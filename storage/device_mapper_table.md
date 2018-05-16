@@ -58,23 +58,31 @@ For **log_type** there are 4 values with different arguments:
 
 ### feature
 there is only 1 feature:  
-**handle_errors**  
+* **handle_errors**  
    causes the mirror to respond to an error. Default is to ignore all errors. LVM enables this feature.
 
-
-1. First ordered list item
-2. Another item
-  * Unordered sub-list. 
-1. Actual numbers don't matter, just that it's a number
-  1. Ordered sub-list
-4. And another item.
-
-   You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
-
-   To have a line break without a paragraph, you will need to use two trailing spaces.  
-   Note that this line is separate, but within the same paragraph.  
-   (This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)
-
-* Unordered list can use asterisks
-- Or minuses
-+ Or pluses
+### Example I: 
+shows a mirror mapping target for a clustered mirror with a mirror log kept on disk.
+```
+0 52428800 mirror clustered_disk 4 253:2 1024 UUID block_on_error 3 253:3 0 253:4 0 253:5 0
+```
+* 0
+   starting block in virtual device  
+* 524288001
+length of this segment (in sectors)
+* mirror clustered_disk1
+mirror target with a log type specifying that mirror is clustered and the mirror log is maintained on disk
+* 41
+4 mirror log arguments will follow
+* 253:2
+major:minor numbers of log device
+* 1024
+region size the mirror log uses to keep track of what is in sync
+* UUID
+UUID of mirror log device to maintain log information throughout a cluster
+* block_on_error
+mirror should respond to errors
+* 3
+number of legs in mirror
+* 253:3 0 253:4 0 253:5 0
+major:minor numbers and offset for devices constituting each leg of mirror
