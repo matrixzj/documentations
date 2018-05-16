@@ -48,7 +48,9 @@ For **log_type** there are 4 values with different arguments:
 #### log_args
 number of log arguments that will be specified in the mapping  
 **logargs**  
+
    the log arguments for the mirror; the number of log arguments provided is specified by the #log-args parameter and the valid log arguments are determined by the log_typeparameter.  
+
 **#devs**  
 the number of legs in the mirror; a device and an offset is specified for each leg  
 **device**  
