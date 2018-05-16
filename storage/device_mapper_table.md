@@ -57,7 +57,8 @@ block device for each mirror leg, referenced by the device name in the filesyste
 starting offset of the mapping on the device. A block device and offset is specified for each mirror leg, as indicated by the #devs parameter.  
 
 #### feature
-there is only 1 feature:
-**handle_errors**
+there is only 1 feature:  
+**handle_errors**  
    causes the mirror to respond to an error. Default is to ignore all errors. LVM enables this feature.
+
 
