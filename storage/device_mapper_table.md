@@ -13,13 +13,43 @@ The following subsections describe the format of the following mappings:
 * striped  
 * [mirror](#mirrored)
 
+## linear
+```
+start length linear device offset
+```
+* start  
+   starting block in virtual device  
+* length  
+   length of this segment  
+* device  
+   block device, referenced by the device name in the filesystem or by the major and minor numbers in the format major:minor  
+* offset  
+   starting offset of the mapping on the device  
+
+#### Example I:
+```
+0 4186112 linear 8:2 2048
+```
+* 0
+   starting block in virtual device
+* 4186112
+   length of this segment (in sectors), 4186112/2/1024 = 2044 Mb = 511 * 4Mb
+   ```
+   $ sudo lvdisplay /dev/vg0/swap | grep LE
+     Current LE             511
+   ```
+* 8:2
+   major:minor numbers of underneath device
+* 2048
+   offset of underneath device
+
 ## Mirrored
 ```
 mirror log_type #logargs logarg1 ... logargN #devs device1 offset1 ... deviceN offsetN <#features> <feature_1>...<feature_N>
 ```  
 LVM maintains a small log which it uses to keep track of which regions are in sync with the mirror or mirrors. 
 
-### log_type  
+#### log_type  
 For **log_type** there are 4 values with different arguments:  
 * core  
    The mirror is local and the mirror log is kept in core memory. This log type takes 1 - 3 arguments:
@@ -47,7 +77,7 @@ For **log_type** there are 4 values with different arguments:
    **[no]sync** argument can be used to specify the mirror as "in-sync" or "out-of-sync".  
    **block_on_error** argument is used to tell the mirror to respond to errors rather than ignoring them.  
 
-### log_args
+#### log_args
    number of log arguments that will be specified in the mapping  
 * **logargs**  
    the log arguments for the mirror; the number of log arguments provided is specified by the #log-args parameter and the valid log arguments are determined by the log_typeparameter.  
@@ -58,12 +88,12 @@ For **log_type** there are 4 values with different arguments:
 * **offset**  
    starting offset of the mapping on the device. A block device and offset is specified for each mirror leg, as indicated by the #devs parameter.  
 
-### feature
+#### feature
 there is only 1 feature:  
 * **handle_errors**  
    causes the mirror to respond to an error. Default is to ignore all errors. LVM enables this feature.
 
-### Example I: 
+#### Example I: 
 shows a mirror mapping target for a clustered mirror with a mirror log kept on disk.
 ```
 0 52428800 mirror clustered_disk 4 253:2 1024 UUID block_on_error 3 253:3 0 253:4 0 253:5 0
@@ -87,11 +117,11 @@ shows a mirror mapping target for a clustered mirror with a mirror log kept on d
 * 3  
    number of legs in mirror  
 * 253:3 0 253:4 0 253:5 0  
-   major:minor numbers and offset for devices constituting each leg of mirror  
+   major:minor numbers and offset for devices constituting each leg of mirror
 
-### Example II:
+#### Example II:
 ```
-vg1-test: 0 2252800 mirror disk 2 253:2 1024 2 253:3 0 253:4 0 1 handle_errors
+0 2252800 mirror disk 2 253:2 1024 2 253:3 0 253:4 0 1 handle_errors
 ```
 * 0  
    starting block in virtual device  
