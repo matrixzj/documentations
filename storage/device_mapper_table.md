@@ -23,7 +23,7 @@ For **log_type** there are 4 values with different arguments:
    The mirror is local and the mirror log is kept in core memory. This log type takes 1 - 3 arguments:
    ```
    logdevice regionsize [[no]sync] [block_on_error]
-```
+   ```
 * disk  
    The mirror is local and the mirror log is kept on disk. This log type takes 2 - 4 arguments:
    ```
