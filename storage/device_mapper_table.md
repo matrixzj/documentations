@@ -69,20 +69,20 @@ shows a mirror mapping target for a clustered mirror with a mirror log kept on d
 * 0  
    starting block in virtual device  
 * 52428800  
-length of this segment (in sectors)
-* mirror clustered_disk1
-mirror target with a log type specifying that mirror is clustered and the mirror log is maintained on disk
-* 41
-4 mirror log arguments will follow
-* 253:2
-major:minor numbers of log device
-* 1024
-region size the mirror log uses to keep track of what is in sync
-* UUID
-UUID of mirror log device to maintain log information throughout a cluster
-* block_on_error
-mirror should respond to errors
-* 3
-number of legs in mirror
-* 253:3 0 253:4 0 253:5 0
-major:minor numbers and offset for devices constituting each leg of mirror
+   length of this segment (in sectors)  
+* mirror clustered_disk1  
+   mirror target with a log type specifying that mirror is clustered and the mirror log is maintained on disk  
+* 4  
+   4 mirror log arguments will follow  
+* 253:2  
+   major:minor numbers of log device  
+* 1024  
+   region size the mirror log uses to keep track of what is in sync  
+* UUID  
+   UUID of mirror log device to maintain log information throughout a cluster  
+* block_on_error  
+   mirror should respond to errors  
+* 3  
+   number of legs in mirror  
+* 253:3 0 253:4 0 253:5 0  
+   major:minor numbers and offset for devices constituting each leg of mirror  
