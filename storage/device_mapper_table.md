@@ -40,7 +40,10 @@ The mirror is clustered and the mirror log is kept on disk. This log type takes 
 logdevice regionsize UUID [[no]sync] [block_on_error]  
 ```
 
-   You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
+   You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).  
+
+
+
 
 
    **regionsize** argument specifies the size of these regions. It must be power of 1 and at least of a kernel page (for Intel x86/x64 processors, this is 4 KiB (8 sectors) This is the granularity in which the mirror is kept to update. Its a tradeoff between increased metadata and wasted I/O. LVM uses a value of 512 KiB (1024 sectors).  
