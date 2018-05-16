@@ -86,3 +86,30 @@ shows a mirror mapping target for a clustered mirror with a mirror log kept on d
    number of legs in mirror  
 * 253:3 0 253:4 0 253:5 0  
    major:minor numbers and offset for devices constituting each leg of mirror  
+
+###Example II:
+```
+vg1-test: 0 2252800 mirror disk 2 253:2 1024 2 253:3 0 253:4 0 1 handle_errors
+```
+* 0  
+   starting block in virtual device  
+* 2252800  
+   length of this segment (in sectors), 2252800/2/1024/4 = 1100 Mb = 275 * 4Mb  
+   ```
+   # lvdisplay /dev/vg1/test  | grep LE  
+   Current LE             275  
+   ```
+* mirror disk   
+   mirror is local and the mirror log is kept on disk  
+* 2  
+   2 mirror log arguments will follow  
+* 253:2  
+   major:minor numbers of log device  
+* 1024   
+   region size the mirror log uses to keep track of what is in sync  
+* 2  
+   number of legs in mirror  
+* 253:3 0 253:4 0  
+   major:minor numbers and offset for devices constituting each leg of mirror  
+* 1 handle_errors  
+   causes the mirror to respond to an error.  
