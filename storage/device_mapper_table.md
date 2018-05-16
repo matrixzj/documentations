@@ -36,9 +36,6 @@ logdevice regionsize UUID [[no]sync] [block_on_error]
 ```
 * clustered_disk  
 The mirror is clustered and the mirror log is kept on disk. This log type takes 3 - 5 arguments:
-```
-logdevice regionsize UUID [[no]sync] [block_on_error]  
-```
 
    You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).  
 
