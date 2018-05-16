@@ -39,9 +39,8 @@ The mirror is clustered and the mirror log is kept on disk. This log type takes 
 ```
 logdevice regionsize UUID [[no]sync] [block_on_error]
 ```
-**regionsize** argument specifies the size of these regions. It must be power of 2 and at least of a kernel page (for Intel x86/x64 processors, this is 4 KiB (8 sectors) This is the granularity in which the mirror is kept to update. Its a tradeoff between increased metadata and wasted I/O. LVM uses a value of 512 KiB (1024 sectors).
-
-**UUID** argument is a unique identifier associated with the mirror log device so that the log state can be maintained throughout the cluster.
+**regionsize** argument specifies the size of these regions. It must be power of 2 and at least of a kernel page (for Intel x86/x64 processors, this is 4 KiB (8 sectors) This is the granularity in which the mirror is kept to update. Its a tradeoff between increased metadata and wasted I/O. LVM uses a value of 512 KiB (1024 sectors).  
+**UUID** argument is a unique identifier associated with the mirror log device so that the log state can be maintained throughout the cluster.  
 **[no]sync** argument can be used to specify the mirror as "in-sync" or "out-of-sync".
 **block_on_error** argument is used to tell the mirror to respond to errors rather than ignoring them.
 
