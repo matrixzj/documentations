@@ -66,9 +66,9 @@ shows a mirror mapping target for a clustered mirror with a mirror log kept on d
 ```
 0 52428800 mirror clustered_disk 4 253:2 1024 UUID block_on_error 3 253:3 0 253:4 0 253:5 0
 ```
-* 0
+* 0  
    starting block in virtual device  
-* 524288001
+* 52428800  
 length of this segment (in sectors)
 * mirror clustered_disk1
 mirror target with a log type specifying that mirror is clustered and the mirror log is maintained on disk
