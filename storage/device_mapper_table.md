@@ -48,16 +48,13 @@ For **log_type** there are 4 values with different arguments:
 ### log_args
 number of log arguments that will be specified in the mapping  
    **logargs**  
-   the log arguments for the mirror; the number of log arguments provided is specified by the #log-args parameter and the valid log arguments are determined by the log_typeparameter.
-
-**#devs**  
-
+   the log arguments for the mirror; the number of log arguments provided is specified by the #log-args parameter and the valid log arguments are determined by the log_typeparameter.  
+   **#devs**  
    the number of legs in the mirror; a device and an offset is specified for each leg  
-
-**device**  
-block device for each mirror leg, referenced by the device name in the filesystem or by the major and minor numbers in the format major:minor. A block device and offset is specified for each mirror leg, as indicated by the #devs parameter.  
-**offset**  
-starting offset of the mapping on the device. A block device and offset is specified for each mirror leg, as indicated by the #devs parameter.  
+   **device**  
+   block device for each mirror leg, referenced by the device name in the filesystem or by the major and minor numbers in the format major:minor. A block device and offset is specified for each mirror leg, as indicated by the #devs parameter.  
+   **offset**  
+   starting offset of the mapping on the device. A block device and offset is specified for each mirror leg, as indicated by the #devs parameter.  
 
 ### feature
 there is only 1 feature:  
