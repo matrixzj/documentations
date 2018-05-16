@@ -11,13 +11,13 @@ The following subsections describe the format of the following mappings:
 * striped
 * mirror
 
-### Mirrored
+## Mirrored
 ```
 mirror log_type #logargs logarg1 ... logargN #devs device1 offset1 ... deviceN offsetN <#features> <feature_1>...<feature_N>
 ```
 LVM maintains a small log which it uses to keep track of which regions are in sync with the mirror or mirrors. 
 
-#### log_type
+### log_type
 For **log_type** there are 4 values with different arguments:
 * core  
    The mirror is local and the mirror log is kept in core memory. This log type takes 1 - 3 arguments:
@@ -45,10 +45,9 @@ For **log_type** there are 4 values with different arguments:
    **[no]sync** argument can be used to specify the mirror as "in-sync" or "out-of-sync".  
    **block_on_error** argument is used to tell the mirror to respond to errors rather than ignoring them.  
 
-#### log_args
+### log_args
 number of log arguments that will be specified in the mapping  
-**logargs**  
-
+   **logargs**  
    the log arguments for the mirror; the number of log arguments provided is specified by the #log-args parameter and the valid log arguments are determined by the log_typeparameter.
 
 **#devs**  
@@ -60,7 +59,7 @@ block device for each mirror leg, referenced by the device name in the filesyste
 **offset**  
 starting offset of the mapping on the device. A block device and offset is specified for each mirror leg, as indicated by the #devs parameter.  
 
-#### feature
+### feature
 there is only 1 feature:  
 **handle_errors**  
    causes the mirror to respond to an error. Default is to ignore all errors. LVM enables this feature.
