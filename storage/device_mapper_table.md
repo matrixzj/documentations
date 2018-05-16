@@ -1,3 +1,5 @@
+# Device Mapper Table
+
 ## General
 ```
 start length mapping [mapping_parameters...]
@@ -87,7 +89,7 @@ shows a mirror mapping target for a clustered mirror with a mirror log kept on d
 * 253:3 0 253:4 0 253:5 0  
    major:minor numbers and offset for devices constituting each leg of mirror  
 
-###Example II:
+### Example II:
 ```
 vg1-test: 0 2252800 mirror disk 2 253:2 1024 2 253:3 0 253:4 0 1 handle_errors
 ```
