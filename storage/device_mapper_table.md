@@ -32,8 +32,29 @@ start length linear device offset
 ```  
 * 0  
    starting block in virtual device  
-* 0
-   starting block in virtual device
+* 4186112  
+   starting block in virtual device  
+* 4186112
+   length of this segment (in sectors), 4186112/2/1024 = 2044 Mb = 511 * 4Mb
+   ```
+   $ sudo lvdisplay /dev/vg0/swap | grep LE
+     Current LE             511
+   ```
+* 8:2
+   major:minor numbers of underneath device
+* 2048
+   offset of underneath device
+
+## Mirrored
+```
+mirror log_type #logargs logarg1 ... logargN #devs device1 offset1 ... deviceN offsetN <#features> <feature_1>...<feature_N>
+```  
+LVM maintains a small log which it uses to keep track of which regions are in sync with the mirror or mirrors. 
+
+#### log_type  
+For **log_type** there are 4 values with different arguments:  
+* core  
+   The mirror is local and the mirror log is kept in core memory. This log type takes 1 - 3 arguments:
 * 4186112
    length of this segment (in sectors), 4186112/2/1024 = 2044 Mb = 511 * 4Mb
    ```
