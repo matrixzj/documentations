@@ -33,8 +33,6 @@ start length linear device offset
 * 0  
    starting block in virtual device  
 * 4186112  
-   starting block in virtual device  
-* 4186112
    length of this segment (in sectors), 4186112/2/1024 = 2044 Mb = 511 * 4Mb
    ```
    $ sudo lvdisplay /dev/vg0/swap | grep LE
