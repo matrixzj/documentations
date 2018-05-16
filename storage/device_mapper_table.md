@@ -19,17 +19,17 @@ LVM maintains a small log which it uses to keep track of which regions are in sy
 
 #### log_type
 For **log_type** there are 4 values with different arguments:
-* core
+* core  
 The mirror is local and the mirror log is kept in core memory. This log type takes 1 - 3 arguments:
 ```
 logdevice regionsize [[no]sync] [block_on_error]
 ```
-* disk
+* disk  
 The mirror is local and the mirror log is kept on disk. This log type takes 2 - 4 arguments:
 ```
 logdevice regionsize [[no]sync] [block_on_error]
 ```
-* clustered_core
+* clustered_core  
 The mirror is clustered and the mirror log is kept in core memory. This log type takes 2 - 4 arguments:
 ```
 logdevice regionsize UUID [[no]sync] [block_on_error]
