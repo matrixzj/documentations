@@ -11,7 +11,7 @@ When a device is specified as a mapping parameter in the Device Mapper, it can b
 The following subsections describe the format of the following mappings:
 * linear
 * striped
-* mirror
+* [mirror](#Mirrored)
 
 ## Mirrored
 ```
