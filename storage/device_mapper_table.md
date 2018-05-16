@@ -34,7 +34,7 @@ The mirror is clustered and the mirror log is kept in core memory. This log type
 ```
 logdevice regionsize UUID [[no]sync] [block_on_error]
 ```
-* clustered_disk
+* clustered_disk  
 The mirror is clustered and the mirror log is kept on disk. This log type takes 3 - 5 arguments:
 ```
 logdevice regionsize UUID [[no]sync] [block_on_error]
