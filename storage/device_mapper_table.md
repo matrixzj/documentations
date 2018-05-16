@@ -38,9 +38,9 @@ start length linear device offset
    $ sudo lvdisplay /dev/vg0/swap | grep LE
      Current LE             511
    ```
-* 8:2
+* 8:2  
    major:minor numbers of underneath device
-* 2048
+* 2048  
    offset of underneath device
 
 ## Mirrored
