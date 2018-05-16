@@ -20,36 +20,30 @@ LVM maintains a small log which it uses to keep track of which regions are in sy
 #### log_type
 For **log_type** there are 4 values with different arguments:
 * core  
-The mirror is local and the mirror log is kept in core memory. This log type takes 1 - 3 arguments:
-```
-logdevice regionsize [[no]sync] [block_on_error]
+   The mirror is local and the mirror log is kept in core memory. This log type takes 1 - 3 arguments:
+   ```
+   logdevice regionsize [[no]sync] [block_on_error]
 ```
 * disk  
-The mirror is local and the mirror log is kept on disk. This log type takes 2 - 4 arguments:
-```
-logdevice regionsize [[no]sync] [block_on_error]
-```
+   The mirror is local and the mirror log is kept on disk. This log type takes 2 - 4 arguments:
+   ```
+   logdevice regionsize [[no]sync] [block_on_error]
+   ```
 * clustered_core  
-The mirror is clustered and the mirror log is kept in core memory. This log type takes 2 - 4 arguments:
-```
-logdevice regionsize UUID [[no]sync] [block_on_error]
-```
+   The mirror is clustered and the mirror log is kept in core memory. This log type takes 2 - 4 arguments:
+   ```
+   logdevice regionsize UUID [[no]sync] [block_on_error]
+   ```
 * clustered_disk  
    The mirror is clustered and the mirror log is kept on disk. This log type takes 3 - 5 arguments:
    ```
    logdevice regionsize UUID [[no]sync] [block_on_error]  
    ```
 
-   You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).  
-
-
-
-
-
    **regionsize** argument specifies the size of these regions. It must be power of 1 and at least of a kernel page (for Intel x86/x64 processors, this is 4 KiB (8 sectors) This is the granularity in which the mirror is kept to update. Its a tradeoff between increased metadata and wasted I/O. LVM uses a value of 512 KiB (1024 sectors).  
-**UUID** argument is a unique identifier associated with the mirror log device so that the log state can be maintained throughout the cluster.  
-**[no]sync** argument can be used to specify the mirror as "in-sync" or "out-of-sync".  
-**block_on_error** argument is used to tell the mirror to respond to errors rather than ignoring them.  
+   **UUID** argument is a unique identifier associated with the mirror log device so that the log state can be maintained throughout the cluster.  
+   **[no]sync** argument can be used to specify the mirror as "in-sync" or "out-of-sync".  
+   **block_on_error** argument is used to tell the mirror to respond to errors rather than ignoring them.  
 
 #### log_args
 number of log arguments that will be specified in the mapping  
