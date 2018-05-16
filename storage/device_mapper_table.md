@@ -2,8 +2,8 @@
 ```
 start length mapping [mapping_parameters...]
 ```
-In the first line of a Device Mapper table, the **start** parameter must equal 0. The **start + length** parameters on one line must equal the start on the next line. Which mapping parameters are specified in a line of the mapping table depends on which mapping type is specified on the line.
-Sizes in the Device Mapper are always specified in sectors (512 bytes).
+In the first line of a Device Mapper table, the **start** parameter must equal 0. The **start + length** parameters on one line must equal the start on the next line. Which mapping parameters are specified in a line of the mapping table depends on which mapping type is specified on the line.  
+Sizes in the Device Mapper are always specified in sectors (512 bytes).  
 When a device is specified as a mapping parameter in the Device Mapper, it can be referenced by the device name in the filesystem (for example, /dev/hda) or by the major and minor numbers in the format **major:minor**. The major:minor format is preferred because it avoids pathname lookups.
 
 The following subsections describe the format of the following mappings:
@@ -41,10 +41,9 @@ logdevice regionsize UUID [[no]sync] [block_on_error]
 ```
 
    **regionsize** argument specifies the size of these regions. It must be power of 1 and at least of a kernel page (for Intel x86/x64 processors, this is 4 KiB (8 sectors) This is the granularity in which the mirror is kept to update. Its a tradeoff between increased metadata and wasted I/O. LVM uses a value of 512 KiB (1024 sectors).  
-
    **UUID** argument is a unique identifier associated with the mirror log device so that the log state can be maintained throughout the cluster.  
    **[no]sync** argument can be used to specify the mirror as "in-sync" or "out-of-sync".  
-   **block_on_error** argument is used to tell the mirror to respond to errors rather than ignoring them.
+   **block_on_error** argument is used to tell the mirror to respond to errors rather than ignoring them.  
 
 #### log_args
 number of log arguments that will be specified in the mapping
