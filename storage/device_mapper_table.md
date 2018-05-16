@@ -46,7 +46,7 @@ For **log_type** there are 4 values with different arguments:
    **block_on_error** argument is used to tell the mirror to respond to errors rather than ignoring them.  
 
 ### log_args
-number of log arguments that will be specified in the mapping  
+   number of log arguments that will be specified in the mapping  
    **logargs**  
    the log arguments for the mirror; the number of log arguments provided is specified by the #log-args parameter and the valid log arguments are determined by the log_typeparameter.  
    **#devs**  
