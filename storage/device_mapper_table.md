@@ -18,6 +18,7 @@ The following subsections describe the format of the following mappings:
 start length linear device offset
 ```
 * start  
+
    starting block in virtual device  
 * length  
    length of this segment  
@@ -29,7 +30,7 @@ start length linear device offset
 #### Example I:
 ```
 0 4186112 linear 8:2 2048
-```
+```  
 * 0
    starting block in virtual device
 * 4186112
