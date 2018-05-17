@@ -9,8 +9,8 @@ Sizes in the Device Mapper are always specified in sectors (512 bytes).
 When a device is specified as a mapping parameter in the Device Mapper, it can be referenced by the device name in the filesystem (for example, /dev/hda) or by the major and minor numbers in the format **major:minor**. The major:minor format is preferred because it avoids pathname lookups.
 
 The following subsections describe the format of the following mappings:  
-* linear  
-* striped  
+* [linear](#linear)
+* [striped](#striped)
 * [mirror](#mirrored)
 
 ## linear
