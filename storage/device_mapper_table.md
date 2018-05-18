@@ -12,8 +12,9 @@ The following subsections describe the format of the following mappings:
 * [linear](#linear)
 * [striped](#striped)
 * [mirror](#mirrored)
+* [snapshot & snapshot-origin]()
 
-## linear
+## Linear
 ```
 start length linear device offset
 ```
@@ -42,6 +43,36 @@ start length linear device offset
    major:minor numbers of underneath device
 * 2048  
    offset of underneath device
+
+## Striped
+```
+start length striped #stripes chunk_size device1 offset1 ... deviceN offsetN
+```
+* start  
+   starting block in virtual device
+* length  
+   length of this segment
+* #stripes  
+   number of stripes for the virtual device
+* chunk_size  
+   number of sectors written to each stripe before switching to the next; must be power of 2 at least as big as the kernel page size
+* device  
+   block device, referenced by the device name in the filesystem or by the major and minor numbers in the format major:minor.
+* offset  
+   starting offset of the mapping on the device
+
+#### Example I:
+```
+0 2097152 striped 2 128 252:16 2048 252:32 2048
+```
+* 0  
+   starting block in virtual device
+* length  
+   length of this segment
+* striped 2 128 
+   stripe across 2 devices with chunk size of 128 sectors
+* 252:16 2048 252:32 2048  
+   major:minor numbers and offset for devices constituting striped device
 
 ## Mirrored
 ```
@@ -145,3 +176,34 @@ shows a mirror mapping target for a clustered mirror with a mirror log kept on d
    major:minor numbers and offset for devices constituting each leg of mirror  
 * 1 handle_errors  
    causes the mirror to respond to an error.  
+
+## snapshot and snapshot-origin
+When you create the first LVM snapshot of a volume, four Device Mapper devices are used:
+* A device with a **linear** mapping containing the original mapping table of the source volume.
+* A device with a **linear** mapping used as the copy-on-write (COW) device for the source volume; for each write, the original data is saved in the COW device of each snapshot to keep its visible content unchanged (until the COW device fills up).
+* A device with a **snapshot** mapping combining #1 and #2, which is the visible snapshot volume.  
+   ```
+   start length snapshot origin COW-device P|N chunksize
+   ```
+   * start  
+      starting block in virtual device
+   * length  
+      length of this segment
+   * origin  
+      base volume of snapshot
+   * COW-device  
+      device on which changed chunks of data are stored
+   * P|N  
+      P (Persistent) or N (Not persistent); indicates whether the snapshot will survive after reboot. For transient snapshots (N) less metadata must be saved on disk; they can be kept in memory by the kernel.
+   * chunksize  
+      size in sectors of changed chunks of data that will be stored on the COW device
+* The "original" volume (which uses the device number used by the original source volume), whose table is replaced by a "**snapshot-origin**" mapping from device #1.i
+   ```
+   start length snapshot-origin origin
+   ```
+   * start  
+      starting block in virtual device
+   * length  
+      length of this segment
+   * origin  
+      base volume of snapshot
