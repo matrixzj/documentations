@@ -22,6 +22,45 @@ A segmentation fault can occur under the following circumstances:
 
 3. An attempt is made to execute a program that was not compiled/built correctly.
 
+## How to inteprete segfault log? 
+```
+May 18 23:55:05 dhcp-192-66 kernel: test[7779]: segfault at 0 ip 00007fdddf181664 sp 00007ffcbb5eb568 error 6 in libc-2.17.so[7fdddf0f2000+1c3000]
+```
+* test  
+   program name
+* 7779  
+   pid number
+* ip 00007fdddf181664  
+   register name and register value for current running instruction
+* sp 00007ffcbb5eb568  
+   regester name and register value for stack (top of stack)
+* error 6
+   error and return code, which is defined in arch/x86/mm/fault.c
+   [Segmentation fault error decoder](https://rgeissert.blogspot.com/p/segmentation-fault-error.html)
+
+## segfault error code
+```
+/*
+ * Page fault error code bits:
+ *
+ *   bit 0 ==    0: no page found       1: protection fault
+ *   bit 1 ==    0: read access         1: write access
+ *   bit 2 ==    0: kernel-mode access  1: user-mode access
+ *   bit 3 ==                           1: use of reserved bit detected
+ *   bit 4 ==                           1: fault was an instruction fetch
+ *   bit 5 ==                           1: protection keys block access
+ */
+enum x86_pf_error_code {
+
+        PF_PROT         =               1 << 0,
+        PF_WRITE        =               1 << 1,
+        PF_USER         =               1 << 2,
+        PF_RSVD         =               1 << 3,
+        PF_INSTR        =               1 << 4,
+        PF_PK           =               1 << 5,
+};
+```
+
 
 
 
@@ -45,7 +84,8 @@ A segmentation fault can occur under the following circumstances:
    May 18 23:55:05 dhcp-192-66 kernel: test[7779]: segfault at 0 ip 00007fdddf181664 sp 00007ffcbb5eb568 error 6 in libc-2.17.so[7fdddf0f2000+1c3000]
    ```
 
+RIP寄存器存放着当前指令的地址
+
 [A Guide for Troubleshooting a Segfault](https://access.redhat.com/articles/372743)  
-[Segmentation fault error decoder](https://rgeissert.blogspot.com/p/segmentation-fault-error.html)
 
 
