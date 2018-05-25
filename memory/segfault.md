@@ -26,16 +26,16 @@ A segmentation fault can occur under the following circumstances:
 ```
 May 18 23:55:05 dhcp-192-66 kernel: test[7779]: segfault at 0 ip 00007fdddf181664 sp 00007ffcbb5eb568 error 6 in libc-2.17.so[7fdddf0f2000+1c3000]
 ```
-* test  
-   program name
-* 7779  
-   pid number
+* test[7779] 
+   program name and pid number
+* segfault at 0
+   memory address (in hex) that caused the segfault when the program tried to access it. Here the address is 0, so we have a null dereference, usually it is a null pointer 
 * ip 00007fdddf181664  
    register name and register value for current running instruction
 * sp 00007ffcbb5eb568  
    regester name and register value for stack (top of stack)
-* error 6
-   error and return code, which is defined in arch/x86/mm/fault.c
+* error 6  
+   error and return code, which is defined in arch/x86/mm/fault.c  
    [Segmentation fault error decoder](https://rgeissert.blogspot.com/p/segmentation-fault-error.html)
 
 ## segfault error code
@@ -43,11 +43,11 @@ May 18 23:55:05 dhcp-192-66 kernel: test[7779]: segfault at 0 ip 00007fdddf18166
 /*
  * Page fault error code bits:
  *
- *   bit 0 ==    0: no page found       1: protection fault
+ *   bit 0 ==    0: no page found       1: protection fault(eg. writing to a read-only mapping)
  *   bit 1 ==    0: read access         1: write access
  *   bit 2 ==    0: kernel-mode access  1: user-mode access
- *   bit 3 ==                           1: use of reserved bit detected
- *   bit 4 ==                           1: fault was an instruction fetch
+ *   bit 3 ==                           1: use of reserved bit detected(kernel will panic if this happens)
+ *   bit 4 ==                           1: fault was an instruction fetch, not data read or write
  *   bit 5 ==                           1: protection keys block access
  */
 enum x86_pf_error_code {
@@ -60,11 +60,26 @@ enum x86_pf_error_code {
         PF_PK           =               1 << 5,
 };
 ```
+* 0 (00000) / 8 (01000) / 16 (10000) / 24 (11000)  
+   a kernel-mode read resulting in no page being found / a reserved bit was detected / read(instruction fetch) / a reserved bit was detected + read(instruction fetch)
+* 1 (00001) / 9 (01001) / 17 (10001) / 25 (11001)  
+   a kernel-mode read resulting in a protection fault / a reserved bit was detected / read(instruction fetch) / a reserved bit was detected + read(instruction fetch)
+* 2 (00010) / 10 (01010) / 18 (10010) / 26 (11010)  
+   a kernel-mode write resulting in no page being found / a reserved bit was detected / write(instruction fetch) / a reserved bit was detected + write(instruction fetch)
+* 3 (00011) / 11 (01011) / 19 (10011) / 27 (11011)  
+   a kernel-mode write resulting in a protection fault / a reserved bit was detected / write(instruction fetch) / a reserved bit was detected + write(instruction fetch)
+* 4 (00100) / 12 (01100) / 20 (10100) / 28 (11100)  
+   a user-mode read resulting in no page being found / a reserved bit was detected / read(instruction fetch) / a reserved bit was detected + read(instruction fetch)
+* 5 (00101) / 13 (01101) / 21 (10101) / 29 (11101)  
+   a user-mode read resulting in a protection fault / a reserved bit was detected / read(instruction fetch) / a reserved bit was detected + read(instruction fetch)
+* 6 (00110) / 14 (01110) / 22 (10110) / 30 (11110)  
+   a user-mode write resulting in no page being found / a reserved bit was detected / write(instruction fetch) / a reserved bit was detected + write(instruction fetch)
+* 7 (00111) / 15 (01111) / 23 (10111) / 31 (11111)  
+   a user-mode write resulting in a protection fault / a reserved bit was detected / write(instruction fetch) / a reserved bit was detected + write(instruction fetch)
+* [protection keys](https://lwn.net/Articles/643797/)
 
-
-
-
-* For example, calling memset() as shown below would cause a program to segfault:
+## Example
+* calling memset() as shown below would cause a program to segfault:
    ```
    $ cat test.c
    #include <stdio.h>
@@ -84,8 +99,5 @@ enum x86_pf_error_code {
    May 18 23:55:05 dhcp-192-66 kernel: test[7779]: segfault at 0 ip 00007fdddf181664 sp 00007ffcbb5eb568 error 6 in libc-2.17.so[7fdddf0f2000+1c3000]
    ```
 
-RIP寄存器存放着当前指令的地址
-
 [A Guide for Troubleshooting a Segfault](https://access.redhat.com/articles/372743)  
-
-
+[What the Linux kernel's messages about segfaulting programs mean on 64-bit x86](https://utcc.utoronto.ca/~cks/space/blog/linux/KernelSegfaultMessageMeaning)
