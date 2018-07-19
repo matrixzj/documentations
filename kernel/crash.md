@@ -41,6 +41,20 @@ point yourselves. How to do this is explained below.
 Inspecting dm-target pending IO
 ===============================
 
+found out D state process
+```bash
+crash> ps -m | grep UN
+[ 2 05:51:03.526] [UN]  PID: 242045  TASK: ffff883fc3a6bf40  CPU: 2   COMMAND: "jbd2/dm-26-8"
+```
+
+If you run into this situation and are inspecting a soft lockup you should  
+first check the dm-status of the targets to verify they are not suspended.  
+Getting the dm-target can vary depending on what you are debugging, but the  
+crash dev -d list is a good start given you have access to the struct gendisk.  
+
+As shown above, we have known that something was wrong with dm-26 since it  
+has been stuck for 2 days and 5:51:03.
+
 ```bash
 crash> dev -d
 MAJOR GENDISK            NAME       REQUEST_QUEUE      TOTAL ASYNC  SYNC   DRV
@@ -126,4 +140,42 @@ MAJOR GENDISK            NAME       REQUEST_QUEUE      TOTAL ASYNC  SYNC   DRV
   253 ffff885ffdfa3000   dm-32      ffff885fc4aa0000       0     0     0     0
    65 ffff881fd51c7800   sdae       ffff883ff50e9a70       0     0     0     0
   201 ffff881fedbbdc00   VxDMP17    ffff881ffc20cf50       0     0     0     0
+
+crash> dev -d
+MAJOR GENDISK            NAME       REQUEST_QUEUE      TOTAL ASYNC  SYNC   DRV
+  253 ffff885ffdc4b400   dm-26      ffff887ff76e2340       0     0     0     0
+```
+
+```bash
+crash> struct gendisk.private_data ffff885ffdc4b400
+  private_data = 0xffff881ffb91f800
+crash> struct mapped_device.pending,flags ffff881ffb91f800
+  pending = {{
+      counter = 0
+    }, {
+      counter = 2
+    }},
+  flags = 64
+crash> eval -b 64
+hexadecimal: 40
+    decimal: 64
+      octal: 100
+     binary: 0000000000000000000000000000000000000000000000000000000001000000
+   bits set: 6
+```
+
+dm device flags were defined in drivers/md/dm.c
+```
+  74 /*
+  75  * Bits for the md->flags field.
+  76  */
+  77 #define DMF_BLOCK_IO_FOR_SUSPEND 0
+  78 #define DMF_SUSPENDED 1
+  79 #define DMF_FROZEN 2
+  80 #define DMF_FREEING 3
+  81 #define DMF_DELETING 4
+  82 #define DMF_NOFLUSH_SUSPENDING 5
+  83 #define DMF_MERGE_IS_OPTIONAL 6
+  84 #define DMF_DEFERRED_REMOVE 7
+  85 #define DMF_SUSPENDED_INTERNALLY 8
 ```
