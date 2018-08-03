@@ -1,10 +1,3 @@
----
-title: CPU Soft lockup
-author: Matrix Zou
-layout: post
-tags: [ kernel ]
----
-
 CPU Soft softup
 =====
 
