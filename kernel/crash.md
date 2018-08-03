@@ -150,11 +150,7 @@ MAJOR GENDISK            NAME       REQUEST_QUEUE      TOTAL ASYNC  SYNC   DRV
   crash> struct gendisk.private_data ffff885ffdc4b400
     private_data = 0xffff881ffb91f800
   crash> struct mapped_device.pending,flags ffff881ffb91f800
-    pending = {{
-        counter = 0
-      }, {
-        counter = 2
-      }},
+    pending = {{ counter = 0 }, { counter = 2 }},
     flags = 64
   crash> eval -b 64
   hexadecimal: 40
