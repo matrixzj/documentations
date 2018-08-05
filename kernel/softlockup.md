@@ -50,3 +50,32 @@ This system was also reporting soft locks for the following processes: bash, rsy
 
 The most important clue as to the cause of the soft lockup is the location of where the code was executing when the soft lockup was detected. This can be found on this line with the RIP (return instruction pointer):
 
+```bash
+Aug 13 17:42:32 hostname kernel: RIP: 0010:[<ffffffff80064bcc>]  [<ffffffff80064bcc>] .text.lock.spinlock+0x2/0x30
+```
+
+In this case the code was trying to acquire a spinlock and this is a typical cause of a soft lockup message. This thread is being prevented from acquiring the spinlock because - most likely - another process has been holding onto the spinlock for too long. So this soft lockup message shows a victim to the real problem and an investgation is needed to find the culprit process that is holding the spinlock. Since a process that holds a spinlock must be currently running on a CPU then a listing of the stack traces for all CPUs is needed to locate the spinlock holder (ie sysrq-t or 'bt -a' in crash). It's also possible that a highly contended reader/writer lock with many readers can cause starvation for writers especially on a NUMA based system where the cost of the memory access to the lock is not equal for all CPUs.
+
+If the soft lockup message shows an RIP that is not trying to acquire a spinlock and is in a seemingly arbitrary place in the code then it may be the case that the process is executing an unbounded loop without relinquishing the CPU. In this case the code needs to be inspected to figure out why it has not terminated. It may be necessary to insert a conditional reschedule (cond_resched()) call in the loop to allow it to temporarily yield the CPU so that other processes can run.
+
+For this particular example above also pay attention to this line:
+
+```bash
+Aug 13 17:42:32 hostname kernel:  [<ffffffff8840933a>] :nfs:nfs_access_cache_shrinker+0x2d/0x1da
+```
+
+Linux now supports local caching of certain file systems (currently only NFS and the in-kernel AFS file systems). This permits remote data to be cached on local disk, thus potentially speeding up future accesses to that data by avoiding the need to go to the network and fetch it again. In this case, something seems to have gone wrong. This NFS cache facility (nfs_access_cache_shrinker) went into loop to do its caching task and locked some internal resources that are needed by other processes as well (bash, kswapd, and rsync, in this case). But the NFS cache did not release the lock before 10 seconds elapsed, so the kernel prints the informational message in logs to let system administrators know about the condition.
+
+Now we will examine why this delay might have occurred. We see the following nfs mounts:
+
+```bash
+nfs1:/abi      /abi                    nfs     soft,bg 0 0
+nfs2:/d1       /servers/nfs2/d1        nfs     soft,bg 0 0
+nfs3:/d1       /servers/nfs3/d1        nfs     soft,bg 0 0
+nfs4:/d1       /servers/nfs4/d1        nfs     soft,bg 0 0
+nfs5:/d1       /servers/nfs5/d1        nfs     soft,bg 0 0
+```
+
+There are many possibilities why this has happened. The most common is if one of the NFS shares went down because of a network connectivity problem. We also see at the time of crash the rsync utility was running, so there is a possibility that this utility was dealing with any one of the NFS shares and prevented timely access to the resource.
+
+The default soft lockup threshold for Red Hat Enterprise Linux 5 is 10s. This has been increased to 60s in Red Hat Enterprise Linux 6.
