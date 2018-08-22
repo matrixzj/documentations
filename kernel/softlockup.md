@@ -1,4 +1,4 @@
-CPU Soft softup
+CPU Soft lockup
 =====
 
 A **soft lockup** is the symptom of a task or kernel thread using and not releasing a CPU for a longer period of time than allowed.
