@@ -12,7 +12,7 @@ site_title: Matrix Documentation
 company_name: Your company
 # this appears in the footer
 
-github_editme_path: tomjoht/documentation-theme-jekyll/blob/gh-pages/
+github_editme_path: https://github.com/matrixzj/documentations
 # if you're using Github, provide the basepath to the branch you've created for reviews, following the sample here. if not, leave this value blank.
 
 # gitlab_editme_path: tomjoht/documentation-theme-jekyll/blob/gh-pages/
@@ -24,10 +24,10 @@ disqus_shortname:
 google_analytics: UA-66296557-1
 # if you have google-analytics ID, put it in. if not, edit this value to blank.
 
-host: 127.0.0.1
+host: 
 # the preview server used. Leave as is.
 
-port: 4000
+port: 
 # the port where the preview is rendered. You can leave this as is unless you have other Jekyll builds using this same port that might cause conflicts. in that case, use another port such as 4006.
 
 exclude:
@@ -38,10 +38,10 @@ exclude:
 
 feedback_subject_line: Jekyll documentation theme
 
-feedback_email: tomjoht@gmail.com
+feedback_email: matrix.zj@gmail.com
 # used as a contact email for the Feedback link in the top navigation bar
 
-# feedback_disable: true
+feedback_disable: true
 # if you uncomment the previous line, the Feedback link gets removed
 
 # feedback_text: "Need help?"
@@ -113,7 +113,7 @@ description: "Intended as a documentation theme based on Jekyll for technical wr
 
 # needed for sitemap.xml file only
 url: http://matrixzj.github.io
-baseurl: /documentationx
+baseurl: /documentations
 
 
 github: [metadata]
