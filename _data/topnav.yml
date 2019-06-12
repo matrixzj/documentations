@@ -4,7 +4,7 @@ topnav:
 - title: Topnav
   items:
     - title: GitHub
-      external_url: https://github.com/tomjoht/documentation-theme-jekyll
+      external_url: https://github.com/matrixzj/documentations
     - title: News
       url: /news
 
@@ -24,9 +24,9 @@ topnav_dropdowns:
           external_url: http://idratherbewriting.com/category-jekyll/
     - title: Products
       folderitems:
-        - title: Jekyll Documentation Theme
-          url: /mydoc_introduction.html
-        - title: Product 1
-          url: /p1_landing_page.html
-        - title: Product 2
-          url: /p2_landing_page.html
+        - title: Matrixzj Keycap Garden
+          url: https://matrixzj.github.com/
+#         - title: Product 1
+#           url: /p1_landing_page.html
+#         - title: Product 2
+#           url: /p2_landing_page.html
