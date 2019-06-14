@@ -9,10 +9,10 @@ topnav_title: Matrix Documentation
 site_title: Matrix Documentation
 # this appears in the html browser tab for the site title (seen mostly by search engines, not users)
 
-company_name: Your company
+company_name: Matrix Zou
 # this appears in the footer
 
-github_editme_path: https://github.com/matrixzj/documentations
+github_editme_path: matrixzj/documentations
 # if you're using Github, provide the basepath to the branch you've created for reviews, following the sample here. if not, leave this value blank.
 
 # gitlab_editme_path: tomjoht/documentation-theme-jekyll/blob/gh-pages/
