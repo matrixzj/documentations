@@ -64,6 +64,10 @@ entries:
       url: /kernel_crash.html
       output: web, pdf
 
+    - title: CPU Soft Lockup
+      url: /kernel_cpu_soft_lockup.html
+      output: web, pdf
+
   - title: Authoring
     output: web, pdf
 
