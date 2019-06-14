@@ -12,7 +12,7 @@ site_title: Matrix Documentation
 company_name: Matrix Zou
 # this appears in the footer
 
-github_editme_path: matrixzj/documentations
+github_editme_path: matrixzj/documentations/
 # if you're using Github, provide the basepath to the branch you've created for reviews, following the sample here. if not, leave this value blank.
 
 # gitlab_editme_path: tomjoht/documentation-theme-jekyll/blob/gh-pages/
