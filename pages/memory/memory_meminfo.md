@@ -9,7 +9,7 @@ permalink: memory_meminfo.html
 folder: memory
 ---
 
-## /proc/meminfo, sar
+/proc/meminfo, sar
 ======
 
 ### /proc/meminfo
