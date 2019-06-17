@@ -38,15 +38,15 @@ A segmentation fault can occur under the following circumstances:
 ```bash
 May 18 23:55:05 dhcp-192-66 kernel: test[7779]: segfault at 0 ip 00007fdddf181664 sp 00007ffcbb5eb568 error 6 in libc-2.17.so[7fdddf0f2000+1c3000]
 ```
-* **test[7779]** 
+* **test[7779]**   
    program name and pid number
-* segfault at 0
+* **segfault at 0**
    memory address (in hex) that caused the segfault when the program tried to access it. Here the address is 0, so we have a null dereference, usually it is a null pointer 
-* ip 00007fdddf181664  
+* **ip 00007fdddf181664**    
    register name and register value for current running instruction
-* sp 00007ffcbb5eb568  
+* **sp 00007ffcbb5eb568**  
    regester name and register value for stack (top of stack)
-* error 6  
+* **error 6**  
    error and return code, which is defined in arch/x86/mm/fault.c  
    [Segmentation fault error decoder](https://rgeissert.blogspot.com/p/segmentation-fault-error.html)
 
