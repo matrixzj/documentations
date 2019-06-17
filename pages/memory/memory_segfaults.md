@@ -3,7 +3,7 @@ title: Segmentation Faults (Segfaults)
 tags: [memory, troubleshooting]
 keywords: segfaults
 last_updated: Juue 17, 2019
-summary: "Things related with Memory Segfaults
+summary: "Things related with Memory Segfaults"
 sidebar: mydoc_sidebar
 permalink: memory_segfaults.html
 folder: memory
