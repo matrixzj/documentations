@@ -76,6 +76,10 @@ entries:
       url: /memory_segfaults.html
       output: web, pdf
 
+    - title: Meminfo
+      url: /memory_meminfo.html
+      output: web, pdf
+
   - title: Misc
     output: web, pdf
     folderitems:
