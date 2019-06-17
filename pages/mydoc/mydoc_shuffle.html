@@ -26,7 +26,8 @@ folder: mydoc
       <button class="btn btn-primary" data-group="formatting">Formatting</button>
       <button class="btn btn-primary" data-group="publishing">Publishing</button>
       <button class="btn btn-primary" data-group="content-types">Content types</button>
-          <button class="btn btn-primary" data-group="single_sourcing">Single Sourcing</button>
+      <button class="btn btn-primary" data-group="single_sourcing">Single Sourcing</button>
+      <button class="btn btn-primary" data-group="kernel">Kernel</button>
       <button class="btn btn-primary" data-group="special_layouts">Special Layouts</button>
     </div>      
 
@@ -142,7 +143,7 @@ folder: mydoc
                    <ul>
                 {% for page in site.pages %}
                 {% for tag in page.tags %}
-                {% if tag == "publishing" %}
+                {% if tag == "kernel" %}
                   <li><a href="{{page.url | remove: '/'}}">{{page.title}}</a></li>
                 {% endif %}
                 {% endfor %}
