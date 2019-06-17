@@ -38,7 +38,7 @@ A segmentation fault can occur under the following circumstances:
 ```bash
 May 18 23:55:05 dhcp-192-66 kernel: test[7779]: segfault at 0 ip 00007fdddf181664 sp 00007ffcbb5eb568 error 6 in libc-2.17.so[7fdddf0f2000+1c3000]
 ```
-* test[7779] 
+* **test[7779]** 
    program name and pid number
 * segfault at 0
    memory address (in hex) that caused the segfault when the program tried to access it. Here the address is 0, so we have a null dereference, usually it is a null pointer 
@@ -113,7 +113,7 @@ enum x86_pf_error_code {
    ```
 
 [A Guide for Troubleshooting a Segfault](https://access.redhat.com/articles/372743)  
-[What the Linux kernel's messages about segfaulting programs mean on 64-bit x86](https://utcc.utoronto.ca/~cks/space/blog/linux/KernelSegfaultMessageMeaning)
+[What the Linux kernel's messages about segfaulting programs mean on 64-bit x86](https://utcc.utoronto.ca/~cks/space/blog/linux/KernelSegfaultMessageMeaning)  
 [What are segmentation faults (segfaults), and how can I identify what's causing them?](https://kb.iu.edu/d/aqsj)
 
 {% include links.html %}
