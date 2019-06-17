@@ -48,4 +48,15 @@ Email: 982092332@qq.com
 SN: GAWAE-FCWQ3-P8NYB-C7GF7-NEDRT-Q5DTB-MFZG6-6NEQC-CRMUD-8MZ2K-66SRB-SU8EW-EDLZ9-TGH3S-8SGA
 ```
 
+### Set New Hostname
+
+```bash
+sudo scutil --set HostName <new host name>
+sudo scutil --set LocalHostName <new host name>
+sudo scutil --set ComputerName <new name>
+dscacheutil -flushcache
+```
+reboot to take it in effect
+
+
 {% include links.html %}
