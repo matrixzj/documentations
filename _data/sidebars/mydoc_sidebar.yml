@@ -68,10 +68,18 @@ entries:
       url: /kernel_cpu_soft_lockup.html
       output: web, pdf
 
+  - title: Memory
+    output: web, pdf
+    folderitems:
+
+    - title: Segmentation Faults
+      url: /memory_segfaults.html
+      output: web, pdf
+
   - title: Misc
     output: web, pdf
-
     folderitems:
+
     - title: Mac Reinstallation
       url: /misc_mac_reinstallation_steps.html
       output: web, pdf
