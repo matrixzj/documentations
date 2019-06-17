@@ -1,120 +1,70 @@
 ---
-title: Segmentation Faults (Segfaults)
-tags: [memory, troubleshooting]
+title: Meminfo
+tags: [memory, info]
 keywords: segfaults
 last_updated: Juue 17, 2019
-summary: "Things related with Memory Segfaults"
+summary: "Linux Memory Info"
 sidebar: mydoc_sidebar
-permalink: memory_segfaults.html
+permalink: memory_meminfo.html
 folder: memory
 ---
 
-## Segmentation Faults(Segfaults)
+## /proc/meminfo, sar
 =====
 
-### What is a segfault?
+### /proc/meminfo
 
-A segmentation fault (aka segfault) is a common condition that causes programs to crash. Segfaults are caused by a program trying to read or write an illegal memory location. Program memory is divided into different segments: 
-
-* a text segment for program instructions
-* a data segment for variables and arrays defined at compile time
-* a stack segment for temporary (or automatic) variables defined in subroutines and functions
-* a heap segment for variables allocated during runtime by functions, such as malloc (in C) 
-
-A segfault occurs when a reference to a variable falls outside the segment where that variable resides, or when a write is attempted to a location that is in a read-only segment. In practice, segfaults are almost always due to trying to read or write a non-existent array element, not properly defining a pointer before using it, or (in C programs) accidentally using a variable's value as an address (see the scanf example below).  
-On Unix family operating systems, a signal called SIGSEGV - signal #11, defined in the system header file signal.h - is then sent to to process. The default action for SIGSEGV is abnormal termination: the process ends and an application core file may be written (depending on the system's configuration).
-
-### Why does a segfault occur?
-
-A segmentation fault can occur under the following circumstances:
-
-1. A bug (software defect) in the program or command is encountered, for example a buffer overflow (an attempt to access memory beyond the end of an array). This can typically be resolved by applying errata or vendor software updates.
-
-2. A hardware problem affects the virtual memory subsystem. For example, a RAM DIMM or CPU cache is defective.
-
-3. An attempt is made to execute a program that was not compiled/built correctly.
-
-### How to inteprete segfault log? 
 ```bash
-May 18 23:55:05 dhcp-192-66 kernel: test[7779]: segfault at 0 ip 00007fdddf181664 sp 00007ffcbb5eb568 error 6 in libc-2.17.so[7fdddf0f2000+1c3000]
+$ cat /proc/meminfo
+MemTotal:       65796288 kB
+MemFree:        49429344 kB
+MemAvailable:   64166652 kB
+Buffers:          402372 kB
+Cached:         13905632 kB
+SwapCached:            0 kB
+Active:         11509652 kB
+Inactive:        3313652 kB
+Active(anon):     550152 kB
+Inactive(anon):    49960 kB
+Active(file):   10959500 kB
+Inactive(file):  3263692 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:       8388604 kB
+SwapFree:        8388604 kB
+Dirty:               108 kB
+Writeback:             0 kB
+AnonPages:        515128 kB
+Mapped:            91320 kB
+Shmem:             84820 kB
+Slab:            1082376 kB
+SReclaimable:    1005096 kB
+SUnreclaim:        77280 kB
+KernelStack:        6752 kB
+PageTables:        12276 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    41286748 kB
+Committed_AS:    1221184 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:      190608 kB
+VmallocChunk:   34325450672 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:    251904 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+DirectMap4k:      237756 kB
+DirectMap2M:    16529408 kB
+DirectMap1G:    50331648 kB
 ```
-* **test[7779]**   
-   program name and pid number
-* **segfault at 0**
-   memory address (in hex) that caused the segfault when the program tried to access it. Here the address is 0, so we have a null dereference, usually it is a null pointer 
-* **ip 00007fdddf181664**    
-   register name and register value for current running instruction
-* **sp 00007ffcbb5eb568**  
-   regester name and register value for stack (top of stack)
-* **error 6**  
-   error and return code, which is defined in arch/x86/mm/fault.c  
-   [Segmentation fault error decoder](https://rgeissert.blogspot.com/p/segmentation-fault-error.html)
 
-### segfault error code
-```
-/*
- * Page fault error code bits:
- *
- *   bit 0 ==    0: no page found       1: protection fault(eg. writing to a read-only mapping)
- *   bit 1 ==    0: read access         1: write access
- *   bit 2 ==    0: kernel-mode access  1: user-mode access
- *   bit 3 ==                           1: use of reserved bit detected(kernel will panic if this happens)
- *   bit 4 ==                           1: fault was an instruction fetch, not data read or write
- *   bit 5 ==                           1: protection keys block access
- */
-enum x86_pf_error_code {
+* **Committed_AS** 
+An estimate of how much RAM you would need to make a 99.99% guarantee that there never is OOM (out of memory) for this workload. Normally the kernel will overcommit memory. That means, say you do a 1GB malloc, nothing happens, really. Only when you start USING that malloc memory you will get real memory on demand, and just as much as you use. So you sort of take a mortgage and hope the bank doesn't go bust. Other cases might include when you mmap a file that's shared only when you write to it and you get a private copy of that data. While it normally is shared between processes. The Committed_AS is a guesstimate of how much RAM/swap you would need worst-case.
 
-        PF_PROT         =               1 << 0,
-        PF_WRITE        =               1 << 1,
-        PF_USER         =               1 << 2,
-        PF_RSVD         =               1 << 3,
-        PF_INSTR        =               1 << 4,
-        PF_PK           =               1 << 5,
-};
-```
-* 0 (00000) / 8 (01000) / 16 (10000) / 24 (11000)  
-   a kernel-mode read resulting in no page being found / a reserved bit was detected / read(instruction fetch) / a reserved bit was detected + read(instruction fetch)
-* 1 (00001) / 9 (01001) / 17 (10001) / 25 (11001)  
-   a kernel-mode read resulting in a protection fault / a reserved bit was detected / read(instruction fetch) / a reserved bit was detected + read(instruction fetch)
-* 2 (00010) / 10 (01010) / 18 (10010) / 26 (11010)  
-   a kernel-mode write resulting in no page being found / a reserved bit was detected / write(instruction fetch) / a reserved bit was detected + write(instruction fetch)
-* 3 (00011) / 11 (01011) / 19 (10011) / 27 (11011)  
-   a kernel-mode write resulting in a protection fault / a reserved bit was detected / write(instruction fetch) / a reserved bit was detected + write(instruction fetch)
-* 4 (00100) / 12 (01100) / 20 (10100) / 28 (11100)  
-   a user-mode read resulting in no page being found / a reserved bit was detected / read(instruction fetch) / a reserved bit was detected + read(instruction fetch)
-* 5 (00101) / 13 (01101) / 21 (10101) / 29 (11101)  
-   a user-mode read resulting in a protection fault / a reserved bit was detected / read(instruction fetch) / a reserved bit was detected + read(instruction fetch)
-* 6 (00110) / 14 (01110) / 22 (10110) / 30 (11110)  
-   a user-mode write resulting in no page being found / a reserved bit was detected / write(instruction fetch) / a reserved bit was detected + write(instruction fetch)
-* 7 (00111) / 15 (01111) / 23 (10111) / 31 (11111)  
-   a user-mode write resulting in a protection fault / a reserved bit was detected / write(instruction fetch) / a reserved bit was detected + write(instruction fetch)
-* [protection keys](https://lwn.net/Articles/643797/)
-
-### Example
-* calling memset() as shown below would cause a program to segfault:
-
-   ```bash
-   $ cat test.c
-   #include <stdio.h>
-   #include <string.h>
-   
-   int main()
-   {
-       memset((char *)0x0, 1, 100);
-   }
-   
-   $ gcc test.c -o test
-   
-   $ ./test
-   Segmentation fault
-   
-   $ sudo tail -n 1 /var/log/messages
-   May 18 23:55:05 dhcp-192-66 kernel: test[7779]: segfault at 0 ip 00007fdddf181664 sp 00007ffcbb5eb568 error 6 in libc-2.17.so[7fdddf0f2000+1c3000]
-   ```
-
-[A Guide for Troubleshooting a Segfault](https://access.redhat.com/articles/372743)  
-[What the Linux kernel's messages about segfaulting programs mean on 64-bit x86](https://utcc.utoronto.ca/~cks/space/blog/linux/KernelSegfaultMessageMeaning)  
-[What are segmentation faults (segfaults), and how can I identify what's causing them?](https://kb.iu.edu/d/aqsj)
 
 {% include links.html %}
 # Segmentation Faults(Segfaults)
