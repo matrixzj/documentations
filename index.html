@@ -8,8 +8,6 @@ permalink: index.html
 sidebar: mydoc_sidebar
 ---
 
-
-
 {% if site.output == "pdf" %}
 {{site.data.alerts.note}} The content on this page doesn't display well on PDF, but I included it anyway so you could see the problems this layout poses if you're including it in PDF.  {{site.data.alerts.end}}
 {% endif %}
@@ -28,46 +26,41 @@ sidebar: mydoc_sidebar
 <div id="grid" class="row">
 
     <div class="col-xs-6 col-sm-4 col-md-4" data-groups='["kernel"]'>
-
-           <div class="panel panel-default">
-               <div class="panel-heading">Kernel</div>
-               <div class="panel-body"> All I known about Linux Kernel
-                   <ul>
+        <div class="panel panel-default">
+            <div class="panel-heading">Kernel</div>
+            <div class="panel-body"> All I known about Linux Kernel
+            <ul>
                 {% for page in site.pages %}
-                {% for tag in page.tags %}
-                {% if tag == "kernel" %}
-                  <li><a href="{{page.url | remove: '/'}}">{{page.title}}</a></li>
-                {% endif %}
+                    {% for tag in page.tags %}
+                        {% if tag == "kernel" %}
+                            <li><a href="{{page.url | remove: '/'}}">{{page.title}}</a></li>
+                        {% endif %}
+                    {% endfor %}
                 {% endfor %}
-                {% endfor %}
-                   </ul>
-               </div>
+            </ul>
             </div>
-
+         </div>
     </div>
 
     <div class="col-xs-6 col-sm-4 col-md-4" data-groups='["memory"]'>
-
-           <div class="panel panel-default">
-               <div class="panel-heading">Memory</div>
-               <div class="panel-body"> Inteprete Memory Info
-                   <ul>
+        <div class="panel panel-default">
+            <div class="panel-heading">Memory</div>
+            <div class="panel-body"> Inteprete Memory Info
+                <ul>
                 {% for page in site.pages %}
-                {% for tag in page.tags %}
-                {% if tag == "memory" %}
-                  <li><a href="{{page.url | remove: '/'}}">{{page.title}}</a></li>
-                {% endif %}
+                    {% for tag in page.tags %}
+                        {% if tag == "memory" %}
+                            <li><a href="{{page.url | remove: '/'}}">{{page.title}}</a></li>
+                        {% endif %}
+                    {% endfor %}
                 {% endfor %}
-                {% endfor %}
-                   </ul>
-               </div>
+                </ul>
             </div>
-
+         </div>
     </div>
     
           <!-- sizer -->
     <div class="col-xs-6 col-sm-4 col-md-1 shuffle_sizer"></div>          
-
 
     </div><!-- /#grid -->
 
