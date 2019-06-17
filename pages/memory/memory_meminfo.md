@@ -62,9 +62,8 @@ DirectMap2M:    16529408 kB
 DirectMap1G:    50331648 kB
 ```
 
-* **Committed_AS** 
+* `Committed_AS`  
 An estimate of how much RAM you would need to make a 99.99% guarantee that there never is OOM (out of memory) for this workload. Normally the kernel will overcommit memory. That means, say you do a 1GB malloc, nothing happens, really. Only when you start USING that malloc memory you will get real memory on demand, and just as much as you use. So you sort of take a mortgage and hope the bank doesn't go bust. Other cases might include when you mmap a file that's shared only when you write to it and you get a private copy of that data. While it normally is shared between processes. The Committed_AS is a guesstimate of how much RAM/swap you would need worst-case.
 
 
 {% include links.html %}
-# Segmentation Faults(Segfaults)
