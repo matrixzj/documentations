@@ -1,6 +1,6 @@
 ---
 title: Mac Reinstallation Steps
-tags: [mac]
+tags: [misc, mac]
 keywords: mac, reinstallation
 last_updated: Juue 17, 2019
 summary: "Steps to reinstall a workbox for myself"
