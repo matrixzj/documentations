@@ -28,18 +28,6 @@ entries:
       url: /index.html
       output: web, pdf
 
-  - title: Release Notes
-    output: web, pdf
-    folderitems:
-
-    - title: 6.0 Release notes
-      url: /mydoc_release_notes_60.html
-      output: web, pdf
-
-    - title: 5.0 Release notes
-      url: /mydoc_release_notes_50.html
-      output: web, pdf
-
   - title: Kernel
     output: web, pdf
     folderitems:
@@ -62,6 +50,15 @@ entries:
 
     - title: Meminfo
       url: /memory_meminfo.html
+      output: web, pdf
+
+
+  - title: Storage
+    output: web, pdf
+    folderitems:
+
+    - title: Device Mapper Table
+      url: /storage_device_mapper_table.html
       output: web, pdf
 
   - title: Misc
