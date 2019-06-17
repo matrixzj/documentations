@@ -1,6 +1,6 @@
 ---
 title: Device Mapper Table
-tags: [storage, DM]
+tags: [storage]
 keywords: device mapper, lvm
 last_updated: Juue 18, 2019
 summary: "Inteprete Device Mapper Table"
@@ -39,7 +39,7 @@ start length linear device offset
 * offset  
    starting offset of the mapping on the device  
 
-##### Example I:
+#### linear example I:
 ```
 0 4186112 linear 8:2 2048
 ```  
@@ -73,7 +73,7 @@ start length striped #stripes chunk_size device1 offset1 ... deviceN offsetN
 * offset  
    starting offset of the mapping on the device
 
-#### Example I:
+#### striped example I:
 ```
 0 2097152 striped 2 128 252:16 2048 252:32 2048
 ```
@@ -136,7 +136,7 @@ there is only 1 feature:
 * **handle_errors**  
    causes the mirror to respond to an error. Default is to ignore all errors. LVM enables this feature.
 
-#### Example I: 
+#### mirror example I: 
 shows a mirror mapping target for a clustered mirror with a mirror log kept on disk.
 ```
 0 52428800 mirror clustered_disk 4 253:2 1024 UUID block_on_error 3 253:3 0 253:4 0 253:5 0
@@ -162,7 +162,7 @@ shows a mirror mapping target for a clustered mirror with a mirror log kept on d
 * 253:3 0 253:4 0 253:5 0  
    major:minor numbers and offset for devices constituting each leg of mirror
 
-#### Example II:
+#### mirror example II:
 ```
 0 2252800 mirror disk 2 253:2 1024 2 253:3 0 253:4 0 1 handle_errors
 ```
