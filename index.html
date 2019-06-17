@@ -21,6 +21,7 @@ sidebar: mydoc_sidebar
       <button class="btn btn-primary" data-group="all">All</button>
       <button class="btn btn-primary" data-group="kernel">Kernel</button>
       <button class="btn btn-primary" data-group="memory">Memory</button>
+      <button class="btn btn-primary" data-group="misc">Misc</button>
     </div>      
 
 <div id="grid" class="row">
@@ -59,6 +60,24 @@ sidebar: mydoc_sidebar
          </div>
     </div>
     
+    <div class="col-xs-6 col-sm-4 col-md-4" data-groups='["Misc"]'>
+        <div class="panel panel-default">
+            <div class="panel-heading">Misc</div>
+            <div class="panel-body"> Miscellaneous Stuff
+                <ul>
+                {% for page in site.pages %}
+                    {% for tag in page.tags %}
+                        {% if tag == "misc" %}
+                            <li><a href="{{page.url | remove: '/'}}">{{page.title}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                </ul>
+            </div>
+         </div>
+    </div>
+    
+          <!-- sizer -->
           <!-- sizer -->
     <div class="col-xs-6 col-sm-4 col-md-1 shuffle_sizer"></div>          
 
