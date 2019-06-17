@@ -6,7 +6,7 @@ last_updated: Juue 17, 2019
 summary: "Things related with Memory Segfaults
 sidebar: mydoc_sidebar
 permalink: memory_segfaults.html
-folder: Memory
+folder: memory
 ---
 
 ## Segmentation Faults(Segfaults)
