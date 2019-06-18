@@ -15,6 +15,7 @@ Markdown Syntax
 ### Headings
 
 To create a heading, add number signs (`#`) in front of a word or phrase. The number of number signs you use should correspond to the heading level. For example, to create a heading level three (`<h3>`), use three number signs (e.g., `### My Header`).  
+
 **Markdown** | **HTML** | **Rendered Output**  
 ------------- | ------------- | -----   
 `# Heading level 1` | `<h1>Heading level 1</h1>` | <h1>Heading level 1</h1>  
