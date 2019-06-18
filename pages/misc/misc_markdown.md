@@ -24,7 +24,7 @@ To create a heading, add number signs (`#`) in front of a word or phrase. The nu
 `#### Heading level 4` | `<h4>Heading level 4</h4>` | <h4>Heading level 4</h4>  
 `##### Heading level 5` | `<h5>Heading level 5</h5>` | <h5>Heading level 5</h5>  
 `###### Heading level 6` | `<h6>Heading level 6</h6>` | <h6>Heading level 6</h6>  
-{:.mbtablestyle}
+{:.table-bordered}
 
 #### Alternate Syntax
 
