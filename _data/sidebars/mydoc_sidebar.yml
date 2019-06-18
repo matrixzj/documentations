@@ -77,6 +77,10 @@ entries:
       url: /misc_mac_reinstallation_steps.html
       output: web, pdf
 
+    - title: Markdown Syntax
+      url: /misc_markdown_syntax.html
+      output: web, pdf
+
   - title: Navigation
     output: web, pdf
 
