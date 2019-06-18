@@ -14,7 +14,7 @@ Markdown Syntax
 
 ### Headings
 
-To create a heading, add number signs (`#`) in front of a word or phrase. The number of number signs you use should correspond to the heading level. For example, to create a heading level three (`<h3>`), use three number signs (e.g., `### My Header`).
+To create a heading, add number signs (`#`) in front of a word or phrase. The number of number signs you use should correspond to the heading level. For example, to create a heading level three (`<h3>`), use three number signs (e.g., `### My Header`).  
 **Markdown** | **HTML** | **Rendered Output**
 ------------- | ------------- | ----- 
 `# Heading level 1` | `<h1>Heading level 1</h1>` | <h1>Heading level 1</h1>
@@ -26,7 +26,7 @@ To create a heading, add number signs (`#`) in front of a word or phrase. The nu
 
 #### Alternate Syntax
 
-Alternatively, on the line below the text, add any number of `==` characters for heading level 1 or `--` characters for heading level 2.
+Alternatively, on the line below the text, add any number of `==` characters for heading level 1 or `--` characters for heading level 2.  
 **Markdown** | **HTML** | **Rendered Output**
 ------------- | ------------- | ----- 
 `Heading level 1`<br>`---------------` | `<h1>Heading level 1</h1>` | <h1>Heading level 1</h1>
@@ -36,7 +36,7 @@ Alternatively, on the line below the text, add any number of `==` characters for
 
 #### Bold
 
-To bold text, add two asterisks or underscores before and after a word or phrase. To bold the middle of a word for emphasis, add two asterisks without spaces around the letters.
+To bold text, add two asterisks or underscores before and after a word or phrase. To bold the middle of a word for emphasis, add two asterisks without spaces around the letters.  
 **Markdown** | **HTML** | **Rendered Output**
 ------------- | ------------- | ----- 
 `I just love **bold text**.` | `I just love <strong>bold text</strong>.` | I just love <strong>bold text.</strong>
@@ -45,7 +45,7 @@ To bold text, add two asterisks or underscores before and after a word or phrase
 
 #### Italic
 
-To italicize text, add one asterisk or underscore before and after a word or phrase. To italicize the middle of a word for emphasis, add one asterisk without spaces around the letters.
+To italicize text, add one asterisk or underscore before and after a word or phrase. To italicize the middle of a word for emphasis, add one asterisk without spaces around the letters.  
 **Markdown** | **HTML** | **Rendered Output**
 ------------- | ------------- | ----- 
 `Italicized text is the *cat's meow*.` | `Italicized text is the <em>cat's meow</em>.` | Italicized text is the <em>cat’s meow</em>.
@@ -54,7 +54,7 @@ To italicize text, add one asterisk or underscore before and after a word or phr
 
 #### Bold and Italic
 
-To emphasize text with bold and italics at the same time, add three asterisks or underscores before and after a word or phrase.
+To emphasize text with bold and italics at the same time, add three asterisks or underscores before and after a word or phrase.  
 **Markdown** | **HTML** | **Rendered Output**
 ------------- | ------------- | ----- 
 `This text is ***really important***.` | `This text is <strong><em>really important</em></strong>.` | This text is <strong><em>really important</em></strong>.
@@ -64,21 +64,21 @@ To emphasize text with bold and italics at the same time, add three asterisks or
 
 #### Blockquotes
 
-To create a blockquote, add a `>` in front of a paragraph.
+To create a blockquote, add a `>` in front of a paragraph.  
 
 `> Dorothy followed her through many of the beautiful rooms in her castle.`
 
-The rendered output looks like this:
+The rendered output looks like this:  
 
 > Dorothy followed her through many of the beautiful rooms in her castle.
 
 #### Blockquotes with Multiple Paragraphs
 
-Blockquotes can contain multiple paragraphs. Add a `>` on the blank lines between the paragraphs.
+Blockquotes can contain multiple paragraphs. Add a `>` on the blank lines between the paragraphs.  
 
-`> Dorothy followed her through many of the beautiful rooms in her castle.`
-`>`
-`> The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.`
+`> Dorothy followed her through many of the beautiful rooms in her castle.`  
+`>`  
+`> The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.`  
 
 The rendered output looks like this:
 
