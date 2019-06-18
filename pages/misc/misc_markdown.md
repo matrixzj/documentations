@@ -19,6 +19,7 @@ To create a heading, add number signs (`#`) in front of a word or phrase. The nu
 | **Markdown** | **HTML** |   
 | ------------- | ------------- |  
 | `# Heading level 1` | `<h1>Heading level 1</h1>` |   
+
 rendered output:   
 > # Heading level 1
 
