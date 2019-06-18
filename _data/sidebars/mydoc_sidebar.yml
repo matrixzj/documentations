@@ -61,6 +61,14 @@ entries:
       url: /storage_device_mapper_table.html
       output: web, pdf
 
+  - title: IDM
+    output: web, pdf
+    folderitems:
+
+    - title: Kerberos Authentication
+      url: /idm_kerberos_authentication.html
+      output: web, pdf
+
   - title: Misc
     output: web, pdf
     folderitems:
