@@ -10,6 +10,7 @@ permalink: misc_markdown_syntax.html
 folder: Misc
 ---
 
+{::nomarkdown}
 <script>
 $( document ).ready(function() {
   // Handler for .ready() called.
@@ -27,6 +28,7 @@ $('#toc').on('click', 'a', function() {
 
 });
 </script>
+{:/}
 
 Markdown Syntax
 =====
