@@ -86,6 +86,17 @@ The rendered output looks like this:
 >
 > The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.
 
+### Lists
 
+You can organize items into ordered and unordered lists.
+
+#### Ordered Lists
+
+To create an ordered list, add line items with numbers followed by periods. The numbers don’t have to be in numerical order, but the list should start with the number one.
+
+**Markdown** | **HTML** | **Rendered Output**  
+------------- | ------------- | -----   
+`1. First item`<br>`2. Second item`<br>`3. Third item`<br>`4. Fourth item ` | `<ol>`<br>`<li>First item</li>`<br>`<li>Second item</li>`<br>`<li>Third item</li>`<br>`<li>Fourth item</li>`<br>`</ol> ` | 1. First item<br>2. Second item<br>3. Third item<br>4. Fourth item 
+{: .table-bordered }
 
 {% include links.html %}
