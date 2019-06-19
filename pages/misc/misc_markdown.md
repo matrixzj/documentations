@@ -97,7 +97,7 @@ To create an ordered list, add line items with numbers followed by periods. The 
 **Markdown** | **HTML** | **Rendered Output**  
 ------------- | ------------- | -----   
 `1. First item`<br>`2. Second item`<br>`3. Third item`<br>`4. Fourth item ` | `<ol>`<br>`<li>First item</li>`<br>`<li>Second item</li>`<br>`<li>Third item</li>`<br>`<li>Fourth item</li>`<br>`</ol> ` | 1. First item<br>2. Second item<br>3. Third item<br>4. Fourth item 
-`1. First item`<br>`2. Second item`<br>`3. Third item`<br>`    1. Indented item`<br>`    2. Indented item`<br>`4. Fourth item ` | `<ol>`<br>`<li>First item</li>`<br>`<li>Second item</li>`<br>`<li>Third item</li>`<br>`<ol>`<br>`<li>Indented item</li>`<br>`<li>Indented item</li>`<br>`</ol>`<br>`<li>Fourth item</li>`<br>`</ol> ` | {::nomarkdown}<ul><li>item1</li><li>item2</li></ul>{:/}
+`1. First item`<br>`2. Second item`<br>`3. Third item`<br>`    1. Indented item`<br>`    2. Indented item`<br>`4. Fourth item ` | `<ol>`<br>`<li>First item</li>`<br>`<li>Second item</li>`<br>`<li>Third item</li>`<br>`<ol>`<br>`<li>Indented item</li>`<br>`<li>Indented item</li>`<br>`</ol>`<br>`<li>Fourth item</li>`<br>`</ol> ` | {::nomarkdown}<ol><li>First item</li><li>Second item</li><li>Third item</li><ol><li>Indented item</li><li>Indented item</li></ol><li>Fourth item</li></ol>{:/}
 {: .table-bordered }
 
 {% include links.html %}
