@@ -124,7 +124,7 @@ To denote a word or phrase as code, enclose it in tick marks (`` ` ``).
 
 #### Block
 
-To create code blocks, indent every line of the block by at least four spaces or one tab, or put three tick marks (` ``` `) or three tildes (`~~~`) on the lines before and after the code block
+To create code blocks, indent every line of the block by at least four spaces or one tab, or put three tick marks (```` ``` ````) or three tildes (`~~~`) on the lines before and after the code block
 
 `    <html>`  
 `      <head>`  
