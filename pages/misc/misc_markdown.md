@@ -111,5 +111,14 @@ To create an unordered list, add dashes (`-`), asterisks (`*`), or plus signs (`
 `+ First item`<br>`+ Second item`<br>`+ Third item`<br>`+ Fourth item` | `<ul>`<br>`<li>First item</li>`<br>`<li>Second item</li>`<br>`<li>Third item</li>`<br>`<li>Fourth item</li>`<br>`</ul>` | {::nomarkdown}<ul><li>First item</li><li>Second item</li><li>Third item</li><li>Fourth item</li></ul>{:/}
 {: .table-bordered }
 
+### Code
+
+#### Word or Phase
+
+To denote a word or phrase as code, enclose it in tick marks (```).
+
+**Markdown** | **HTML** | **Rendered Output**  
+------------- | ------------- | -----   
+`At the command prompt, type \`nano\`.` | `At the command prompt, type <code>nano</code>.` | {::nomarkdown}At the command prompt, type <code>nano</code>.{:/}
 
 {% include links.html %}
