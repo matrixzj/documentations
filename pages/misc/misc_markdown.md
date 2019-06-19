@@ -68,7 +68,7 @@ To emphasize text with bold and italics at the same time, add three asterisks or
 ------------- | ------------- | -----   
 ^superscript^ | | 
 
-test ^superscript^ 
+test ==superscript==
 
 #### Blockquotes
 
