@@ -143,9 +143,31 @@ To create code blocks, indent every line of the block by at least four spaces or
 ~~~
 ````  
 Rendered Output:  
+```
     <html>
       <head>
       </head>
     </html>
+```
+
+### Links
+
+To create a link, enclose the link text in brackets (e.g., [Duck Duck Go]) and then follow it immediately with the URL in parentheses (e.g., (https://duckduckgo.com)).
+
+`My own site is [Matrix Garden](https://matrixzj.github.io).`
+
+The rendered output looks like this:
+
+My own site is [Matrix Garden](https://matrixzj.github.io).
+
+#### Adding Titles
+
+You can optionally add a title for a link. This will appear as a tooltip when the user hovers over the link. To add a title, enclose it in parentheses after the URL.
+
+`My own site is [Matrix Garden](https://matrixzj.github.io "best site").`
+
+The rendered output looks like this:
+
+My own site is [Matrix Garden](https://matrixzj.github.io "best site").
 
 {% include links.html %}
