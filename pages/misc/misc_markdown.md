@@ -115,10 +115,29 @@ To create an unordered list, add dashes (`-`), asterisks (`*`), or plus signs (`
 
 #### Word or Phase
 
-To denote a word or phrase as code, enclose it in tick marks (```).
+To denote a word or phrase as code, enclose it in tick marks (`````).
 
 **Markdown** | **HTML** | **Rendered Output**  
 ------------- | ------------- | -----   
 ``At the command prompt, type `nano`.`` | `At the command prompt, type <code>nano</code>.` | {::nomarkdown}At the command prompt, type <code>nano</code>.{:/}
+
+#### Block
+
+To create code blocks, indent every line of the block by at least four spaces or one tab. 
+
+```
+    <html>
+      <head>
+      </head>
+    </html>
+```
+
+Rendered Output:
+
+    <html>
+      <head>
+      </head>
+    </html>
+
 
 {% include links.html %}
