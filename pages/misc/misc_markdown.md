@@ -170,4 +170,11 @@ The rendered output looks like this:
 
 My own site is [Matrix Garden](https://matrixzj.github.io "best site").
 
+
+[hobbit-hole][1]
+[hobbit-hole] [1]
+[hobbit-hole][a]
+[hobbit-hole][A]
+
+
 {% include links.html %}
