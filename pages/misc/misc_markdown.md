@@ -18,12 +18,12 @@ To create a heading, add number signs (`#`) in front of a word or phrase. The nu
 
 | **Markdown** | **Alternate** | **HTML** | **Rendered Output** |   
 | ------------- | ------------- | ------------- | ------------- | 
-| `# Heading level 1` | `Heading level 1`<br>`---------------` | `<h1>Heading level 1</h1>` | <img src="{{ 'images/misc/markdown/heading1.png' | relative_url }}" alt="heading1"> |   
-|`## Heading level 2` | `Heading level 2`<br>`===============` | `<h2>Heading level 2</h2>` | <img src="{{ 'images/misc/markdown/heading2.png' | relative_url }}" alt="heading2"> | 
-|`### Heading level 3` | | `<h3>Heading level 3</h3>` | <img src="{{ 'images/misc/markdown/heading3.png' | relative_url }}" alt="heading3"> |
-|`#### Heading level 4` | | `<h4>Heading level 4</h4>` | <img src="{{ 'images/misc/markdown/heading4.png' | relative_url }}" alt="heading4"> |
-|`##### Heading level 5` | | `<h5>Heading level 5</h5>` | <img src="{{ 'images/misc/markdown/heading5.png' | relative_url }}" alt="heading5"> |
-|`###### Heading level 6` | | `<h6>Heading level 6</h6>` | <img src="{{ 'images/misc/markdown/heading6.png' | relative_url }}" alt="heading6"> |
+| `# Heading level 1` | `Heading level 1`<br>`---------------` | `<h1>Heading level 1</h1>` | {::nomarkdown}<h1>Heading level 1</h1>{:/}  
+| `## Heading level 2` | `Heading level 2`<br>`===============` | `<h2>Heading level 2</h2>` | <img src="{{ 'images/misc/markdown/heading2.png' | relative_url }}" alt="heading2"> | 
+| `### Heading level 3` | | `<h3>Heading level 3</h3>` | <img src="{{ 'images/misc/markdown/heading3.png' | relative_url }}" alt="heading3"> |
+| `#### Heading level 4` | | `<h4>Heading level 4</h4>` | <img src="{{ 'images/misc/markdown/heading4.png' | relative_url }}" alt="heading4"> |
+| `##### Heading level 5` | | `<h5>Heading level 5</h5>` | <img src="{{ 'images/misc/markdown/heading5.png' | relative_url }}" alt="heading5"> |
+| `###### Heading level 6` | | `<h6>Heading level 6</h6>` | <img src="{{ 'images/misc/markdown/heading6.png' | relative_url }}" alt="heading6"> |
 {: .table-bordered }
 
 ### Emphasis 
