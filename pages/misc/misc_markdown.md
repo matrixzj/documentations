@@ -62,6 +62,14 @@ To emphasize text with bold and italics at the same time, add three asterisks or
 `This text is **_really important_**.` | `This text is <strong><em>really important</em></strong>.` | This text is <strong><em>really important</em></strong>.  
 {: .table-bordered }
 
+#### Superscript and Subscript
+
+**Markdown** | **HTML** | **Rendered Output**  
+------------- | ------------- | -----   
+^superscript^ | | 
+
+^superscript^ 
+
 #### Blockquotes
 
 To create a blockquote, add a `>` in front of a paragraph.  
