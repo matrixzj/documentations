@@ -4,6 +4,7 @@ tags: [misc]
 keywords: markdown
 last_updated: June 18, 2019
 summary: "Markdown Cheatsheet"
+toc: false
 sidebar: mydoc_sidebar
 permalink: misc_markdown_syntax.html
 folder: Misc
