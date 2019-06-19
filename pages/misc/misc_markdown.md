@@ -106,9 +106,9 @@ To create an unordered list, add dashes (`-`), asterisks (`*`), or plus signs (`
 
 **Markdown** | **HTML** | **Rendered Output**  
 ------------- | ------------- | -----   
-`- First item`<br>`- Second item`<br>`- Third item`<br>`- Fourth item` | `<ul>`<br>`<li>First item</li>`<br>`<li>Second item</li>`<br>`<li>Third item</li>`<br>`<li>Fourth item</li>`<br>`</ul>` | {::nomarkdown}<ol><li>First<ul><li>First item</li><li>Second item</li><li>Third item</li><li>Fourth item</li></ul>{:/}
-`* First item`<br>`* Second item`<br>`* Third item`<br>`* Fourth item` | `<ul>`<br>`<li>First item</li>`<br>`<li>Second item</li>`<br>`<li>Third item</li>`<br>`<li>Fourth item</li>`<br>`</ul>` | {::nomarkdown}<ol><li>First<ul><li>First item</li><li>Second item</li><li>Third item</li><li>Fourth item</li></ul>{:/}
-`+ First item`<br>`+ Second item`<br>`+ Third item`<br>`+ Fourth item` | `<ul>`<br>`<li>First item</li>`<br>`<li>Second item</li>`<br>`<li>Third item</li>`<br>`<li>Fourth item</li>`<br>`</ul>` | {::nomarkdown}<ol><li>First<ul><li>First item</li><li>Second item</li><li>Third item</li><li>Fourth item</li></ul>{:/}
+`- First item`<br>`- Second item`<br>`- Third item`<br>`- Fourth item` | `<ul>`<br>`<li>First item</li>`<br>`<li>Second item</li>`<br>`<li>Third item</li>`<br>`<li>Fourth item</li>`<br>`</ul>` | {::nomarkdown}<ul><li>First item</li><li>Second item</li><li>Third item</li><li>Fourth item</li></ul>{:/}
+`* First item`<br>`* Second item`<br>`* Third item`<br>`* Fourth item` | `<ul>`<br>`<li>First item</li>`<br>`<li>Second item</li>`<br>`<li>Third item</li>`<br>`<li>Fourth item</li>`<br>`</ul>` | {::nomarkdown}<ul><li>First item</li><li>Second item</li><li>Third item</li><li>Fourth item</li></ul>{:/}
+`+ First item`<br>`+ Second item`<br>`+ Third item`<br>`+ Fourth item` | `<ul>`<br>`<li>First item</li>`<br>`<li>Second item</li>`<br>`<li>Third item</li>`<br>`<li>Fourth item</li>`<br>`</ul>` | {::nomarkdown}<ul><li>First item</li><li>Second item</li><li>Third item</li><li>Fourth item</li></ul>{:/}
 {: .table-bordered }
 
 
