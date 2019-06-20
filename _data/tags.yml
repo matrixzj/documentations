@@ -3,6 +3,10 @@
 # In other words, the last line must be the last tag in the allowed-tags list.
 allowed-tags:
   - kernel
+  - memory 
+  - storage
+  - idm
+  - misc
   - getting_started
   - content_types
   - navigation
