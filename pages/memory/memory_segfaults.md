@@ -1,6 +1,6 @@
 ---
 title: Segmentation Faults (Segfaults)
-tags: [memory, troubleshooting]
+tags: [memory]
 keywords: segfaults
 last_updated: Juue 17, 2019
 summary: "Things related with Memory Segfaults"
