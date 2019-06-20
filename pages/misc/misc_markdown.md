@@ -2,7 +2,7 @@
 title: Markdown Syntax
 tags: [misc]
 keywords: markdown
-last_updated: June 18, 2019
+last_updated: June 20, 2019
 summary: "Markdown Cheatsheet"
 sidebar: mydoc_sidebar
 permalink: misc_markdown_syntax.html
@@ -25,6 +25,7 @@ To create a heading, add number signs (`#`) in front of a word or phrase. The nu
 | `##### Heading level 5` | | `<h5>Heading level 5</h5>` | {::nomarkdown}<h5>Heading level 5</h5>{:/}
 | `###### Heading level 6` | | `<h6>Heading level 6</h6>` | {::nomarkdown}<h6>Heading level 6</h6>{:/}
 {: .table-bordered }
+
 
 ### Emphasis 
 
@@ -191,10 +192,89 @@ Reference-style links are constructed in two parts: the part you keep inline wit
 [3]: <https://matrixzj.github.io/documentations> "Markdown Syntax"
 ```
 
+The rendered output looks like this:
+
 [Matrix Keycap Garden][1] is maintained by [Matrix Zou][2], and based on [Markdown][3]
 
 [1]: <https://matrixzj.github.io> "Keycaps Garden"
 [2]: <https://matrixzj.github.io/resume> "about Matrix"
 [3]: <https://matrixzj.github.io/documentations> "Markdown Syntax"
+
+#### Footnotes
+
+Footnotes are built with 2 parts: 
+    1 label, enclose with brackets and label text must be lead by `^'
+    2 footnotes content, can be anywhere in the doc, lead by `label` defined above + `: ` + real footnote content
+
+```
+Footnotes[^1] have a label[^label] 
+
+[^1]: This is a footnote
+[^label]: A footnote on "label"
+```
+
+Footnotes[^1] have a label[^label]  
+Note: footnote will be shown in the end of page. 
+
+[^1]: This is a footnote
+[^label]: A footnote on "label"
+
+#### Images
+
+To add an image, add an exclamation mark (!), followed by alt text in brackets, and the path or URL to the image asset in parentheses. You can optionally add a title after the URL in the parentheses.
+
+`![Matrix](/images/misc/markdown/Portrait.JPG)`
+
+Rendered output:
+
+![Matrix](images/misc/markdown/Portrait.JPG)
+
+##### Linking Images
+
+To add a link to an image, enclose the Markdown for the image in brackets, and then add the link in parentheses.
+
+`[![Matrix](images/misc/markdown/Portrait.JPG)](https://matrixzj.github.io/resume)`
+
+Rendered output
+
+[![Matrix](images/misc/markdown/Portrait.JPG)](https://matrixzj.github.io/resume)
+
+### Tables
+
+Tables aren't part of the core Markdown spec, but they are part of GFM and Markdown Here supports them. 
+
+```
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
+```
+
+Rendered output:
+
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
+
+There must be at least 3 dashes separating each header cell. The outer pipes (`|`) are optional, and you don't need to make the 
+raw Markdown line up prettily. You can also use inline Markdown.
+
+```
+Markdown | Less | Pretty
+--- | --- | ---
+*Still* | `renders` | **nicely**
+1 | 2 | 3
+```
+
+Rendered output:
+
+Markdown | Less | Pretty
+--- | --- | ---
+*Still* | `renders` | **nicely**
+1 | 2 | 3
+
 
 {% include links.html %}
