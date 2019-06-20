@@ -170,16 +170,31 @@ The rendered output looks like this:
 
 My own site is [Matrix Garden](https://matrixzj.github.io "best site").
 
-In a hole in the ground there lived a hobbit. Not a nasty, dirty, wet hole, filled with the ends
-of worms and an oozy smell, nor yet a dry, bare, sandy hole with nothing in it to sit down on or to
-eat: it was a [hobbit-hole](https://en.wikipedia.org/wiki/Hobbit#Lifestyle "Hobbit lifestyles"), and that means comfort.
+#### Reference-style Links
 
-In a hole in the ground there lived a hobbit. Not a nasty, dirty, wet hole, filled with the ends
-of worms and an oozy smell, nor yet a dry, bare, sandy hole with nothing in it to sit down on or to
-eat: it was a [hobbit-hole][1], and that means comfort. [my own site][2]
+Reference-style links are constructed in two parts: the part you keep inline with your text and the part you store somewhere else in the file to keep the text easy to read.
 
-[1]: <https://en.wikipedia.org/wiki/Hobbit#Lifestyle> "Hobbit lifestyles"
-[2]: <https://matrixzj.github.io> "keycaps garden"
+1. The first part of a reference-style link is formatted with two sets of brackets. 
+    1. The first set of brackets surrounds the text that should appear linked. 
+    2. The second set of brackets displays a label used to point to the link you’re storing elsewhere in your document.
 
+2. The second part of a reference-style link is formatted with the following attributes:
+    1. The label, in brackets, followed immediately by a colon and at least one space (e.g., `[label]:` ).
+    2. The URL for the link, which you can optionally enclose in angle brackets.
+    3. The optional title for the link, which you can enclose in double quotes, single quotes, or parentheses.
+
+```
+[Matrix Keycap Garden][1] is maintained by [Matrix Zou][2], and based on [Markdown][3]
+
+[1]: <https://matrixzj.github.io> "Keycaps Garden"
+[2]: <https://matrixzj.github.io/resume> "about Matrix"
+[3]: <https://matrixzj.github.io/documentations> "Markdown Syntax"
+```
+
+[Matrix Keycap Garden][1] is maintained by [Matrix Zou][2], and based on [Markdown][3]
+
+[1]: <https://matrixzj.github.io> "Keycaps Garden"
+[2]: <https://matrixzj.github.io/resume> "about Matrix"
+[3]: <https://matrixzj.github.io/documentations> "Markdown Syntax"
 
 {% include links.html %}
