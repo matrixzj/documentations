@@ -62,14 +62,6 @@ To emphasize text with bold and italics at the same time, add three asterisks or
 `This text is **_really important_**.` | `This text is <strong><em>really important</em></strong>.` | This text is <strong><em>really important</em></strong>.  
 {: .table-bordered }
 
-#### Superscript and Subscript
-
-**Markdown** | **HTML** | **Rendered Output**  
-------------- | ------------- | -----   
-^superscript^ | | 
-
-test ==superscript==
-
 #### Blockquotes
 
 To create a blockquote, add a `>` in front of a paragraph.  
@@ -178,11 +170,9 @@ The rendered output looks like this:
 
 My own site is [Matrix Garden](https://matrixzj.github.io "best site").
 
-
-[hobbit-hole][1]  
-[hobbit-hole] [1]  
-[hobbit-hole][a]  
-[hobbit-hole][A]  
+In a hole in the ground there lived a hobbit. Not a nasty, dirty, wet hole, filled with the ends
+of worms and an oozy smell, nor yet a dry, bare, sandy hole with nothing in it to sit down on or to
+eat: it was a [hobbit-hole](https://en.wikipedia.org/wiki/Hobbit#Lifestyle "Hobbit lifestyles"), and that means comfort.
 
 
 {% include links.html %}
