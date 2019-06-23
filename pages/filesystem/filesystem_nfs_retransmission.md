@@ -1,12 +1,12 @@
 ---
-title: Mac Reinstallation Steps
-tags: [misc]
-keywords: mac, reinstallation
+title: NFS Retransmission
+tags: [filesystem]
+keywords: nfs, retransmission
 last_updated: June 17, 2019
-summary: "Steps to reinstall a workbox for myself"
+summary: "NFS Retransmission mechanism"
 sidebar: mydoc_sidebar
-permalink: misc_mac_reinstallation_steps.html
-folder: Misc
+permalink: filesystem_nfs_retransmission.html
+folder: filesystem
 ---
 
 ## Mac Reinstallation Steps
