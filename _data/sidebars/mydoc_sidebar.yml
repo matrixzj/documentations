@@ -81,6 +81,10 @@ entries:
       url: /misc_markdown_syntax.html
       output: web, pdf
 
+    - title: Modify VM Image without Starting IT
+      url: /misc_guestfish.html
+      output: web, pdf
+
   - title: Navigation
     output: web, pdf
 
