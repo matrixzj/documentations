@@ -12,7 +12,7 @@ folder: Misc
 ## Modify VM Image without Starting It
 =====
 
-### Load  image file with guestfish
+### Load image file with guestfish
 
 ```bash
 # guestfish --rw -a /export/data/kvm/images/image.qcow2

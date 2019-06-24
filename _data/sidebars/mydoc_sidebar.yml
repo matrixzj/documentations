@@ -85,6 +85,10 @@ entries:
       url: /misc_guestfish.html
       output: web, pdf
 
+    - title: HP iLO
+      url: /misc_hpilo.html
+      output: web, pdf
+
   - title: Navigation
     output: web, pdf
 
