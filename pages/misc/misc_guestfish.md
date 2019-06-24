@@ -47,4 +47,6 @@ ei
 e
 ```
 
+[Modify images](https://docs.openstack.org/image-guide/modify-images.html)
+
 {% include links.html %}
