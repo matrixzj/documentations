@@ -69,6 +69,10 @@ entries:
       url: /idm_kerberos_authentication.html
       output: web, pdf
 
+    - title: IPA / Win AD Sync
+      url: /idm_ipa_win_sync.html
+      output: web, pdf
+
   - title: Misc
     output: web, pdf
     folderitems:
