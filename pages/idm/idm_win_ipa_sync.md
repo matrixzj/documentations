@@ -132,4 +132,11 @@ $TTL    1h
 75              IN      PTR     client1.example.net.
 ```
 
+### Preparation: Windows AD Setup
+
+1. Network Setup
+    - IP Address Assignment 
+    - Disable Firewall
+    - Hostname Change
+
 {% include links.html %}
