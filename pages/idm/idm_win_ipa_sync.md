@@ -5,7 +5,8 @@ keywords: ipa, ad, passwod, sync
 last_updated: June 25, 2019
 summary: "IPA to Windows AD Domain Password / User Sync"
 sidebar: mydoc_sidebar
-jjj
+permalink: idm_ipa_win_sync.html
+folder: idm
 ---
 
 Kerberos Authentication
