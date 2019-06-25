@@ -79,14 +79,14 @@ for i in iLOInfoDict:
 Result Example:
 ```bash
  $ sudo ./gather_ilo_info_v1.py 192.168.100.0/24
---------------- -------- -------- ------------  ------------------------------- -------------------------------
-iLO IP Address  iLO Type  iLO Ver Server Model  iLO Server FQDN                 iLO FQDN
---------------- -------- -------- ------------  ------------------------------- -------------------------------
-192.168.100.51      iLO4     2.50 DL380p Gen8   ilo01.example.net               ilo01-iLO.example.net
-192.168.100.50      iLO4     2.50 DL380p Gen8   ilo02.example.net               ilo02-iLO.example.net
-192.168.100.53      iLO4     2.50 DL360 Gen9    ilo03.example.net               ilo03-iLO.example.net
-192.168.100.52      iLO3     1.85 DL380 G7      ilo04.example.net               ilo04-iLO.example.net
-192.168.100.212     iLO4     2.50 DL360 Gen9    ilo05.example.net               ilo05-iLO.example.net
+--------------- -------- -------- ------------  ------------------ ----------------------
+iLO IP Address  iLO Type  iLO Ver Server Model  iLO Server FQDN    iLO FQDN
+--------------- -------- -------- ------------  ------------------ ----------------------
+192.168.100.51      iLO4     2.50 DL380p Gen8   ilo01.example.net  ilo01-iLO.example.net
+192.168.100.50      iLO4     2.50 DL380p Gen8   ilo02.example.net  ilo02-iLO.example.net
+192.168.100.53      iLO4     2.50 DL360 Gen9    ilo03.example.net  ilo03-iLO.example.net
+192.168.100.52      iLO3     1.85 DL380 G7      ilo04.example.net  ilo04-iLO.example.net
+192.168.100.212     iLO4     2.50 DL360 Gen9    ilo05.example.net  ilo05-iLO.example.net
 ```
 
 ### Gather iLO info for a subnet with iLO restful API
@@ -174,9 +174,9 @@ $ su -
 # export PYTHONHTTPSVERIFY=0
 
 # ./gather_ilo_info.py 192.168.100.0/24
---------------- -------- -------- ------------  ------------------------------- 
-iLO IP Address  iLO Type  iLO Ver Server Model  iLO Server FQDN                 
---------------- -------- -------- ------------  ------------------------------- 
+--------------- -------- -------- ------------  ------------------
+iLO IP Address  iLO Type  iLO Ver Server Model  iLO Server FQDN   
+--------------- -------- -------- ------------  ------------------
 192.168.100.51      iLO4     2.50 DL380p Gen8   ilo01.example.net               
 192.168.100.50      iLO4     2.50 DL380p Gen8   ilo02.example.net               
 192.168.100.53      iLO4     2.50 DL360 Gen9    ilo03.example.net               
