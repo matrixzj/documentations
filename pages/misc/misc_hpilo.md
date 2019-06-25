@@ -12,7 +12,7 @@ folder: Misc
 ## HP iLO
 =====
 
-### Gather iLO info for a subnet
+### Gather iLO info for a subnet with python lib `hpilo`
 
 ```python
 #!/usr/bin/env python
@@ -76,6 +76,112 @@ for i in iLOInfoDict:
     print printFormat % (i, iLOInfoDict[i][0], iLOInfoDict[i][1], iLOInfoDict[i][2], iLOInfoDict[i][3], iLOInfoDict[i][4])
 ```
 
-[Modify images](https://docs.openstack.org/image-guide/modify-images.html)
+Result Example:
+```bash
+ $ sudo ./gather_ilo_info_v1.py 192.168.100.0/24
+--------------- -------- -------- ------------  ------------------------------- -------------------------------
+iLO IP Address  iLO Type  iLO Ver Server Model  iLO Server FQDN                 iLO FQDN
+--------------- -------- -------- ------------  ------------------------------- -------------------------------
+192.168.100.51      iLO4     2.50 DL380p Gen8   ilo01.example.net               ilo01-iLO.example.net
+192.168.100.50      iLO4     2.50 DL380p Gen8   ilo02.example.net               ilo02-iLO.example.net
+192.168.100.53      iLO4     2.50 DL360 Gen9    ilo03.example.net               ilo03-iLO.example.net
+192.168.100.52      iLO3     1.85 DL380 G7      ilo04.example.net               ilo04-iLO.example.net
+192.168.100.212     iLO4     2.50 DL360 Gen9    ilo05.example.net               ilo05-iLO.example.net
+```
+
+### Gather iLO info for a subnet with iLO restful API
+
+```python
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+
+import nmap
+from sys import argv
+from httplib import HTTPSConnection
+from base64 import b64encode
+import json
+import xml.etree.ElementTree
+import urllib2
+
+script, iLONetwork = argv
+userid='admin'
+passwd='admin'
+
+iLOInfoDict = {}
+
+def probeiLOInfo(_iLOIPAddr):
+    auth='BASIC ' + b64encode(userid + ":" + passwd)
+    header = {'Authorization': auth}
+
+    conn = HTTPSConnection(host=_iLOIPAddr, strict=True)
+
+    iLOInfoURL = 'http://' + _iLOIPAddr + '/xmldata?item=All'
+    iLOPage = urllib2.urlopen(iLOInfoURL)
+    iLOXML = xml.etree.ElementTree.parse(iLOPage)
+    iLOXMLRoot = iLOXML.getroot()
+
+    # parse iLO Type
+    for i in iLOXMLRoot.iter('PN'):
+        iLOMajorVersion = i.text.split('(')[1].split(')')[0]
+
+    # parse iLO Ver
+    for i in iLOXMLRoot.iter('FWRI'):
+        iLOMinorVersion = i.text
+
+    # parse HW Type
+    for i in iLOXMLRoot.iter('SPN'):
+        iLOHardwareType = i.text
+
+    # probe FQDN info
+    if iLOMajorVersion == 'iLO 4':
+        conn.request('GET', '/rest/v1/Managers/1/NetworkService', headers=header)
+        iLOResponse = conn.getresponse().read().split("'")[0]
+        iLOResponseDict = json.loads(iLOResponse)
+        iLOFQDN = iLOResponseDict['FQDN']
+        conn.close()
+    else:
+        iLOFQDN = 'unknown'
+
+    iLOInfoDict[_iLOIPAddr] = (iLOMajorVersion, iLOMinorVersion, iLOHardwareType, iLOFQDN)
+
+nm = nmap.PortScanner()
+networkScanResult = nm.scan(hosts=iLONetwork, arguments='-n -P0 -sS -p 17988')
+
+iLOAliveHostsList = []
+for key in networkScanResult['scan']:
+    if networkScanResult['scan'][key]['tcp'][17988]['state'] == 'open':
+        iLOAliveHostsList.append(key)
+
+iLOAliveHostsList.sort()
+
+for iLOHost in iLOAliveHostsList:
+        probeiLOInfo(iLOHost)
+
+
+print '''
+--------------- -------- ------- ---------------------- -------------------------------
+iLO IP Address  iLO Type iLO Ver       Server Model           iLO FQDN
+--------------- -------- ------- ---------------------- -------------------------------'''
+
+for i in iLOInfoDict:
+    print '%-15s %7s %-8s %-22s %-s' % (i, iLOInfoDict[i][0], iLOInfoDict[i][1], iLOInfoDict[i][2], iLOInfoDict[i][3])
+```
+
+Result:
+```bash
+$ su - 
+
+# export PYTHONHTTPSVERIFY=0
+
+# ./gather_ilo_info.py 192.168.100.0/24
+--------------- -------- -------- ------------  ------------------------------- 
+iLO IP Address  iLO Type  iLO Ver Server Model  iLO Server FQDN                 
+--------------- -------- -------- ------------  ------------------------------- 
+192.168.100.51      iLO4     2.50 DL380p Gen8   ilo01.example.net               
+192.168.100.50      iLO4     2.50 DL380p Gen8   ilo02.example.net               
+192.168.100.53      iLO4     2.50 DL360 Gen9    ilo03.example.net               
+192.168.100.52      iLO3     1.85 DL380 G7      ilo04.example.net               
+192.168.100.212     iLO4     2.50 DL360 Gen9    ilo05.example.net               
+```
 
 {% include links.html %}
