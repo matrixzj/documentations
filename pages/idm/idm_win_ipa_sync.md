@@ -140,7 +140,7 @@ $TTL    1h
     - Hostname Change
 
 2. AD Controller / CA Setup
-    - Add roles to Window 
+    - Add roles to Window  
     ![sync01](images/idm/ipa_win_sync_01.png)
 
 {% include links.html %}
