@@ -9,8 +9,7 @@ permalink: idm_ipa_win_sync.html
 folder: idm
 ---
 
-Kerberos Authentication
-======
+## IPA / Win AD Sync
 
 ### Preparation: Bind DNS Setup
 
