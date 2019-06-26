@@ -178,32 +178,40 @@ $TTL    1h
 
     - Windows CA
 
-a01
-![dc01](images/idm/ipa_win_sync_ca_01.png)
-a02
-![dc02](images/idm/ipa_win_sync_ca_02.png)
-a03
-![dc03](images/idm/ipa_win_sync_ca_03.png)
-a04
-![dc04](images/idm/ipa_win_sync_ca_04.png)
-a05
-![dc05](images/idm/ipa_win_sync_ca_05.png)
-a06
-![dc06](images/idm/ipa_win_sync_ca_06.png)
-a07
-![dc07](images/idm/ipa_win_sync_ca_07.png)
-a08
-![dc08](images/idm/ipa_win_sync_ca_08.png)
-a09
-![dc09](images/idm/ipa_win_sync_ca_09.png)
-a10
-![dc10](images/idm/ipa_win_sync_ca_10.png)
-a11
-![dc11](images/idm/ipa_win_sync_ca_11.png)
+    ![sync04](images/idm/ipa_win_sync_04.png)
+
+    Leave `Credentials` as default  
+    ![dc02](images/idm/ipa_win_sync_ca_02.png)
+
+    Leave `Role Services` as `Certification Authority`  
+    ![dc03](images/idm/ipa_win_sync_ca_03.png)
+
+    CA Type `Standalone CA`  
+    ![dc04](images/idm/ipa_win_sync_ca_04.png)
+
+    CA Type `Root CA`   
+    ![dc05](images/idm/ipa_win_sync_ca_05.png)
+
+    `Create a new private key`  
+    ![dc06](images/idm/ipa_win_sync_ca_06.png)
+
+    Private key cryptographic options: algorithm as `MD5`, key length `2048`  
+    ![dc07](images/idm/ipa_win_sync_ca_07.png)
+
+    Leave `CA Name` as default  
+    ![dc13](images/idm/ipa_win_sync_ca_13.png)
+
+    Validity Period as `5 years`
+    ![dc09](images/idm/ipa_win_sync_ca_09.png)
+
+    Leave `Certificate Database locations` as default  
+    ![dc10](images/idm/ipa_win_sync_ca_10.png)
+
+    `Configure`
+    ![dc11](images/idm/ipa_win_sync_ca_11.png)
+
 a12
 ![dc12](images/idm/ipa_win_sync_ca_12.png)
-a13
-![dc13](images/idm/ipa_win_sync_ca_13.png)
 
 
     test1
@@ -224,7 +232,5 @@ a13
     test6
     ![sync11](images/idm/ipa_win_sync_11.png)
 
-    test7
-    ![sync04](images/idm/ipa_win_sync_04.png)
 
 {% include links.html %}
