@@ -142,5 +142,15 @@ $TTL    1h
 2. AD Controller / CA Setup
     - Add roles to Window  
     ![sync01](images/idm/ipa_win_sync_01.png)
+    ![sync02](images/idm/ipa_win_sync_02.png)
+    ![sync03](images/idm/ipa_win_sync_03.png)
+    ![sync04](images/idm/ipa_win_sync_04.png)
+    ![sync05](images/idm/ipa_win_sync_05.png)
+    ![sync06](images/idm/ipa_win_sync_06.png)
+    ![sync07](images/idm/ipa_win_sync_07.png)
+    ![sync08](images/idm/ipa_win_sync_08.png)
+    ![sync09](images/idm/ipa_win_sync_09.png)
+    ![sync10](images/idm/ipa_win_sync_10.png)
+    ![sync11](images/idm/ipa_win_sync_11.png)
 
 {% include links.html %}
