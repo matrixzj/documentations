@@ -176,6 +176,8 @@ $TTL    1h
     `Install`  
     ![dc7](images/idm/ipa_win_sync_dc_07.png)
 
+    - Windows CA
+
 a01
 ![dc01](images/idm/ipa_win_sync_ca_01.png)
 a02
