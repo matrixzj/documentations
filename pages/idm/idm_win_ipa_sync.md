@@ -134,83 +134,82 @@ $TTL    1h
 
 ### Preparation: Windows AD Setup
 
-1. Network Setup
-    - IP Address Assignment 
-    - Disable Firewall
-    - Hostname Change
+#### Network Setup
+- IP Address Assignment 
+- Disable Firewall
+- Hostname Change
 
-2. AD Controller / CA Setup
-   - Add roles to Window  
+#### Add `Domin Controller` 
 
-    ![sync01](images/idm/ipa_win_sync_01.png)
+![sync01](images/idm/ipa_win_sync_01.png)
 
-    `Role-based or feature-based installation`  
-    ![sync02](images/idm/ipa_win_sync_02.png)
+`Role-based or feature-based installation`  
+![sync02](images/idm/ipa_win_sync_02.png)
 
-    `Select a server from the server pool`  
-    ![sync03](images/idm/ipa_win_sync_03.png)
+`Select a server from the server pool`  
+![sync03](images/idm/ipa_win_sync_03.png)
 
-    - Windows Domain Controller 
+- Windows Domain Controller 
 
-    DC installation firstly  
-    ![sync05](images/idm/ipa_win_sync_05.png)
+DC installation firstly  
+![sync05](images/idm/ipa_win_sync_05.png)
 
-    `Add a new forest` named as `examplemedia.net`  
-    ![dc1](images/idm/ipa_win_sync_dc_01.png)
+`Add a new forest` named as `examplemedia.net`  
+![dc1](images/idm/ipa_win_sync_dc_01.png)
 
-    Password Set  
-    ![dc2](images/idm/ipa_win_sync_dc_02.png)
+Password Set  
+![dc2](images/idm/ipa_win_sync_dc_02.png)
 
-    Leave `DNS` as default  
-    ![dc3](images/idm/ipa_win_sync_dc_03.png)
+Leave `DNS` as default  
+![dc3](images/idm/ipa_win_sync_dc_03.png)
 
-    Leave `NetBIOS` as default `EXAMPLEMEDIA`  
-    ![dc4](images/idm/ipa_win_sync_dc_04.png)
+Leave `NetBIOS` as default `EXAMPLEMEDIA`  
+![dc4](images/idm/ipa_win_sync_dc_04.png)
 
-    Leave `Paths` as default  
-    ![dc5](images/idm/ipa_win_sync_dc_05.png)
+Leave `Paths` as default  
+![dc5](images/idm/ipa_win_sync_dc_05.png)
 
-    `Review Options` and `Next`  
-    ![dc6](images/idm/ipa_win_sync_dc_06.png)
+`Review Options` and `Next`  
+![dc6](images/idm/ipa_win_sync_dc_06.png)
 
-    `Install`  
-    ![dc7](images/idm/ipa_win_sync_dc_07.png)
+`Install`  
+![dc7](images/idm/ipa_win_sync_dc_07.png)
 
-    - Windows CA
+#### Add `Certificate Service` 
 
-    ![sync04](images/idm/ipa_win_sync_04.png)
+![sync04](images/idm/ipa_win_sync_04.png)
 
-    Leave `Credentials` as default  
-    ![dc02](images/idm/ipa_win_sync_ca_02.png)
+Leave `Credentials` as default  
+![dc02](images/idm/ipa_win_sync_ca_02.png)
 
-    Leave `Role Services` as `Certification Authority`  
-    ![dc03](images/idm/ipa_win_sync_ca_03.png)
+Leave `Role Services` as `Certification Authority`  
+![dc03](images/idm/ipa_win_sync_ca_03.png)
 
-    CA Type `Standalone CA`  
-    ![dc04](images/idm/ipa_win_sync_ca_04.png)
+CA Type `Standalone CA`  
+![dc04](images/idm/ipa_win_sync_ca_04.png)
 
-    CA Type `Root CA`   
-    ![dc05](images/idm/ipa_win_sync_ca_05.png)
+CA Type `Root CA`   
+![dc05](images/idm/ipa_win_sync_ca_05.png)
 
-    `Create a new private key`  
-    ![dc06](images/idm/ipa_win_sync_ca_06.png)
+`Create a new private key`  
+![dc06](images/idm/ipa_win_sync_ca_06.png)
 
-    Private key cryptographic options: algorithm as `MD5`, key length `2048`  
-    ![dc07](images/idm/ipa_win_sync_ca_07.png)
+Private key cryptographic options: algorithm as `MD5`, key length `2048`  
+![dc07](images/idm/ipa_win_sync_ca_07.png)
 
-    Leave `CA Name` as default  
-    ![dc13](images/idm/ipa_win_sync_ca_13.png)
+Leave `CA Name` as default  
+![dc13](images/idm/ipa_win_sync_ca_13.png)
 
-    Validity Period as `5 years`  
-    ![dc09](images/idm/ipa_win_sync_ca_09.png)
+Validity Period as `5 years`  
+![dc09](images/idm/ipa_win_sync_ca_09.png)
 
-    Leave `Certificate Database locations` as default  
-    ![dc10](images/idm/ipa_win_sync_ca_10.png)
+Leave `Certificate Database locations` as default  
+![dc10](images/idm/ipa_win_sync_ca_10.png)
 
-    `Configure`  
-    ![dc11](images/idm/ipa_win_sync_ca_11.png)
+`Configure`  
+![dc11](images/idm/ipa_win_sync_ca_11.png)
 
-    - Reboot to take it in effect
+#### Reboot to take it in effect
 
 
 
