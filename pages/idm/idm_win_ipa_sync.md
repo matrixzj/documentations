@@ -176,6 +176,33 @@ $TTL    1h
     `Install`  
     ![dc7](images/idm/ipa_win_sync_dc_07.png)
 
+a01
+![dc01](images/idm/ipa_win_sync_ca_001.png)
+a02
+![dc02](images/idm/ipa_win_sync_ca_002.png)
+a03
+![dc03](images/idm/ipa_win_sync_ca_003.png)
+a04
+![dc04](images/idm/ipa_win_sync_ca_004.png)
+a05
+![dc05](images/idm/ipa_win_sync_ca_005.png)
+a06
+![dc06](images/idm/ipa_win_sync_ca_006.png)
+a07
+![dc07](images/idm/ipa_win_sync_ca_007.png)
+a08
+![dc08](images/idm/ipa_win_sync_ca_008.png)
+a09
+![dc09](images/idm/ipa_win_sync_ca_009.png)
+a10
+![dc10](images/idm/ipa_win_sync_ca_010.png)
+a11
+![dc11](images/idm/ipa_win_sync_ca_011.png)
+a12
+![dc12](images/idm/ipa_win_sync_ca_012.png)
+a13
+![dc13](images/idm/ipa_win_sync_ca_013.png)
+
     test1
     ![sync06](images/idm/ipa_win_sync_06.png)
 
