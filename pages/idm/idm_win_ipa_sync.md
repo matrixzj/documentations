@@ -142,15 +142,35 @@ $TTL    1h
 2. AD Controller / CA Setup
     - Add roles to Window  
     ![sync01](images/idm/ipa_win_sync_01.png)
+
+    `Role-based or feature-based installation`  
     ![sync02](images/idm/ipa_win_sync_02.png)
+
+    `Select a server from the server pool`
     ![sync03](images/idm/ipa_win_sync_03.png)
-    ![sync04](images/idm/ipa_win_sync_04.png)
+
+    DC installation firstly
     ![sync05](images/idm/ipa_win_sync_05.png)
+
+    test1
     ![sync06](images/idm/ipa_win_sync_06.png)
+
+    test2
     ![sync07](images/idm/ipa_win_sync_07.png)
+
+    test3
     ![sync08](images/idm/ipa_win_sync_08.png)
+
+    test4
     ![sync09](images/idm/ipa_win_sync_09.png)
+
+    test5
     ![sync10](images/idm/ipa_win_sync_10.png)
+
+    test6
     ![sync11](images/idm/ipa_win_sync_11.png)
+
+    test7
+    ![sync04](images/idm/ipa_win_sync_04.png)
 
 {% include links.html %}
