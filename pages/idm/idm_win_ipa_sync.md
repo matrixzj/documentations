@@ -201,36 +201,17 @@ $TTL    1h
     Leave `CA Name` as default  
     ![dc13](images/idm/ipa_win_sync_ca_13.png)
 
-    Validity Period as `5 years`
+    Validity Period as `5 years`  
     ![dc09](images/idm/ipa_win_sync_ca_09.png)
 
     Leave `Certificate Database locations` as default  
     ![dc10](images/idm/ipa_win_sync_ca_10.png)
 
-    `Configure`
+    `Configure`  
     ![dc11](images/idm/ipa_win_sync_ca_11.png)
 
-a12
-![dc12](images/idm/ipa_win_sync_ca_12.png)
+    - Reboot to take it in effect
 
-
-    test1
-    ![sync06](images/idm/ipa_win_sync_06.png)
-
-    test2
-    ![sync07](images/idm/ipa_win_sync_07.png)
-
-    test3
-    ![sync08](images/idm/ipa_win_sync_08.png)
-
-    test4
-    ![sync09](images/idm/ipa_win_sync_09.png)
-
-    test5
-    ![sync10](images/idm/ipa_win_sync_10.png)
-
-    test6
-    ![sync11](images/idm/ipa_win_sync_11.png)
 
 
 {% include links.html %}
