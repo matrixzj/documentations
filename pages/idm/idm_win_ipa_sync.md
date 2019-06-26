@@ -140,13 +140,14 @@ $TTL    1h
     - Hostname Change
 
 2. AD Controller / CA Setup
-    - Add roles to Window  
+   - Add roles to Window  
+
     ![sync01](images/idm/ipa_win_sync_01.png)
 
     `Role-based or feature-based installation`  
     ![sync02](images/idm/ipa_win_sync_02.png)
 
-    `Select a server from the server pool`
+    `Select a server from the server pool`  
     ![sync03](images/idm/ipa_win_sync_03.png)
 
     - Windows Domain Controller 
