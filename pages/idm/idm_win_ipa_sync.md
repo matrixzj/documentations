@@ -149,23 +149,30 @@ $TTL    1h
     `Select a server from the server pool`
     ![sync03](images/idm/ipa_win_sync_03.png)
 
+    - Windows Domain Controller 
     DC installation firstly  
     ![sync05](images/idm/ipa_win_sync_05.png)
 
-c1
-![dc1](images/idm/ipa_win_sync_dc_01.png)
-c2
-![dc2](images/idm/ipa_win_sync_dc_02.png)
-c3
-![dc3](images/idm/ipa_win_sync_dc_03.png)
-c4
-![dc4](images/idm/ipa_win_sync_dc_04.png)
-c5
-![dc5](images/idm/ipa_win_sync_dc_05.png)
-c6
-![dc6](images/idm/ipa_win_sync_dc_06.png)
-c7
-![dc7](images/idm/ipa_win_sync_dc_07.png)
+    `Add a new forest` named as `examplemedia.net`
+    ![dc1](images/idm/ipa_win_sync_dc_01.png)
+
+    Password Set
+    ![dc2](images/idm/ipa_win_sync_dc_02.png)
+
+    Leave `DNS` as default
+    ![dc3](images/idm/ipa_win_sync_dc_03.png)
+
+    Leave `NetBIOS` as default `EXAMPLEMEDIA`
+    ![dc4](images/idm/ipa_win_sync_dc_04.png)
+
+    Leave `Paths` as default
+    ![dc5](images/idm/ipa_win_sync_dc_05.png)
+
+    `Review Options` and `Next`
+    ![dc6](images/idm/ipa_win_sync_dc_06.png)
+
+    `Install`
+    ![dc7](images/idm/ipa_win_sync_dc_07.png)
 
     test1
     ![sync06](images/idm/ipa_win_sync_06.png)
