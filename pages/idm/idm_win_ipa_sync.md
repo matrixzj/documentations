@@ -151,28 +151,29 @@ $TTL    1h
     ![sync03](images/idm/ipa_win_sync_03.png)
 
     - Windows Domain Controller 
+
     DC installation firstly  
     ![sync05](images/idm/ipa_win_sync_05.png)
 
-    `Add a new forest` named as `examplemedia.net`
+    `Add a new forest` named as `examplemedia.net`  
     ![dc1](images/idm/ipa_win_sync_dc_01.png)
 
-    Password Set
+    Password Set  
     ![dc2](images/idm/ipa_win_sync_dc_02.png)
 
-    Leave `DNS` as default
+    Leave `DNS` as default  
     ![dc3](images/idm/ipa_win_sync_dc_03.png)
 
-    Leave `NetBIOS` as default `EXAMPLEMEDIA`
+    Leave `NetBIOS` as default `EXAMPLEMEDIA`  
     ![dc4](images/idm/ipa_win_sync_dc_04.png)
 
-    Leave `Paths` as default
+    Leave `Paths` as default  
     ![dc5](images/idm/ipa_win_sync_dc_05.png)
 
-    `Review Options` and `Next`
+    `Review Options` and `Next`  
     ![dc6](images/idm/ipa_win_sync_dc_06.png)
 
-    `Install`
+    `Install`  
     ![dc7](images/idm/ipa_win_sync_dc_07.png)
 
     test1
