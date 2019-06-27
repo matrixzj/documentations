@@ -297,10 +297,10 @@ dSCorePropagationData: 16010101000000.0Z
 ### IPA Installation
 
 ```bash
-# ipa-server-install  -r EXAMPLE.NET -n example.net -p example -a example -N --hostname=ipa.example.net -U
+# ipa-server-install -r EXAMPLE.NET -n example.net -p example -a example -N --hostname=ipa.example.net -U
 ```
 
-IPA <-> Windown Sync Agreement Setup
+### IPA <-> Windown Sync Agreement Setup
 
 ```bash
 # ipa-replica-manage connect --winsync --binddn 'cn=administrator,cn=users,dc=examplemedia,dc=net' --bindpw 'Ex@ample' --passsync secretpwd --cacert /etc/openldap/cacerts/windows-ca.cer win12r2.examplemedia.net --win-subtree 'OU=User Accounts,DC=examplemedia,DC=net' -v
@@ -316,7 +316,22 @@ Starting replication, please wait until this has completed.
 Update succeeded
 
 Connected 'ipa.example.net' to 'win12r2.examplemedia.net'
+
+# ipa-replica-manage list
+ipa.example.net: master
+win12r2.examplemedia.net: winsync
 ```
+
+### Password Sync Windows Sync Plugin Setup
+
+Install `RedHat-PassSync-1.1.7-x86_64.msi` and configure it as below
+![passwd_01](images/idm/ipa_win_sync_passwd_01.png)
+
+Import IPA CA cert into Windows AD Server 
+`certutil.exe -d . -A -t CT,, -n "IPACA" -a -i ipaca.crt`
+![passwd_01](images/idm/ipa_win_sync_passwd_02.png)
+
+
 
 
 {% include links.html %}
