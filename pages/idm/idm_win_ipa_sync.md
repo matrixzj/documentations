@@ -328,8 +328,8 @@ Install `RedHat-PassSync-1.1.7-x86_64.msi` and configure it as below
 ![passwd_01](images/idm/ipa_win_sync_passwd_01.png)
 
 Import IPA CA cert into Windows AD Server   
-`C:\Program Files\Red Hat Directory Password Synchronization\certutil.exe -d . -A -t CT,, -n "IPACA" -a -i ipa-ca.crt`
-![passwd_01](images/idm/ipa_win_sync_passwd_02.png)
+`C:\Program Files\Red Hat Directory Password Synchronization\certutil.exe -d . -A -t CT,, -n "IPACA" -a -i ipa-ca.crt`  
+![passwd_01](images/idm/ipa_win_sync_passwd_02.png)  
 NOTE: `List Installed Cert`  
 `C:\Program Files\Red Hat Directory Password Synchronization\certutil.exe -d . -L`
 
