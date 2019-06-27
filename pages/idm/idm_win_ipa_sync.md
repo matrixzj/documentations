@@ -303,7 +303,7 @@ dSCorePropagationData: 16010101000000.0Z
 IPA <-> Windown Sync Agreement Setup
 
 ```bash
-# ipa-replica-manage connect --winsync --binddn 'cn=administrator,cn=users,dc=examplemedia,dc=net' --bindpw 'Fr$$wheel' --passsync secretpwd --cacert /etc/openldap/cacerts/windows-ca.cer win12r2.examplemedia.net --win-subtree 'OU=User Accounts,DC=examplemedia,DC=net' -v
+# ipa-replica-manage connect --winsync --binddn 'cn=administrator,cn=users,dc=examplemedia,dc=net' --bindpw 'Ex@ample' --passsync secretpwd --cacert /etc/openldap/cacerts/windows-ca.cer win12r2.examplemedia.net --win-subtree 'OU=User Accounts,DC=examplemedia,DC=net' -v
 Added CA certificate /etc/openldap/cacerts/windows-ca.cer to certificate database for ipa.example.net
 ipa: INFO: AD Suffix is: DC=examplemedia,DC=net
 The user for the Windows PassSync service is uid=passsync,cn=sysaccounts,cn=etc,dc=example,dc=net
