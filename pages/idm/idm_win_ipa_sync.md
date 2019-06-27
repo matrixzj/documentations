@@ -211,17 +211,9 @@ Leave `Certificate Database locations` as default
 
 Verify LDAPS via `ldp` in Windows AD
 
-#### Reboot to take it in effect
+#### Verify AD / CS from IPA side
 
-### IPA Installation
-
-```bash
-# ipa-server-install  -r EXAMPLE.NET -n example.net -p example -a example -N --hostname=ipa.example.net -U
-```
-
-### 
-
-
+ldap toolsets config file `/etc/openldap/ldap.conf` 
 
 ```bash
 # diff -u /etc/openldap/ldap.conf /etc/openldap/ldap.conf.orig
@@ -257,6 +249,8 @@ Verify LDAPS via `ldp` in Windows AD
 -
 -TLS_CACERT /etc/openldap/cacerts/windows-ca.cer
 ```
+
+Verify via `ldapsearch`
 
 ```bash
 # ldapsearch -H ldaps://win12r2.examplemedia.net:636 -b 'OU=BJ,OU=CN,OU=User Accounts,DC=examplemedia,DC=net' -D 'CN=Administrator,CN=Users,DC=examplemedia,DC=net' -W objectClass=organizationalPerson
@@ -298,11 +292,18 @@ objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=examplemedia,DC=net
 dSCorePropagationData: 16010101000000.0Z
 ```
 
+#### Reboot to take it in effect
+
+### IPA Installation
 
 ```bash
-# ipa-replica-manage connect --winsync --binddn 'cn=administrator,cn=users,dc=examplemedia,dc=net' --bindpw 'Fr$$wheel' --passsyn
-c secretpwd --cacert /etc/openldap/cacerts/windows-ca.cer win12r2.examplemedia.net --win-subtree 'OU=User Accounts,DC=examplemedia,DC=
-net' -v
+# ipa-server-install  -r EXAMPLE.NET -n example.net -p example -a example -N --hostname=ipa.example.net -U
+```
+
+IPA <-> Windown Sync Agreement Setup
+
+```bash
+# ipa-replica-manage connect --winsync --binddn 'cn=administrator,cn=users,dc=examplemedia,dc=net' --bindpw 'Fr$$wheel' --passsync secretpwd --cacert /etc/openldap/cacerts/windows-ca.cer win12r2.examplemedia.net --win-subtree 'OU=User Accounts,DC=examplemedia,DC=net' -v
 Added CA certificate /etc/openldap/cacerts/windows-ca.cer to certificate database for ipa.example.net
 ipa: INFO: AD Suffix is: DC=examplemedia,DC=net
 The user for the Windows PassSync service is uid=passsync,cn=sysaccounts,cn=etc,dc=example,dc=net
@@ -316,9 +317,6 @@ Update succeeded
 
 Connected 'ipa.example.net' to 'win12r2.examplemedia.net'
 ```
-
-
-
 
 
 {% include links.html %}
