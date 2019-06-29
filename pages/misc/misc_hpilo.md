@@ -2,7 +2,7 @@
 title: HP iLO 
 tags: [misc]
 keywords: iLO, ssh, script 
-last_updated: June 24, 2019
+last_updated: June 29, 2019
 summary: "HP iLO related stuffs"
 sidebar: mydoc_sidebar
 permalink: misc_hpilo.html
@@ -183,5 +183,37 @@ iLO IP Address  iLO Type  iLO Ver Server Model  iLO Server FQDN
 192.168.100.52      iLO3     1.85 DL380 G7      ilo04.example.net               
 192.168.100.212     iLO4     2.50 DL360 Gen9    ilo05.example.net               
 ```
+
+###  Set One-Time Boot Device
+
+```
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+
+from sys import argv
+import hpilo
+
+script, iiloAddr = argv
+userid='admin'
+passwd='admin'
+
+import hpilo
+
+ilo = hpilo.Ilo(iloAddr, userid, passwd)
+
+# list current boot sequence
+# output:  ['cdrom', 'usb', 'hdd', 'network1']
+ilo. get_persistent_boot()
+
+# get current one-time boot device
+# output: 'normal'
+ilo.get_one_time_boot()
+
+# set one time boot device 
+# Options: normal, floppy, cdrom, hdd, usb, rbsu, network
+ilo.set_one_time_boot('network')
+```
+
+[iLO automation from python or shell](https://seveas.github.io/python-hpilo/index.html)
 
 {% include links.html %}
