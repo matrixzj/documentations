@@ -69,19 +69,51 @@ br0             8000.ecb1d77fa580       no              eth0
 -LIBVIRTD_ARGS="--listen"
 +#LIBVIRTD_ARGS="--listen"
 
-# diff /etc/libvirt/libvirtd.conf{,.orig}
-494,495d493
-< listen_tls = 0
-< listen_tcp = 1
+# diff -u /etc/libvirt/libvirtd.conf{,.orig}
+--- /etc/libvirt/libvirtd.conf  2019-06-29 04:52:59.835812187 +0000
++++ /etc/libvirt/libvirtd.conf.orig     2019-06-29 04:52:37.898775202 +0000
+@@ -491,5 +491,3 @@
+ # potential infinite waits blocking libvirt.
+ #
+ #ovs_timeout = 5
+-listen_tls = 0
+-listen_tcp = 1
 
- # Override Kerberos service keytab for SASL/GSSAPI
- #KRB5_KTNAME=/etc/libvirt/krb5.tab
+# diff -u /etc/sasl2/libvirt.conf{,.orig}
+--- /etc/sasl2/libvirt.conf     2019-06-29 05:27:42.096793960 +0000
++++ /etc/sasl2/libvirt.conf.orig        2019-06-29 04:55:13.358973492 +0000
+@@ -18,7 +18,7 @@
+ # To use GSSAPI requires that a libvirtd service principal is
+ # added to the Kerberos server for each host running libvirtd.
+ # This principal needs to be exported to the keytab file listed below
+-mech_list: digest-md5
++mech_list: gssapi
+
+ # If using a TLS socket or UNIX socket only, it is possible to
+ # enable plugins which don't provide session encryption. The
+@@ -37,9 +37,9 @@
+ # instead need KRB5_KTNAME env var.
+ # For modern Linux, and other OS, this should be sufficient
+ #
+-# keytab: /etc/libvirt/krb5.tab
++keytab: /etc/libvirt/krb5.tab
+
+ # If using scram-sha-1 for username/passwds, then this is the file
+ # containing the passwds. Use 'saslpasswd2 -a libvirt [username]'
+ # to add entries, and 'sasldblistusers2 -f [sasldb_path]' to browse it
+-sasldb_path: /etc/libvirt/passwd.db
++#sasldb_path: /etc/libvirt/passwd.db
 
 # yum install cyrus-sasl-md5
 
-# systemctl restart libvirtd
+# saslpasswd2 -a libvirt root
+Password:
+Again (for verification):
 
-# saslpasswd2 -a libvirt fred
+# sasldblistusers2 -f /etc/libvirt/passwd.db
+root@pekdev015.dev.fwmrm.net: userPassword
+
+# systemctl restart libvirtd
 ```
 
 `Verify Connection`
