@@ -15,7 +15,8 @@ folder: Misc
 ### RPM Installation
 
 ```bash
-# yum install -y virt-install qemu libvirt
+# yum install -y virt-install qemu libvirt kvm seabios
+
 # systemctl enable --now libvirtd
 ```
 
@@ -160,6 +161,20 @@ Core(s) per socket:  12
 Thread(s) per core:  2
 NUMA cell(s):        2
 Memory size:         134089036 KiB
+```
+
+### Fix kernel module `kvm` permission issue
+
+```bash
+# ls -al /dev/kvm
+0 crw------- 1 root root 10, 232 Jun 29 08:53 /dev/kvm
+
+# chown root:kvm /dev/kvm
+
+# chmod 660 /dev/kvm
+
+# ls -al /dev/kvm
+0 crw-rw---- 1 root kvm 10, 232 Jun 29 08:53 /dev/kvm
 ```
 
 {% include links.html %}
