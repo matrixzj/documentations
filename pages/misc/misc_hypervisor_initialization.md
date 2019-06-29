@@ -21,6 +21,7 @@ folder: Misc
 
 ### Bridge Config
 
+`remove default NAT bridge`
 ```bash
 # virsh net-list
  Name                 State      Autostart     Persistent
@@ -32,7 +33,10 @@ Network default destroyed
 
 # virsh net-undefine default
 Network default has been undefined
+```
 
+`config a new bridge`
+```
 # cat /etc/sysconfig/network-scripts/ifcfg-eth0
 DEVICE=eth0
 BOOTPROTO=none
@@ -58,6 +62,7 @@ br0             8000.ecb1d77fa580       no              eth0
 
 ### TCP Connection and Auth 
 
+`Enble libvirt TCP listen`
 ```bash
 # diff -u /etc/sysconfig/libvirtd{,.orig}
 --- /etc/sysconfig/libvirtd     2019-06-29 04:51:15.601536416 +0000
@@ -79,6 +84,8 @@ br0             8000.ecb1d77fa580       no              eth0
 -listen_tls = 0
 -listen_tcp = 1
 
+`MD5 Auth Enable`
+```bash
 # diff -u /etc/sasl2/libvirt.conf{,.orig}
 --- /etc/sasl2/libvirt.conf     2019-06-29 05:27:42.096793960 +0000
 +++ /etc/sasl2/libvirt.conf.orig        2019-06-29 04:55:13.358973492 +0000
@@ -103,7 +110,10 @@ br0             8000.ecb1d77fa580       no              eth0
  # to add entries, and 'sasldblistusers2 -f [sasldb_path]' to browse it
 -sasldb_path: /etc/libvirt/passwd.db
 +#sasldb_path: /etc/libvirt/passwd.db
+```
 
+`Add User for libvirt TCP Auth`
+```bash
 # yum install cyrus-sasl-md5
 
 # saslpasswd2 -a libvirt root
