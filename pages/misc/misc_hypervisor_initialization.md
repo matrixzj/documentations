@@ -141,6 +141,25 @@ NUMA cell(s):        2
 Memory size:         134089036 KiB
 ```
 
-[Modify images](https://docs.openstack.org/image-guide/modify-images.html)
+Note: If no authentication is needed, try config as below
+```bash
+# diff /etc/libvirt/libvirtd.conf{,.orig}
+494,496d493
+< listen_tls = 0
+< listen_tcp = 1
+< auth_tcp = "none"
+
+# systemctl restart libvirtd
+
+# virsh -c qemu+tcp://localhost/system nodeinfo
+CPU model:           x86_64
+CPU(s):              48
+CPU frequency:       2300 MHz
+CPU socket(s):       1
+Core(s) per socket:  12
+Thread(s) per core:  2
+NUMA cell(s):        2
+Memory size:         134089036 KiB
+```
 
 {% include links.html %}
