@@ -97,6 +97,10 @@ entries:
       url: /misc_hypervisor_initialization.html
       output: web, pdf
 
+    - title: Rsyslog
+      url: /misc_rsyslog.html
+      output: web, pdf
+
   - title: Navigation
     output: web, pdf
 
