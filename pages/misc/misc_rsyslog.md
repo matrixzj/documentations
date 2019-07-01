@@ -14,7 +14,7 @@ folder: Misc
 
 ### Severity
 
-Numerical Code|Severity|Description
+Numerical<br>Code|Severity|Description
 :------|:------|:------
 0|emerg|system is unusable
 1|alert|action must be taken immediately
@@ -26,6 +26,35 @@ Numerical Code|Severity|Description
 7|debug|debug-level messages
 
 [Rsyslog Gentoo Wiki](https://wiki.gentoo.org/wiki/Rsyslog)
+
+### Facility
+
+Numerical<br>Code|Facility|Description
+:------|:------|:------
+0|kern|kernel messages
+1|user|user-level messages
+2|mail|mail system
+3|daemon|system daemons
+4|auth|security/authorization messages
+5|syslog|messages generated internally by syslogd
+6|lpr|line printer subsystem
+7|news|network news subsystem
+8|uucp|UUCP subsystem
+9|cron|clock daemon
+10|security|security/authorization messages
+11|ftp|FTP daemon
+12|ntp|NTP subsystem
+13|logaudit|log audit
+14|logalert|log alert
+15|clock|clock daemon (note 2)
+16|local0|local use 0 (local0)
+17|local1|local use 1 (local1)
+18|local2|local use 2 (local2)
+19|local3|local use 3 (local3)
+20|local4|local use 4 (local4)
+21|local5|local use 5 (local5)
+22|local6|local use 6 (local6)
+23|local7|local use 7 (local7)
 
 ### Troubleshoot Rsyslog with template `RSYSLOG_DebugFormat`
 
