@@ -64,9 +64,9 @@ local5.none;local5.crit                                 /var/log/matrix1
 
 Test CMD
 ```bash
-\# logger -p local5.crit test4
+# logger -p local5.crit test4
 
-\# logger -p local5.info test5
+# logger -p local5.info test5
 ```
 
 Result: `test4` will be loggered to `/var/log/matrix1`, but `test5` will not be.
