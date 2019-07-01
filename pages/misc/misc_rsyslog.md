@@ -56,7 +56,65 @@ Numerical<br>Code|Facility|Description
 22|local6|local use 6 (local6)
 23|local7|local use 7 (local7)
 
-### Troubleshoot Rsyslog with template `RSYSLOG_DebugFormat`
+### Selectors Overwrite (later one will overwrite precedings)
+
+```bash
+local5.none;local5.crit                                 /var/log/matrix1
+```
+
+Test CMD
+```bash
+\# logger -p local5.crit test4
+
+\# logger -p local5.info test5
+```
+
+Result: `test4` will be loggered to `/var/log/matrix1`, but `test5` will not be.
+
+### Troubleshoot Rsyslog property issue with template `RSYSLOG_DebugFormat`
+
+[Definition](https://www.rsyslog.com/doc/v8-stable/configuration/templates.html)
+```bash
+template(name="RSYSLOG_DebugFormat" type="list") {
+     constant(value="Debug line with all properties:\nFROMHOST: '")
+     property(name="fromhost")
+     constant(value="', fromhost-ip: '")
+     property(name="fromhost-ip")
+     constant(value="', HOSTNAME: '")
+     property(name="hostname")
+     constant(value="', PRI: '")
+     property(name="pri")
+     constant(value=",\nsyslogtag '")
+     property(name="syslogtag")
+     constant(value="', programname: '")
+     property(name="programname")
+     constant(value="', APP-NAME: '")
+     property(name="app-name")
+     constant(value="', PROCID: '")
+     property(name="procid")
+     constant(value="', MSGID: '")
+     property(name="msgid")
+     constant(value="',\nTIMESTAMP: '")
+     property(name="timereported")
+     constant(value="', STRUCTURED-DATA: '")
+     property(name="structured-data")
+     constant(value="',\nmsg: '")
+     property(name="msg")
+     constant(value="'\nescaped msg: '")
+     property(name="msg" controlcharacters="drop")
+     constant(value="'\ninputname: ")
+     property(name="inputname")
+     constant(value=" rawmsg: '")
+     property(name="rawmsg")
+     constant(value="'\n$!:")
+     property(name="$!")
+     constant(value="\n$.:")
+     property(name="$.")
+     constant(value="\n$/:")
+     property(name="$/")
+     constant(value="\n\n")
+}
+```
 
 config example
 
