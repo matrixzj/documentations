@@ -10,7 +10,22 @@ folder: Misc
 ---
 
 ## Rsyslog
-=====
+======
+
+### Severity
+
+Numerical Code|Severity|Description
+:------|:------|:------
+0|emerg|system is unusable
+1|alert|action must be taken immediately
+2|crit|critical conditions
+3|error|error conditions
+4|warning|warning conditions
+5|notice|normal but significant condition
+6|info|informational messages
+7|debug|debug-level messages
+
+[Rsyslog Gentoo Wiki](https://wiki.gentoo.org/wiki/Rsyslog)
 
 ### Troubleshoot Rsyslog with template `RSYSLOG_DebugFormat`
 
