@@ -64,6 +64,10 @@ entries:
   - title: IDM
     output: web, pdf
     folderitems:
+    
+    - title: CA
+      url: /idm_ca.html
+      output: web, pdf
 
     - title: Kerberos Authentication
       url: /idm_kerberos_authentication.html
