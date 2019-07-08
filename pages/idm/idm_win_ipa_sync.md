@@ -314,6 +314,14 @@ Expand the "Certificates" node under "Third-Party Root Certification Authorities
 ![ca21](images/idm/ipa_win_sync_ca_21.png)
 ![ca22](images/idm/ipa_win_sync_ca_22.png)
 
+##### Accept Signed Cert in Windows AD Server
+```bash
+certreq -accept windows.crt
+```
+![ca23](images/idm/ipa_win_sync_ca_23.png)
+
+##### Restart Windows AD Server to take it effect and verify with `ldp` tool
+
 #### Verify AD / CS from IPA side
 
 ldap toolsets config file `/etc/openldap/ldap.conf` 
