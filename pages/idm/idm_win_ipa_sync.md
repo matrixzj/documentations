@@ -177,6 +177,8 @@ Leave `Paths` as default
 
 #### Add `Certificate Service` 
 
+Domain Controller will automatically register itself to CA and retrieve cert.
+
 ![sync04](images/idm/ipa_win_sync_04.png)
 
 Leave `Credentials` as default  
@@ -210,6 +212,45 @@ Leave `Certificate Database locations` as default
 ![dc11](images/idm/ipa_win_sync_ca_11.png)
 
 Verify LDAPS via `ldp` in Windows AD
+
+#### Alternative: Get Cert from 3rd Party CA
+
+##### Create the .inf file, which be used to create the certificate request
+```bash
+# cat request.inf
+;----------------- request.inf -----------------
+
+[Version]
+
+Signature="$Windows NT$
+
+[NewRequest]
+
+Subject = "CN=win12r2.example.com, O=example, S=New York, C=US" ; replace with the FQDN of the DC
+KeySpec = 1
+KeyLength = 1024
+; Can be 1024, 2048, 4096, 8192, or 16384.
+; Larger key sizes are more secure, but have
+; a greater impact on performance.
+Exportable = TRUE
+MachineKeySet = TRUE
+SMIME = False
+PrivateKeyArchive = FALSE
+UserProtected = FALSE
+UseExistingKeySet = FALSE
+ProviderName = "Microsoft RSA SChannel Cryptographic Provider"
+ProviderType = 12
+RequestType = PKCS10
+KeyUsage = 0xa0
+
+[EnhancedKeyUsageExtension]
+
+OID=1.3.6.1.5.5.7.3.1 ; this is for Server Authentication
+
+;-----------------------------------------------
+```
+
+Note: Some third-party certification authorities may require additional information in the Subject parameter. Such information includes an e-mail address (E), organizational unit (OU), organization (O), locality or city (L), state or province (S), and country or region (C). You can append this information to the Subject name (CN) in the Request.inf file. 
 
 #### Verify AD / CS from IPA side
 
@@ -300,7 +341,7 @@ dSCorePropagationData: 16010101000000.0Z
 # ipa-server-install -r EXAMPLE.NET -n example.net -p example -a example -N --hostname=ipa.example.net -U
 ```
 
-### IPA <-> Windown Sync Agreement Setup
+### IPA <---> Windown Sync Agreement Setup
 
 ```bash
 # ipa-replica-manage connect --winsync --binddn 'cn=administrator,cn=users,dc=examplemedia,dc=net' --bindpw 'Ex@ample' --passsync secretpwd --cacert /etc/openldap/cacerts/windows-ca.cer win12r2.examplemedia.net --win-subtree 'OU=User Accounts,DC=examplemedia,DC=net' -v
