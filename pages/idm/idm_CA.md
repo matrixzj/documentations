@@ -65,7 +65,9 @@ emailAddress            = optional
 ```
 
 #### In addition, create a file to indicate the next certificate serial number to be issued:
+```
 # echo 01 > /etc/pki/CA/serial
+```
 
 #### Generate CA private key
 ```
@@ -141,6 +143,74 @@ Certificate Request:
          0b:bb:a2:e5:9b:99:00:04:69:7b:a3:22:2c:09:cb:0e:7a:9e:
          fb:b3:5c:26:33:4a:19:fe:c9:6e:52:82:67:16:35:fa:67:ca:
          00:0f
+```
+
+### Sign a cert based on request
+```
+# openssl ca -in /tmp/request.req -out /tmp/windows.crt
+Using configuration from /etc/pki/tls/openssl.cnf
+Enter pass phrase for /etc/pki/CA/private/my-ca.key:
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+        Serial Number: 2 (0x2)
+        Validity
+            Not Before: Jul  8 06:13:38 2019 GMT
+            Not After : Jul  7 06:13:38 2020 GMT
+        Subject:
+            countryName               = US
+            stateOrProvinceName       = New York
+            organizationName          = Example
+            commonName                = win12r2.example.com
+        X509v3 extensions:
+            X509v3 Basic Constraints:
+                CA:FALSE
+            Netscape Comment:
+                OpenSSL Generated Certificate
+            X509v3 Subject Key Identifier:
+                41:8D:BC:E4:B5:62:7D:DA:23:07:5A:C7:F9:E0:63:50:25:3B:E2:62
+            X509v3 Authority Key Identifier:
+                keyid:CC:12:A6:8A:EA:74:08:85:B3:DC:51:91:E8:F7:31:9D:8D:5B:3A:B4
+
+Certificate is to be certified until Jul  7 06:13:38 2020 GMT (365 days)
+Sign the certificate? [y/n]:y
+
+
+1 out of 1 certificate requests certified, commit? [y/n]y
+Write out database with 1 new entries
+Data Base Updated
+```
+
+### Revoke a cert
+
+```bash
+# openssl crl -in /etc/pki/CA/my-ca.crl -noout -text
+Certificate Revocation List (CRL):
+        Version 2 (0x1)
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: /C=US/ST=New York/L=New York/O=Example/OU=OPS/CN=ca.example.net/emailAddress=root@ca.example.net
+        Last Update: Jul  8 06:09:55 2019 GMT
+        Next Update: Aug  7 06:09:55 2019 GMT
+        CRL extensions:
+            X509v3 CRL Number:
+                0
+No Revoked Certificates.
+    Signature Algorithm: sha256WithRSAEncryption
+         45:c2:cd:91:e0:cc:9d:37:95:c2:76:dc:39:c2:ef:d5:7c:af:
+         1f:2f:61:fd:24:d5:b9:42:54:d3:dc:63:df:c5:ed:47:c2:df:
+         fd:1d:c3:ef:d7:07:54:c2:49:e6:c3:5b:87:61:29:67:6d:bd:
+         c5:a5:93:6d:4f:4e:5e:e6:41:7f:cc:2e:9c:7d:c7:ed:d7:64:
+         81:93:91:17:ea:a1:26:a8:1b:c9:e2:35:a9:99:a9:19:a5:77:
+         f3:b7:c9:a5:4c:19:fd:ed:6a:73:31:1a:36:46:9b:68:e9:42:
+         0b:d2:2c:f2:8f:95:7b:26:89:2c:20:93:ab:57:a9:dc:c0:98:
+         fc:c0:3d:d7:9b:ad:b1:81:d7:a1:ef:0c:b3:0f:fe:0a:3c:76:
+         0d:40:0c:09:92:c4:01:84:82:b5:a2:85:ec:17:da:f7:2b:78:
+         23:b8:5d:cc:15:f8:37:dd:d5:6e:5f:42:5c:7e:bd:7a:87:46:
+         ab:d0:c5:ac:3a:f7:bb:84:57:16:0e:80:75:9f:cb:41:6f:af:
+         ed:34:81:d1:c0:64:06:00:99:72:cf:ce:13:8d:2f:8a:4b:1c:
+         43:ef:3c:e3:9f:b1:c4:df:b1:77:41:45:5e:58:c0:ae:a6:b4:
+         4a:87:e6:c6:c6:3c:3d:35:e1:18:ed:fb:15:23:05:72:46:4e:
+         b6:a2:fe:da
 ```
 
 {% include links.html %}
