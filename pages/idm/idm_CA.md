@@ -182,6 +182,13 @@ Data Base Updated
 ```
 
 ### Revoke a cert
+```bash
+# openssl ca -revoke /etc/pki/CA/newcerts/02.pem
+Using configuration from /etc/pki/tls/openssl.cnf
+Enter pass phrase for /etc/pki/CA/private/my-ca.key:
+Revoking Certificate 02.
+Data Base Updated
+```
 
 ```bash
 # openssl crl -in /etc/pki/CA/my-ca.crl -noout -text

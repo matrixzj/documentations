@@ -226,7 +226,7 @@ Signature="$Windows NT$
 
 [NewRequest]
 
-Subject = "CN=win12r2.example.com, O=example, S=New York, C=US" ; replace with the FQDN of the DC
+Subject = "CN=win12r2.example.com, O=Example, S=New York, C=US" ; replace with the FQDN of the DC
 KeySpec = 1
 KeyLength = 1024
 ; Can be 1024, 2048, 4096, 8192, or 16384.
@@ -251,6 +251,63 @@ OID=1.3.6.1.5.5.7.3.1 ; this is for Server Authentication
 ```
 
 Note: Some third-party certification authorities may require additional information in the Subject parameter. Such information includes an e-mail address (E), organizational unit (OU), organization (O), locality or city (L), state or province (S), and country or region (C). You can append this information to the Subject name (CN) in the Request.inf file. 
+
+##### Generate Request File
+```
+certreq -new request.inf request.req
+```
+[Generate Request File](images/idm/ipa_win_sync_ca_14.png)
+
+##### Sign this Request on CA host 
+```bash
+# openssl ca -in /tmp/request.csr -out /tmp/windows.crt
+Using configuration from /etc/pki/tls/openssl.cnf
+Enter pass phrase for /etc/pki/CA/private/my-ca.key:
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+        Serial Number: 3 (0x3)
+        Validity
+            Not Before: Jul  8 08:38:13 2019 GMT
+            Not After : Jul  7 08:38:13 2020 GMT
+        Subject:
+            countryName               = US
+            stateOrProvinceName       = New York
+            organizationName          = Example
+            commonName                = win12r2.example.com
+        X509v3 extensions:
+            X509v3 Basic Constraints:
+                CA:FALSE
+            Netscape Comment:
+                OpenSSL Generated Certificate
+            X509v3 Subject Key Identifier:
+                41:26:57:F9:91:36:32:53:30:1B:AC:06:63:FA:3B:38:51:64:E6:BB
+            X509v3 Authority Key Identifier:
+                keyid:CC:12:A6:8A:EA:74:08:85:B3:DC:51:91:E8:F7:31:9D:8D:5B:3A:B4
+
+Certificate is to be certified until Jul  7 08:38:13 2020 GMT (365 days)
+Sign the certificate? [y/n]:y
+
+
+1 out of 1 certificate requests certified, commit? [y/n]y
+Write out database with 1 new entries
+Data Base Updated
+```
+
+##### Import CA Certs to Windows AD
+
+Start->Run...-> Type "mmc". This will open the "Add/Remove Snap-in" dialog.
+![ca15](images/idm/ipa_win_sync_ca_15.png)
+
+In the "Add Snap-in" dialog, select "Certificates" and press "Next".
+![ca16](images/idm/ipa_win_sync_ca_16.png)
+
+Select "Computer account" and press "Next".
+![ca17](images/idm/ipa_win_sync_ca_17.png)
+
+Select "Local computer" and press "Finish"
+![ca18](images/idm/ipa_win_sync_ca_18.png)
+
 
 #### Verify AD / CS from IPA side
 
