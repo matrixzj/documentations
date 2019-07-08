@@ -308,6 +308,11 @@ Select "Computer account" and press "Next".
 Select "Local computer" and press "Finish"
 ![ca18](images/idm/ipa_win_sync_ca_18.png)
 
+Expand the "Certificates" node under "Third-Party Root Certification Authorities". Right-click on the "Certificates" node, select "All Tasks" -> "Import...", and import the Certificate Authority ("my-ca.crt") copied from CA hosts.
+![ca19](images/idm/ipa_win_sync_ca_19.png)
+![ca20](images/idm/ipa_win_sync_ca_20.png)
+![ca21](images/idm/ipa_win_sync_ca_21.png)
+![ca22](images/idm/ipa_win_sync_ca_22.png)
 
 #### Verify AD / CS from IPA side
 
