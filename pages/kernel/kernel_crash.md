@@ -2,7 +2,7 @@
 title: Crash
 tags: [kernel]
 keywords: trouble, vmcore, crash, kernel
-last_updated: Juue 12, 2019
+last_updated: June 12, 2019
 summary: "This page lists some tips to analyze vmcore with crash"
 sidebar: mydoc_sidebar
 permalink: kernel_crash.html

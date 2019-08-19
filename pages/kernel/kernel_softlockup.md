@@ -2,7 +2,7 @@
 title: CPU Soft Lockup
 tags: [kernel]
 keywords: trouble, CPU, Soft Lockup, kernel
-last_updated: Juue 14, 2019
+last_updated: June 14, 2019
 summary: "This page lists some tips to analyze cpu lockup error"
 sidebar: mydoc_sidebar
 permalink: kernel_cpu_soft_lockup.html

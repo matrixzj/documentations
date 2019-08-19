@@ -77,6 +77,14 @@ entries:
       url: /idm_ipa_win_sync.html
       output: web, pdf
 
+  - title: OpenStack
+    output: web, pdf
+    folderitems:
+    
+    - title: OpenStack Services
+      url: /openstack_services.html
+      output: web, pdf
+      
   - title: Misc
     output: web, pdf
     folderitems:
