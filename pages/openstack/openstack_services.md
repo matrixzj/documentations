@@ -16,6 +16,7 @@ folder: openstack
 Daemon Description | Config File | Ports | Service Name | Note  
 :------:|:------:|:------:|:------:|:------:  
 Identity service public endpoint | /etc/httpd/conf.d/wsgi-keystone.conf | 5000 | | publicurl  
+{: .table-bordered }
 
 
 Identity service (keystone) administrative endpoint 	35357 	adminurl
