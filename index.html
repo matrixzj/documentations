@@ -94,6 +94,23 @@ sidebar: mydoc_sidebar
          </div>
     </div>
 
+    <div class="col-xs-6 col-sm-4 col-md-4" data-groups='["OpenStack"]'>
+        <div class="panel panel-default">
+            <div class="panel-heading">OpenStack</div>
+            <div class="panel-body"> Private Cloud
+                <ul>
+                {% for page in site.pages %}
+                    {% for tag in page.tags %}
+                        {% if tag == "misc" %}
+                            <li><a href="{{page.url | remove: '/'}}">{{page.title}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                </ul>
+            </div>
+         </div>
+    </div>
+
     <div class="col-xs-6 col-sm-4 col-md-4" data-groups='["Misc"]'>
         <div class="panel panel-default">
             <div class="panel-heading">Misc</div>
