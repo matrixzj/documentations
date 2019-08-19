@@ -15,8 +15,8 @@ folder: openstack
 
 Daemon Description | Config File | Ports | Service Name | Note  
 :------:|:------:|:------:|:------:|:------:  
-Identity service public endpoint | /etc/keystone/keystone.conf | 5000 | | publicurl  
-Identity service (keystone) administrative endpoint | /etc/keystone/keystone.conf</br> /etc/httpd/conf.d/wsgi-keystone.conf | 35357 | | adminurl
+Identity service public endpoint | /etc/keystone/keystone.conf<br>/etc/httpd/conf.d/wsgi-keystone.conf | 5000 | | publicurl  
+Identity service (keystone) administrative endpoint | /etc/keystone/keystone.conf<br>/etc/httpd/conf.d/wsgi-keystone.conf | 35357 | | adminurl
 Compute API (nova-api) | /usr/lib/systemd/system/openstack-nova-api.service | 8773/8774, 8775 | openstack-nova-api.service
 Compute VNC proxy for browsers ( openstack-nova-novncproxy) | /usr/lib/systemd/system/openstack-nova-novncproxy.service | 6080 | openstack-nova-novncproxy.service
 Image service registry | /etc/glance/glance-registry.conf | 9191 | openstack-glance-registry.service	
