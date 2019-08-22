@@ -28,6 +28,20 @@ Block Storage (cinder) | /etc/cinder/cinder.conf | 8776 | openstack-cinder-api.s
 Message Broker (AMQP traffic) | | 5672 | rabbitmq-server.service | OpenStack Block Storage, Networking, Orchestration, and Compute
 {: .table-bordered }
 
+### Nova Status 
+
+```
+# nova service-list 
++-----+------------------+---------------------------+-----------+---------+-------+----------------------------+-----------------+
+| Id  | Binary           | Host                      | Zone      | Status  | State | Updated_at                 | Disabled Reason |
++-----+------------------+---------------------------+-----------+---------+-------+----------------------------+-----------------+
+| 3   | nova-conductor   | controller.dev.fwmrm.net  | internal  | enabled | up    | 2019-08-22T07:17:48.000000 | -               |
+| 27  | nova-consoleauth | controller.dev.fwmrm.net  | internal  | enabled | up    | 2019-08-22T07:17:42.000000 | -               |
+| 30  | nova-scheduler   | controller.dev.fwmrm.net  | internal  | enabled | up    | 2019-08-22T07:17:44.000000 | -               |
+| 126 | nova-compute     | nova01.dev.fwmrm.net      | nova      | enabled | up    | 2019-08-22T07:17:42.000000 | -               |
+| 150 | nova-console     | controller.dev.fwmrm.net  | internal  | enabled | up    | 2019-08-22T07:17:47.000000 | -               |
+| 153 | nova-compute     | nova02.dev.fwmrm.net      | DEV-iSCSI | enabled | up    | 2019-08-22T07:17:44.000000 | -               |
+```
 
 
 {% include links.html %}
