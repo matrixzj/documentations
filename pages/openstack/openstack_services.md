@@ -2,7 +2,7 @@
 title: OpenStack Services
 tags: [openstack]
 keywords: openstack, services, daemon, health check
-last_updated: August 19, 2019
+last_updated: August 22, 2019
 summary: "How to check health status for OpenStack daemons"
 sidebar: mydoc_sidebar
 permalink: openstack_services.html
