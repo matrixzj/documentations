@@ -5,7 +5,7 @@ keywords: kerberos, ticket
 last_updated: June 18, 2019
 summary: "Steps kerberos authentication"
 sidebar: mydoc_sidebar
-permalink: idm_keberos_authentication.html
+permalink: idm_kerberos_authentication.html
 folder: idm
 ---
 
