@@ -24,11 +24,10 @@ Compute VNC proxy for browsers ( openstack-nova-novncproxy) | /etc/nova/nova.con
 Compute for VM ( openstack-nova-compute) | /etc/nova/nova.conf | | openstack-nova-compute.service
 Networking (neutron) | /etc/neutron/neutron.conf<br>/etc/neutron/plugin.ini | 9696 | neutron-server.service | publicurl and adminurl
 Networking (neutron comput) | /etc/neutron/neutron.conf<br>/etc/neutron/plugins/ml2/linuxbridge_agent.ini | | neutron-linuxbridge-agent.service | 
+Block Storage (cinder) | /etc/cinder/cinder.conf | 8776 | openstack-cinder-api.service | publicurl and adminurl
+Message Broker (AMQP traffic) | | 5672 | rabbitmq-server.service | OpenStack Block Storage, Networking, Orchestration, and Compute
 {: .table-bordered }
 
 
-Block Storage (cinder) 	8776 	publicurl and adminurl
-Compute ports for access to virtual machine consoles 	5900-5999 	
-Object Storage (swift) 	6000, 6001, 6002 	
 
 {% include links.html %}
