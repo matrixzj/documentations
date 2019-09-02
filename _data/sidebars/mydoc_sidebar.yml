@@ -61,6 +61,10 @@ entries:
       url: /storage_device_mapper_table.html
       output: web, pdf
 
+    - title: NetApp SnapMirror
+      url: /storage_netapp_snapmirror.html
+      output: web, pdf
+
   - title: IDM
     output: web, pdf
     folderitems:
