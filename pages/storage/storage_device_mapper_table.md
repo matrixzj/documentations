@@ -2,7 +2,7 @@
 title: Device Mapper Table
 tags: [storage]
 keywords: device mapper, lvm
-last_updated: Juue 18, 2019
+last_updated: June 18, 2019
 summary: "Inteprete Device Mapper Table"
 sidebar: mydoc_sidebar
 permalink: storage_device_mapper_table.html
