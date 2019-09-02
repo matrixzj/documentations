@@ -168,7 +168,7 @@ svm_NetAppCloudVolumeTest1
                                                        snapmirror     svm_NetAppCloudVolumeTest2
 ```
 
-## Volume SnapMirror
+### Volume SnapMirror
 
 ```
 NetAppCloudVolumeTest2::> volume create -vserver svm_NetAppCloudVolumeTest2 -volume MirrorDestVolume -type DP -size 100G -aggregate aggr1
