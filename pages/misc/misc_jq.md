@@ -26,10 +26,6 @@ $ cat /tmp/data
                     "Key": "Env"
                 },
                 {
-                    "Value": "Ops-Sandbox",
-                    "Key": "Project"
-                },
-                {
                     "Value": "AccountBase",
                     "Key": "aws:cloudformation:stack-name"
                 },
@@ -45,19 +41,14 @@ $ cat /tmp/data
                     "Value": "PrivateSubnet1a",
                     "Key": "Name"
                 },
-                {
-                    "Value": "arn:aws:cloudformation:us-east-1:392697640131:stack/AccountBase/f8d43350-f272-11e8-b9be-50fae9826c99",
-                    "Key": "aws:cloudformation:stack-id"
-                }
             ],
             "AvailableIpAddressCount": 214,
             "DefaultForAz": false,
             "Ipv6CidrBlockAssociationSet": [],
-            "VpcId": "vpc-0f54cb3791fe5ccbb",
             "State": "available",
             "MapPublicIpOnLaunch": false,
-            "SubnetId": "subnet-011027c9a5b395c2c",
-            "CidrBlock": "10.35.2.0/24",
+            "SubnetId": "subnet-xxxxxx",
+            "CidrBlock": "10.1.2.0/24",
             "AssignIpv6AddressOnCreation": false
         },
         {
@@ -68,20 +59,8 @@ $ cat /tmp/data
                     "Key": "Owner"
                 },
                 {
-                    "Value": "arn:aws:cloudformation:us-east-1:392697640131:stack/AccountBase/f8d43350-f272-11e8-b9be-50fae9826c99",
-                    "Key": "aws:cloudformation:stack-id"
-                },
-                {
                     "Value": "AccountBase",
                     "Key": "aws:cloudformation:stack-name"
-                },
-                {
-                    "Value": "PublicSubnet1a",
-                    "Key": "Name"
-                },
-                {
-                    "Value": "Ops-Sandbox",
-                    "Key": "Project"
                 },
                 {
                     "Value": "PublicSubnet1a",
@@ -95,11 +74,10 @@ $ cat /tmp/data
             "AvailableIpAddressCount": 250,
             "DefaultForAz": false,
             "Ipv6CidrBlockAssociationSet": [],
-            "VpcId": "vpc-0f54cb3791fe5ccbb",
             "State": "available",
             "MapPublicIpOnLaunch": false,
-            "SubnetId": "subnet-00498dd23f3bd3e98",
-            "CidrBlock": "10.35.0.0/24",
+            "SubnetId": "subnet-yyyyyy",
+            "CidrBlock": "10.1.0.0/24",
             "AssignIpv6AddressOnCreation": false
         }
     ]
