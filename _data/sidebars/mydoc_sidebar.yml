@@ -117,6 +117,10 @@ entries:
       url: /misc_rsyslog.html
       output: web, pdf
 
+    - title: jq
+      url: /misc_jq.html
+      output: web, pdf
+
   - title: Navigation
     output: web, pdf
 
