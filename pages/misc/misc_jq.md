@@ -201,4 +201,18 @@ $ cat /tmp/data | jq '.Subnets[] | {id: .SubnetId, network: .CidrBlock} | select
 }
 ```
 
+#### Resharp json
+
+```
+$ cat /tmp/data | jq '.Subnets[] | { id: .SubnetId, ip_range: .CidrBlock }'
+{
+  "id": "subnet-011027c9a5b395c2c",
+  "ip_range": "10.35.2.0/24"
+}
+{
+  "id": "subnet-00498dd23f3bd3e98",
+  "ip_range": "10.35.0.0/24"
+}
+```
+
 {% include links.html %}
