@@ -189,6 +189,11 @@ $ cat /tmp/data | jq '.Subnets[] | .SubnetId, .CidrBlock | select( . == "10.35.0
 ```
 
 ```
+$ cat /tmp/data | jq '.Subnets[] | .SubnetId, .CidrBlock | select( . | test(".*35.2.*") )'
+"10.35.2.0/24"
+```
+
+```
 $ cat /tmp/data | jq '.Subnets[] | {id: .SubnetId, network: .CidrBlock} | select(.network == "10.35.0.0/24")'
 {
   "id": "subnet-00498dd23f3bd3e98",
