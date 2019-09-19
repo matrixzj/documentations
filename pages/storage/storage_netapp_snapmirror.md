@@ -2,7 +2,7 @@
 title: NetApp SnapMirror
 tags: [storage]
 keywords: NetApp, data protection, SnapMirror
-last_updated: Aug 30, 2019
+last_updated: Sep 19, 2019
 summary: "How to setup SnapMirror"
 sidebar: mydoc_sidebar
 permalink: storage_netapp_snapmirror.html
@@ -230,7 +230,7 @@ NetAppCloudVolumeTestHA-02
 
 ### What will be stored in Snapshots 
 
-#### Deleted Data while snapmirror was transferring
+#### Deleted Data while snapmirror was transferring will be included
 ```
 NetAppCloudVolumeTest1::> snap show -volume SourceVolume
                                                                  ---Blocks---
