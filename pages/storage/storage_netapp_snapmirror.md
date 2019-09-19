@@ -207,7 +207,144 @@ svm_NetAppCloudVolumeTest1:SourceVolume
                                       Idle           -         true    -
 ```
 
+### Manual Update SnapMirror
+
+```
+NetAppCloudVolumeTestHA::> snapmirror update -destination-path svm_NetAppCloudVolumeTestHA:NetAppCloudVolumeTestHA_data
+Operation is queued: snapmirror update of destination "svm_NetAppCloudVolumeTestHA:NetAppCloudVolumeTestHA_data".
+
+NetAppCloudVolumeTestHA::> snapmirror show -destination-path svm_NetAppCloudVolumeTestHA:NetAppCloudVolumeTestHA_data -fields lag,newest-snapshot-timestamp
+source-path                             destination-path                                         newest-snapshot-timestamp lag-time
+--------------------------------------- -------------------------------------------------------- ------------------------- --------
+svm_NetAppCloudVolumeTest1:SourceVolume svm_NetAppCloudVolumeTestHA:NetAppCloudVolumeTestHA_data 09/19 07:35:27            0:2:6
+
+NetAppCloudVolumeTestHA::> date
+Node      Date                     Time zone
+--------- ------------------------ -------------------------
+NetAppCloudVolumeTestHA-01
+          Thu Sep 19 07:37:41 2019 Etc/UTC
+NetAppCloudVolumeTestHA-02
+          Thu Sep 19 07:37:41 2019 Etc/UTC
+2 entries were displayed.
+```
+
+### What will be stored in Snapshots 
+
+#### Deleted Data while snapmirror was transferring
+```
+NetAppCloudVolumeTest1::> snap show -volume SourceVolume
+                                                                 ---Blocks---
+Vserver  Volume   Snapshot                                  Size Total% Used%
+-------- -------- ------------------------------------- -------- ------ -----
+svm_NetAppCloudVolumeTest1
+         SourceVolume
+                  snapmirror.3e430262-cfd8-11e9-a813-53a7aecad837_2159983246.2019-09-19_074825
+                                                          6.14MB     0%    0%
+                  snapmirror.3e430262-cfd8-11e9-a813-53a7aecad837_2159983246.2019-09-19_075403
+                                                          3.89MB     0%    0%
+2 entries were displayed.
+```
+
+```
+centos@ip-10-35-2-229.ec2.internal:/mnt/source · 07:48 AM Thu Sep 19 ·
+!349 $ ll
+total 13487808
+-rw-r--r-- 1 root root 5268045824 Sep 10 17:49 1.img
+-rw-r--r-- 1 root root 2147483648 Sep 10 17:50 2.img
+-rw-r--r-- 1 root root 4194304000 Aug 31 06:36 3.img
+-rw-r--r-- 1 root root 2147483648 Sep 19 07:42 4.img
+
+centos@ip-10-35-2-229.ec2.internal:/mnt/source · 07:51 AM Thu Sep 19 ·
+!352 $ sudo rm -f 2.img
+```
+
+```
+NetAppCloudVolumeTest1::> snap show -volume SourceVolume
+                                                                 ---Blocks---
+Vserver  Volume   Snapshot                                  Size Total% Used%
+-------- -------- ------------------------------------- -------- ------ -----
+svm_NetAppCloudVolumeTest1
+         SourceVolume
+                  snapmirror.3e430262-cfd8-11e9-a813-53a7aecad837_2159983246.2019-09-19_074825
+                                                          6.14MB     0%    0%
+                  snapmirror.3e430262-cfd8-11e9-a813-53a7aecad837_2159983246.2019-09-19_075403
+                                                          1.94GB     2%    9%
+2 entries were displayed.
+```
+
+#### Newly added data will NOT be included in it
+```
+NetAppCloudVolumeTestHA::> snapmirror show
+                                                                       Progress
+Source            Destination Mirror  Relationship   Total             Last
+Path        Type  Path        State   Status         Progress  Healthy Updated
+----------- ---- ------------ ------- -------------- --------- ------- --------
+svm_NetAppCloudVolumeTest1:SourceVolume
+            XDP  svm_NetAppCloudVolumeTestHA:NetAppCloudVolumeTestHA_data
+                              Snapmirrored
+                                      Transferring   5.07GB    true    09/19 07:58:29
+```
+
+```
+centos@ip-10-35-2-229.ec2.internal:/mnt/source · 07:54 AM Thu Sep 19 ·
+!353 $ sudo dd if=/dev/urandom of=7.img bs=1M  count=4096
+4096+0 records in
+4096+0 records out
+4294967296 bytes (4.3 GB) copied, 52.7619 s, 81.4 MB/s
+```
+
+```
+NetAppCloudVolumeTest1::> snap show -volume SourceVolume
+                                                                 ---Blocks---
+Vserver  Volume   Snapshot                                  Size Total% Used%
+-------- -------- ------------------------------------- -------- ------ -----
+svm_NetAppCloudVolumeTest1
+         SourceVolume
+                  snapmirror.3e430262-cfd8-11e9-a813-53a7aecad837_2159983246.2019-09-19_074825
+                                                          6.14MB     0%    0%
+                  snapmirror.3e430262-cfd8-11e9-a813-53a7aecad837_2159983246.2019-09-19_075403
+                                                          1.94GB     2%    8%
+2 entries were displayed.
+```
+
+#### For modified data, original data will be included in it
+```
+centos@ip-10-35-2-229.ec2.internal:/mnt/source · 08:00 AM Thu Sep 19 ·
+!354 $ ls -l
+total 24014872
+-rw-r--r-- 1 root root 5268045824 Sep 10 17:49 1.img
+-rw-r--r-- 1 root root 4194304000 Aug 31 06:36 3.img
+-rw-r--r-- 1 root root 2147483648 Sep 19 07:42 4.img
+-rw-r--r-- 1 root root 4294967296 Sep 19 07:50 5.img
+-rw-r--r-- 1 root root 4294967296 Sep 19 07:51 6.img
+-rw-r--r-- 1 root root 4294967296 Sep 19 07:58 7.img
+
+centos@ip-10-35-2-229.ec2.internal:/mnt/source · 08:00 AM Thu Sep 19 ·
+!355 $ sudo dd if=/dev/urandom of=3.img bs=1M  count=1024
+1024+0 records in
+1024+0 records out
+1073741824 bytes (1.1 GB) copied, 15.4966 s, 69.3 MB/s
+
+centos@ip-10-35-2-229.ec2.internal:/mnt/source · 08:01 AM Thu Sep 19 ·
+!356 $ ls -l
+total 20955452
+-rw-r--r-- 1 root root 5268045824 Sep 10 17:49 1.img
+-rw-r--r-- 1 root root 1073741824 Sep 19 08:01 3.img
+-rw-r--r-- 1 root root 2147483648 Sep 19 07:42 4.img
+-rw-r--r-- 1 root root 4294967296 Sep 19 07:50 5.img
+-rw-r--r-- 1 root root 4294967296 Sep 19 07:51 6.img
+-rw-r--r-- 1 root root 4294967296 Sep 19 07:58 7.img
+```
+
+```
+NetAppCloudVolumeTest1::> snap show -volume SourceVolume
+                                                                 ---Blocks---
+Vserver  Volume   Snapshot                                  Size Total% Used%
+-------- -------- ------------------------------------- -------- ------ -----
+svm_NetAppCloudVolumeTest1
+         SourceVolume
+                  snapmirror.3e430262-cfd8-11e9-a813-53a7aecad837_2159983246.2019-09-19_075403
+                                                          5.94GB     6%   22%
+```
 
 {% include links.html %}
-
-
