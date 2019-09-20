@@ -184,4 +184,43 @@ $ cat /tmp/data | jq '.Subnets[] | { id: .SubnetId, ip_range: .CidrBlock }'
 }
 ```
 
+#### skip null iterator with `?`
+```
+$ cat /tmp/ss-instances | jq ' .[][].Instances[] | {id: .InstanceId, tags: .Tags[]} | select(.tags.Key | test("^Name$";"i")) | se
+lect(.tags.Value | test(".*netapp.*"))'
+jq: error (at <stdin>:34578): Cannot iterate over null (null)
+```
+
+```
+$ cat /tmp/ss-instances | jq ' .[][].Instances[] | {id: .InstanceId, tags: .Tags[]?} | select(.tags.Key | test("^Name$";"i")) | s
+elect(.tags.Value | test(".*netapp.*"))'
+{
+  "id": "i-0908ac3819044a7b4",
+  "tags": {
+    "Value": "fwawsnetapp01-mediator",
+    "Key": "Name"
+  }
+}
+```
+
+#### filter case insensitive with `"i"`
+```
+$ cat /tmp/ss-instances | jq ' .[][].Instances[] | {id: .InstanceId, tags: .Tags[]?} | select(.tags.Key | test("^Name$";"i")) | s
+elect(.tags.Value | test(".*netapp.*";"i"))'
+{
+  "id": "i-0b92c0aa4b6758489",
+  "tags": {
+    "Value": "System-NetAppCloudManager",
+    "Key": "Name"
+  }
+}
+{
+  "id": "i-0908ac3819044a7b4",
+  "tags": {
+    "Value": "fwawsnetapp01-mediator",
+    "Key": "Name"
+  }
+}
+```
+
 {% include links.html %}
