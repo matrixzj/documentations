@@ -121,6 +121,10 @@ entries:
       url: /misc_jq.html
       output: web, pdf
 
+    - title: Ansible Tips
+      url: /misc_ansible_tips.html
+      output: web, pdf
+
   - title: Navigation
     output: web, pdf
 
