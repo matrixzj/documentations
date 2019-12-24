@@ -59,6 +59,4 @@ $ cat ilo_subnet.yml
 
 ```
 
-### Mail Signature
-
 {% include links.html %}
