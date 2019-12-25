@@ -65,6 +65,10 @@ entries:
       url: /storage_netapp_snapmirror.html
       output: web, pdf
 
+    - title: IO Performance
+      url: /storage_io_perf.html
+      output: web, pdf
+
   - title: IDM
     output: web, pdf
     folderitems:
