@@ -128,7 +128,7 @@ root@pekdev015.dev.fwmrm.net: userPassword
 # systemctl restart libvirtd
 ```
 
-`Verify Connection`
+`Verify Connection from localhost`
 ```bash
 # virsh -c qemu+tcp://localhost/system nodeinfo
 Please enter your authentication name: root
@@ -141,6 +141,24 @@ Core(s) per socket:  12
 Thread(s) per core:  2
 NUMA cell(s):        2
 Memory size:         134089036 KiB
+```
+
+`Verify Connection from remote`
+NOTE: Make sure `cyrus-sasl-md5` installed on remote host
+```bash
+# yum install cyrus-sasl-md5
+
+# virsh -c qemu+tcp://192.168.0.74/system nodeinfo
+Please enter your authentication name: root
+Please enter your password:
+CPU model:           x86_64
+CPU(s):              24
+CPU frequency:       2933 MHz
+CPU socket(s):       1
+Core(s) per socket:  6
+Thread(s) per core:  2
+NUMA cell(s):        2
+Memory size:         67098420 KiB
 ```
 
 Note: If no authentication is needed, try config as below
