@@ -2,7 +2,7 @@
 title: Hypervisor Initialization
 tags: [misc]
 keywords: virt-install
-last_updated: Jan 14, 2020
+last_updated: Jan 15, 2020
 summary: "Build a raw host to KVM based Hypervisor"
 sidebar: mydoc_sidebar
 permalink: misc_hypervisor_initialization.html
@@ -15,7 +15,7 @@ folder: Misc
 ### RPM Installation
 
 ```bash
-# yum install -y virt-install qemu libvirt kvm seabios
+# yum install -y virt-install qemu libvirt kvm seabios qemu-kvm
 
 # systemctl enable --now libvirtd
 ```
