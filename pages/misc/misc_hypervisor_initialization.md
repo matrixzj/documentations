@@ -123,7 +123,7 @@ Password:
 Again (for verification):
 
 # sasldblistusers2 -f /etc/libvirt/passwd.db
-root@pekdev015.dev.fwmrm.net: userPassword
+root@test.example.net: userPassword
 
 # systemctl restart libvirtd
 ```
