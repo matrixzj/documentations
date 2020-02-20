@@ -1,6 +1,6 @@
 ---
 title: HP iLO 
-tags: [misc]
+tags: [misc, python]
 keywords: iLO, ssh, script 
 last_updated: June 29, 2019
 summary: "HP iLO related stuffs"
