@@ -93,6 +93,14 @@ entries:
       url: /openstack_services.html
       output: web, pdf
       
+  - title: Python
+    output: web, pdf
+    folderitems:
+
+    - title: Python Virtual Environment
+      url: /python_virtual_env.html
+      output: web, pdf
+
   - title: Misc
     output: web, pdf
     folderitems:

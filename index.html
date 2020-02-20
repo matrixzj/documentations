@@ -24,6 +24,7 @@ sidebar: mydoc_sidebar
       <button class="btn btn-primary" data-group="storage">Storage</button>
       <button class="btn btn-primary" data-group="openstack">OpenStack</button>
       <button class="btn btn-primary" data-group="idm">IDM</button>
+      <button class="btn btn-primary" data-group="python">Python</button>
       <button class="btn btn-primary" data-group="misc">Misc</button>
     </div>      
 
@@ -101,6 +102,23 @@ sidebar: mydoc_sidebar
         <div class="panel panel-default">
             <div class="panel-heading">OpenStack</div>
             <div class="panel-body"> Private Cloud
+                <ul>
+                {% for page in site.pages %}
+                    {% for tag in page.tags %}
+                        {% if tag == "openstack" %}
+                            <li><a href="{{page.url | remove: '/'}}">{{page.title}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                </ul>
+            </div>
+         </div>
+    </div>
+
+    <div class="col-xs-6 col-sm-4 col-md-4" data-groups='["python"]'>
+        <div class="panel panel-default">
+            <div class="panel-heading">Python</div>
+            <div class="panel-body"> Python Scripts
                 <ul>
                 {% for page in site.pages %}
                     {% for tag in page.tags %}
