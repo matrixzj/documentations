@@ -74,8 +74,18 @@ Device:         rrqm/s wrqm/s  r/s   w/s  rkB/s   wkB/s avgrq-sz avgqu-sz await 
 vda               0.04  23.85 7.11 52.27 442.51 5702.99   206.97     0.84 14.22   0.47    16.09   0.28   1.64
 ```
 ##### Output Explanation
-> Straight forward:  
->> Device:     The device name as listed in /dev  
+- Straight forward:  
+    - Device:     The device name as listed in /dev  
+    - rrqm/s + wrqm/s:
+    The number of requests merged per second were queued to the device io scheduler
+    Measured at the io scheduler
+    - r/s + w/s:
+    The number of requests that were issued to the device completed by storage per second
+    Measured at io done
+    - rkB/s + wkB/s:
+    The number of kilobytes read from/written to the device transferred between the host and storage per second
+    measured at io done
+
 
 
 {% include links.html %}
