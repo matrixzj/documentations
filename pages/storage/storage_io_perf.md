@@ -75,16 +75,23 @@ vda               0.04  23.85 7.11 52.27 442.51 5702.99   206.97     0.84 14.22 
 ```
 ##### Output Explanation
 - Straight forward:  
-    - Device:     The device name as listed in /dev  
-    - rrqm/s + wrqm/s:
-    The number of requests merged per second were queued to the device io scheduler
-    Measured at the io scheduler
-    - r/s + w/s:
-    The number of requests that were issued to the device completed by storage per second
-    Measured at io done
-    - rkB/s + wkB/s:
-    The number of kilobytes read from/written to the device transferred between the host and storage per second
-    measured at io done
+    - Device: The device name as listed in /dev  
+    - rrqm/s + wrqm/s: The number of requests merged per second were queued to the device io scheduler, Measured at the io scheduler
+    - r/s + w/s: The number of requests that were issued to the device completed by storage per second, Measured at io done
+    - rkB/s + wkB/s: The number of kilobytes read from/written to the device transferred between the host and storage per second, Measured at io done
+- Special:
+    - avgrq-sz:
+    <pre>
+    The average size (in 512b sectors) of the requests that were issued to the device
+completed by storage.
+    Combined average for both reads and writes
+    (rkB/s + wkB/s)*2/(r/s + w/s)
+    Can derive average read/write io size: (rkB/s*2)/(r/s) or (wkB/s*2)/(w/s)
+    </pre>
+avgqu-sz:
+the average queue length of the requests that were issued to the device
+The average number of requests within the io scheduler queue plus the average
+number of io outstanding to st
 
 
 
