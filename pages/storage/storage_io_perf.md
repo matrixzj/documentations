@@ -49,7 +49,7 @@ sda               0.00      0.00 0.00    156.00  0.00 566732.00  7265.79     34.
 dm-0              0.00 113133.00 0.00    164.00  0.00 566732.00  6911.37    150.71 846.07    0.00  846.07  6.10 100.00
 dm-1              0.00      0.00 0.00 113817.00  0.00 702732.00    12.35 111791.51 896.90    0.00  896.90  0.01 100.10
 ```
-{: .font-size: 7pt }
+{: .font-size: 6pt }
 
 ### Linux IO information collecting tools
 #### iostat
@@ -57,10 +57,23 @@ dm-1              0.00      0.00 0.00 113817.00  0.00 702732.00    12.35 111791.
 ```
 # iostat -xkt 1 <dev_name> [-p ]
 ```
--x    display extended statistics
--k    use KByte instead of sector as unit
--t    show time
--p    display par
+-x    display extended statistics  
+-k    use KByte instead of sector as unit  
+-t    show time  
+-p    display partitions in RHEL6. In RHEL5, statistics on partitions are displayed by default, exclusive with -x  
+
+##### Output Example
+```
+# iostat -tkx 1
+Linux 3.10.0-514.el7.x86_64 (rhel7-test.dev.fwmrm.net)  12/12/2019      _x86_64_        (8 CPU)
+
+12/12/2019 06:06:58 AM
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           1.11    0.00    0.42    0.28    0.00   98.19
+
+Device:         rrqm/s   wrqm/s     r/s    w/s        rkB/s     wkB/s a   vgrq-sz   avgqu-sz   await r_await w_await  svctm  %util
+vda               0.04    23.85    7.11   52.27   442.51  5702.99   206.97     0.84      14.22  0.47   16.09     0.28   1.64
+```
 
 
 {% include links.html %}
