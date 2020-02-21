@@ -83,13 +83,30 @@ vda               0.04  23.85 7.11 52.27 442.51 5702.99   206.97     0.84 14.22 
     - avgrq-sz:
     The average size (in 512b sectors) of the requests that were issued to the device completed by storage.  
     Combined average for both reads and writes:  
-    `(rkB/s + wkB/s)*2/(r/s + w/s)`
-    Can derive average read/write io size:   
+    `(rkB/s + wkB/s)*2/(r/s + w/s)`  
+    Can derive average read/write io size:     
     `(rkB/s*2)/(r/s) or (wkB/s*2)/(w/s)`
     - avgqu-sz:
-the average queue length of the requests that were issued to the device
-The average number of requests within the io scheduler queue plus the average
-number of io outstanding to st
+    ~the average queue length of the requests that were issued to the device~  
+    The average number of requests within the io scheduler queue plus the average number of io outstanding to storage (driver queue)  
+    `/sys/block/sda/queue/nr_requests` (io scheduler)  
+    `/sys/block/sda/device/queue_depth` (driver)  
+    It is measured between io scheduler and io done
+    - await/r_await/w_await:
+    The average time (in milliseconds) for I/O requests ~issued to the device to be served~ completed by storage. This includes the time spent by the requests in the cheduler queue and the time storage spent servicing time  
+    Measured at io done.
+    - svctm:
+    The average effective storage service time (in milliseconds) for I/O requests that were ~issued to the device~ completed by storage  
+    `%util * 1000ms-per-second / #io-completed-per-second`  
+    await time doesn’t take into account parallelism within storage and includes queuing time within io scheduler  
+    svctm in effect accounts for parallel io operations within storage and does not include queuing time within io scheduler  
+    - %util:
+    ~Percentage of sample interval during which I/O requests were issued to the device (bandwidth utilization for the device). Device saturation occurs when this value is close to 100%~  
+    Percentage of sample interval during there was at least 1 outstanding I/O request within the io scheduler/driver/storage  
+    Device saturation for the current load point occurs when this value is close to 100% and the device is a single physical disk  
+    It is often divorced from the maximum available device bandwidth with modern enterprise storage configurations.  
+
+
 
 
 
