@@ -29,8 +29,7 @@ avg-cpu:  %user   %nice %system %iowait  %steal   %idle
 
 Device:         rrqm/s    wrqm/s   r/s       w/s    rkB/s     wkB/s avgrq-sz avgqu-sz   await  svctm  %util
 sda               0.00      0.00  0.00      0.00     0.00      0.00     0.00     0.00    0.00   0.00   0.00
-sda1              0.00      0.00  0.00      0.00     0.00      0.00     0.00     0.00    0.00   0.00   0.00
-sdb               0.00 134838.61  0.00   1081.19     0.00 552047.52  1021.19   105.60   99.01   0.92  99.21
+sda1              0.00      0.00  0.00      0.00     0.00      0.00     0.00     0.00    0.00   0.00   0.00 sdb               0.00 134838.61  0.00   1081.19     0.00 552047.52  1021.19   105.60   99.01   0.92  99.21
 sdb1              0.00 134839.60  0.00   1081.19     0.00 552047.52  1021.19   105.60   99.01   0.92  99.21
 dm-2              0.00      0.00  0.00 135906.93     0.00 543627.72     8.00 13423.23   99.65   0.01  99.50
 dm-3              0.00      0.00  0.00 135907.92     0.00 543631.68     8.00 13386.22   99.65   0.01  99.31
@@ -71,9 +70,12 @@ Linux 3.10.0-514.el7.x86_64 (rhel7-test.dev.fwmrm.net)  12/12/2019      _x86_64_
 avg-cpu:  %user   %nice %system %iowait  %steal   %idle
            1.11    0.00    0.42    0.28    0.00   98.19
 
-Device:         rrqm/s   wrqm/s     r/s    w/s        rkB/s     wkB/s a   vgrq-sz   avgqu-sz   await r_await w_await  svctm  %util
-vda               0.04    23.85    7.11   52.27   442.51  5702.99   206.97     0.84      14.22  0.47   16.09     0.28   1.64
+Device:         rrqm/s wrqm/s  r/s   w/s  rkB/s   wkB/s avgrq-sz avgqu-sz await r_await w_await  svctm  %util
+vda               0.04  23.85 7.11 52.27 442.51 5702.99   206.97     0.84 14.22   0.47    16.09   0.28   1.64
 ```
+##### Output Explanation
+> Straight forward:  
+>> Device:     The device name as listed in /dev  
 
 
 {% include links.html %}
