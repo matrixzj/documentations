@@ -179,19 +179,31 @@ The standard header (or initial fields displayed) include:
 - *%5T.%9t*	5-character field for the seconds portion of the time stamp and a 9-character field for the nanoseconds in the time stamp  
 - *%5p*		5-character field for the process ID  
 - *%2a*     2-character field for one of the actions. Trace actions:  
-	- ***Q--queued***			This notes intent to queue i/o at the given location. No real requests exists yet.  
-	- ***G--get request***	To send any type of request to a block device, a struct request container must be allocated first.  
-	- ***I--inserted***		A request is being sent to the i/o scheduler for addition to the internal queue and later service by the driver. The request is fully formed at this time.  
-	- ***P--plug***			When i/o is queued to a previously empty block device queue, Linux will plug the queue in anticipation of future ios being added before this data is needed.  
-	- ***M--back merge***		A previously inserted request exists that ends on the boundary of where this i/o begins, so the i/o scheduler can merge them together.  
-	- ***F--front merge***	Same as the back merge, except this i/o ends where a previously inserted requests starts.  
-	- ***U--unplug***    		Some request data already queued in the device, start sending requests to the driver. This may happen automatically if a timeout period has passed (see next entry) or if a number of requests have been added to the queue.  
-	- ***T--unplug***			due to timer If nobody requests the i/o that was queued after plugging the queue, Linux will automatically unplug it after a defined period has passed.  
-	- ***D--issued***			A request that previously resided on the block layer queue or in the i/o scheduler has been sent to the driver.
-	- ***C--complete***		A previously issued request has been completed. The output will detail the sector and size of that request, as well as the success or failure of it.  
-	- ***X--split***			On raid or device mapper setups, an incoming i/o may straddle a device or internal zone and needs to be chopped up into smaller pieces for service. This may indicate a performance problem due to a bad setup of that raid/dm device, but may also just be part of normal boundary conditions. dm is notably bad at this and will clone lots of i/o.  
-	- ***A--remap***			For stacked devices, incoming i/o is remapped to device below it in the i/o stack. The remap action details what exactly is being remapped to what.
-- *%3di*		3-character field for RWBS data
+	- ***Q--queued***  
+	This notes intent to queue i/o at the given location. No real requests exists yet.  
+	- ***G--get request***  
+	To send any type of request to a block device, a struct request container must be allocated first.  
+	- ***I--inserted***  
+	A request is being sent to the i/o scheduler for addition to the internal queue and later service by the driver. The request is fully formed at this time.  
+	- ***P--plug***
+	When i/o is queued to a previously empty block device queue, Linux will plug the queue in anticipation of future ios being added before this data is needed.   
+	- ***M--back merge***
+	A previously inserted request exists that ends on the boundary of where this i/o begins, so the i/o scheduler can merge them together.  
+	- ***F--front merge***
+	Same as the back merge, except this i/o ends where a previously inserted requests starts.  
+	- ***U--unplug***
+	Some request data already queued in the device, start sending requests to the driver. This may happen automatically if a timeout period has passed (see next entry) or if a number of requests have been added to the queue.  
+	- ***T--unplug***
+	Due to timer If nobody requests the i/o that was queued after plugging the queue, Linux will automatically unplug it after a defined period has passed.  
+	- ***D--issued***
+	A request that previously resided on the block layer queue or in the i/o scheduler has been sent to the driver.  
+	- ***C--complete***
+	A previously issued request has been completed. The output will detail the sector and size of that request, as well as the success or failure of it.  
+	- ***X--split***
+	On raid or device mapper setups, an incoming i/o may straddle a device or internal zone and needs to be chopped up into smaller pieces for service. This may indicate a performance problem due to a bad setup of that raid/dm device, but may also just be part of normal boundary conditions. dm is notably bad at this and will clone lots of i/o.  
+	- ***A--remap***
+	For stacked devices, incoming i/o is remapped to device below it in the i/o stack. The remap action details what exactly is being remapped to what.  
+- *%3d*		3-character field for RWBS data
 	- ***R***		Read
 	- ***W***		Write
 	- ***B***		Barrier (deprecated)
