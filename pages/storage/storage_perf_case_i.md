@@ -15,7 +15,7 @@ IO Performance Case I
 ## Sequetial Write
 
 ### Env Info
-| | Host1 | Host2 | Host3 |
+| | Host1 | Host2 | Host3 
 | :------------- | :------------- | :------------ | :-------------
 | CPU |	Xeon(R) E-2288G CPU @ 3.70GHz (16 Cores) | Xeon(R) CPU E5-2650 v4 @ 2.20GHz (48 Cores) | Xeon(R) CPU E5-2650 v4 @ 2.20GHz (48 Cores)
 | Memory | DDR4 2666 MHz 32G x 4 | DDR4 2400 MHz 32G x 4 | DDR4 2400 MHz 32G x 4
@@ -24,7 +24,7 @@ IO Performance Case I
 | RAID Info | 4 SSDs → RAID0 | 6 SSDs → RAID5 | 6 SSDs → RAID0
 | Filesystem | EXT4 | XFS | XFS
 | Mountpoint | /var | /var | /var
-{:.mbtablestyle}
+{: .table-bordered }
 
 ### Test Script
 ```
@@ -44,9 +44,10 @@ kill -9 $(ps aux | awk '/iostat/{print $2}' | head -1)
 ```
 
 ### Result
-| | Host1 | Host2 | Host3 |
+| | Host1 | Host2 | Host3 
 | :------------- | :------------- | :------------ | :-------------
 | Avg Time to Write 20GB | 20.6339 Seconds | 13.8235 Seconds | 12.4453 Seconds
+{: .table-bordered }
 
 
 
