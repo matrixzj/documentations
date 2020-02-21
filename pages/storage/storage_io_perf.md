@@ -12,12 +12,12 @@ folder: storage
 IO Performance
 ======
 
-### Linux IO Stack
+## Linux IO Stack
 
-#### Overview  
+### Overview  
 [![Linux IO Stack](images/storage/Linux-storage-stack-diagram_v4.10.png)](https://www.thomas-krenn.com/en/wiki/Linux_Storage_Stack_Diagram)
 
-#### Nutshell  
+### Nutshell  
 ![Linux IO Nutshell](images/storage/io.png)
 
 NOTE: The difference Between RHEL5 and Later Release:
@@ -50,9 +50,9 @@ dm-1              0.00      0.00 0.00 113817.00  0.00 702732.00    12.35 111791.
 ```
 {: .font-size: 6pt }
 
-### Linux IO information collecting tools
-#### iostat
-##### Usage
+## Linux IO information collecting tools
+### iostat
+#### Usage
 ```
 # iostat -xkt 1 <dev_name> [-p ]
 ```
@@ -61,7 +61,7 @@ dm-1              0.00      0.00 0.00 113817.00  0.00 702732.00    12.35 111791.
 -t    show time  
 -p    display partitions in RHEL6. In RHEL5, statistics on partitions are displayed by default, exclusive with -x  
 
-##### Output Example
+#### Output Example
 ```
 # iostat -tkx 1
 Linux 3.10.0-514.el7.x86_64 (rhel7-test.dev.fwmrm.net)  12/12/2019      _x86_64_        (8 CPU)
@@ -74,7 +74,7 @@ Device:         rrqm/s wrqm/s  r/s   w/s  rkB/s   wkB/s avgrq-sz avgqu-sz await 
 vda               0.04  23.85 7.11 52.27 442.51 5702.99   206.97     0.84 14.22   0.47    16.09   0.28   1.64
 ```
 
-##### Output Explanation
+#### Output Explanation
 - Straight forward:  
     - Device: The device name as listed in /dev  
     - rrqm/s + wrqm/s: The number of requests merged per second were queued to the device io scheduler, Measured at the io scheduler
@@ -107,8 +107,8 @@ vda               0.04  23.85 7.11 52.27 442.51 5702.99   206.97     0.84 14.22 
     Device saturation for the current load point occurs when this value is close to 100% and the device is a single physical disk  
     It is often divorced from the maximum available device bandwidth with modern enterprise storage configurations.  
 
-#### iotop
-##### Usage
+### iotop
+#### Usage
 ```
 # iotop –b –t –d 1 [-o]
 ```
@@ -117,7 +117,7 @@ vda               0.04  23.85 7.11 52.27 442.51 5702.99   206.97     0.84 14.22 
 -d    interval(default 1 second)  
 -o    only show process actually doing io  
 
-##### Output Sample
+#### Output Sample
 ```
 07:54:25 Total DISK READ :       0.00 B/s | Total DISK WRITE :       3.96 K/s
 07:54:25 Actual DISK READ:       0.00 B/s | Actual DISK WRITE:      11.89 K/s
@@ -125,13 +125,13 @@ vda               0.04  23.85 7.11 52.27 442.51 5702.99   206.97     0.84 14.22 
 07:54:25  313 be/3 root      0.00 B/s    3.96 K/s  0.00 %  0.14 % [jbd2/vda2-8]
 ```
 
-##### Output Explanation
+#### Output Explanation
 **Total DISK WRITE** vs **Actual DISK WRITE**  
      *Total* is for read and write bandwidth from processes  
      *Actual* is for read and write bandwidth from processes and kernel  
 
-#### blktrace
-##### Usage
+### blktrace
+#### Usage
 ```
 # yum install blktrace
 # mount –t debugfs debugfs /sys/kernel/debug
@@ -142,7 +142,7 @@ Ctrl + c to terminate blktrace
 ```
 Note: /tmp/blktrace should be located anywhere other than devices monitored  
 
-##### Output Sample
+#### Output Sample
 ```
   8,16   4     1870     0.292079290 16540  Q   R 2608235665 + 3 [act_storage]
   8,16   4     1871     0.292080710 16540  G   R 2608235665 + 3 [act_storage]
@@ -168,7 +168,7 @@ Note: /tmp/blktrace should be located anywhere other than devices monitored
   8,16   4     1876     0.292535466     0  C   R 2608235665 + 3 [0]
 ```
 
-##### Output Explanation
+#### Output Explanation
 The standard header (or initial fields displayed) include:
 ```
 %D %2c %8s %5T.%9t %5p %2a %3d Start block + number of blocks Process
@@ -209,7 +209,7 @@ The standard header (or initial fields displayed) include:
 	- ***B***		Barrier (deprecated)
 	- ***S***		Sync
 
-##### btt
+#### btt
 ```
 $ blkparse -i sdb.blktrace.* -d sdb.bin
 $ btt -i sdb.bin
@@ -251,23 +251,29 @@ Q------->G------------>I--------->M------------------->D------------------------
 - *D2C* service time of the request by the device
 - *Q2C* total time spent in the block layer for a request
 
-A Real Case
-iostat from Intel 3710
+## A Real Case
+#### iostat from Intel 3710
+```
 04/17/2019 09:56:49 AM
 avg-cpu:  %user   %nice %system %iowait  %steal   %idle
            0.13    0.00    0.97    9.82    0.00   89.08
 
 Device:         rrqm/s   wrqm/s     r/s    w/s   rkB/s        wkB/s    avgrq-sz avgqu-sz   await r_await w_await  svctm  %util
 sdb               0.00     0.00  20229.00 235.00 60071.00 30080.00    8.81     5.21         0.25       0.24      1.46    0.05 100.10
-iostat from Intel 4600
+```
+
+#### iostat from Intel 4600
+```
 04/17/2019 09:50:44 AM
 avg-cpu:  %user   %nice %system %iowait  %steal   %idle
            0.15    0.00    0.72   15.05    0.00   84.08
 
 Device:         rrqm/s   wrqm/s     r/s    w/s   rkB/s        wkB/s    avgrq-sz avgqu-sz   await r_await w_await  svctm  %util
 sdb               0.00     0.00 20234.00  235.00 60205.00 30080.00   8.82      8.79         0.43      0.40    2.82      0.05 100.30
+```
 
-btt from Intel 3710
+#### btt from Intel 3710
+```
 $ btt -i sdb.bin
 ==================== All Devices ====================
 
@@ -288,7 +294,10 @@ Q2C               0.000034323   0.000266895   0.006142108      145453
  (  8, 16) |  27.4427%  25.5142%   0.0000%  20.9913%  98.4595%
 ---------- | --------- --------- --------- --------- ---------
    Overall |  27.4427%  25.5142%   0.0000%  20.9913%  98.4595%
-read request D2C time analysis for Intel 3710
+```
+
+#### read request D2C time analysis for Intel 3710
+```
           x < .000026           0
 .000026 < x < .000052           54
 .000052 < x < .000078           66
@@ -309,8 +318,57 @@ read request D2C time analysis for Intel 3710
 .002080 < x < .002340           38
 .002340 < x < .002600           34
 .002600 < x < .002860           48
+```
 
+#### btt from Intel 4600
+```
+$ btt -i sdb.bin
+==================== All Devices ====================
 
+            ALL           MIN           AVG           MAX           N
+--------------- ------------- ------------- ------------- -----------
+
+Q2Q               0.000000001   0.000048850   0.000455220      134261
+Q2G               0.000000296   0.000001499   0.000056508     6444576
+G2I               0.000000375   0.000001338   0.000051724     6444576
+I2D               0.000000359   0.000001100   0.000307657     6444576
+D2C               0.000075813   0.000420482   0.006191458      134249
+Q2C               0.000079661   0.000424418   0.006201090      134249
+
+==================== Device Overhead ====================
+
+       DEV |       Q2G       G2I       Q2M       I2D       D2C
+---------- | --------- --------- --------- --------- ---------
+ (  8, 16) |  16.9548%  15.1363%   0.0000%  12.4385%  99.0724%
+---------- | --------- --------- --------- --------- ---------
+   Overall |  16.9548%  15.1363%   0.0000%  12.4385%  99.0724%
+```
+
+#### read request D2C time analysis for Intel 4600
+```
+         x < .00008             0
+.00008 < x < .00012             1156
+.00012 < x < .00016             2522
+.00016 < x < .00020             3679
+.00020 < x < .00024             3984
+.00024 < x < .00028             2733
+.00028 < x < .00032             698
+.00032 < x < .00036             592
+.00036 < x < .00040             345
+.00040 < x < .00080             2118
+.00080 < x < .00120             820
+.00120 < x < .00160             638
+.00160 < x < .00200             492
+.00200 < x < .00240             290
+.00240 < x < .00280             83
+.00280 < x < .00320             32
+.00320 < x < .00360             24
+.00360 < x < .00400             9
+.00400 < x                      13
+```
+
+#### Conclusion
+As a big difference was shown between *svctm* and *await* in `iostat`, we suspect there should be some pending was happened in io scheuduler or somewhere else in OS. Finally, we confirmed it is hardware performance issue from `btt`.
 
 
 {% include links.html %}
