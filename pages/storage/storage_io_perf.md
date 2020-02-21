@@ -81,11 +81,11 @@ vda               0.04  23.85 7.11 52.27 442.51 5702.99   206.97     0.84 14.22 
     - rkB/s + wkB/s: The number of kilobytes read from/written to the device transferred between the host and storage per second, Measured at io done
 - Special:
     - avgrq-sz:
-    The average size (in 512b sectors) of the requests that were issued to the device
-completed by storage.
-    Combined average for both reads and writes
-    (rkB/s + wkB/s)*2/(r/s + w/s)
-    Can derive average read/write io size: (rkB/s*2)/(r/s) or (wkB/s*2)/(w/s)
+    The average size (in 512b sectors) of the requests that were issued to the device completed by storage.  
+    Combined average for both reads and writes:  
+    `(rkB/s + wkB/s)*2/(r/s + w/s)`
+    Can derive average read/write io size:   
+    `(rkB/s*2)/(r/s) or (wkB/s*2)/(w/s)`
     - avgqu-sz:
 the average queue length of the requests that were issued to the device
 The average number of requests within the io scheduler queue plus the average
