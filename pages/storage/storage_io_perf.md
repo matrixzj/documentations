@@ -37,6 +37,7 @@ dm-3              0.00      0.00  0.00 135907.92     0.00 543631.68     8.00 133
 ```
 
 From RHEL6, "request-based device-mapper" was adopted by device-mapper-multipath. So io merge is happened in device-mapper-multipath before sending them to underneath paths.
+<span style="font-size:4em;">
 ```bash
 12/25/2019 03:17:34 AM
 avg-cpu:  %user   %nice %system %iowait  %steal   %idle
@@ -48,6 +49,7 @@ sda               0.00      0.00 0.00    156.00  0.00 566732.00  7265.79     34.
 dm-0              0.00 113133.00 0.00    164.00  0.00 566732.00  6911.37    150.71 846.07    0.00  846.07  6.10 100.00
 dm-1              0.00      0.00 0.00 113817.00  0.00 702732.00    12.35 111791.51 896.90    0.00  896.90  0.01 100.10
 ```
+</span>
 
 
 {% include links.html %}
