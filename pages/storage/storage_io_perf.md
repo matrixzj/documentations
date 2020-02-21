@@ -37,6 +37,7 @@ dm-3              0.00      0.00  0.00 135907.92     0.00 543631.68     8.00 133
 ```
 
 From RHEL6, "request-based device-mapper" was adopted by device-mapper-multipath. So io merge is happened in device-mapper-multipath before sending them to underneath paths.
+
 <span style="font-size:4em;">
 ```bash
 12/25/2019 03:17:34 AM
