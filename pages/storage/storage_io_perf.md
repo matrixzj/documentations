@@ -73,6 +73,7 @@ avg-cpu:  %user   %nice %system %iowait  %steal   %idle
 Device:         rrqm/s wrqm/s  r/s   w/s  rkB/s   wkB/s avgrq-sz avgqu-sz await r_await w_await  svctm  %util
 vda               0.04  23.85 7.11 52.27 442.51 5702.99   206.97     0.84 14.22   0.47    16.09   0.28   1.64
 ```
+
 ##### Output Explanation
 - Straight forward:  
     - Device: The device name as listed in /dev  
@@ -87,13 +88,13 @@ vda               0.04  23.85 7.11 52.27 442.51 5702.99   206.97     0.84 14.22 
     Can derive average read/write io size:     
     `(rkB/s*2)/(r/s) or (wkB/s*2)/(w/s)`
     - avgqu-sz:
-    ~the average queue length of the requests that were issued to the device~  
+    ~~the average queue length of the requests that were issued to the device~~  
     The average number of requests within the io scheduler queue plus the average number of io outstanding to storage (driver queue)  
     `/sys/block/sda/queue/nr_requests` (io scheduler)  
     `/sys/block/sda/device/queue_depth` (driver)  
     It is measured between io scheduler and io done
     - await/r_await/w_await:
-    The average time (in milliseconds) for I/O requests ~issued to the device to be served~ completed by storage. This includes the time spent by the requests in the cheduler queue and the time storage spent servicing time  
+    The average time (in milliseconds) for I/O requests ~~issued to the device to be served~~ completed by storage. This includes the time spent by the requests in the cheduler queue and the time storage spent servicing time  
     Measured at io done.
     - svctm:
     The average effective storage service time (in milliseconds) for I/O requests that were ~issued to the device~ completed by storage  
@@ -101,10 +102,33 @@ vda               0.04  23.85 7.11 52.27 442.51 5702.99   206.97     0.84 14.22 
     await time doesn’t take into account parallelism within storage and includes queuing time within io scheduler  
     svctm in effect accounts for parallel io operations within storage and does not include queuing time within io scheduler  
     - %util:
-    ~Percentage of sample interval during which I/O requests were issued to the device (bandwidth utilization for the device). Device saturation occurs when this value is close to 100%~  
+    ~~Percentage of sample interval during which I/O requests were issued to the device (bandwidth utilization for the device). Device saturation occurs when this value is close to 100%~~   
     Percentage of sample interval during there was at least 1 outstanding I/O request within the io scheduler/driver/storage  
     Device saturation for the current load point occurs when this value is close to 100% and the device is a single physical disk  
     It is often divorced from the maximum available device bandwidth with modern enterprise storage configurations.  
+
+#### iotop
+##### Usage
+```
+# iotop –b –t –d 1 [-o]
+```
+-b    non-interactive mode
+-t    add timestamp
+-d    interval(default 1 second)
+-o    only show process actually doing io
+
+##### Output Sample
+```
+07:54:25 Total DISK READ :       0.00 B/s | Total DISK WRITE :       3.96 K/s
+07:54:25 Actual DISK READ:       0.00 B/s | Actual DISK WRITE:      11.89 K/s
+    TIME  TID PRIO USER     DISK READ  DISK WRITE  SWAPIN      IO    COMMAND
+07:54:25  313 be/3 root      0.00 B/s    3.96 K/s  0.00 %  0.14 % [jbd2/vda2-8]
+```
+
+##### Output Explanation
+**Total DISK WRITE** vs **Actual DISK WRITE**
+     *Total* is for read and write bandwidth from processes
+     *Actual* is for read and write bandwidth from processes and kernel
 
 
 
