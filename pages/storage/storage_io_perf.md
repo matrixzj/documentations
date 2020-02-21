@@ -51,5 +51,16 @@ dm-1              0.00      0.00 0.00 113817.00  0.00 702732.00    12.35 111791.
 ```
 {: .font-size: 7pt }
 
+### Linux IO information collecting tools
+#### iostat
+##### Usage
+```
+# iostat -xkt 1 <dev_name> [-p ]
+```
+-x    display extended statistics
+-k    use KByte instead of sector as unit
+-t    show time
+-p    display par
+
 
 {% include links.html %}
