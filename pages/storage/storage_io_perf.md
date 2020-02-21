@@ -179,7 +179,7 @@ The standard header (or initial fields displayed) include:
 *%5T.%9t*	5-character field for the seconds portion of the time stamp and a 9-character field for the nanoseconds in the time stamp  
 *%5p*		5-character field for the process ID  
 *%2a*       2-character field for one of the actions  
-			Trace actions:  
+&nbsp;&nbsp;&nbsp;&nbsp;Trace actions:  
 			***Q--queued***			This notes intent to queue i/o at the given location. No real requests exists yet.  
 			***G--get request***	To send any type of request to a block device, a struct request container must be allocated first.  
 			***I--inserted***		A request is being sent to the i/o scheduler for addition to the internal queue and later service by the driver. The request is fully formed at this time.  
