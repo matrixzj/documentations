@@ -21,7 +21,7 @@ IO Performance Case I
 | CPU |	Xeon(R) E-2288G CPU @ 3.70GHz (16 Cores) | Xeon(R) CPU E5-2650 v4 @ 2.20GHz (48 Cores) | Xeon(R) CPU E5-2650 v4 @ 2.20GHz (48 Cores)
 | Memory | DDR4 2666 MHz 32G x 4 | DDR4 2400 MHz 32G x 4 | DDR4 2400 MHz 32G x 4
 | Raid Controller |  AVAGO MegaRAID SAS 9361-4i (1G Cache) | HPE Smart Array P440 (4G Cache) | HPE Smart Array P440 (4G Cache)
-| SSD | INTEL SSDSC2KB960G8 (D3-S4510 Series) | INTEL SSDSC2KG96 (D3-S4610 Series) & INTEL SSDSC2KG96 (DC S4600 Series) | INTEL SSDSC2KG96 (D3-S4610 Series) & INTEL SSDSC2KG96 (DC S4600 Series)
+| SSD | INTEL SSDSC2KB960G8 ([D3-S4510 Series](https://ark.intel.com/content/www/us/en/ark/products/series/134791/intel-ssd-d3-s4510-series.html)) | INTEL SSDSC2KG96 ([D3-S4610 Series](https://ark.intel.com/content/www/us/en/ark/products/134917/intel-ssd-d3-s4610-series-960gb-2-5in-sata-6gb-s-3d2-tlc.html)) & INTEL SSDSC2KG96 ([DC S4600 Series](https://ark.intel.com/content/www/us/en/ark/products/120518/intel-ssd-dc-s4600-series-960gb-2-5in-sata-6gb-s-3d1-tlc.html)) | INTEL SSDSC2KG96 (D3-S4610 Series) & INTEL SSDSC2KG96 (DC S4600 Series)
 | RAID Info | 4 SSDs → RAID0 | 6 SSDs → RAID5 | 6 SSDs → RAID0
 | Filesystem | EXT4 | XFS | XFS
 | Mountpoint | /var | /var | /var
@@ -45,10 +45,14 @@ kill -9 $(ps aux | awk '/iostat/{print $2}' | head -1)
 ```
 
 ### Result
+
 | | Host1 | Host2 | Host3 
 | :------------- | :------------- | :------------ | :-------------
 | Avg Time to Write 20GB | 20.6339 Seconds | 13.8235 Seconds | 12.4453 Seconds
 {: .table-bordered }
+
+### Conclusion
+`XFS` is better on throughput test scenario than `EXT4`
 
 
 
