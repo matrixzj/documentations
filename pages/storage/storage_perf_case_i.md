@@ -60,15 +60,16 @@ kill -9 $(ps aux | awk '/iostat/{print $2}' | head -1)
 
 ### Env Info
 
-| | Host1 | Host2 
-| :------------- | :------------- | :------------ 
-| CPU | Xeon(R) CPU E5-2650 v4 @ 2.20GHz (48 Cores) | Xeon(R) CPU E5-2650 v4 @ 2.20GHz (48 Cores)
-| Memory | DDR4 2400 MHz 32G x 4 | DDR4 2400 MHz 32G x 4
-| Raid Controller | AVAGO MegaRAID SAS 9361-8i (1G Cache) | HPE Smart Array P440 (4G Cache)
-| SSD | INTEL SSDSC2KG96 (D3-S4610 Series) | INTEL SSDSC2KG96 (D3-S4610 Series)
-| RAID Info | 4 SSDs → RAID0 | 4 SSDs → RAID0
-| Filesystem | EXT4 | EXT4
-| Mountpoint | /export | /export
+| | Host1 | Host2 (CPU on `ondemand`) | Host2 (CPU on `performance`) | Host3 
+| :------------- | :------------- | :------------ | :------------ | :------------
+| CPU | Xeon(R) CPU E5-2650 v4 @ 2.20GHz (48 Cores) | Xeon(R) CPU E5-2650 v4 @ 2.20GHz (48 Cores) | Xeon(R) CPU E5-2650 v4 @ 2.20GHz (48 Cores) | Xeon(R) E-2288G CPU @ 3.70GHz (16 Cores)
+| CPU Governor | performance | ondemand | performance | powersave
+| Memory | DDR4 2400 MHz 32G x 4 | DDR4 2400 MHz 32G x 4 | DDR4 2400 MHz 32G x 4 | DDR4 2666 MHz 32G x 4
+| Raid Controller | AVAGO MegaRAID SAS 9361-8i (1G Cache) | HPE Smart Array P440 (4G Cache) | HPE Smart Array P440 (4G Cache) | AVAGO MegaRAID SAS 9361-4i (1G Cache)
+| SSD | INTEL SSDSC2KG96 (D3-S4610 Series) | INTEL SSDSC2KG96 (D3-S4610 Series) | INTEL SSDSC2KG96 (D3-S4610 Series) | INTEL SSDSC2KB960G8 (D3-S4510 Series)
+| RAID Info | 4 SSDs → RAID0 | 4 SSDs → RAID0 | 4 SSDs → RAID0 | 4 SSDs → RAID0 
+| Filesystem | EXT4 | EXT4 | EXT4 | EXT4
+| Mountpoint | /export | /export | /export | /var
 {: .table-bordered }
 
 ### How-to Run Test
@@ -163,7 +164,9 @@ $ $ for i in `seq 1 3`; do  grep -R '^\s*write' 4k-32t/fio.result.$i | awk -F','
 | | 4k | 8k | 16k
 | :------------- | :------------- | :------------ | :-------------
 | Host1 | 159703 | 124112 | 58969.3
-| Host2 | 178449 | 112723 | 54417
+| Host2 (CPU on `ondemand`) | 34277.9 | 55004.9 | 50909.5 
+| Host2 (CPU on `performance`) | 178449 | 112723 | 54417
+| Host3 | 142179 | 115600 | 36361.3
 {: .table-bordered }
 
 [fio/iostat/iotop collected](images/storage/storage_perf_case_i/random_write.tar.bz2)
