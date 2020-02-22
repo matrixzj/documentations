@@ -50,11 +50,11 @@ kill -9 $(ps aux | awk '/iostat/{print $2}' | head -1)
 | :------------- | :------------- | :------------ | :-------------
 | Avg Time to Write 20GB | 20.6339 Seconds | 13.8235 Seconds | 12.4453 Seconds
 {: .table-bordered }
+[iostat/iotop collected](images/storage/storage_perf_case_i/sequetial_write.tar.bz2)
 
 ### Conclusion
 `XFS` is better on throughput test scenario than `EXT4`
 
-[iostat/iotop collected](images/storage/storage_perf_case_i/sequetial_write.tar.bz2)
 
 ## Random Write
 
@@ -168,8 +168,40 @@ $ $ for i in `seq 1 3`; do  grep -R '^\s*write' 4k-32t/fio.result.$i | awk -F','
 | Host2 (CPU on `performance`) | 178449 | 112723 | 54417
 | Host3 | 142179 | 115600 | 36361.3
 {: .table-bordered }
-
 [fio/iostat/iotop collected](images/storage/storage_perf_case_i/random_write.tar.bz2)
 
+### Conclusion
+CPU freqency is crucial for io performance.
+
+## Random Write (io_scheduler / filesystem)
+
+### Env info
+
+| | Host | Host | Host 
+| :------------- | :------------- | :------------ | :------------ | :------------
+| CPU | Xeon(R) CPU E5-2650 v4 @ 2.20GHz (48 Cores) | Xeon(R) CPU E5-2650 v4 @ 2.20GHz (48 Cores) | Xeon(R) CPU E5-2650 v4 @ 2.20GHz (48 Cores) 
+| CPU Governor | performance | performance | performance
+| Memory | DDR4 2400 MHz 32G x 4 | DDR4 2400 MHz 32G x 4 | DDR4 2400 MHz 32G x 4
+| Raid Controller | HPE Smart Array P440 (4G Cache) | HPE Smart Array P440 (4G Cache) | HPE Smart Array P440 (4G Cache) | AVAGO MegaRAID SAS 9361-4i (1G Cache)
+| SSD | INTEL SSDSC2KG96 (D3-S4610 Series) | INTEL SSDSC2KG96 (D3-S4610 Series) | INTEL SSDSC2KG96 (D3-S4610 Series)
+| RAID Info | 6 SSDs → RAID0 | 6 SSDs → RAID0 | 6 SSDs → RAID0
+| Filesystem | EXT4 | EXT4 | XFS
+| IO Scheduler | noop | cfq | noop
+| Mountpoint | /export | /export | /export
+{: .table-bordered }
+
+### Result (iops with 32threads)
+
+| | 4k | 8k | 16k
+| :------------- | :------------- | :------------ | :-------------
+| Host(ext4/cfq) | 44711.7 | 40876.7 | 34597.7
+| Host(ext4/noop) | 186779 | 155757 | 111132
+| Host(xfs/noop) | 138856 | 145067 | 111602
+{: .table-bordered }
+[fio/iostat/iotop collected](images/storage/storage_perf_case_i/random_write1.tar.bz2)
+
+### Conclusion
+- For SSD, io scheduler `noop` is much better than `cfq`, which is default io scheduler in CentOS7/RHEL7.
+- `XFS` performance on random write is poor than `EXT4`, especialy io blocksize is smaller.
 
 {% include links.html %}
