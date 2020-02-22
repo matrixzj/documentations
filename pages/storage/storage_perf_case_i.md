@@ -182,7 +182,7 @@ CPU freqency is crucial for io performance.
 | CPU | Xeon(R) CPU E5-2650 v4 @ 2.20GHz (48 Cores) | Xeon(R) CPU E5-2650 v4 @ 2.20GHz (48 Cores) | Xeon(R) CPU E5-2650 v4 @ 2.20GHz (48 Cores) 
 | CPU Governor | performance | performance | performance
 | Memory | DDR4 2400 MHz 32G x 4 | DDR4 2400 MHz 32G x 4 | DDR4 2400 MHz 32G x 4
-| Raid Controller | HPE Smart Array P440 (4G Cache) | HPE Smart Array P440 (4G Cache) | HPE Smart Array P440 (4G Cache) | AVAGO MegaRAID SAS 9361-4i (1G Cache)
+| Raid Controller | HPE Smart Array P440 (4G Cache) | HPE Smart Array P440 (4G Cache) | HPE Smart Array P440 (4G Cache)
 | SSD | INTEL SSDSC2KG96 (D3-S4610 Series) | INTEL SSDSC2KG96 (D3-S4610 Series) | INTEL SSDSC2KG96 (D3-S4610 Series)
 | RAID Info | 6 SSDs → RAID0 | 6 SSDs → RAID0 | 6 SSDs → RAID0
 | Filesystem | EXT4 | EXT4 | XFS
