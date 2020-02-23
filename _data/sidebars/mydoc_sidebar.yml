@@ -140,3 +140,7 @@ entries:
     - title: Ansible Tips
       url: /misc_ansible_tips.html
       output: web, pdf
+
+    - title: Ansible Tips
+      url: /misc_bash_history_collector.html
+      output: web, pdf

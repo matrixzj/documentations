@@ -2,7 +2,7 @@
 title: IO Performance Case I
 tags: [storage]
 keywords: io, iostat, iotop, fio, cpu, io_scheduler, xfs, ext4
-last_updated: Feb 21, 2020
+last_updated: Feb 23, 2020
 summary: "IO Performance Case I"
 sidebar: mydoc_sidebar
 permalink: storage_perf_case_i.html
@@ -129,7 +129,9 @@ else
 fi
 
 iotop -b -o -t -d1 > ${output_dir}/iotop.$sn &
+iotop_pid=$!
 iostat -tkx 1 sdb > ${output_dir}/iostat.$sn &
+iostat_pid=$!
 
 echo 3 > /proc/sys/vm/drop_caches
 rm -vf /export/test.img
@@ -137,16 +139,14 @@ fio randw.fio > ${output_dir}/fio.result.$sn
 
 echo "====== ${blocksize}/${threads} Test Round ${sn} ended ======"
 
+kill -9 ${iotop_pid} > /dev/null 2>&1
+kill -9 ${iostat_pid} > /dev/null 2>&1
+
 unset blocksize
 unset threads
+unset iotop_pid
+unset iostat_pid
 
-for pid_iotop in `ps aux | awk '/iotop/{print $2}'`; do
-        kill -9 ${pid_iotop} > /dev/null 2>&1
-done
-
-for pid_iostat in `ps aux | awk '/iostat/{print $2}'`; do
-        kill -9 ${pid_iostat} > /dev/null 2>&1
-done
 ```
 
 #### Test CMD with 32threads
