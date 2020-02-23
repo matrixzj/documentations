@@ -141,6 +141,6 @@ entries:
       url: /misc_ansible_tips.html
       output: web, pdf
 
-    - title: Ansible Tips
+    - title: Bash History Collector
       url: /misc_bash_history_collector.html
       output: web, pdf
