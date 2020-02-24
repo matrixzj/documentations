@@ -25,6 +25,7 @@
 
 ## OpenStack
 - [OpenStack Services](pages/openstack/openstack_services.md)
+- [KVM Migration Without Shared Storage](pages/openstack/virt_kvm_migration_without_shared_storage.md)
 
       
 ## Python

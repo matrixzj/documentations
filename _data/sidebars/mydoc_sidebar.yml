@@ -97,6 +97,10 @@ entries:
       url: /openstack_services.html
       output: web, pdf
       
+    - title: KVM Migration Without Shared Storage
+      url: /virt_kvm_migration_without_shared_storage.html
+      output: web, pdf
+
   - title: Python
     output: web, pdf
     folderitems:
