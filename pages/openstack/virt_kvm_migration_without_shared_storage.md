@@ -96,8 +96,8 @@ root@kvm02:~ · 06:08 AM Tue Jan 21 ·
 ----------------------------------------------------
  11    smtp01                      running
 ```
- --copy-storage-all        copy storage image files to dest hypervisor
- --verbose                 show migration progess
- --persistent              create VM define XML file
+ --copy-storage-all        copy storage image files to dest hypervisor  
+ --verbose                 show migration progess  
+ --persistent              create VM define XML file  
 
 {% include links.html %}
