@@ -70,7 +70,7 @@ entries:
       output: web, pdf
 
     - title: IO Performance Case I
-      url: /storage_perf_case_i.md.html
+      url: /storage_perf_case_i.html
       output: web, pdf
 
   - title: IDM

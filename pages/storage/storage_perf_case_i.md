@@ -2,7 +2,7 @@
 title: IO Performance Case I
 tags: [storage]
 keywords: io, iostat, iotop, fio, cpu, io_scheduler, xfs, ext4
-last_updated: Feb 23, 2020
+last_updated: Feb 25, 2020
 summary: "IO Performance Case I"
 sidebar: mydoc_sidebar
 permalink: storage_perf_case_i.html
@@ -102,6 +102,7 @@ $ cat randw.fio
 $ cat test.sh
 #! /bin/bash
 
+blockdevice='sdb'
 blocksize=$1
 threads=$2
 sn=$3
@@ -114,30 +115,31 @@ if [ ! -d ${output_dir} ]; then
         mkdir ${output_dir}
 fi
 
-echo "====== ${blocksize}/${threads} Test Round ${sn} started ======"
+echo "====== ${blocksize}/${threads}threads Test Round ${sn} started ======"
 
-echo 'cfq' > /sys/block/sdb/queue/scheduler
+echo 'noop' > /sys/block/${blockdevice}/queue/scheduler
 cat /sys/block/sdb/queue/scheduler
 
-for i in `seq 0 47`; do echo performance > /sys/devices/system/cpu/cpu${i}/cpufreq/scaling_governor; done
-performance_count=$(for i in `seq 0 47`; do cat /sys/devices/system/cpu/cpu${i}/cpufreq/scaling_governor; done | grep 'performance'  | wc -l)
+find /sys/devices/system/cpu -maxdepth 3 -name scaling_governor | xargs -I {} sh -c 'echo performance > {}'
+cpucount=$(lscpu | awk '/^CPU\(s\)/{print $NF}')
+performance_count=$(for i in `seq 0 $(expr ${cpucount} - 1)`; do cat /sys/devices/system/cpu/cpu${i}/cpufreq/scaling_governor; done | grep 'performance'  | wc -l)
 
-if [ ${performance_count} -ne 48 ]; then
+if [ ${performance_count} -ne ${cpucount} ]; then
         echo "something wrong with cpu setting"
 else
-        echo "48 cpus are running on performance state"
+        echo "${cpucount} cpus are running on performance state"
 fi
 
 iotop -b -o -t -d1 > ${output_dir}/iotop.$sn &
 iotop_pid=$!
-iostat -tkx 1 sdb > ${output_dir}/iostat.$sn &
+iostat -tkx 1 ${blockdevice} > ${output_dir}/iostat.$sn &
 iostat_pid=$!
 
 echo 3 > /proc/sys/vm/drop_caches
 rm -vf /export/test.img
 fio randw.fio > ${output_dir}/fio.result.$sn
 
-echo "====== ${blocksize}/${threads} Test Round ${sn} ended ======"
+echo "====== ${blocksize}/${threads}threads Test Round ${sn} ended ======"
 
 kill -9 ${iotop_pid} > /dev/null 2>&1
 kill -9 ${iostat_pid} > /dev/null 2>&1
