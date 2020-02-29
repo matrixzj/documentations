@@ -15,6 +15,7 @@
 - [NetApp SnapMirror](pages/storage/storage_netapp_snapmirror.md)
 - [IO Performance](pages/storage/storage_io_perf.md)
 - [IO Performance Case I](pages/storage/storage_perf_case_i.md.md)
+- [LVM Strip](pages/storage/storage_lvm_strip.md)
       
 
 ## IDM
