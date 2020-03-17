@@ -152,3 +152,7 @@ entries:
     - title: Bash History Collector
       url: /misc_bash_history_collector.html
       output: web, pdf
+
+    - title: Compression Comparison
+      url: /misc_compression_comparison.html
+      output: web, pdf
