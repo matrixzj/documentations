@@ -44,3 +44,4 @@
 - [Ansible Tips](pages/misc/misc_ansible_tips.md)
 - [Bash History Collector](pages/misc/misc_bash_history_collector.md)
 - [Compression Comparison](pages/misc/misc_compression_comparison.md)
+- [Brew Install from a Local Source](pages/misc/misc_brew_local_install.md)

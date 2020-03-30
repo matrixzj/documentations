@@ -156,3 +156,7 @@ entries:
     - title: Compression Comparison
       url: /misc_compression_comparison.html
       output: web, pdf
+
+    - title: Brew Install from a Local Source
+      url: /misc_brew_local_install.html
+      output: web, pdf
