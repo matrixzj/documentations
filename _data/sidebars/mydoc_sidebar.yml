@@ -160,3 +160,7 @@ entries:
     - title: Brew Install from a Local Source
       url: /misc_brew_local_install.html
       output: web, pdf
+
+    - title: Run Script with SNMP
+      url: /misc_run_script_via_snmp.html
+      output: web.pdf
