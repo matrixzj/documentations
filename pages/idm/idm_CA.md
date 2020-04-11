@@ -2,7 +2,7 @@
 title: CA(Certificate Authority)
 tags: [idm]
 keywords: certs, tls, ssl
-last_updated: July 7th, 2019
+last_updated: April 11th, 2020
 summary: "Self-signed CA Setup"
 sidebar: mydoc_sidebar
 permalink: idm_ca.html
@@ -218,6 +218,129 @@ No Revoked Certificates.
          43:ef:3c:e3:9f:b1:c4:df:b1:77:41:45:5e:58:c0:ae:a6:b4:
          4a:87:e6:c6:c6:3c:3d:35:e1:18:ed:fb:15:23:05:72:46:4e:
          b6:a2:fe:da
+```
+
+### HTTPS 
+#### Generate Private key
+```bash
+# openssl genrsa -out web1.example.com.key 2048
+Generating RSA private key, 2048 bit long modulus
+..+++
+.....+++
+e is 65537 (0x10001)
+```
+
+#### Generate Cert Request
+```bash
+# openssl req -new -sha256 -key web1.example.com.key -out web1.example.com.csr
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [US]:US
+State or Province Name (full name) [New York]:New York
+Locality Name (eg, city) [New York]:New York
+Organization Name (eg, company) [Example]:Example
+Organizational Unit Name (eg, section) []:test
+Common Name (eg, your name or your server's hostname) []:web1.example.com
+Email Address []:root@web1.example.com
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+```
+
+#### Sign Cert 
+```bash
+# openssl ca -in web1.example.com.csr -out web1.example.com.crt
+Using configuration from /etc/pki/tls/openssl.cnf
+Enter pass phrase for /etc/pki/CA/private/my-ca.key:
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+        Serial Number: 2 (0x2)
+        Validity
+            Not Before: Apr 11 16:06:13 2020 GMT
+            Not After : Apr 11 16:06:13 2021 GMT
+        Subject:
+            countryName               = US
+            stateOrProvinceName       = New York
+            organizationName          = Example
+            organizationalUnitName    = test
+            commonName                = web1.example.com
+            emailAddress              = root@web1.example.com
+        X509v3 extensions:
+            X509v3 Basic Constraints:
+                CA:FALSE
+            Netscape Comment:
+                OpenSSL Generated Certificate
+            X509v3 Subject Key Identifier:
+                17:C3:6B:FF:4F:F3:8B:71:98:24:BF:6D:B1:46:2C:8A:B2:C1:C7:EB
+            X509v3 Authority Key Identifier:
+                keyid:F2:CF:04:95:36:A0:35:FF:1F:71:64:83:AB:46:F0:4F:21:E1:69:10
+
+Certificate is to be certified until Apr 11 16:06:13 2021 GMT (365 days)
+Sign the certificate? [y/n]:y
+
+
+1 out of 1 certificate requests certified, commit? [y/n]y
+Write out database with 1 new entries
+Data Base Updated
+```
+
+#### Update http config
+```bash
+# yum install mod_ssl
+
+# cat >> /etc/httpd/conf/httpd.conf << EOF
+LoadModule ssl_module modules/mod_ssl.so
+
+Listen 443
+<VirtualHost *:443>
+   DocumentRoot /var/www/html
+   <Directory /var/www/html>
+     AllowOverride All
+     order allow,deny
+     allow from all
+   </Directory>
+
+   ServerName web1.example.com
+   SSLEngine on
+   SSLCertificateFile /etc/httpd/https/web1.example.com.crt
+   SSLCertificateKeyFile /etc/httpd/https/web1.example.com.key
+
+#   SSLVerifyClient require
+   SSLVerifyDepth 1
+   SSLCACertificateFile /etc/httpd/https/my-ca.crt
+   CustomLog logs/ssl_request_log \
+          "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+</VirtualHost>
+EOF
+
+# mv /etc/httpd/conf.d/ssl.conf{,.bak}
+
+# mkdir /etc/httpd/https -p
+
+# cp /root/web1.example.com* /etc/httpd/https/
+
+# systemctl restart httpd
+```
+
+#### Verify https connection
+```bash
+# curl --cacert /etc/pki/CA/my-ca.crt https://web1.example.com
+web1.example.com
+
+ # curl -k https://web1.example.com
+web1.example.com
+
+# tailf /etc/httpd/logs/ssl_request_log
+...
+[11/Apr/2020:16:26:48 +0000] 192.168.0.40 TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 "GET / HTTP/1.1" 19
 ```
 
 {% include links.html %}
