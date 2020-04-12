@@ -13,7 +13,7 @@ folder: Misc
 =====
 
 ### HTTP LoadBalancer
-
+#### HAProxy Config
 ```bash
 # yum -y install haproxy
 
@@ -57,7 +57,7 @@ folder: Misc
 # systemctl restart haproxy
 ```
 
-Verify
+#### Verify
 ```bash
 # curl http://localhost
 web1.example.com
