@@ -164,3 +164,7 @@ entries:
     - title: Run Script with SNMP
       url: /misc_run_script_via_snmp.html
       output: web.pdf
+
+    - title: HAProxy
+      url: /misc_haproxy.html
+      output: web.pdf

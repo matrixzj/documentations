@@ -46,3 +46,4 @@
 - [Compression Comparison](pages/misc/misc_compression_comparison.md)
 - [Brew Install from a Local Source](pages/misc/misc_brew_local_install.md)
 - [Run Script with SNMP](pages/misc/misc_run_script_via_snmp.md)
+- [HAProxy](pages/misc/misc_haproxy.md)
