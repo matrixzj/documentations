@@ -19,6 +19,7 @@ sidebar: mydoc_sidebar
 
       <div class="filter-options">
       <button class="btn btn-primary" data-group="all">All</button>
+      <button class="btn btn-primary" data-group="bash">Bash</button>
       <button class="btn btn-primary" data-group="kernel">Kernel</button>
       <button class="btn btn-primary" data-group="memory">Memory</button>
       <button class="btn btn-primary" data-group="storage">Storage</button>
@@ -29,6 +30,23 @@ sidebar: mydoc_sidebar
     </div>      
 
 <div id="grid" class="row">
+
+    <div class="col-xs-6 col-sm-4 col-md-4" data-groups='["bash"]'>
+        <div class="panel panel-default">
+            <div class="panel-heading">Bash</div>
+            <div class="panel-body"> Bash Script
+            <ul>
+                {% for page in site.pages %}
+                    {% for tag in page.tags %}
+                        {% if tag == "bash" %}
+                            <li><a href="{{page.url | remove: '/'}}">{{page.title}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+            </div>
+         </div>
+    </div>
 
     <div class="col-xs-6 col-sm-4 col-md-4" data-groups='["kernel"]'>
         <div class="panel panel-default">
