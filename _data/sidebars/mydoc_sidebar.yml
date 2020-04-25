@@ -28,6 +28,15 @@ entries:
       url: /index.html
       output: web, pdf
 
+  - title: Bash
+    output: web, pdf
+    type: homepage
+    folderitems:
+
+    - title: Bash CheatSheet
+      url: /bash_cheatsheet.html
+      output: web, pdf
+
   - title: Kernel
     output: web, pdf
     folderitems:
