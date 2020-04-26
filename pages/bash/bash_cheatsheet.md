@@ -122,7 +122,7 @@ $ echo $?
 2
 ```
 
-### set `IFS`
+#### set `IFS`
 The `IFS` variable - which stands for `I`nternal `F`ield `S`eparator - controls what Bash calls word splitting. When set to a string, each character in the string is considered by Bash to separate words. This governs how bash will iterate through a sequence. For example, this script:
 ```
 $ cat test.sh
@@ -159,7 +159,7 @@ A B C D E
 ```
 
 ### Conditional execution
-```
+```bash
 $ grep test /tmp/test || echo 'Matrix'
 grep: /tmp/test: No such file or directory
 Matrix
@@ -168,7 +168,7 @@ $ grep test /tmp/test && echo 'Matrix'
 grep: /tmp/test: No such file or directory
 ```
 
-### Difference between `[` and `[[`
+### Difference between `[` and `[[`  
 1. empty strings and strings with whitespaces can be intuitively handled 
 ```bash
 $ ls -al file\ test
