@@ -170,6 +170,7 @@ grep: /tmp/test: No such file or directory
 
 ### Difference between `[` and `[[`  
 1. empty strings and strings with whitespaces can be intuitively handled 
+
 ```bash
 $ ls -al file\ test
 -rw-r--r-- 1 Matrix Matrix 0 Apr 26 08:18 file test
@@ -190,6 +191,7 @@ $ if [ -f ${file} ]; then echo 'Matrix'; fi
 ```
 
 2. user `&&` / `||` for boolean test and `<` / `>` for string comparisons
+
 ```bash
 $ string1='aaa'
 
