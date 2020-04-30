@@ -169,6 +169,7 @@ grep: /tmp/test: No such file or directory
 ```
 
 ### Difference between `[` and `[[`  
+
 1. empty strings and strings with whitespaces can be intuitively handled 
 
 ```bash
