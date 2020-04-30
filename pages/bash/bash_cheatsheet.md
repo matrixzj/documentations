@@ -213,5 +213,39 @@ $ if [ "$string1" > "$string2" ]; then echo test; fi
 test
 ```
 
+3. Wonderful `=~` operator for doing regular expression matches.
+
+with `[`
+```bash
+if [ "$answer" = y -o "$answer" = yes ]
+```
+
+with `[[`
+```bash
+if [[ $answer =~ ^y(es)?$ ]]
+```
+
+NOTE: captured groups which it stores in `BASH_REMATCH`
+The entire match is assigned to BASH_REMATCH[0], the first sub-pattern is assigned to BASH_REMATCH[1], etc.
+```bash
+$ answer=yes
+
+$ if [[ $answer =~ ^y(es)$ ]]; then echo test; fi
+test
+
+$ echo ${BASH_REMATCH[*]}
+yes es
+```
+
+```bash
+$ answer=yesyes
+
+$ if [[ $answer =~ ^y(es)(yes)$ ]]; then echo test; fi
+test
+
+$ echo ${BASH_REMATCH[*]}
+yesyes es yes
+```
+
 
 {% include links.html %}
