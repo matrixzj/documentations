@@ -169,6 +169,7 @@ grep: /tmp/test: No such file or directory
 ```
 
 ### Difference between `[` and `[[`  
+NOTE: `[[` is a bash extension, so if you are writing sh-compatible scripts then you need to stick with `[`. Make sure you have the `#!/bin/bash` shebang line for your script if you use double brackets.
 
 1. empty strings and strings with whitespaces can be intuitively handled 
 
@@ -193,59 +194,69 @@ grep: /tmp/test: No such file or directory
 
 2. user `&&` / `||` for boolean test and `<` / `>` for string comparisons
 
-```bash
-$ string1='aaa'
-
-$ string2='aab'
-
-$ [ -n "$string1" && -n "$string2" ] && echo test
--bash: [: missing `]'
-
-$ [[ -n "$string1" && -n "$string2" ]] && echo test
-test
-
-$ if [[ "$string1" > "$string2" ]]; then echo test; fi
-
-$ if [[ "$string1" < "$string2" ]]; then echo test; fi
-test
-
-$ if [ "$string1" > "$string2" ]; then echo test; fi
-test
-```
+   ```bash
+   $ string1='aaa'
+   
+   $ string2='aab'
+   
+   $ [ -n "$string1" && -n "$string2" ] && echo test
+   -bash: [: missing `]'
+   
+   $ [[ -n "$string1" && -n "$string2" ]] && echo test
+   test
+   
+   $ if [[ "$string1" > "$string2" ]]; then echo test; fi
+   
+   $ if [[ "$string1" < "$string2" ]]; then echo test; fi
+   test
+   
+   $ if [ "$string1" > "$string2" ]; then echo test; fi
+   test
+   ```
 
 3. Wonderful `=~` operator for doing regular expression matches.
 
-with `[`
+   with `[`
+   ```bash
+   if [ "$answer" = y -o "$answer" = yes ]
+   ```
+   
+   with `[[`
+   ```bash
+   if [[ $answer =~ ^y(es)?$ ]]
+   ```
+   
+   NOTE: captured groups which it stores in `BASH_REMATCH`
+   The entire match is assigned to BASH_REMATCH[0], the first sub-pattern is assigned to BASH_REMATCH[1], etc.
+   ```bash
+   $ answer=yes
+   
+   $ if [[ $answer =~ ^y(es)$ ]]; then echo test; fi
+   test
+   
+   $ echo ${BASH_REMATCH[*]}
+   yes es
+   ```
+   
+   ```bash
+   $ answer=yesyes
+   
+   $ if [[ $answer =~ ^y(es)(yes)$ ]]; then echo test; fi
+   test
+   
+   $ echo ${BASH_REMATCH[*]}
+   yesyes es yes
+   ```
+
+4. Less strict 
+
 ```bash
-if [ "$answer" = y -o "$answer" = yes ]
+   $ answer=yes
+   
+   $ if [ $answer = y* ]; then echo test; fi
+   
+   $ if [[ $answer = y* ]]; then echo test; fi
+   test
 ```
-
-with `[[`
-```bash
-if [[ $answer =~ ^y(es)?$ ]]
-```
-
-NOTE: captured groups which it stores in `BASH_REMATCH`
-The entire match is assigned to BASH_REMATCH[0], the first sub-pattern is assigned to BASH_REMATCH[1], etc.
-```bash
-$ answer=yes
-
-$ if [[ $answer =~ ^y(es)$ ]]; then echo test; fi
-test
-
-$ echo ${BASH_REMATCH[*]}
-yes es
-```
-
-```bash
-$ answer=yesyes
-
-$ if [[ $answer =~ ^y(es)(yes)$ ]]; then echo test; fi
-test
-
-$ echo ${BASH_REMATCH[*]}
-yesyes es yes
-```
-
 
 {% include links.html %}
