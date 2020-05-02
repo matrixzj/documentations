@@ -9,11 +9,11 @@ permalink: bash_cheatsheet.html
 folder: bash
 ---
 
-## Bash Cheatsheet
+# Bash Cheatsheet
 =====
 
-### Basic
-#### String quotes
+## Basic
+### String quotes
 ```bash
 $ NAME="Matrix"
 
@@ -24,7 +24,7 @@ $ echo 'Hi $NAME'
 Hi $NAME
 ```
 
-#### Shell Execution
+### Shell Execution
 ```bash
 $ echo "I'm in $(pwd)"
 I'm in /home/Matrix/documentations
@@ -34,7 +34,7 @@ I'm in /home/Matrix/documentations
 ```
 [Command Substitution](http://wiki.bash-hackers.org/syntax/expansion/cmdsubst)
 
-#### Functions
+###x Functions
 ```bash
 get_name() {
    echo "Matrix"
@@ -44,17 +44,17 @@ $ echo "You are $(get_name)"
 You are Matrix
 ```
 
-#### Strict Mode
+### Strict Mode
 ```bash
 set -euo pipefail
 IFS=$'\n\t'
 ```
 [Unofficial bash strict mode](http://redsymbol.net/articles/unofficial-bash-strict-mode/)
 
-##### `set -e`
+#### `set -e`
 The `set -e` option instructs bash to immediately exit if any command has a non-zero exit status. You wouldn't want to set this for your command-line shell, but in a script it's massively helpful. Specifically, if any pipeline; any command in parentheses; or a command executed as part of a command list in braces exits with a non-zero exit status, the script exits immediately with that same status. 
 
-##### `set -u`
+#### `set -u`
 `set -u` affects variables. When set, a reference to any variable you haven't previously defined - with the exceptions of `$*` and `$@` - is an error, and causes the program to immediately exit.
 
 Without this option
@@ -90,7 +90,7 @@ $ echo $?
 1
 ```
 
-##### `set -o pipefail`
+#### `set -o pipefail`
 This setting prevents errors in a pipeline from being masked. If any command in a pipeline fails, that return code will be used as the return code of the whole pipeline. By default, the pipeline's return code is that of the last command - even if it succeeds.
 
 ```bash
@@ -109,7 +109,7 @@ $ echo $?
 2
 ```
 
-##### set `IFS`
+#### set `IFS`
 The `IFS` variable - which stands for `I`nternal `F`ield `S`eparator - controls what Bash calls word splitting. When set to a string, each character in the string is considered by Bash to separate words. This governs how bash will iterate through a sequence. For example, this script:
 ```
 $ cat test.sh
@@ -133,7 +133,7 @@ c
 a b c
 ```
 
-#### Brace expansion
+### Brace expansion
 ```bash
 $ echo {A,B}
 A B
@@ -145,7 +145,7 @@ $ echo {A..E}
 A B C D E
 ```
 
-#### Conditional Execution
+### Conditional Execution
 ```bash
 $ grep test /tmp/test || echo 'Matrix'
 grep: /tmp/test: No such file or directory
@@ -155,7 +155,7 @@ $ grep test /tmp/test && echo 'Matrix'
 grep: /tmp/test: No such file or directory
 ```
 
-#### Difference between `[` and `[[`  
+### Difference between `[` and `[[`  
 NOTE: `[[` is a bash extension, so if you are writing sh-compatible scripts then you need to stick with `[`. Make sure you have the `#!/bin/bash` shebang line for your script if you use double brackets.
 
 1. empty strings and strings with whitespaces can be intuitively handled 
@@ -249,8 +249,8 @@ NOTE: `[[` is a bash extension, so if you are writing sh-compatible scripts then
 [What's the difference between `[` and `[[` in Bash](https://stackoverflow.com/questions/3427872/whats-the-difference-between-and-in-bash)
 
 
-### Parameter expansions
-#### Basics
+## Parameter expansions
+### Basics
 ```bash
 $ name="Matrix"
 
@@ -273,8 +273,8 @@ $ echo ${name:(-2):1} #=> "x" (slicing from right)
 i
 ```
 
-### Variables
-#### Basic
+## Variables
+### Basic
 ```bash
 $ NAME="Matrix"
 
@@ -288,7 +288,7 @@ $ echo "${NAME}"
 Matrix
 ```
 
-#### Indirection
+### Indirection
 ```bash
 $ food="Cake"
 
@@ -298,7 +298,7 @@ $ echo "${!food}"
 Cup cake
 ```
 
-#### Case modification
+### Case modification
 The `^` operator modifies the first character to uppercase, the `,` operator to lowercase, the `~` reverse case. When using the double-form (`^^` / `,,` / `~~`), all characters are converted. 
 ```bash
 $ name="matrix"
@@ -317,60 +317,59 @@ MATRIX
 
 $ name="MATrix"
 
-$  echo ${name,}
+$ echo ${name,}
 mATrix
 
-$  echo ${name~}
+$ echo ${name~}
 mATrix
 
-$  echo ${name,,}
+$ echo ${name,,}
 matrix
 
-$  echo ${name~~}
+$ echo ${name~~}
 matRIX
 ```
 
-#### Variable name expansion
-This expands to a list of all set `variable names` beginning with the string *PREFIX*. The elements of the list are separated by the first character in the `IFS`-variable (<space> by default). 
+### Variable name expansion
+This expands to a list of all set `variable names` beginning with the string **PREFIX**. The elements of the list are separated by the first character in the `IFS`-variable (<space> by default). 
 ```bash
 $ test1="Matrix1"
 
-$  test2="Matrix2"
+$ test2="Matrix2"
 
-$  test3="Matrix3"
+$ test3="Matrix3"
 
-$  echo "${!test@}"
+$ echo "${!test@}"
 test1 test2 test3
 
-$  echo "${!test*}"
+$ echo "${!test*}"
 test1 test2 test3
 ```
 
-#### Substring removal
-1. From the beginning
-   Remove the described `pattern` trying to match it *from the beginning of the string*. The operator `#` will try to remove the shortest text matching the pattern, while `##` tries to do it with the longest text matching.
+### Substring removal
+1. From the beginning  
+   Remove the described `pattern` trying to match it **from the beginning of the string**. The operator `#` will try to remove the shortest text matching the pattern, while `##` tries to do it with the longest text matching.
    ```bash
    $ name='Matrix Zou Matrix Zou'
    
-   $  echo "${name#M*Z}"
+   $ echo "${name#M*Z}"
    ou Matrix Zou
    
-   $  echo "${name##M*Z}"
+   $ echo "${name##M*Z}"
    ou
    ```
 
 2. From the end
    ```bash
-   $  echo "${name%Z*u}"
+   $ echo "${name%Z*u}"
    Matrix Zou Matrix
    
-   $  echo "${name%%Z*u}"
+   $ echo "${name%%Z*u}"
    Matrix
    ```
 
-
-#### Default Value
-##### ${var-DEFAULT}
+### Default Value
+#### ${var-DEFAULT}
 ```bash
 $ echo ${food-Cake}  #=> $food, if not defined, shown as "Cake", but not saved
 Cake
@@ -387,7 +386,7 @@ $ echo ${food-Cake}
 bread
 ```
 
-##### ${var:-DEFAULT}
+#### ${var:-DEFAULT}
 ```bash
 $ echo ${food:-Cake}  #=> $food, if not defined or empty value, shown as "Cake", but not saved
 Cake
@@ -405,7 +404,7 @@ $ echo ${food:-Cake}
 bread
 ```
 
-##### ${var=DEFAULT}
+#### ${var=DEFAULT}
 ```bash
 $ echo ${food=Cake}  #=> $food, if not defined, shown as "Cake" and saved
 Cake
@@ -419,7 +418,7 @@ $ echo ${food=Cake}
 bread
 ```
 
-##### ${var:=DEFAULT}
+#### ${var:=DEFAULT}
 ```bash
 $ echo ${food:=Cake}  #=> $food, if not defined or empty value, shown as "Cake" and saved
 Cake
