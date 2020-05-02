@@ -288,6 +288,87 @@ $ echo "${NAME}"
 Matrix
 ```
 
+#### Indirection
+```bash
+$ food="Cake"
+
+$ Cake="Cup cake"
+
+$ echo "${!food}"
+Cup cake
+```
+
+#### Case modification
+The `^` operator modifies the first character to uppercase, the `,` operator to lowercase, the `~` reverse case. When using the double-form (`^^` / `,,` / `~~`), all characters are converted. 
+```bash
+$ name="matrix"
+
+$ echo ${name^}
+Matrix
+
+$ echo ${name~}
+Matrix
+
+$ echo ${name^^}
+MATRIX
+
+$ echo ${name~~}
+MATRIX
+
+$ name="MATrix"
+
+$  echo ${name,}
+mATrix
+
+$  echo ${name~}
+mATrix
+
+$  echo ${name,,}
+matrix
+
+$  echo ${name~~}
+matRIX
+```
+
+#### Variable name expansion
+This expands to a list of all set `variable names` beginning with the string *PREFIX*. The elements of the list are separated by the first character in the `IFS`-variable (<space> by default). 
+```bash
+$ test1="Matrix1"
+
+$  test2="Matrix2"
+
+$  test3="Matrix3"
+
+$  echo "${!test@}"
+test1 test2 test3
+
+$  echo "${!test*}"
+test1 test2 test3
+```
+
+#### Substring removal
+1. From the beginning
+   Remove the described `pattern` trying to match it *from the beginning of the string*. The operator `#` will try to remove the shortest text matching the pattern, while `##` tries to do it with the longest text matching.
+   ```bash
+   $ name='Matrix Zou Matrix Zou'
+   
+   $  echo "${name#M*Z}"
+   ou Matrix Zou
+   
+   $  echo "${name##M*Z}"
+   ou
+   ```
+
+2. From the end
+   ```bash
+   $  echo "${name%Z*u}"
+   Matrix Zou Matrix
+   
+   $  echo "${name%%Z*u}"
+   Matrix
+   ```
+
+
 #### Default Value
 ##### ${var-DEFAULT}
 ```bash
