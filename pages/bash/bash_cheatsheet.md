@@ -368,6 +368,32 @@ test1 test2 test3
    Matrix
    ```
 
+### Search and replace
+Substitute (replace) a substring **matched by a pattern**, on expansion time. The matched substring will be entirely removed and the given string will be inserted. 
+1. Substitute first occurrence with `/`
+   ```bash
+   $ name='Matrix Zou Matrix Zou'
+   
+   $ echo "${name/Matrix/Test}"
+   Test Zou Matrix Zou
+   ```
+
+2. Substitute all occurrence with `//`
+   ```bash
+   $ echo "${name//Matrix/Tetst}"
+   Test Zou Test Zou
+   ```  
+
+3. Archoring, `#` from beginning, `%` from end
+   ```bash
+   $ echo "${name/#Matrix/Test}"
+   Test Zou Matrix Zou
+   
+   $ echo "${name/%Zou/Test}"
+   Matrix Zou Matrix Test
+   ```
+
+
 ### Default Value
 #### ${var-DEFAULT}
 ```bash
