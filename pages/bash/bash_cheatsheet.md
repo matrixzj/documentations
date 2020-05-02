@@ -393,6 +393,18 @@ Substitute (replace) a substring **matched by a pattern**, on expansion time. Th
    Matrix Zou Matrix Test
    ```
 
+4. Remove matched pattern
+   ```bash
+   $ echo "${name/Matrix/}"
+    Zou Matrix Zou
+   
+   $ echo "${name/Matrix}"
+    Zou Matrix Zou
+   
+   $ echo "${name/%Zou}"
+   Matrix Zou Matrix
+   ```
+
 
 ### Default Value
 #### ${var-DEFAULT}
