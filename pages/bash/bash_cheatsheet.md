@@ -2,7 +2,7 @@
 title: Bash CheatSheet
 tags: [bash]
 keywords: bash, script
-last_updated: April 25, 2020
+last_updated: May 2, 2020
 summary: "Bash Script cheatsheet"
 sidebar: mydoc_sidebar
 permalink: bash_cheatsheet.html
@@ -249,31 +249,8 @@ NOTE: `[[` is a bash extension, so if you are writing sh-compatible scripts then
 [What's the difference between `[` and `[[` in Bash](https://stackoverflow.com/questions/3427872/whats-the-difference-between-and-in-bash)
 
 
+
 ## Parameter expansions
-### Basics
-```bash
-$ name="Matrix"
-
-$ echo ${name/M/m}
-matrix
-
-$ echo ${name:0:2}    #=> "Ma" (slicing)
-Ma
-
-$ echo ${name::2}     #=> "Ma" (slicing)
-Ma
-
-$ echo ${name::-1}    #=> "Matri" (slicing)
-Matri
-
-$ echo ${name:(-1)}   #=> "x" (slicing from right)
-x
-
-$ echo ${name:(-2):1} #=> "x" (slicing from right)
-i
-```
-
-## Variables
 ### Basic
 ```bash
 $ NAME="Matrix"
@@ -405,74 +382,164 @@ Substitute (replace) a substring **matched by a pattern**, on expansion time. Th
    Matrix Zou Matrix
    ```
 
-
-### Default Value
-#### ${var-DEFAULT}
+### String length
 ```bash
-$ echo ${food-Cake}  #=> $food, if not defined, shown as "Cake", but not saved
+$ name="Matrix"
+
+$ echo "${#name}"
+6
+```
+
+### Substring expansion
+```bash
+$ name="Matrix"
+
+$ echo ${name:0:2}    #=> "Ma" (slicing)
+Ma
+
+$ echo ${name::2}     #=> "Ma" (slicing)
+Ma
+
+$ echo ${name::-1}    #=> "Matri" (slicing)
+Matri
+
+$ echo ${name:(-1)}   #=> "x" (slicing from end)
+x
+
+$ echo "${name: -1:1}" #=> same as above
+x
+
+$ echo ${name:(-2):1} #=> "x" (slicing from right)
+i
+
+$ echo "${name:1: -1}" #=> "atri" (negative length means slicing LENGTH charater(s) from end)
+atri
+```
+Note: When using a negative offset, you need to separate the negative number from the colon by ` `(space or `()`(brackets)
+
+
+### Use a default value
+`${var:-DEFAULT}`
+`${var-DEFAULT}`
+**var** is unset (never was defined) or null (empty), this one expands to **DEFAULT**, otherwise it expands to the value of **var**, as if it just was `${var}`. If you omit the `:` (colon), like shown in the second form, the default value is only used when the **var** was unset, not when it was empty. 
+```bash
+$ unset food
+
+$ echo ${food-Cake}
 Cake
 
-$ echo ${food}
+$ echo ${food:-Cake}
+Cake
 
 $ food=""
 
 $ echo ${food-Cake}
 
-$ food="bread"
+
+$ echo ${food:-Cake}
+Cake
+
+$ food="Bread"
 
 $ echo ${food-Cake}
-bread
-```
-
-#### ${var:-DEFAULT}
-```bash
-$ echo ${food:-Cake}  #=> $food, if not defined or empty value, shown as "Cake", but not saved
-Cake
-
-$ food=""
+Bread
 
 $ echo ${food:-Cake}
-Cake
-
-$ echo ${food}
-
-$ food="bread"
-
-$ echo ${food:-Cake}
-bread
+Bread
 ```
 
-#### ${var=DEFAULT}
+### Assign a default value
+`${var:=DEFAULT}`
+`${var=DEFAULT}`
+This one works like the using default values, but the default text you give is not only expanded, but also assigned to the **var**, if it was unset or null. Equivalent to using a default value, when you omit the `:`(colon), as shown in the second form, the default value will only be assigned when the **var** was unset. 
 ```bash
-$ echo ${food=Cake}  #=> $food, if not defined, shown as "Cake" and saved
-Cake
-
-$ echo ${food}
-Cake
-
-$ food="bread"
+$ unset food
 
 $ echo ${food=Cake}
-bread
-```
-
-#### ${var:=DEFAULT}
-```bash
-$ echo ${food:=Cake}  #=> $food, if not defined or empty value, shown as "Cake" and saved
 Cake
 
 $ echo ${food}
 Cake
 
+$ unset food
+
 $ food=""
 
-$ echo "${food:=Cake}"
-Cake
+$ echo ${food=Cake}
 
-$ food="bread"
 
 $ echo ${food:=Cake}
-bread
+Cake
+
+$ echo ${food}
+Cake
 ```
+
+### Use an alternate value
+`${var:+WORD}`
+`${var+WORD}`
+This form expands to nothing if the **var** is unset or empty. If it is set, it does not expand to the **var**'s value, but to **WORD**. For the second form, expand to **WORD** only when **var** is empty.
+```bash
+$ unset foo
+
+$ echo "${foo:+bread}"
+
+
+$ echo "${foo+bread}"
+
+
+$ unset foo; foo="Cake"
+
+$ echo "${foo+bread}"
+bread
+
+$ echo "${foo:+bread}"
+bread
+
+$ unset foo; foo=""
+
+$ echo "${foo+bread}"
+bread
+
+$ echo "${foo:+bread}"
+
+```
+
+### Display error if null or unset
+`${var:?WORD}`
+`${var?WORD}`
+If **var** is unset or empty, the expansion of **WORD** will be used as appendix for an error message. The second form is only apply to unset.
+```bash
+$ unset foo
+
+$ echo "${foo?not set}"
+-bash: foo: not set
+
+$ echo "${foo}"
+
+
+$ echo "${foo:?not set}"
+-bash: foo: not set
+
+$ foo=""
+
+$ echo "${foo:?not set}"
+-bash: foo: not set
+
+$ echo "${foo?not set}"
+
+```
+
+### Matrix
+||**var** Set and Not Null|**var** Set but Null|**var** Unset
+| :------ | :------ | :------ | :------ 
+|${var:-word}|substitude *var*|substitude *word*|substitude *word*|
+|${var-word}|substitude *var*|substitude null|substitude *word*|
+|${var:=word}|substitude *var*|assign *word*|assign *word*|
+|${var=word}|substitude *var*|substitude null|assign *word*|
+|${var:?word}|substitude *var*|error, exit|error, exit|
+|${var?word}|substitude *var*|substitude null|error, exit|
+|${var:+word}|substitude *word*|substitude null|substitude null|
+|${var?word}|substitude *word*|substitude *word*|substitude null|
 
 {% include links.html %}
