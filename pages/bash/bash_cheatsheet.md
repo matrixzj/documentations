@@ -419,8 +419,8 @@ Note: When using a negative offset, you need to separate the negative number fro
 
 
 ### Use a default value
-`${var:-DEFAULT}`
-`${var-DEFAULT}`
+`${var:-DEFAULT}`  
+`${var-DEFAULT}`  
 **var** is unset (never was defined) or null (empty), this one expands to **DEFAULT**, otherwise it expands to the value of **var**, as if it just was `${var}`. If you omit the `:` (colon), like shown in the second form, the default value is only used when the **var** was unset, not when it was empty. 
 ```bash
 $ unset food
@@ -449,8 +449,8 @@ Bread
 ```
 
 ### Assign a default value
-`${var:=DEFAULT}`
-`${var=DEFAULT}`
+`${var:=DEFAULT}`  
+`${var=DEFAULT}`  
 This one works like the using default values, but the default text you give is not only expanded, but also assigned to the **var**, if it was unset or null. Equivalent to using a default value, when you omit the `:`(colon), as shown in the second form, the default value will only be assigned when the **var** was unset. 
 ```bash
 $ unset food
@@ -476,8 +476,8 @@ Cake
 ```
 
 ### Use an alternate value
-`${var:+WORD}`
-`${var+WORD}`
+`${var:+WORD}`  
+`${var+WORD}`  
 This form expands to nothing if the **var** is unset or empty. If it is set, it does not expand to the **var**'s value, but to **WORD**. For the second form, expand to **WORD** only when **var** is empty.
 ```bash
 $ unset foo
@@ -506,8 +506,8 @@ $ echo "${foo:+bread}"
 ```
 
 ### Display error if null or unset
-`${var:?WORD}`
-`${var?WORD}`
+`${var:?WORD}`  
+`${var?WORD}`  
 If **var** is unset or empty, the expansion of **WORD** will be used as appendix for an error message. The second form is only apply to unset.
 ```bash
 $ unset foo
@@ -531,6 +531,7 @@ $ echo "${foo?not set}"
 ```
 
 ### Matrix
+
 ||**var** Set and Not Null|**var** Set but Null|**var** Unset
 | :------ | :------ | :------ | :------ 
 |${var:-word}|substitude *var*|substitude *word*|substitude *word*|
