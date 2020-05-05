@@ -34,7 +34,7 @@ I'm in /home/Matrix/documentations
 ```
 [Command Substitution](http://wiki.bash-hackers.org/syntax/expansion/cmdsubst)
 
-###x Functions
+### Functions
 ```bash
 get_name() {
    echo "Matrix"
@@ -42,6 +42,22 @@ get_name() {
 
 $ echo "You are $(get_name)"
 You are Matrix
+```
+
+### Single line comment
+```bash
+$ cat bash_test.sh
+#!/bin/bash
+
+: '
+this is the first line of comment
+this is the second line of comment
+'
+
+echo comment
+
+$ ./bash_test.sh
+comment
 ```
 
 ### Strict Mode
@@ -542,5 +558,7 @@ $ echo "${foo?not set}"
 |${var?word}|substitude *var*|substitude null|error, exit|
 |${var:+word}|substitude *word*|substitude null|substitude null|
 |${var?word}|substitude *word*|substitude *word*|substitude null|
+{: .table-bordered }
+
 
 {% include links.html %}
