@@ -2,7 +2,7 @@
 title: Bash CheatSheet
 tags: [bash]
 keywords: bash, script
-last_updated: May 2, 2020
+last_updated: May 5, 2020
 summary: "Bash Script cheatsheet"
 sidebar: mydoc_sidebar
 permalink: bash_cheatsheet.html
@@ -530,7 +530,7 @@ $ echo "${foo?not set}"
 
 ```
 
-### Matrix
+### Parameters Expansion Matrix
 
 ||**var** Set and Not Null|**var** Set but Null|**var** Unset
 | :------ | :------ | :------ | :------ 
