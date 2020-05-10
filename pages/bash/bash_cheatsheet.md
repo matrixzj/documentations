@@ -2,7 +2,7 @@
 title: Bash CheatSheet
 tags: [bash]
 keywords: bash, script
-last_updated: May 5, 2020
+last_updated: May 11, 2020
 summary: "Bash Script cheatsheet"
 sidebar: mydoc_sidebar
 permalink: bash_cheatsheet.html
@@ -740,5 +740,116 @@ test
 ```
 
 [More about bash special parameters and shell vaviables](https://wiki.bash-hackers.org/syntax/shellvars)
+
+## Arrays
+### Defining arrays
+```bash
+$ Fruits=('Apple' 'Banana' 'Orange')
+
+$ echo "${Fruits[0]}"
+Apple
+
+$ echo "${Fruits[1]}"
+Banana
+
+$ echo "${Fruits[2]}"
+Orange
+
+$ for i in "${Fruits[@]}"; do echo "${i}"; done
+Apple
+Banana
+Orange
+```
+
+### Array operations
+#### Push an element
+```bash
+$ Fruits=("${Fruits[@]}" "Waterlemon")
+
+$ echo ${Fruits[@]}
+Apple Banana Orange Waterlemon
+
+$ Fruits+=('Cherry')
+
+$ echo "${Fruits[@]}"
+Apple Banana Orange Waterlemon Cherry
+```
+
+#### Remove element
+```bash
+$ echo "${Fruits[@]}"
+Apple Banana Orange Waterlemon Cherry
+
+$ unset Fruits[1]
+
+$ echo "${Fruits[@]}"
+Apple Orange Waterlemon Cherry
+
+$ Fruits=(${Fruits[@]/App*/})
+
+$ echo "${Fruits[@]}"
+Orange Waterlemon Cherry
+```
+
+#### Duplicate / Concatenate array
+```bash
+$ echo "${Fruits[@]}"
+Orange Waterlemon Cherry
+
+$ AnotherFruits=("${Fruits[@]}")
+
+$ echo "${AnotherFruits[@]}"
+Orange Waterlemon Cherry
+
+$ Fruits=("${Fruits[@]}" "${AnotherFruits[@]}")
+
+$ echo "${Fruits[@]}"
+Orange Waterlemon Cherry Orange Waterlemon Cherry
+```
+
+#### Read from file
+```bash
+$ cat /tmp/test
+Apple
+Orange
+Cherry
+Lemon
+
+$ Fruits=($(cat /tmp/test))
+
+$ echo "${Fruits[@]}"
+Apple Orange Cherry Lemon
+
+$ echo "${Fruits[1]}"
+Orange
+```
+
+### Working with arrays
+#### Number of elements
+```bash
+$ echo "${Fruits[@]}"
+Apple Orange Cherry Lemon
+
+$ echo "${#Fruits[@]}"
+4
+```
+
+#### Length of an element
+```bash
+$ echo "${Fruits[1]}"
+Orange
+
+$ echo "${#Fruits[1]}"
+6
+```
+
+#### Slicing of an array
+```bash
+$ echo "${Fruits[@]}"
+Apple Orange Cherry Lemon
+
+$ echo "${Fruits[@]:1:2}"
+Orange Cherry
+```
 
 {% include links.html %}
