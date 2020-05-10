@@ -560,5 +560,185 @@ $ echo "${foo?not set}"
 |${var?word}|substitude *word*|substitude *word*|substitude null|
 {: .table-bordered }
 
+## Functions
+### Return values
+```bash
+$ cat bash_return_values.sh
+#!/bin/bash
+
+myfunc() {
+    local myresult='some value'
+    echo ${myresult}
+}
+
+result="$(myfunc)"
+
+echo ${result}
+
+$ ./bash_return_values.sh
+some value
+```
+
+### Raising errors
+```bash
+$ cat bash_raising_errors.sh
+#!/bin/bash
+
+myfunc() {
+    return 1
+}
+
+if myfunc; then
+    echo "success"
+else
+    echo "failure"
+fi
+
+$ ./bash_raising_errors.sh
+failure
+
+$ cat bash_raising_errors.sh
+#!/bin/bash
+
+myfunc() {
+    return 1
+}
+
+myfunc
+
+$ ./bash_raising_errors.sh
+
+$ echo $?
+1
+```
+
+### Special parameters
+#### `*` asterisk / `@` at-sign
+The positional parameters starting from the first. When used inside doublequotes (see quoting), like `$*`, it expands to all positional parameters as one word, delimited by the first character of the **IFS** variable (a space in this example): "$1 $2 $3 $4". But `$@` will be not take **IFS** as delimiter. 
+```bash
+$ cat ./bash_special_parmeters.sh
+#!/bin/bash
+
+echo "$*"
+
+echo "$@"
+
+IFS=$'\n'
+
+echo "$*"
+
+echo "$@"
+
+echo $1
+
+echo $2
+
+$ ./bash_special_parmeters.sh  12 34
+12 34
+12 34
+12
+34
+12 34
+12
+34
+```
+
+#### `#` hash mark
+Number of positional parameters (decimal) 
+```bash
+$ cat ./bash_special_parmeters.sh
+#!/bin/bash
+
+echo "$#"
+
+$ ./bash_special_parmeters.sh  12 34
+2
+```
+
+#### `?` question mark
+Status of the most recently executed foreground-pipeline (exit/return code)
+
+#### `-` dash
+Current option flags set by the shell itself.
+```bash
+$ cat bash_special_parmeters.sh
+#!/bin/bash
+
+echo "$-"
+
+set -euo pipefail
+
+echo "$-"
+
+$ ./bash_special_parmeters.sh 12 34
+hB
+ehuB
+```
+
+#### `$` dollar-sign
+The process ID (PID) of the shell. In an explicit subshell it expands to the PID of the current "main shell", not the subshell. This is different from `$BASHPID`!
+```bash
+$ echo $$; echo $BASHPID ; ( cd /usr; pstree -p | grep $$; echo "$$" )
+33969
+33969
+           |             |-bash(33969)---bash(33868)-+-grep(33870)
+33969
+
+$ echo $$; echo $BASHPID ; ( cd /usr; pstree -p | grep $$; echo "$BASHPID" )
+33969
+33969
+           |             |-bash(33969)---bash(34977)-+-grep(34979)
+34977
+```
+
+#### `!` exclamation mark
+The process ID (PID) of the most recently executed background pipeline
+```bash
+$ ping -c 1000 localhost > /dev/null  &
+[1] 47589
+
+$ echo $!
+47589
+```
+
+#### `0` zero 
+The name of the shell or the shell script (filename).
+```bash
+$ echo $0
+-bash
+
+$ cat bash_special_parmeters.sh
+#!/bin/bash
+
+echo "$0"
+
+$ ./bash_special_parmeters.sh
+./bash_special_parmeters.sh
+```
+
+#### `_` underscore
+A kind of catch-all parameter. Directly after shell invocation, it's set to the filename used to invoke Bash, or the absolute or relative path to the script, just like $0 would show it. Subsequently, expands to the last argument to the previous command. 
+```bash
+$ cat bash_special_parmeters.sh
+#! /bin/bash
+
+echo "$_"
+
+$ ./bash_special_parmeters.sh
+./bash_special_parmeters.sh
+
+$ cat bash_special_parmeters.sh
+#! /bin/bash
+
+echo test
+
+echo "$_"
+
+$ ./bash_special_parmeters.sh
+test
+test
+```
+
+[More about bash special parameters and shell vaviables](https://wiki.bash-hackers.org/syntax/shellvars)
 
 {% include links.html %}
