@@ -852,4 +852,61 @@ $ echo "${Fruits[@]:1:2}"
 Orange Cherry
 ```
 
+## Dictionary
+### Defining dictionary
+```bash
+$ declare -A sounds
+
+$ sounds[dog]="bark"
+
+$ sounds[cow]="moo"
+
+$ sounds[wolf]="howl"
+```
+
+### Iteratiing dictionary
+```bash
+$ echo "${sounds[@]}"
+bark howl moo
+
+$ for i in "${sounds[@]}"; do echo "$i"; done
+bark
+howl
+moo
+
+$ echo "${!sounds[@]}"
+dog wolf cow 
+
+$ for i in "${!sounds[@]}"; do echo "$i"; done
+dog
+wolf
+cow
+```
+
+### Working with dictionary
+#### Number of elements
+```bash
+$ echo "${#sounds[@]}"
+3
+```
+
+#### Add / Remove element
+```bash
+$ sounds[bird]="tweet"
+
+$ echo "${#sounds[@]}"
+4
+
+$ echo "${sounds[@]}"
+bark howl moo tweet
+
+$ unset sounds[bird]
+
+$ echo "${#sounds[@]}"
+3
+
+$ echo "${!sounds[@]}"
+dog wolf cow
+```
+
 {% include links.html %}
