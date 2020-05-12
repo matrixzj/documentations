@@ -909,4 +909,23 @@ $ echo "${!sounds[@]}"
 dog wolf cow
 ```
 
+#### Iteration 
+* Over key
+   ```bash
+   $ for i in  "${!sounds[@]}"; do echo "${i}"; done
+   dog
+   wolf
+   cow
+   ```
+
+* Over value 
+   ```bash
+   $ for i in  "${sounds[@]}"; do echo "${i}"; done
+   bark
+   howl
+   moo
+   ```
+
+
+
 {% include links.html %}
