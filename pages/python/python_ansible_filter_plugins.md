@@ -49,7 +49,7 @@ $ cat tasks/test1.yml
   tasks:
   - name: Print a message
     debug:
-    msg: "`{`{ 'test' | a_filter }}"
+    msg: "\{{ 'test' | a_filter }}"
 
 ```
 
@@ -92,12 +92,12 @@ $ cat tasks/test1.yml
   tasks:
   - name: Print a message
     set_fact:
-      hw: "{{ 'nic' | b_filter }}"
+      hw: "\{{ 'nic' | b_filter }}"
       current_nic_ver: "1.0"
 
   - name: print a message
     debug:
-      msg: "{{ lookup('vars', hw ) }}"
+      msg: "\{{ lookup('vars', hw ) }}"
 
 $ ansible-playbook tasks/test1.yml
 PLAY [localhost] *********************************************************************************************
