@@ -49,7 +49,7 @@ $ cat tasks/test1.yml
   tasks:
   - name: Print a message
     debug:
-    msg: "\{\{ 'test' | a_filter \}\}"
+    msg: " {{ 'test' | a_filter }} "
 
 ```
 
