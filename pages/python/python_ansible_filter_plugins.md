@@ -39,7 +39,8 @@ filter_plugins              = plugins/filter
 ```
 
 ### playbook
-```
+
+```bash
 $ cat tasks/test1.yml
 ---
 - hosts: localhost
@@ -48,22 +49,22 @@ $ cat tasks/test1.yml
   tasks:
   - name: Print a message
     debug:
-      msg: "{{ 'test' | a_filter }}"
+    msg: "{{ 'test' | a_filter }}"
 ```
 
 ### result 
 ```
 $ ansible-playbook tasks/test1.yml
 
-PLAY [localhost] *****************************************************************************************************
+PLAY [localhost] ***********************************************************************************************
 
-TASK [Print a message] ***********************************************************************************************
+TASK [Print a message] *****************************************************************************************
 ok: [localhost] => {
     "msg": "test CRAZY NEW FILTER"
 }
 
-PLAY RECAP ***********************************************************************************************************
-localhost                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+PLAY RECAP *****************************************************************************************************
+localhost              : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 ```
 
