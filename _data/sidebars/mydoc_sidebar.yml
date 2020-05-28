@@ -37,6 +37,10 @@ entries:
       url: /bash_cheatsheet.html
       output: web, pdf
 
+    - title: Ssh Break Out While-Loop
+      url: /bash_ssh_break_out_of_while_loop.html
+      output: web, pdf
+
   - title: Kernel
     output: web, pdf
     folderitems:

@@ -33,6 +33,11 @@
 - [Python Virtual Environment](pages/python/python_virtual_env.md)
       
 
+## Bash
+- [Bash CheatSheet](pages/bash/bash_cheatsheet.md)
+- [Ssh Break Out While-Loop](pages/bash/bash_ssh_break_out_of_while_loop.md)
+
+
 ## Misc
 - [Mac Reinstallation](pages/misc/misc_mac_reinstallation_steps.md)
 - [Markdown Syntax](pages/misc/misc_markdown_syntax.md)
