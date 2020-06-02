@@ -36,6 +36,7 @@
 ## Bash
 - [Bash CheatSheet](pages/bash/bash_cheatsheet.md)
 - [Ssh Break Out While-Loop](pages/bash/bash_ssh_break_out_of_while_loop.md)
+- [Pure Bash Bible - Strings](pages/bash/bash_pure_bible_strings.md)
 
 
 ## Misc
