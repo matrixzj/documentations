@@ -2,7 +2,7 @@
 title: Python Ansible Filter Plugins
 tags: [python]
 keywords: python, ansible, filter, plugins
-last_updated: May 26, 2020
+last_updated: June 3, 2020
 summary: "Example to demostrate Ansible filter plugin" 
 sidebar: mydoc_sidebar
 permalink: python_ansible_filter_plugins.html
@@ -49,7 +49,7 @@ $ cat tasks/test1.yml
   tasks:
   - name: Print a message
     debug:
-    msg: "\{{ 'test' | a_filter }}"
+    msg: "\{\{ 'test' | a_filter \}\}"
 
 ```
 
@@ -92,12 +92,12 @@ $ cat tasks/test1.yml
   tasks:
   - name: Print a message
     set_fact:
-      hw: "\{{ 'nic' | b_filter }}"
+      hw: "\{\{ 'nic' | b_filter \}\}"
       current_nic_ver: "1.0"
 
   - name: print a message
     debug:
-      msg: "\{{ lookup('vars', hw ) }}"
+      msg: "\{\{ lookup('vars', hw) \}\}"
 
 $ ansible-playbook tasks/test1.yml
 PLAY [localhost] *********************************************************************************************
@@ -112,6 +112,65 @@ ok: [localhost] => {
 
 PLAY RECAP ***************************************************************************************************
 localhost             : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+```
+
+### Filter to check rpm installed with wrong distro
+```bash
+$ cat plugins/filter/rpm_distro_check.py
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+
+class FilterModule(object):
+    def filters(self):
+        return {
+            'rpm_distro_check': self.rpm_distro_check,
+        }
+
+    def rpm_distro_check(self, rpm_list, distro):
+        rpm_dict = {}
+        if distro == 'CentOS':
+            wrong_build_host = 'redhat.com'
+        elif distro == 'RedHat':
+            wrong_build_host = 'centos.org'
+
+        for rpm in rpm_list['stdout_lines']:
+            if wrong_build_host in rpm.split(' ')[1]:
+                rpm_dict[rpm.split(' ')[0]] = rpm.split(' ')[1]
+        return rpm_dict
+
+$ cat tasks/verify_rpm_vendor.yml
+---
+- hosts: all
+  gather_facts: true
+
+  tasks:
+  - name: list all installed rpm packages
+    shell: for i in `rpm -qa`; do rpm -q --queryformat "%{name} %{buildhost}\n" $i; done
+    register: rpm_listed
+
+  - name: show
+    debug:
+      msg: "\{\{ rpm_listed | rpm_distro_check( ansible_distribution ) | length \}\}"
+    when:  "rpm_listed | rpm_distro_check( ansible_distribution ) | length > 0"
+
+$ ansible-playbook -i inventory/prod --limit test117* tasks/verify_rpm_vendor.yml
+
+PLAY [all] ******************************************************************************************************************
+
+TASK [Gathering Facts] ******************************************************************************************************
+ok: [test117.example.net]
+
+TASK [list all installed rpm packages] **************************************************************************************
+changed: [test117.example.net]
+
+TASK [show] *****************************************************************************************************************
+ok: [test117.example.net] => {
+    "msg": "21"
+}
+
+PLAY RECAP ******************************************************************************************************************
+test117.example.net        : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
 ```
 
 
