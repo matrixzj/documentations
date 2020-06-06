@@ -1,8 +1,8 @@
 ---
 title: "Python"
-tagName: kernel
+tagName: python
 search: exclude
-permalink: tag_kernel.html
+permalink: tag_python.html
 sidebar: mydoc_sidebar
 folder: tags
 ---
