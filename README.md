@@ -31,6 +31,8 @@
       
 ## Python
 - [Python Virtual Environment](pages/python/python_virtual_env.md)
+- [Python Ansible Filter Plugins](pages/python/python_ansible_filter_plugins.md)
+- [Python Sed Debug](pages/python/python_sed_debug.md)
       
 
 ## Bash

@@ -134,6 +134,10 @@ entries:
       url: /python_ansible_filter_plugins.html
       output: web, pdf
 
+    - title: Python Sed Debug
+      url: /python_sed_debug.html
+      output: web, pdf
+
   - title: Misc
     output: web, pdf
     folderitems:
