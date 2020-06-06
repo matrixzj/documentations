@@ -19,17 +19,17 @@ folder: bash
 trim_string() {
     # Usage: trim_string "   example   string    "
     : "${1#"${1%%[![:space:]]*}"}"
-	# [![:space:]]* 	-> string from the first non-space charactor to the end 
-	# "${1%%[![:space:]]*}" -> remove above string from the end, remaining is space prefix
+	# [![:space:]]* 				-> string from the first non-space charactor to the end 
+	# "${1%%[![:space:]]*}" 		-> greedly remove above string from the end, remaining is space prefix
 	#
 	# string="        matrix is nice      "
 	#
 	# $ string1="${string%%[![:space:]]*}"
 	#
-    # $ echo ${#string1}
+    # $ echo "${#string1}"
     # 8
 	#
-	# "${1#"${1%%[![:space:]]*}"}" -> remove space prefix from the start	
+	# "${1#"${1%%[![:space:]]*}"}"	-> remove space prefix from the start	
 	#
     # $ string2="${string#${string1}}"
     # 
@@ -39,8 +39,26 @@ trim_string() {
     # $ echo "${#string2}"
     # 20
 	# 
+
     : "${_%"${_##*[![:space:]]}"}"
+	# *[![:space:]] 				-> string from start to the a non-space charactor, 'matrix is nice'
+	# ${_##*[![:space:]]}			-> greedly remove above string from the start, remove 'matrix is nice' from the start, remaining is space suffix
+	#
+	# $ string3="${string2##*[![:space:]]}"
+	#
+    # $ echo "${#string3}"
+	# 6
+	#
+	# "${_%"${_##*[![:space:]]}"}"	-> remove space suffix from the end
+	#
+	# $ string4="${string2%${string3}}"
 	# 
+	# $ echo "${#string4}"
+	# 14
+	# 
+	# $ echo "${string4}"
+	# matrix is nice
+
     printf '%s\n' "$_"
 }
 ```
