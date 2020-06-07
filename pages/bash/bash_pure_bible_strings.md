@@ -2,7 +2,7 @@
 title: Pure Bash Bible - Strings
 tags: [bash]
 keywords: bash, strings
-last_updated: June 2, 2020
+last_updated: June 7, 2020
 summary: "Pure Bash Bible Strings"
 sidebar: mydoc_sidebar
 permalink: bash_pure_bible_strings.html
@@ -19,18 +19,18 @@ folder: bash
 trim_string() {
     # Usage: trim_string "   example   string    "
     : "${1#"${1%%[![:space:]]*}"}"
-	# [![:space:]]* 				-> string from the first non-space charactor to the end 
-	# "${1%%[![:space:]]*}" 		-> greedly remove above string from the end, remaining is space prefix
-	#
-	# string="        matrix is nice      "
-	#
-	# $ string1="${string%%[![:space:]]*}"
-	#
+    # [![:space:]]* 				-> string from the first non-space charactor to the end 
+    # "${1%%[![:space:]]*}" 		-> greedly remove above string from the end, remaining is space prefix
+    #
+    # string="        matrix is nice      "
+    #
+    # $ string1="${string%%[![:space:]]*}"
+    #
     # $ echo "${#string1}"
     # 8
-	#
-	# "${1#"${1%%[![:space:]]*}"}"	-> remove space prefix from the start	
-	#
+    #
+    # "${1#"${1%%[![:space:]]*}"}"	-> remove space prefix from the start	
+    #
     # $ string2="${string#${string1}}"
     # 
     # $ echo "${string2}"
@@ -38,26 +38,26 @@ trim_string() {
     # 
     # $ echo "${#string2}"
     # 20
-	# 
+    # 
 
     : "${_%"${_##*[![:space:]]}"}"
-	# *[![:space:]] 				-> string from start to the a non-space charactor, 'matrix is nice'
-	# ${_##*[![:space:]]}			-> greedly remove above string from the start, remove 'matrix is nice' from the start, remaining is space suffix
-	#
-	# $ string3="${string2##*[![:space:]]}"
-	#
+    # *[![:space:]] 				-> string from start to the a non-space charactor, 'matrix is nice'
+    # ${_##*[![:space:]]}			-> greedly remove above string from the start, remove 'matrix is nice' from the start, remaining is space suffix
+    #
+    # $ string3="${string2##*[![:space:]]}"
+    #
     # $ echo "${#string3}"
-	# 6
-	#
-	# "${_%"${_##*[![:space:]]}"}"	-> remove space suffix from the end
-	#
-	# $ string4="${string2%${string3}}"
-	# 
-	# $ echo "${#string4}"
-	# 14
-	# 
-	# $ echo "${string4}"
-	# matrix is nice
+    # 6
+    #
+    # "${_%"${_##*[![:space:]]}"}"	-> remove space suffix from the end
+    #
+    # $ string4="${string2%${string3}}"
+    # 
+    # $ echo "${#string4}"
+    # 14
+    # 
+    # $ echo "${string4}"
+    # matrix is nice
 
     printf '%s\n' "$_"
 }
@@ -68,6 +68,30 @@ trim_string() {
 $ trim_string "        matrix is nice      "
 matrix is nice
 ```
+
+## Trim all white-space from string and truncate spaces
+### Function
+```bash
+trim_all() {
+    # Usage: trim_all "   example   string    "
+    set -f
+    # -f    noglob
+    # Disable [pathname expansion (globbing)](https://wiki.bash-hackers.org/syntax/expansion/globs)
+    set -- $*
+    # --    If no arguments follow, the positional parameters are unset. With arguments, the positional parameters are set, even if the strings begin with a - (dash) like an option.
+    printf '%s\n' "$*"
+    set +f
+}
+```
+
+### Example
+```bash
+$ trim_all "    matrix    is   nice    "
+matrix is nice
+```
+
+
+
 
 
 
