@@ -90,9 +90,49 @@ $ trim_all "    matrix    is   nice    "
 matrix is nice
 ```
 
+## Use regex on a string
+### Function
+```bash
+regex() {
+    # Usage: regex "string" "regex"
+    [[ $1 =~ $2 ]] && printf '%s\n' "${BASH_REMATCH[1]}"
+}
+```
 
+### Example
+```bash
+# Trim leading white-space.
+$ regex '    hello' '^\s*(.*)'
+hello
 
+# Validate a hex color.
+$ regex "#FFFFFF" '^(#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3}))$'
+#FFFFFF
 
+# Validate a hex color (invalid).
+$ regex "red" '^(#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3}))$'
+# no output (invalid)
 
+$ cat color_verify.sh
+#!/bin/bash
+
+$ is_hex_color() {
+    if [[ $1 =~ ^(#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3}))$ ]]; then
+        printf '%s\n' "${BASH_REMATCH[1]}"
+    else
+        printf '%s\n' "error: $1 is an invalid color."
+        return 1
+    fi
+}
+
+read -r color
+is_hex_color "$color" || color="#FFFFFF"
+
+$ echo "#95968d" | ./color_verify.sh
+#95968d
+
+$ echo "red" | ./color_verify.sh
+error: red is an invalid color.
+```
 
 {% include links.html %}
