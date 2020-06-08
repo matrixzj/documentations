@@ -566,7 +566,7 @@ $ echo "${foo?not set}"
 
 ## Special parameters
 ### `*` asterisk / `@` at-sign
-The positional parameters starting from the first. When used inside doublequotes (see quoting), like `$*`, it expands to all positional parameters as one word, delimited by the first character of the **IFS** variable (a space in this example): "$1 $2 $3 $4". But `$@` will be not take **IFS** as delimiter. 
+The positional parameters starting from the first.  
 ```bash
 $ cat ./bash_special_parmeters.sh
 #!/bin/bash
@@ -593,6 +593,32 @@ $ ./bash_special_parmeters.sh  12 34
 12 34
 12
 34
+```
+
+When used inside doublequotes (see quoting), like `$*`, it expands to all positional parameters as one word, delimited by the first character of the **IFS** variable (a space in this example): "$1 $2 $3 $4". But `$@` will be not take **IFS** as delimiter.   
+```bash
+$ cat bash_special_parmeters.sh
+#! /bin/bash
+
+# bash_special_parmeters.sh - Cmd args - positional parameter demo
+
+#### Set the IFS to | ####
+IFS='|'
+
+echo "Command-Line Arguments Demo"
+
+echo "*** All args displayed using \$@ positional parameter ***"
+echo "$@"        #*** double quote added ***#
+
+echo "*** All args displayed using \$* positional parameter ***"
+echo "$*"        #*** double quote added ***#
+
+$ ./bash_special_parmeters.sh apple pear grape lemon
+Command-Line Arguments Demo
+*** All args displayed using $@ positional parameter ***
+apple pear grape lemon
+*** All args displayed using $* positional parameter ***
+apple|pear|grape|lemon
 ```
 
 ### `#` hash mark
