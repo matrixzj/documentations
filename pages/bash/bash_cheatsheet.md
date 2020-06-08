@@ -2,7 +2,7 @@
 title: Bash CheatSheet
 tags: [bash]
 keywords: bash, script
-last_updated: May 11, 2020
+last_updated: June 8, 2020
 summary: "Bash Script cheatsheet"
 sidebar: mydoc_sidebar
 permalink: bash_cheatsheet.html
@@ -147,6 +147,10 @@ a
 b
 c
 a b c
+
+# show current IFS
+$ printf %q "$IFS"
+$' \t\n'
 ```
 
 ### Brace expansion

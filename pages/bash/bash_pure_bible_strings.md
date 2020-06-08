@@ -13,6 +13,7 @@ folder: bash
 =====
 
 ## Trim leading and trailing white-space from string
+This is an alternative to `sed`, `awk`, `perl` and other tools. The function below works by finding all leading and trailing white-space and removing it from the start and end of the string. The `:` built-in is used in place of a temporary variable.
 
 ### Function
 ```bash
@@ -70,6 +71,8 @@ matrix is nice
 ```
 
 ## Trim all white-space from string and truncate spaces
+This is an alternative to `sed`, `awk`, `perl` and other tools. The function below works by abusing word splitting to create a new string without leading/trailing white-space and with truncated spaces.
+
 ### Function
 ```bash
 trim_all() {
@@ -91,6 +94,8 @@ matrix is nice
 ```
 
 ## Use regex on a string
+The result of `bash`'s regex matching can be used to replace `sed` for a large number of use-cases.
+
 ### Function
 ```bash
 regex() {
@@ -134,5 +139,19 @@ $ echo "#95968d" | ./color_verify.sh
 $ echo "red" | ./color_verify.sh
 error: red is an invalid color.
 ```
+
+## Split a string on a delimiter
+This is an alternative to `cut`, `awk` and other tools.
+
+### Function
+```bash
+split() {
+   # Usage: split "string" "delimiter"
+   IFS=$'\n' read -d "" -ra arr <<< "${1//$2/$'\n'}"
+   printf '%s\n' "${arr[@]}"
+}
+
+
+
 
 {% include links.html %}
