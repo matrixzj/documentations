@@ -2,7 +2,7 @@
 title: Pure Bash Bible - Strings
 tags: [bash]
 keywords: bash, strings
-last_updated: June 7, 2020
+last_updated: June 9, 2020
 summary: "Pure Bash Bible Strings"
 sidebar: mydoc_sidebar
 permalink: bash_pure_bible_strings.html
@@ -146,12 +146,176 @@ This is an alternative to `cut`, `awk` and other tools.
 ### Function
 ```bash
 split() {
-   # Usage: split "string" "delimiter"
-   IFS=$'\n' read -d "" -ra arr <<< "${1//$2/$'\n'}"
-   printf '%s\n' "${arr[@]}"
+    # Usage: split "string" "delimiter"
+    IFS=$'\n' read -d "" -ra arr <<< "${1//$2/$'\n'}"
+    # "${1//$2/$'\n'}"      -> within $1, replace all $2 with $'\n'
+    # read
+    #   -d delim
+    #       The first character of delim is used to terminate the input line, rather than newline.
+    #   -r  Backslash  does not act as an escape character.  The backslash is considered to be part of the line.  In particular, a backslash-newline pair may not be used as a line continuation.
+    #   -a aname
+    #       The  words  are  assigned  to  sequential indices of the array variable aname, starting at 0. aname is unset before any new values are assigned.  Other name arguments are ignored.
+ 
+    printf '%s\n' "${arr[@]}"
+}
+```
+
+### Example
+```bash
+$ split "apple,oranges,pears,grapes" ","
+apple
+oranges
+pears
+grapes
+
+$ split "1, 2, 3, 4, 5" ", "
+1
+2
+3
+4
+5
+```
+
+## lowercase / uppercase change or revert
+
+### Functions 
+```bash
+lower() {
+    # Usage: lower "string"
+    printf '%s\n' "${1,,}"
 }
 
+upper() {
+    # Usage: upper "string"
+    printf '%s\n' "${1^^}"
+}
 
+reverse_case() {
+    # Usage: reverse_case "string"
+    printf '%s\n' "${1~~}"
+}
+```
+
+## Trim quotes from a string
+
+### Function
+```bash
+trim_quotes() {
+    # Usage: trim_quotes "string"
+    : "${1//\'}"
+    printf '%s\n' "${_//\"}"
+}
+```
+
+### Example
+```bash
+$ var="'Hello', \"World\""
+
+$ trim_quotese "${var}"
+Hello, World
+```
+
+## Strip all instances of pattern from string
+
+### Function
+```bash
+strip_all() {
+    # Usage: strip_all "string" "pattern"
+    printf '%s\n' "${1//$2}"
+}
+```
+
+### Example
+```bash
+$ strip_all "The Quick Brown Fox" "[[:space:]]"
+TheQuickBrownFox
+
+$ strip_all "The Quick Brown Fox" "[aeiou]"
+Th Qck Brwn Fx
+```
+
+## Percent-encode / decode a string
+
+### Function
+```bash
+urlencode() {
+    # Usage: urlencode "string"
+    local LC_ALL=C
+    for (( i = 0; i < ${#1}; i++ )); do
+        : "${1:i:1}"
+        # slice the `i`th character
+        case "$_" in
+            [a-zA-Z0-9.~_-])
+                printf '%s' "$_"
+            ;;
+
+            *)
+                printf '%%%02X' "'$_"
+                # if the leading character is a single or double quote, the value is the  ASCII  value  of  the  following character.
+            ;;
+        esac
+    done
+    printf '\n'
+}
+
+urldecode() {
+    # Usage: urldecode "string"
+    : "${1//+/ }"
+    # remove '+'
+    printf '%b\n' "${_//%/\\x}"
+    # replace '%' to '\x'
+    # %b     causes  printf  to  expand backslash escape sequences in the corresponding argument (except that \c terminates output, backslashes in \', \", and \? are not removed, and octal escapes beginning with \0 may contain up to four digits).
+}
+```
+
+### Example
+```bash
+$ urlencode "https://github.com/dylanaraps/pure-bash-bible"
+https%3A%2F%2Fgithub.com%2Fdylanaraps%2Fpure-bash-bible
+
+$ urldecode "https%3A%2F%2Fgithub.com%2Fdylanaraps%2Fpure-bash-bible"
+https://github.com/dylanaraps/pure-bash-bible
+```
+
+## Check if string contains / starts / ends with a sub-string
+
+### Function
+```bash
+## Contains
+if [[ $var == *sub_string* ]]; then
+    printf '%s\n' "sub_string is in var."
+fi
+
+# Inverse (substring not in string).
+if [[ $var != *sub_string* ]]; then
+    printf '%s\n' "sub_string is not in var."
+fi
+
+# This works for arrays too!
+if [[ ${arr[*]} == *sub_string* ]]; then
+    printf '%s\n' "sub_string is in array."
+fi
+
+## Starts
+if [[ $var == sub_string* ]]; then
+    printf '%s\n' "var starts with sub_string."
+fi
+
+# Inverse (var does not start with sub_string).
+if [[ $var != sub_string* ]]; then
+    printf '%s\n' "var does not start with sub_string."
+fi
+
+## Ends
+if [[ $var == *sub_string ]]; then
+    printf '%s\n' "var ends with sub_string."
+fi
+
+# Inverse (var does not end with sub_string).
+if [[ $var != *sub_string ]]; then
+    printf '%s\n' "var does not end with sub_string."
+fi
+```
 
 
 {% include links.html %}
