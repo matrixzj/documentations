@@ -45,6 +45,10 @@ entries:
       url: /bash_pure_bible_strings.html
       output: web, pdf
 
+    - title: Pure Bash Bible - Array
+      url: /bash_pure_bible_array.html
+      output: web, pdf
+
   - title: Kernel
     output: web, pdf
     folderitems:
