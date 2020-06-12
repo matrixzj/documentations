@@ -5,7 +5,7 @@ keywords: bash, array
 last_updated: June 12, 2020
 summary: "Pure Bash Bible Array"
 sidebar: mydoc_sidebar
-permalink: bash_pure_bible_Array.html
+permalink: bash_pure_bible_array.html
 folder: bash
 ---
 
@@ -68,6 +68,7 @@ remove_array_dups() {
     printf '%s\n' "${!tmp_array[@]}"
     # Iteration on dict keys
 }
+```
 
 ### Example
 ```bash
