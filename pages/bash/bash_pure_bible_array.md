@@ -2,7 +2,7 @@
 title: Pure Bash Bible - Array
 tags: [bash]
 keywords: bash, array
-last_updated: June 9, 2020
+last_updated: June 12, 2020
 summary: "Pure Bash Bible Array"
 sidebar: mydoc_sidebar
 permalink: bash_pure_bible_Array.html
@@ -77,5 +77,75 @@ $ remove_array_dups 1 1 2 2 1 1 3 3
 3
 ```
 
+## Random array element
+
+### Function
+```bash
+random_array_element() {
+    # Usage: random_array_element "array"
+    local arr=("$@")
+    printf '%s\n' "${arr[RANDOM % $#]}"
+}
+```
+
+### Example
+```bash
+$ array=(red green blue yellow brown)
+
+$ random_array_element "${array[@]}"
+brown
+
+$ random_array_element "${array[@]}"
+red
+
+$ random_array_element 1 2 3 4 5 6 7
+5
+
+$ random_array_element 1 2 3 4 5 6 7
+6
+```
+
+## Cycle through an Array
+
+### Function
+```bash
+cycle() {
+    local arr=("$@")
+    printf '%s ' "${arr[${i:=0}]}"
+    ((i=i>=${#arr[@]}-1?0:++i))
+    # if i>${#arr[@]}-1, i=0; else ++i
+}
+```
+
+### Example
+```bash
+$ array=(a b c d)
+
+$ cycle "${array[@]}"
+a
+
+$ cycle "${array[@]}"
+b
+
+$ cycle "${array[@]}"
+c
+
+$ cycle "${array[@]}"
+d
+
+$ cycle "${array[@]}"
+a
+
+$ arr=(true false)
+
+$ cycle "${arr[@]}"
+false
+
+$ cycle "${arr[@]}"
+true
+
+$ cycle "${arr[@]}"
+false
+```
 
 {% include links.html %}
