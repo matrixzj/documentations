@@ -113,6 +113,11 @@ cycle() {
     local arr=("$@")
     printf '%s ' "${arr[${i:=0}]}"
     ((i=i>=${#arr[@]}-1?0:++i))
+    # operator sequence: 
+    # 1 ++i
+    # 2 i>=${#arr[@]}-1
+    # 3 i>=${#arr[@]}-1:0:++i
+    # 4 i=...
     # if i>${#arr[@]}-1, i=0; else ++i
 }
 ```
