@@ -87,11 +87,15 @@ done
 
 # Iterate recursively.
 shopt -s globstar
+## shopt 
+##      Toggle  the values of variables controlling optional shell behavior.
+##      `globstar`
+##          If set, the pattern ** used in a pathname expansion context will match all files and zero or more directo‐
+##          ries and subdirectories.  If the pattern is followed by a /, only directories and subdirectories match.
 for file in ~/Pictures/**/*; do
     printf '%s\n' "$file"
 done
 shopt -u globstarq
-
 ```
 
 {% include links.html %}
