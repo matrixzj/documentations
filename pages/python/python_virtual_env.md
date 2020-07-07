@@ -2,7 +2,7 @@
 title: Python Virtual Environment
 tags: [python]
 keywords: python, virtual environment, multi-versions, pyenv
-last_updated: Feburary 20, 2020
+last_updated: July 7, 2020
 summary: "How to install Python Virtual Enviroment on CentOS7 with PyEnv"
 sidebar: mydoc_sidebar
 permalink: python_virtual_env.html
@@ -62,9 +62,17 @@ Installing Python-3.7.6...
 Installed Python-3.7.6 to /home/jzou/.pyenv/versions/3.7.6
 ```
 
-### Install pyenv-virtualenv plugin 
+### Install pyenv-virtualenv plugin and add config in `.bashrc`
 ```
 $ git clone https://github.com/yyuu/pyenv-virtualenv.git $HOME/.pyenv/plugins/pyenv-virtualenv
+
+$ cat << EOF >> $HOME/.bashrc
+### python virtual env config
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+EOF
+
+$ source .bashrc
 ```
 
 ### List Installed Python Versions 
