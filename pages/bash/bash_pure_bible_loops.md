@@ -2,7 +2,7 @@
 title: Pure Bash Bible - Loops
 tags: [bash]
 keywords: bash, loop
-last_updated: June 12, 2020
+last_updated: July 8, 2020
 summary: "Pure Bash Bible Loops"
 sidebar: mydoc_sidebar
 permalink: bash_pure_bible_loops.html
