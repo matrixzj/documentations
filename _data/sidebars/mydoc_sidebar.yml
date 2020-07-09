@@ -49,6 +49,14 @@ entries:
       url: /bash_pure_bible_array.html
       output: web, pdf
 
+    - title: Pure Bash Bible - Loops
+      url: /bash_pure_bible_loops.html
+      output: web, pdf
+
+    - title: Pure Bash Bible - File Handling
+      url: /bash_pure_bible_file_handling.html
+      output: web, pdf
+
   - title: Kernel
     output: web, pdf
     folderitems:

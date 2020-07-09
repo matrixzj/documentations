@@ -40,6 +40,7 @@
 - [Ssh Break Out While-Loop](pages/bash/bash_ssh_break_out_of_while_loop.md)
 - [Pure Bash Bible - Strings](pages/bash/bash_pure_bible_strings.md)
 - [Pure Bash Bible - Array](pages/bash/bash_pure_bible_array.md)
+- [Pure Bash Bible - Loops](pages/bash/bash_pure_bible_loops.md)
 
 
 ## Misc
