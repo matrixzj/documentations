@@ -2,7 +2,7 @@
 title: Pure Bash Bible - File Handling
 tags: [bash]
 keywords: bash, file handling
-last_updated: July 8, 2020
+last_updated: July 9, 2020
 summary: "Pure Bash Bible File Handling"
 sidebar: mydoc_sidebar
 permalink: bash_pure_bible_file_handling.html

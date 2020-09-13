@@ -121,6 +121,10 @@ entries:
     - title: IPA / Win AD Sync
       url: /idm_ipa_win_sync.html
       output: web, pdf
+      
+    - title: API Examples for IPA
+      url: /idm_ipa_api.html
+      output: web, pdf
 
   - title: OpenStack
     output: web, pdf
