@@ -126,6 +126,10 @@ entries:
       url: /idm_ipa_api.html
       output: web, pdf
 
+    - title: Verify Certs with `openssl`
+      url: /idm_verify_certs_with_openssl.html
+      output: web, pdf
+
   - title: OpenStack
     output: web, pdf
     folderitems:

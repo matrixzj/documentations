@@ -23,6 +23,7 @@
 - [Kerberos Authentication](pages/idm/idm_kerberos_authentication.md)
 - [IPA / Win AD Sync](pages/idm/idm_ipa_win_sync.md)
 - [API Examples for IPA](pages/idm/idm_ipa_api.md)
+- [Verify Certs with `openssl`](pages/idm/idm_verify_certs_with_openssl.md)
 
 
 ## OpenStack
