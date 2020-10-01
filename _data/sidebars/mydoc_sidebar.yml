@@ -130,6 +130,10 @@ entries:
       url: /idm_verify_certs_with_openssl.html
       output: web, pdf
 
+    - title: Decrypt ssh private key with `openssl`
+      url: /idm_decrypt_ssh_private_key_with_openssl.html
+      output: web, pdf
+
   - title: OpenStack
     output: web, pdf
     folderitems:

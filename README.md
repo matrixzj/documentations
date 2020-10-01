@@ -24,6 +24,7 @@
 - [IPA / Win AD Sync](pages/idm/idm_ipa_win_sync.md)
 - [API Examples for IPA](pages/idm/idm_ipa_api.md)
 - [Verify Certs with `openssl`](pages/idm/idm_verify_certs_with_openssl.md)
+- [Decrypt ssh private key with `openssl`](pages/idm/idm_decrypt_ssh_key_openssl.md)
 
 
 ## OpenStack
