@@ -2,7 +2,7 @@
 title: Mac Reinstallation Steps
 tags: [misc]
 keywords: mac, reinstallation
-last_updated: June 17, 2019
+last_updated: Nov 14, 2020
 summary: "Steps to reinstall a workbox for myself"
 sidebar: mydoc_sidebar
 permalink: misc_mac_reinstallation_steps.html
@@ -57,6 +57,15 @@ sudo scutil --set ComputerName <new name>
 dscacheutil -flushcache
 ```
 reboot to take it in effect
+
+
+### Enable utf-8 for iTerm
+
+```bash
+echo 'export LC_ALL=en_US.UTF-8' >> ~/.zshrc
+echo 'export LANG=en_US.UTF-8' >> ~/.zshrc
+```
+
 
 ### Mail Signature
 
