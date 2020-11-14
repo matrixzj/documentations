@@ -44,6 +44,7 @@
 - [Pure Bash Bible - Strings](pages/bash/bash_pure_bible_strings.md)
 - [Pure Bash Bible - Array](pages/bash/bash_pure_bible_array.md)
 - [Pure Bash Bible - Loops](pages/bash/bash_pure_bible_loops.md)
+- [sed](pages/bash/bash_sed.md)
 
 
 ## Misc

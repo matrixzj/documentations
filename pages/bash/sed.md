@@ -5,7 +5,7 @@ keywords: sed
 last_updated: Nov 14, 2020
 summary: "sed tips"
 sidebar: mydoc_sidebar
-permalink: bash_se.html
+permalink: bash_sed.html
 folder: bash
 ---
 

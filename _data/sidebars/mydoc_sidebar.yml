@@ -57,6 +57,10 @@ entries:
       url: /bash_pure_bible_file_handling.html
       output: web, pdf
 
+    - title: sed
+      url: /bash_sed.html
+      output: web, pdf
+
   - title: Kernel
     output: web, pdf
     folderitems:
