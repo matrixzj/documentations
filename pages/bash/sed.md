@@ -22,13 +22,15 @@ Unless special commands (like `D`) are used, the pattern space is deleted betwee
 
 ## Special Characters during replace
 
-### `&` Replaced by the string matched by the regular expression
+### `&` 
+Replaced by the string matched by the regular expression
 ```bash
 $ echo 'test test' | sed -e 's/[[:alpha:]]\+/(&)/'
 (test) test
 ```
 
-### `\` Matches the nth substring (n is a single digit) previously specified in the pattern using “\(” and “\)”.
+### `\` 
+Matches the nth substring (n is a single digit) previously specified in the pattern using “\(” and “\)”.
 ```bash
 $ echo 'test test' | sed -e 's/\([[:alpha:]]\+\)/(\1)/'
 (test) test
@@ -37,7 +39,8 @@ $ echo 'test1 test2' | sed -re 's/([[:alpha:]]+[0-9]) ([[:alpha:]]+[0-9])/(\2) (
 (test2) (test1)
 ```
 
-### `\L` / `\U` Replaced processing string to lower/upper case
+### `\L` / `\U` 
+Replaced processing string to lower/upper case
 ```bash
 $ echo 'test1 test2' | sed -E 's/([[:alpha:]])/\U\1/'
 Test1 test2
@@ -156,14 +159,16 @@ $ ifconfig lo0 | sed -ne '/lo0:/{N; P}'
 lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 16384
 ```
 
-### `l` displays the contents of the pattern space, showing non-printing characters as two-digit ASCII codes
+### `l` 
+displays the contents of the pattern space, showing non-printing characters as two-digit ASCII codes
 ```bash
 $ cat /tmp/test  | sed -n -e  'l'
 The Great \033 is a movie starring Steve McQueen.$
 \033$
 ```
 
-### `y` transforms each character by position in string `abc` to its equivalent in string `xyz`
+### `y` 
+transforms each character by position in string `abc` to its equivalent in string `xyz`
 ```bash
 $ echo 'test'  | sed -e 'y/tes/abc/'
 abca
@@ -176,6 +181,7 @@ $ echo 'test'  | sed -e '='
 test
 ```
 
+## Examples
 
 ### replace in a specific range
 
