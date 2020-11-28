@@ -24,11 +24,12 @@ folder: Misc
 |[:graph:]|Visible characters (anything except spaces and control characters)|[\x21-\x7E]
 |[:lower:]|Lowercase letters|[a-z]
 |[:print:]|Visible characters and spaces (anything except control characters)|[\x20-\x7E]
-|[:punct:]|Punctuation (and symbols)|[!"\#$%&'()*+,\-./:;<=>?@\[\\\]^_‘{|}~]
+|[:punct:]|Punctuation (and symbols)|[!"\#$%&'()*+,\-./:;<=>?\@\[\\\]^_‘{\|}~]
 |[:space:]|All whitespace characters, including line breaks|[ \t\r\n\v\f]
 |[:upper:]|Uppercase letters|[A-Z]
 |[:word:]|Word characters (letters, numbers and underscores)|[A-Za-z0-9_]
 |[:xdigit:]|Hexadecimal digits|[A-Fa-f0-9]
+{: .table-bordered }
 
 
 {% include links.html %}
