@@ -22,7 +22,7 @@ Unless special commands (like `D`) are used, the pattern space is deleted betwee
 
 ## Special Characters during replace
 
-### `&` 
+### `\&` 
 Replaced by the string matched by the regular expression
 ```bash
 $ echo 'test test' | sed -e 's/[[:alpha:]]\+/(&)/'
@@ -174,12 +174,17 @@ $ echo 'test'  | sed -e 'y/tes/abc/'
 abca
 ```
 
-### `=` prints the line number of the matched line
+### `=` 
+prints the line number of the matched line
 ```bash
 $ echo 'test'  | sed -e '='
 1
 test
 ```
+
+### `r` / `w` 
+`r` read content of file into the `pattern` space
+`w` write the contents of `pattern` to the file
 
 ## Examples
 

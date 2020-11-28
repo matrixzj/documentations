@@ -61,3 +61,4 @@
 - [Brew Install from a Local Source](pages/misc/misc_brew_local_install.md)
 - [Run Script with SNMP](pages/misc/misc_run_script_via_snmp.md)
 - [HAProxy](pages/misc/misc_haproxy.md)
+- [Regex POSIX Bracket Expressions](pages/misc/misc_regex_posix_bracket_expressions.md)
