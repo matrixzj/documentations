@@ -2,7 +2,7 @@
 title: sed
 tags: [bash]
 keywords: sed
-last_updated: Nov 14, 2020
+last_updated: Dec 4, 2020
 summary: "sed tips"
 sidebar: mydoc_sidebar
 permalink: bash_sed.html
@@ -27,6 +27,9 @@ Replaced by the string matched by the regular expression
 ```bash
 $ echo 'test test' | sed -e 's/[[:alpha:]]\+/(&)/'
 (test) test
+
+$ echo 'Matrix Zou' | sed -e '/[[:alpha:]]\+/s//This is &/'
+This is Matrix Zou
 ```
 
 ### `\` 
@@ -52,7 +55,7 @@ $ echo 'tEST1 test2' | sed -E 's/(....)/\L\1/'
 test1 test2
 ```
 
-## commands in `sed`
+## Commands
 
 ### `a` / `i` / `c` / `d` 
 `a` appends a line after every line with the address or pattern
@@ -76,11 +79,93 @@ $ printf 'Matrix\nZou\n'  | sed '/M/d'
 Zou
 ```
 
+### `l` 
+displays the contents of the pattern space, showing non-printing characters as two-digit ASCII codes
+```bash
+$ cat /tmp/test  | sed -n -e  'l'
+The Great \033 is a movie starring Steve McQueen.$
+\033$
+```
+
+### `y` 
+transforms each character by position in string `abc` to its equivalent in string `xyz`
+```bash
+$ echo 'test'  | sed -e 'y/tes/abc/'
+abca
+```
+
+### `=` 
+prints the line number of the matched line
+```bash
+$ echo 'test'  | sed -e '='
+1
+test
+```
+
+### `r` / `w` 
+`r` read content of file into the `pattern` space
+`w` write the contents of `pattern` to the file
+```bash
+$ cat /tmp/source
+1
+2
+3
+
+$ cat /tmp/target
+4
+5
+6
+
+$ sed -E '/2/r /tmp/target' /tmp/source
+1
+2
+4
+5
+6
+3
+
+$ sed -E '/[[:digit:]]/w /tmp/test' /tmp/source
+1
+2
+3
+
+$ cat /tmp/test
+1
+2
+3
+```
+
+### `q`
+stop reading new input lines (and stop sending them to the output)
+```bash
+$ cat test
+Adams, Henrietta        Northeast
+Banks, Freda            South
+Dennis, Jim             Midwest
+Garvey, Bill            Northeast
+Jeffries, Jane          West
+Madison, Sylvia         Midwest
+Sommes, Tom             South
+
+!274 $ cat test | sed -E '/Northeast/q'
+Adams, Henrietta        Northeast
+```
+
+## Advanced sed commands
+
 ### `n` / `N`
 `n` outputs the contents of the pattern space and then reads the next line of input without returning to the top of the script. In effect, the next command causes the next line of input to replace the current line in the pattern space. Subsequent commands in the script are applied to the replacement line, not the current line. If the default output has not been suppressed, the current line is printed before the replacement takes place.
 `N` creates a multiline pattern space by reading a new line of input and appending it to the contents of the pattern space. The original contents of pattern space and the new input line are separated by a newline. The embedded newline character can be matched  in patterns by the escape sequence "\n". In a multiline pattern space, the metacharacter "^" matches the very first character of the pattern space, and not the character(s) following any embedded newline(s). Similarly, "$: matches only the final newline in the pattern space, and not any embedded newline(s). After the Next command is executed, control is then passed to subsequent commands in the script.
 
 ```bash
+ $ ifconfig lo0
+lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 16384
+        options=1203<RXCSUM,TXCSUM,TXSTATUS,SW_TIMESTAMP>
+        inet 127.0.0.1 netmask 0xff000000
+        inet6 ::1 prefixlen 128
+        inet6 fe80::1%lo0 prefixlen 64 scopeid 0x1
+        nd6 options=201<PERFORMNUD,DAD>
+
 $ ifconfig lo0 | sed -e '/lo0/{/flags/d}'
         options=1203<RXCSUM,TXCSUM,TXSTATUS,SW_TIMESTAMP>
         inet 127.0.0.1 netmask 0xff000000
@@ -104,7 +189,7 @@ $ ifconfig lo0 | sed -e '/lo0/{N; /flags/d}'
 ```
 
 ### `d` / `D`
-`d` deletes the contents of the pattern space and causes a new line of input to be read with editing resuming at the top of the script. 
+`d` deletes the contents of the pattern space and causes a new line of input to be read, with editing resuming at the top of the script. 
 `D` deletes a portion of the pattern space, up to the first embedded newline. It does not cause a new line of input to be read; instead, it returns to the top of the script, applying these instructions to what remains in the pattern space. 
 ```bash
 $ cat test_text
@@ -159,32 +244,58 @@ $ ifconfig lo0 | sed -ne '/lo0:/{N; P}'
 lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 16384
 ```
 
-### `l` 
-displays the contents of the pattern space, showing non-printing characters as two-digit ASCII codes
-```bash
-$ cat /tmp/test  | sed -n -e  'l'
-The Great \033 is a movie starring Steve McQueen.$
-\033$
-```
+## Advanced Commands related with `hold` space
 
-### `y` 
-transforms each character by position in string `abc` to its equivalent in string `xyz`
-```bash
-$ echo 'test'  | sed -e 'y/tes/abc/'
-abca
-```
+### `h` / `H`
+`h` copys contents of `pattern` space to `hold` space, `hold` space will be overwritten by copied contents.
+`H` appends contents of `pattern` space to `hold` space.
 
-### `=` 
-prints the line number of the matched line
+### `g` / `G`
+`g` copy contents of `hold` space to `pattern` space, `pattern` space will be overwritten by copied contents.
+`G` appends contents of `hold` space to `pattern` space.
+
 ```bash
-$ echo 'test'  | sed -e '='
+$ cat /tmp/test
 1
-test
+2
+
+$ cat number.sed
+/1/ {
+    h
+    d
+}
+/2/ {
+    G
+}
+
+$ sed -f number.sed /tmp/test
+2
+1
 ```
 
-### `r` / `w` 
-`r` read content of file into the `pattern` space
-`w` write the contents of `pattern` to the file
+Explanation:
+```bash
+$ ./sedsed.py -d -f number.sed /tmp/test
+PATT:1$
+HOLD:$
+COMM:/1/ {
+COMM:h
+PATT:1$
+HOLD:1$
+COMM:d
+PATT:2$
+HOLD:1$
+COMM:/1/ {
+COMM:/2/ {
+COMM:G
+PATT:2\n1$
+HOLD:1$
+COMM:}
+PATT:2\n1$
+HOLD:1$
+2
+1
+```
 
 ## Examples
 
