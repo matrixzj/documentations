@@ -253,6 +253,8 @@ lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 16384
 ### `g` / `G`
 `g` copy contents of `hold` space to `pattern` space, `pattern` space will be overwritten by copied contents.
 `G` appends contents of `hold` space to `pattern` space.
+### `x`
+`x` swaps contents of `hold` space and `pattern` space.
 
 ```bash
 $ cat /tmp/test
