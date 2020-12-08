@@ -247,12 +247,13 @@ lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 16384
 ## Advanced Commands related with `hold` space
 
 ### `h` / `H`
-`h` copys contents of `pattern` space to `hold` space, `hold` space will be overwritten by copied contents.
-`H` appends contents of `pattern` space to `hold` space.
+`h` copys contents of `pattern` space to `hold` space, `hold` space will be overwritten by copied contents.  
+`H` appends contents of `pattern` space to `hold` space.  
 
 ### `g` / `G`
-`g` copy contents of `hold` space to `pattern` space, `pattern` space will be overwritten by copied contents.
-`G` appends contents of `hold` space to `pattern` space.
+`g` copy contents of `hold` space to `pattern` space, `pattern` space will be overwritten by copied contents.  
+`G` appends contents of `hold` space to `pattern` space.  
+
 ### `x`
 `x` swaps contents of `hold` space and `pattern` space.
 
