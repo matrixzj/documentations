@@ -55,6 +55,13 @@ $ echo 'tEST1 test2' | sed -E 's/(....)/\L\1/'
 test1 test2
 ```
 
+### `I`
+Matchs case-insensitive 
+```bash
+$ echo 'Hello' | sed -e 's/hello/Matrix/I'
+Matrix
+```
+
 ## Commands
 
 ### `a` / `i` / `c` / `d` 
@@ -346,6 +353,18 @@ ens3: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 9000
         TX packets 1681993  bytes 905255387 (863.3 MiB)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
+```
+
+```bash
+$ cat /tmp/python.txt
+Python is a very popular language.
+Python is easy to use. Python is easy to learn.
+Python is a cross-platform language.
+Python is easy to use. Python is easy to learn.
+
+$ sed 's/Python/Go/2;t' /tmp/python.txt  | sed '/Go/d'
+Python is a very popular language.
+Python is a cross-platform language.
 ```
 
 ## Examples
