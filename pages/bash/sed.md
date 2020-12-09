@@ -300,6 +300,11 @@ HOLD:1$
 1
 ```
 
+## Branch Commands 
+`b` refers to `branch` command, which transfers control unconditionally in a script to a line containing a specified label. If no label is specified, control passes to the end of the script  
+`t` refers to `test` command, occurring only if a substitute command has changed the current line, conditionally transfer control in a script to a line containing a specified label. If no label is specified, control passes to the end of the script. 
+
+
 ## Examples
 
 ### replace in a specific range
