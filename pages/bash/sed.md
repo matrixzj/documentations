@@ -304,6 +304,49 @@ HOLD:1$
 `b` refers to `branch` command, which transfers control unconditionally in a script to a line containing a specified label. If no label is specified, control passes to the end of the script  
 `t` refers to `test` command, occurring only if a substitute command has changed the current line, conditionally transfer control in a script to a line containing a specified label. If no label is specified, control passes to the end of the script. 
 
+```bash
+ $ ifconfig
+ens3: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 9000
+        inet 10.0.0.4  netmask 255.255.255.0  broadcast 10.0.0.255
+        inet6 fe80::17ff:fe00:59b6  prefixlen 64  scopeid 0x20<link>
+        ether 02:00:17:00:59:b6  txqueuelen 1000  (Ethernet)
+        RX packets 2232164  bytes 7140983864 (6.6 GiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 1681954  bytes 905209876 (863.2 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 5065  bytes 985987 (962.8 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 5065  bytes 985987 (962.8 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+$ ifconfig | sed -e '/^[[:alpha:]]/{:a;N;s/\n\s\+/\n/;t a;q}'
+ens3: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 9000
+inet 10.0.0.4  netmask 255.255.255.0  broadcast 10.0.0.255
+inet6 fe80::17ff:fe00:59b6  prefixlen 64  scopeid 0x20<link>
+ether 02:00:17:00:59:b6  txqueuelen 1000  (Ethernet)
+RX packets 2232185  bytes 7140985554 (6.6 GiB)
+RX errors 0  dropped 0  overruns 0  frame 0
+TX packets 1681967  bytes 905212914 (863.2 MiB)
+TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+$ ifconfig | sed -ne '/^[[:alpha:]]/{:a;N;/\n$/!{ba};p;q}'
+ens3: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 9000
+        inet 10.0.0.4  netmask 255.255.255.0  broadcast 10.0.0.255
+        inet6 fe80::17ff:fe00:59b6  prefixlen 64  scopeid 0x20<link>
+        ether 02:00:17:00:59:b6  txqueuelen 1000  (Ethernet)
+        RX packets 2232219  bytes 7140993050 (6.6 GiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 1681993  bytes 905255387 (863.3 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+```
 
 ## Examples
 
