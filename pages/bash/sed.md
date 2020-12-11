@@ -65,10 +65,10 @@ Matrix
 ## Commands
 
 ### `a` / `i` / `c` / `d` 
-`a` appends a line after every line with the address or pattern
-`i` insert a line before every line with the range or pattern
-`c` change the range or pattern with provided string
-`d` delete  a line or every line with the range or pattern
+`a` appends a line after every line with the address or pattern  
+`i` insert a line before every line with the range or pattern  
+`c` change the range or pattern with provided string  
+`d` delete  a line or every line with the range or pattern  
 
 ```bash
 $ echo 'Matrix' | sed -E '/[[:alpha:]]+/a\Zou'
@@ -110,8 +110,8 @@ test
 ```
 
 ### `r` / `w` 
-`r` read content of file into the `pattern` space
-`w` write the contents of `pattern` to the file
+`r` read content of file into the `pattern` space  
+`w` write the contents of `pattern` to the file  
 ```bash
 $ cat /tmp/source
 1
@@ -161,7 +161,7 @@ Adams, Henrietta        Northeast
 ## Advanced sed commands
 
 ### `n` / `N`
-`n` outputs the contents of the pattern space and then reads the next line of input without returning to the top of the script. In effect, the next command causes the next line of input to replace the current line in the pattern space. Subsequent commands in the script are applied to the replacement line, not the current line. If the default output has not been suppressed, the current line is printed before the replacement takes place.
+`n` outputs the contents of the pattern space and then reads the next line of input without returning to the top of the script. In effect, the next command causes the next line of input to replace the current line in the pattern space. Subsequent commands in the script are applied to the replacement line, not the current line. If the default output has not been suppressed, the current line is printed before the replacement takes place.  
 `N` creates a multiline pattern space by reading a new line of input and appending it to the contents of the pattern space. The original contents of pattern space and the new input line are separated by a newline. The embedded newline character can be matched  in patterns by the escape sequence "\n". In a multiline pattern space, the metacharacter "^" matches the very first character of the pattern space, and not the character(s) following any embedded newline(s). Similarly, "$: matches only the final newline in the pattern space, and not any embedded newline(s). After the Next command is executed, control is then passed to subsequent commands in the script.
 
 ```bash
@@ -196,8 +196,8 @@ $ ifconfig lo0 | sed -e '/lo0/{N; /flags/d}'
 ```
 
 ### `d` / `D`
-`d` deletes the contents of the pattern space and causes a new line of input to be read, with editing resuming at the top of the script. 
-`D` deletes a portion of the pattern space, up to the first embedded newline. It does not cause a new line of input to be read; instead, it returns to the top of the script, applying these instructions to what remains in the pattern space. 
+`d` deletes the contents of the pattern space and causes a new line of input to be read, with editing resuming at the top of the script.   
+`D` deletes a portion of the pattern space, up to the first embedded newline. It does not cause a new line of input to be read; instead, it returns to the top of the script, applying these instructions to what remains in the pattern space.   
 ```bash
 $ cat test_text
 This line is followed by 1 blank line.
@@ -240,8 +240,8 @@ This is the end.
 ```
 
 ### `p` / `P`
-`p` outputs whole pattern space. It does not clear the pattern space nor does it change the flow of control in the script. 
-`P` outputs the first portion of a multiline pattern space, up to the first embedded newline.
+`p` outputs whole pattern space. It does not clear the pattern space nor does it change the flow of control in the script.   
+`P` outputs the first portion of a multiline pattern space, up to the first embedded newline.  
 ```bash
 $ ifconfig lo0 | sed -ne '/lo0:/{N; p}'
 lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 16384
