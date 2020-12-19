@@ -2,7 +2,7 @@
 title: sed
 tags: [bash]
 keywords: sed
-last_updated: Dec 4, 2020
+last_updated: Dec 19, 2020
 summary: "sed tips"
 sidebar: mydoc_sidebar
 permalink: bash_sed.html
@@ -493,6 +493,12 @@ Command      : s/.//
 Pattern Space: xam$
 Hold Space   : $
 xam
+```
+
+Alternative way
+```bash
+$ echo 'matrix' | sed -E 's/.*/\n&\n/;s/(\n.)(.*)(.\n)/\3\2\1/;s/\n//g'
+xatrim
 ```
 
 {% include links.html %}

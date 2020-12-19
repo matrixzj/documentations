@@ -2,7 +2,7 @@
 title: Python Sed Debug
 tags: [python]
 keywords: python, sed
-last_updated: June 6, 2020
+last_updated: Dec 19, 2020
 summary: "Sed Debug Tool to show pattern/hold space"
 sidebar: mydoc_sidebar
 permalink: python_sed_debug.html
