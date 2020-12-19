@@ -22,7 +22,7 @@ Unless special commands (like `D`) are used, the pattern space is deleted betwee
 
 ## Special Characters during replace
 
-### `\&` 
+### `&` 
 Replaced by the string matched by the regular expression
 ```bash
 $ echo 'test test' | sed -e 's/[[:alpha:]]\+/(&)/'
@@ -395,8 +395,7 @@ $ echo 'Python Python' | sed -e 's/Python/Go/2'
 Python Go
 ```
 
-### get a specific block 
-
+#### get a specific block 
 Show info of `eth0` via `ifconfig` 
 ```bash
 $ ifconfig | sed -ne '/^eth0/{:a;N;/\s$/!{ba};p}'
@@ -409,6 +408,91 @@ eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1460
         TX packets 15504492  bytes 10165112383 (9.4 GiB)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
+```
+
+#### print the last 5 lines of a file
+similar as `tail -n 5`
+```bash
+$ cat /tmp/test
+aa
+bb
+cc
+dd
+ee
+ff
+gg
+
+$ cat /tmp/test | sed -ne '$p;:a;N;6,$D;$!{ba}'
+cc
+dd
+ee
+ff
+gg
+```
+
+#### reverse order of lines
+same as `tac`
+```bash
+$ cat /tmp/test1
+aa
+bb
+cc
+
+$ cat /tmp/test1 | sed '1!G;h;$!d'
+cc
+bb
+aa
+```
+
+#### reverse all characters for a line
+same as `rev`
+```bash
+$ echo 'max' | sed '/\n/!G;s/\(.\)\(.*\n\)/&\2\1/;//D;s/.//'
+xam
+
+$ echo 'max' | ./sedsed.py -d -e '/\n/!G;s/\(.\)\(.*\n\)/&\2\1/;//D;s/.//'
+Pattern Space: max$
+Hold Space   : $
+Command      : /\n/ !G
+Pattern Space: max\n$
+Hold Space   : $
+Command      : s/\(.\)\(.*\n\)/&\2\1/
+Pattern Space: max\nax\nm$
+Hold Space   : $
+Command      : // D
+Pattern Space: ax\nm$
+Hold Space   : $
+Command      : /\n/ !G
+Pattern Space: ax\nm$
+Hold Space   : $
+Command      : s/\(.\)\(.*\n\)/&\2\1/
+Pattern Space: ax\nx\nam$
+Hold Space   : $
+Command      : // D
+Pattern Space: x\nam$
+Hold Space   : $
+Command      : /\n/ !G
+Pattern Space: x\nam$
+Hold Space   : $
+Command      : s/\(.\)\(.*\n\)/&\2\1/
+Pattern Space: x\n\nxam$
+Hold Space   : $
+Command      : // D
+Pattern Space: \nxam$
+Hold Space   : $
+Command      : /\n/ !G
+Pattern Space: \nxam$
+Hold Space   : $
+Command      : s/\(.\)\(.*\n\)/&\2\1/
+Pattern Space: \nxam$
+Hold Space   : $
+Command      : // D
+Pattern Space: \nxam$
+Hold Space   : $
+Command      : s/.//
+Pattern Space: xam$
+Hold Space   : $
+xam
 ```
 
 {% include links.html %}
