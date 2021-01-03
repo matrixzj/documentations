@@ -44,9 +44,50 @@ dd
 
 ### `ADDR1,~N`
 Matches `ADDR1` and the lines following `ADDR1` the next line whose input line number is a multiple of `N`.
+```bash
+$ cat /tmp/test1
+aa
+bb
+cc
+dd
+ee
+ff
+gg
+hh
+ii
 
+$ sed -ne '/cc/,~3p' /tmp/test1
+cc
+dd
+ee
+ff
 
+$ sed -ne '/dd/,~3p' /tmp/test1
+dd
+ee
+ff
+```
 
+### `N1~N2`
+Matches `N1` and steps over the next `N2` lines until the end of input stream 
+```
+$ cat /tmp/test1
+aa
+bb
+cc
+dd
+ee
+ff
+gg
+hh
+ii
+
+$ sed -ne '2~2p' /tmp/test1
+bb
+dd
+ff
+hh
+```
 
 ## Special Characters during replace
 
