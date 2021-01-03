@@ -13,6 +13,7 @@ import tempfile
 myname = 'sedsed'
 myhome = 'http://aurelio.net/projects/sedsed/'
 
+
 # -----------------------------------------------------------------------------
 #                              User Configuration
 # -----------------------------------------------------------------------------
@@ -424,9 +425,9 @@ else:
 
 # show pattern space, show hold space, show sed command
 # null sed command to restore last address, 't' status trick
-showpatt = [     's/^/Pattern Space: /', 'l', 's/^Pattern Space: //'     ]
-showhold = ['x', 's/^/Hold Space   : /', 'l', 's/^Hold Space   : //', 'x']
-showcomm = ['i\\', '%sCommand      : \a%s' % (color_YLW, color_NO)]
+showpatt = [     's/^/PATT:/', 'l', 's/^PATT://'     ]
+showhold = ['x', 's/^/HOLD:/', 'l', 's/^HOLD://', 'x']
+showcomm = ['i\\', 'COMM:%s\a%s' % (color_YLW, color_NO)]
 nullcomm = ['y/!/!/']
 save_t   = ['t zzset\a\n#DEBUG#', 't zzclr\a',
             ':zzset\a\n#DEBUG#', ':zzclr\a']
@@ -1698,7 +1699,7 @@ class SedEmulator(object):
             if cmd['id'] in '{}':
                 showreg = 0
             if showreg:
-                print('Pattern Space:' + self._make_raw_string(PS))
+                print('PATT:' + self._make_raw_string(PS))
                 print('HOLD:' + self._make_raw_string(HS))
 
         self.line = PS
@@ -1712,7 +1713,7 @@ class SedEmulator(object):
                 break
 
             if self.linenr == 1 and self.f_debug:   # debug info
-                print('Pattern Space:' + self._make_raw_string(self.line))
+                print('PATT:' + self._make_raw_string(self.line))
                 print('HOLD:' + self._make_raw_string(self.holdspace))
 
             while not self.EOS:

@@ -20,6 +20,34 @@ folder: bash
 
 Unless special commands (like `D`) are used, the pattern space is deleted between two cycles. The hold space, on the other hand, keeps its data between cycles (see commands `h`, `H`, `x`, `g`, `G` to move n data between both buffers).
 
+## Address Range
+
+### `ADDR1, +N`
+Matches `ADDR1` and the `N` lines following ADDR1.
+```bash
+$ cat /tmp/test1
+aa
+bb
+cc
+dd
+ee
+ff
+gg
+hh
+ii
+
+$ cat /tmp/test1 | sed -ne '/bb/,+2p'
+bb
+cc
+dd
+```
+
+### `ADDR1,~N`
+Matches `ADDR1` and the lines following `ADDR1` the next line whose input line number is a multiple of `N`.
+
+
+
+
 ## Special Characters during replace
 
 ### `&` 
