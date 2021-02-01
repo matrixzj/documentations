@@ -2,7 +2,7 @@
 title: jq
 tags: [misc]
 keywords: json, jq
-last_updated: Sep 20, 2019
+last_updated: Feb 1, 2021
 summary: "parse json with jq"
 sidebar: mydoc_sidebar
 permalink: misc_jq.html
@@ -85,6 +85,17 @@ $ cat /tmp/data
 ```
 
 ### Examples
+
+#### Show all keys 
+
+```
+$ cat /tmp/data | jq '. | keys[]'
+"Subnets"
+
+$ cat /tmp/data | jq '.Subnets | keys[]'
+0
+1
+```
 
 #### Elements count
 
