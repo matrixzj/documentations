@@ -26,11 +26,13 @@ folder: Misc
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 ```
 
-### Karabiner Complex Modifications
-
-complex modifications config location
+### Install git
 ```bash
-/Users/jzou/.config/karabiner/assets/complex_modifications
+brew install git
+
+git config --global user.name "Matrix Zou"
+
+git config --global user.email matrix.zj@gmail.com
 ```
 
 ### Virt-Manager on Mac
@@ -66,6 +68,54 @@ echo 'export LC_ALL=en_US.UTF-8' >> ~/.zshrc
 echo 'export LANG=en_US.UTF-8' >> ~/.zshrc
 ```
 
+### Karabiner Complex Modifications
+
+complex modifications config location
+```bash
+/Users/jzou/.config/karabiner/assets/complex_modifications
+```
+
+### Squirrel 鼠须管
+[Squirrel](https://rime.im/download/)
+
+[Install Wubi jidian Input](https://awesomeopensource.com/project/KyleBing/rime-wubi86-jidian)
+```
+cd Downloads
+git clone https://github.com/KyleBing/rime-wubi86-jidian.git
+cp -arv rime-wubi86-jidian/* ~/Library/Rime
+```
+
+Enable Chinese Input in Atom/iterm2
+- Find out Bundle Identifier for app
+```
+$ cat /Applications/Atom.app/Contents/Info.plist | grep -i identifier -A 1
+    <key>CFBundleIdentifier</key>
+    <string>com.github.atom</string>
+```
+Atom Bundle Identifier: com.github.atom
+
+```
+$ cat /Applications/iTerm.app/Contents/Info.plist | grep -i identifier -A 1
+    <key>CFBundleIdentifier</key>
+    <string>com.googlecode.iterm2</string>
+```
+iTerm2 Bundle Identifier: com.googlecode.iterm2
+
+- Update RIME config
+```
+cat << EOF >> ~/Library/Rime/squirrel.custom.yaml
+patch:
+  app_options/com.apple.Xcode:
+    ascii_mode: true
+  app_options/com.github.atom: {}
+  app_options/com.googlecode.iterm2: {}
+EOF
+```
+
+- Add custom phase
+```
+echo "胖胖\teueu" >> wubi86_jidian.dict.yaml
+```
 
 ### Mail Signature
 
