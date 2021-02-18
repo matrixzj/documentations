@@ -35,21 +35,6 @@ git config --global user.name "Matrix Zou"
 git config --global user.email matrix.zj@gmail.com
 ```
 
-### Virt-Manager on Mac
-[virt-manager on Mac github repo](https://github.com/jeffreywildman/homebrew-virt-manager)
-
-```bash
-brew tap jeffreywildman/homebrew-virt-manager
-brew install virt-manager virt-viewer
-```
-
-### iStart Menus Activation Key
-
-```bash
-Email: 982092332@qq.com
-SN: GAWAE-FCWQ3-P8NYB-C7GF7-NEDRT-Q5DTB-MFZG6-6NEQC-CRMUD-8MZ2K-66SRB-SU8EW-EDLZ9-TGH3S-8SGA
-```
-
 ### Set New Hostname
 
 ```bash
@@ -59,7 +44,6 @@ sudo scutil --set ComputerName <new name>
 dscacheutil -flushcache
 ```
 reboot to take it in effect
-
 
 ### Enable utf-8 for iTerm
 
@@ -117,6 +101,38 @@ EOF
 echo "胖胖\teueu" >> wubi86_jidian.dict.yaml
 ```
 
+### Prevent GlobalProtect VPN from auto-starting on the Mac
+```
+sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangpa.plist
+sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangps.plist
+```
+
+### Install gnu-sed
+```
+brew install gnu-sed
+export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+```
+
+### Atom
+- Disable ‘Enter’ for Autocomplete/Snippets
+  Settings -> Packages -> autocomplete-plus -> Settings -> Keymap For Confirming A suggestion
+
+
 ### Mail Signature
+
+### Virt-Manager on Mac
+[virt-manager on Mac github repo](https://github.com/jeffreywildman/homebrew-virt-manager)
+
+```bash
+brew tap jeffreywildman/homebrew-virt-manager
+brew install virt-manager virt-viewer
+```
+
+### iStart Menus Activation Key
+
+```bash
+Email: 982092332@qq.com
+SN: GAWAE-FCWQ3-P8NYB-C7GF7-NEDRT-Q5DTB-MFZG6-6NEQC-CRMUD-8MZ2K-66SRB-SU8EW-EDLZ9-TGH3S-8SGA
+```
 
 {% include links.html %}
