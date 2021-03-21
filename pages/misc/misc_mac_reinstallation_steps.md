@@ -78,29 +78,29 @@ brew install --cask eul
 * [IINA](https://iina.io/)
 * [Keka](https://www.keka.io/en/)
 * Battery Monitor
-* [Input Method - Squirrel 鼠须管]
+* [Input Method - Squirrel 鼠须管](https://matrixzj.github.io/documentations/misc_mac_reinstallation_steps.html#squirrel-%E9%BC%A0%E9%A1%BB%E7%AE%A1)
 * [WeChat](https://www.wechat.com/en/)
 * [QQ](https://im.qq.com/macqq/)
 * [Discord](https://discord.com/)
 
 ## Applicaiton Setup
 
-### iTerm2
-### Enable utf-8 for iTerm2
+### iTerm2  
+- Enable utf-8 for iTerm2
 
 ```bash
 echo 'export LC_ALL=en_US.UTF-8' >> ~/.zshrc
 echo 'export LANG=en_US.UTF-8' >> ~/.zshrc
 ```
 
-### Karabiner Complex Modifications
-
+### Karabiner Complex Modifications  
 complex modifications config location
 ```bash
 /Users/jzou/.config/karabiner/assets/complex_modifications
 ```
 
-### Squirrel 鼠须管
+### Squirrel 鼠须管  
+#### Installation
 [Squirrel](https://rime.im/download/)
 
 [Install Wubi jidian Input](https://awesomeopensource.com/project/KyleBing/rime-wubi86-jidian)
@@ -110,30 +110,29 @@ git clone https://github.com/KyleBing/rime-wubi86-jidian.git
 cp -arv rime-wubi86-jidian/* ~/Library/Rime
 ```
 
-Enable Chinese Input in Atom/iterm2
-- Find out Bundle Identifier for app
-```
-$ cat /Applications/Atom.app/Contents/Info.plist | grep -i identifier -A 1
-    <key>CFBundleIdentifier</key>
-    <string>com.github.atom</string>
-```
-Atom Bundle Identifier: com.github.atom
-
+#### Enable Chinese Input in Atom/iterm2
+- Find out iTerm2 Bundle Identifier: com.googlecode.iterm2
 ```
 $ cat /Applications/iTerm.app/Contents/Info.plist | grep -i identifier -A 1
     <key>CFBundleIdentifier</key>
     <string>com.googlecode.iterm2</string>
 ```
-iTerm2 Bundle Identifier: com.googlecode.iterm2
+
+- Find out Atom Bundle Identifier: com.github.atom
+```
+$ cat /Applications/Atom.app/Contents/Info.plist | grep -i identifier -A 1
+    <key>CFBundleIdentifier</key>
+    <string>com.github.atom</string>
+```
 
 - Update RIME config
-```
+```bash
 cat << EOF >> ~/Library/Rime/squirrel.custom.yaml
-patch:
-  app_options/com.apple.Xcode:
-    ascii_mode: true
-  app_options/com.github.atom: {}
-  app_options/com.googlecode.iterm2: {}
+patch:  
+  app_options/com.apple.Xcode:   
+    ascii_mode: true  
+  app_options/com.github.atom: {}  
+  app_options/com.googlecode.iterm2: {}  
 EOF
 ```
 
@@ -150,12 +149,13 @@ sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangp
 
 
 ### Atom
-- Disable ‘Enter’ for Autocomplete/Snippets
-  Settings -> Packages -> autocomplete-plus -> Settings -> Keymap For Confirming A suggestion
+- Disable ‘Enter’ for Autocomplete/Snippets  
+  Settings -> Packages -> autocomplete-plus -> Settings -> Keymap For Confirming A suggestion, change it from 'tab and enter' to 'tab'
 
 
 ### Mail Signature
 
+## Optional   
 ### Virt-Manager on Mac
 [virt-manager on Mac github repo](https://github.com/jeffreywildman/homebrew-virt-manager)
 
