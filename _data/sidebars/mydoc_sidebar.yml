@@ -61,6 +61,10 @@ entries:
       url: /bash_sed.html
       output: web, pdf
 
+    - title: awk
+      url: /bash_awk.html
+      output: web, pdf
+
   - title: Kernel
     output: web, pdf
     folderitems:
