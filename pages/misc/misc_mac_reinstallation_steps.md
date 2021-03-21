@@ -37,6 +37,11 @@ git config --global user.name "Matrix Zou"
 git config --global user.email matrix.zj@gmail.com
 ```
 
+### show path in Finder title bar
+```bash
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool true; killall Finder
+```
+
 ### Set New Hostname
 
 ```bash
@@ -136,7 +141,7 @@ patch:
 EOF
 ```
 
-- Add custom phase
+#### Add custom phase
 ```
 echo "胖胖\teueu" >> wubi86_jidian.dict.yaml
 ```
