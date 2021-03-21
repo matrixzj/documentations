@@ -9,8 +9,10 @@ permalink: misc_mac_reinstallation_steps.html
 folder: Misc
 ---
 
-## Mac Reinstallation Steps
+# Mac Reinstallation Steps
 =====
+
+## Mandantory
 
 ### Install Brew
 [Homebrew](https://brew.sh/)
@@ -45,7 +47,46 @@ dscacheutil -flushcache
 ```
 reboot to take it in effect
 
-### Enable utf-8 for iTerm
+### Install gnu-sed/gawk
+```bash
+brew install gnu-sed
+brew install gawk
+```
+
+PATH config
+```
+$ brew list gawk | grep 'bin/awk'
+/usr/local/Cellar/gawk/5.1.0/bin/awk
+
+$ brew list gnu-sed | grep 'bin'
+/usr/local/Cellar/gnu-sed/4.8/bin/gsed
+
+$ echo 'export PATH="/usr/local/Cellar/gawk/5.1.0/bi:/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"' >> ~/.zshrc
+```
+
+### eul MacOS Monitor 
+```
+brew install --cask eul
+```
+
+### Application Install list
+* [Karabiner-Elements](https://karabiner-elements.pqrs.org/)
+* [iTerm2](https://iterm2.com/downloads.html)
+* [Office](https://www.office.com/)
+* [Microsoft Teams](https://www.microsoft.com/en-ww/microsoft-teams/download-app)
+* Kensingtonworks for K75370
+* [IINA](https://iina.io/)
+* [Keka](https://www.keka.io/en/)
+* Battery Monitor
+* [Input Method - Squirrel 鼠须管]
+* [WeChat](https://www.wechat.com/en/)
+* [QQ](https://im.qq.com/macqq/)
+* [Discord](https://discord.com/)
+
+## Applicaiton Setup
+
+### iTerm2
+### Enable utf-8 for iTerm2
 
 ```bash
 echo 'export LC_ALL=en_US.UTF-8' >> ~/.zshrc
@@ -107,11 +148,6 @@ sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangp
 sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangps.plist
 ```
 
-### Install gnu-sed
-```
-brew install gnu-sed
-export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
-```
 
 ### Atom
 - Disable ‘Enter’ for Autocomplete/Snippets
