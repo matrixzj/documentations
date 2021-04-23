@@ -2,7 +2,7 @@
 title: jq
 tags: [misc]
 keywords: json, jq
-last_updated: Feb 1, 2021
+last_updated: Apr 23, 2021
 summary: "parse json with jq"
 sidebar: mydoc_sidebar
 permalink: misc_jq.html
@@ -228,6 +228,27 @@ $ cat /tmp/ss-instances | jq ' .[][].Instances[] | {id: .InstanceId, tags: .Tags
     "Value": "fwawsnetapp01-mediator",
     "Key": "Name"
   }
+}
+```
+
+#### pass parameters from bash
+```
+$ test_cidr='10.1.0.*'
+
+$ jq -r --arg cidr "${test_cidr}" '.Subnets[] | {cidr: .CidrBlock} | select(.cidr | test($cidr))' /tmp/data
+{
+  "cidr": "10.1.0.0/24"
+}
+```
+
+parameter as an integer
+```
+$ avaiable_ips_threshhold=220                                                                                                                                               
+
+$ jq -r --argjson ip_threshhold "${avaiable_ips_threshhold}" '.Subnets[] | {subnetid: .SubnetId, AvailableIp: .AvailableIpAddressCount} | select(.AvailableIp > $ip_threshhold)' /tmp/data
+{
+  "subnetid": "subnet-yyyyyy",
+  "AvailableIp": 25
 }
 ```
 

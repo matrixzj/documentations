@@ -107,12 +107,15 @@ complex modifications config location
 ### Squirrel 鼠须管  
 #### Installation
 [Squirrel](https://rime.im/download/)
+```bash
+brew install --cask squirrel
+```
 
 [Install Wubi jidian Input](https://awesomeopensource.com/project/KyleBing/rime-wubi86-jidian)
-```
+```bash
 cd Downloads
 git clone https://github.com/KyleBing/rime-wubi86-jidian.git
-cp -arv rime-wubi86-jidian/* ~/Library/Rime
+cp -aRv rime-wubi86-jidian/* ~/Library/Rime
 ```
 
 #### Enable Chinese Input in Atom/iterm2
@@ -131,14 +134,13 @@ $ cat /Applications/Atom.app/Contents/Info.plist | grep -i identifier -A 1
 ```
 
 - Update RIME config
+add folloing block to ~/Library/Rime/squirrel.custom.yaml
 ```bash
-cat << EOF >> ~/Library/Rime/squirrel.custom.yaml
 patch:  
   app_options/com.apple.Xcode:   
-    ascii_mode: true  
-  app_options/com.github.atom: {}  
-  app_options/com.googlecode.iterm2: {}  
-EOF
+    ascii_mode: true    
+  app_options/com.github.atom: {}   
+  app_options/com.googlecode.iterm2: {}    
 ```
 
 #### Add custom phase
