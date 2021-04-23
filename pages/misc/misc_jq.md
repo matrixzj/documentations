@@ -252,4 +252,23 @@ $ jq -r --argjson ip_threshhold "${avaiable_ips_threshhold}" '.Subnets[] | {subn
 }
 ```
 
+#### filter value based on another is existed
+```
+$ cat /tmp/data
+{
+    "Subnets": [
+        {
+            "AvailabilityZone": "us-east-1a",
+            "SubnetId": "subnet-xxxxxx"
+        },
+        {
+            "SubnetId": "subnet-yyyyyy"
+        }
+    ]
+}
+
+$ jq '.Subnets[] | {az: .AvailabilityZone, subnet: .SubnetId} | select(.az != null).subnet ' /tmp/data
+"subnet-xxxxxx"
+```
+
 {% include links.html %}
