@@ -566,8 +566,8 @@ xam
 
 Alternative way
 ```bash
-$ echo 'matrix' | sed -E 's/.*/\n&\n/;s/(\n.)(.*)(.\n)/\3\2\1/;s/\n//g'
-xatrim
+$ echo 'matrix' | sed -E 's/.*/\n&\n/;:x;s/(\n.)(.*)(.\n)/\3\2\1/;tx;s/\n//g'
+xirtam
 ```
 
 {% include links.html %}
