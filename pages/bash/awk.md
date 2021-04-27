@@ -15,7 +15,7 @@ folder: bash
 ## System Variables
 
 * **FS**    field separator. By default, its value is a single space. FS can also be set to any single character, or to a regular expression.
-* **OFS**   output field separator. By default awk OFS is a single space character.
+* **OFS**   output field separator. By default awk OFS is a single space character.  
 ```bash
 $ echo "matrix" | awk 'BEGIN{FS="tr"}{print $1}'
 ma
@@ -29,7 +29,7 @@ ix
 ```
 
 * **RS**    record separator. By default, its value is a newline.
-* **ORS**   output record separator. By default, its value is a newline.
+* **ORS**   output record separator. By default, its value is a newline.  
 ```bash
 $ echo "matrix" | awk 'BEGIN{RS="tr"}{if(NR==2)print $1}'
 ix
@@ -46,7 +46,7 @@ ma|ix$
 
 
 * **NF**    number of fields for the current input record.
-* **NR**    number of records being processed or line number.
+* **NR**    number of records being processed or line number.   
 ```bash
 $ echo "a|b|c" | awk 'BEGIN{FS="|"}{print NF}'
 3
@@ -57,7 +57,7 @@ $ echo "a|b|c" | awk 'BEGIN{RS="|"}{print NR}'
 3
 ```
 
-* **FILENAME** the name of the file being read
+* **FILENAME** the name of the file being read   
 ```bash
 $ echo "a|b|c" | awk '{print FILENAME}'
 -
@@ -83,7 +83,7 @@ $ awk '{print FILENAME}' /tmp/student /tmp/score
 /tmp/score
 ```
 
-* **FNR**   Number of Records relative to the current input file
+* **FNR**   Number of Records relative to the current input file    
 ```bash
 $ awk '{print NR}' /tmp/student /tmp/score
 1
@@ -105,7 +105,7 @@ $ awk '{print FNR}' /tmp/student /tmp/score
 ```
 
 * **CONVFMT**   number-to-string conversions. By default, the value is '%.6g'
-* **OFMT**      string-to-number conversions. By default, the value is '%.6g'
+* **OFMT**      string-to-number conversions. By default, the value is '%.6g'    
 ```bash
 $ awk -v OFMT="%d" 'BEGIN{print str = (5.5 + 3.2)}'
 8
