@@ -16,6 +16,7 @@ folder: bash
 
 * **FS**    field separator. By default, its value is a single space. FS can also be set to any single character, or to a regular expression.
 * **OFS**   output field separator. By default awk OFS is a single space character.   
+
 ```bash
 $ echo "matrix" | awk 'BEGIN{FS="tr"}{print $1}'
 ma
