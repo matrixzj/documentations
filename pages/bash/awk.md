@@ -118,6 +118,9 @@ $ echo 0.77767686 |  awk '{ print "" 0+$0 }' CONVFMT='%.1g'
 0.8
 ```
 
+## Functions
+### Numeric Functions
+* **exp(x)**    Return the exponential of x (e ^ x) or report an error if x is out 
 
 
 
