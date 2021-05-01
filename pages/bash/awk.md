@@ -133,8 +133,8 @@ $ echo 0.77767686 |  awk '{ print "" 0+$0 }' CONVFMT='%.1g'
 
 ### String Functions
 #### asort(source [, dest [, how ] ]) / asorti(source [, dest [, how ] ])   
-Both functions return the number of elements in the array source. For asort(), awk sorts the values of source and replaces the indices of the sorted values of source with sequential integers starting with one. If the optional array dest is specified, then source is duplicated into dest. dest is then sorted, leaving the indices of source unchanged. If the source array contains subarrays as values, they will come last, after all scalar values. Subarrays are not recursively sorted. 
-The asorti() function works similarly to asort(); however, the indices are sorted, instead of the values.   
+Both functions return the number of elements in the array *source*. For *asort()*, awk sorts the values of *source* and replaces the indices of the sorted values of *source* with sequential integers starting with one. If the optional array *dest* is specified, then *source* is duplicated into *dest*. *dest* is then sorted, leaving the indices of *source* unchanged. If the *source* array contains subarrays as values, they will come last, after all scalar values. Subarrays are not recursively sorted. 
+The *asorti()* function works similarly to *asort()*; however, the indices are sorted, instead of the values.   
 
 ```bash
 $ cat /tmp/test
@@ -152,5 +152,16 @@ first
 last
 middle
 ```
+
+#### gensub(regexp, replacement, how [, target])
+Search the *target* string target for matches of the regular expression *regexp*. If *how* is a string beginning with 'g' or 'G' (short for "global"), then replace all matches of *regexp* with *replacement*. Otherwise, treat *how* as a number indicating which match of *regexp* to replace. Treat numeric values less than one as if they were one. If no *target* is supplied, use *$0*. Return the modified string as the result of the function. The original target string is *not* changed.
+*gensub()* is a general substitution function. Its purpose is to provide more features than the standard *sub()* and *gsub()* functions.
+*gensub()* provides an additional feature that is not available in *sub()* or *gsub()*: the ability to specify components of a regexp in the replacement text. This is done by using parentheses in the regexp to mark the components and then specifying *'\N'* in the replacement text, where *N* is a digit from 1 to 9.  
+```bash
+$ awk 'BEGIN{test="max zou max"; dest = gensub(/m.x/, "matrix", "1", test); print dest}'
+matrix zou max
+```
+
+
 
 {% include links.html %}
