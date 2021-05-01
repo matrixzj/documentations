@@ -29,8 +29,9 @@ ma
 ix
 ```
 
-* **RS**    record separator. By default, its value is a newline.
-* **ORS**   output record separator. By default, its value is a newline.  
+* **RS**    record separator. By default, its value is a newline.  
+* **ORS**   output record separator. By default, its value is a newline.   
+
 ```bash
 $ echo "matrix" | awk 'BEGIN{RS="tr"}{if(NR==2)print $1}'
 ix
@@ -46,8 +47,9 @@ ma|ix$
 ```
 
 
-* **NF**    number of fields for the current input record.
-* **NR**    number of records being processed or line number.   
+* **NF**    number of fields for the current input record.  
+* **NR**    number of records being processed or line number.     
+
 ```bash
 $ echo "a|b|c" | awk 'BEGIN{FS="|"}{print NF}'
 3
@@ -58,7 +60,8 @@ $ echo "a|b|c" | awk 'BEGIN{RS="|"}{print NR}'
 3
 ```
 
-* **FILENAME** the name of the file being read   
+* **FILENAME** the name of the file being read     
+
 ```bash
 $ echo "a|b|c" | awk '{print FILENAME}'
 -
@@ -85,6 +88,7 @@ $ awk '{print FILENAME}' /tmp/student /tmp/score
 ```
 
 * **FNR**   Number of Records relative to the current input file    
+
 ```bash
 $ awk '{print NR}' /tmp/student /tmp/score
 1
@@ -107,6 +111,7 @@ $ awk '{print FNR}' /tmp/student /tmp/score
 
 * **CONVFMT**   number-to-string conversions. By default, the value is '%.6g'
 * **OFMT**      string-to-number conversions. By default, the value is '%.6g'    
+
 ```bash
 $ awk -v OFMT="%d" 'BEGIN{print str = (5.5 + 3.2)}'
 8
@@ -120,8 +125,32 @@ $ echo 0.77767686 |  awk '{ print "" 0+$0 }' CONVFMT='%.1g'
 
 ## Functions
 ### Numeric Functions
-* **exp(x)**    Return the exponential of x (e ^ x) or report an error if x is out 
+* **exp(x)**    Return the exponential of x (e ^ x) or report an error if x is out of range.
+* **int(x)**    Return the nearest integer to x.
+* **log(x)**    Return the natural logarithm of x, if x is positive; otherwise, return NaN (“not a number”) on IEEE 754 systems.
+* **rand()**    Return a random number. The values of rand() are uniformly distributed between zero and one. The value could be zero but is never one.
+* **sqrt(x)**   Return the positive square root of x.
 
+### String Functions
+#### asort(source [, dest [, how ] ]) / asorti(source [, dest [, how ] ])   
+Both functions return the number of elements in the array source. For asort(), awk sorts the values of source and replaces the indices of the sorted values of source with sequential integers starting with one. If the optional array dest is specified, then source is duplicated into dest. dest is then sorted, leaving the indices of source unchanged. If the source array contains subarrays as values, they will come last, after all scalar values. Subarrays are not recursively sorted. 
+The asorti() function works similarly to asort(); however, the indices are sorted, instead of the values.   
 
+```bash
+$ cat /tmp/test
+last|de
+first|sac
+middle|cul
+
+$ awk '{split($0, entry, "|"); source[entry[1]]=entry[2]} END{count=asort(source, dest); for (i=1; i<=count; i++) {print dest[i]}}' test
+cul
+de
+sac
+
+$ awk '{split($0, entry, "|"); source[entry[1]]=entry[2]} END{count=asorti(source, dest); for (i=1; i<=count; i++) {print dest[i]}}' test
+first
+last
+middle
+```
 
 {% include links.html %}
