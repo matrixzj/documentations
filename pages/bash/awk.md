@@ -157,10 +157,135 @@ middle
 Search the *target* string target for matches of the regular expression *regexp*. If *how* is a string beginning with 'g' or 'G' (short for "global"), then replace all matches of *regexp* with *replacement*. Otherwise, treat *how* as a number indicating which match of *regexp* to replace. Treat numeric values less than one as if they were one. If no *target* is supplied, use *$0*. Return the modified string as the result of the function. The original target string is *not* changed.
 *gensub()* is a general substitution function. Its purpose is to provide more features than the standard *sub()* and *gsub()* functions.
 *gensub()* provides an additional feature that is not available in *sub()* or *gsub()*: the ability to specify components of a regexp in the replacement text. This is done by using parentheses in the regexp to mark the components and then specifying *'\N'* in the replacement text, where *N* is a digit from 1 to 9.  
+
 ```bash
 $ awk 'BEGIN{test="max zou max"; dest = gensub(/m.x/, "matrix", "1", test); print dest}'
 matrix zou max
 ```
+
+#### gsub(regexp, replacement [, target])
+Search *target* for all of the longest, leftmost, nonoverlapping matching substrings it can find and replace them with replacement. The 'g' in gsub() stands for "global", which means replace everywhere. 
+The *gsub()* function returns the number of substitutions made. If the variable to search and alter ( *target* ) is omitted, then the entire input record ( *$0* ) is used. 
+```bash
+$ awk 'BEGIN{test="matrix matrix"; count = gsub(/matrix/, "zou", test); print test; print count}'
+zou zou
+2
+```
+
+#### index(in, find)
+Search the string *in* for the first occurrence of the string *find*, and return the position in characters where that occurrence begins in the string *in*. 
+
+```bash
+$ awk 'BEGIN{print index("matrix matrix", " matrix")}'                        
+7
+
+$ awk 'BEGIN{print index("matrix matrix", "  matrix")}'
+0
+
+$ awk 'BEGIN{print index("matrix matrix", "matrix")}'                         
+1
+```
+
+#### length([string])
+Return the number of characters in *string*. If no argument is supplied, *length()* returns the length of *$0*. When given an array argument, the *length()* function returns the number of elements in the array.
+
+```
+$ awk 'BEGIN{test = "matrix"; print length(test)}'
+6
+
+$ awk 'BEGIN{test[1] = "matrix"; test[2] = "zou"; print length(test)}'
+2
+```
+
+#### match(string, regexp [, array])
+Search *string* for the longest, leftmost substring matched by the regular expression *regexp* and return the character position (index) at which that substring begins (one, if it starts at the beginning of *string*). If no match is found, return zero.
+The *regexp* argument may be either a regexp constant (/…/) or a string constant ("…").
+The order of the first two arguments is the opposite of most other string functions that work with regular expressions, such as *sub()* and *gsub()*. It might help to remember that for *match()*, the order is the same as for the ‘~’ operator: ‘string ~ regexp’.
+The match() function sets the predefined variable RSTART to the index. It also sets the predefined variable RLENGTH to the length in characters of the matched substring. If no match is found, RSTART is set to zero, and RLENGTH to -1. 
+
+```bash
+$ awk 'BEGIN{test = "matrix"; print match(test, /t.*x/); print RLENGTH, RSTART}'
+3
+4 3
+```
+
+If *array* is present, it is cleared, and then the zeroth element of *array* is set to the entire portion of *string* matched by *regexp*. If *regexp* contains parentheses, the integer-indexed elements of *array* are set to contain the portion of *string* matching the corresponding parenthesized subexpression.   
+
+```bash
+$ awk 'BEGIN{test = "matrix zou"; match(test, /(m.*x) (z.*u)/, array); count=length(array); for(i = 0; i<=2; i++)print array[i]}'
+matrix zou
+matrix
+zou
+```
+
+In addition, multidimensional subscripts are available providing the start index and length of each matched subexpression: 
+
+```bash
+$ awk 'BEGIN{test = "matrix zou"; match(test, /(m.*x) (z.*u)/, array); for (x in array)print x, array[x]}'
+0start 1
+0length 10
+1start 1
+2start 8
+0 matrix zou
+1 matrix
+2 zou
+2length 3
+1length 6
+```
+
+#### patsplit(string, array [, fieldpat [, seps ] ])
+Search *fieldpat* in  *string* and store the pieces in *array* and the separator strings in the *seps* array. The first piece is stored in *array[1]*, the second piece in *array[2]*, and so forth. The third argument, *fieldpat*, is a regexp describing the fields in *string*. It may be either a regexp constant or a string. If *fieldpat* is omitted, the value of FPAT is used. *patsplit()* returns the number of elements created. *seps[i]* is the possibly null separator string after *array[i]*. The possibly null leading separator will be in *seps[0]*. So a non-null string with *n* fields will have *n+1* separators.
+
+```bash
+$ awk 'BEGIN{patsplit("matrix|zou", a, /[a-z]*/, seps); print "array result:"; for(i=1;i<=length(a);i++)print a[i]; print length(a); print "seperator result:"; for(j=0;j<length(seps);j++) print seps[j]; print length(seps)}'
+array result:
+matrix
+zou
+2
+seperator result:
+
+|
+2
+
+$ awk 'BEGIN{patsplit("matrix|zou", a, /[^|]*/, seps); print "array result:"; for(i=1;i<=length(a);i++)print a[i]; print length(a); print "seperator result:"; for(j=0;j<length(seps);j++) print seps[j]; print length(seps)}'
+array result:
+matrix
+zou
+2
+seperator result:
+
+|
+2
+```
+NOTE: *seps* start from *0*, instead of *1*
+*regexp [^|]* refers to everything except *|* 
+
+#### split(string, array  [, fieldsep [, seps ] ])
+Divide *string* into pieces separated by *fieldsep* and store the pieces in *array* and the separator strings in the *seps* array.  The first piece is stored in *array[1]*, the second piece in *array[2]*, and so forth. The string value of the third argument, *fieldsep*, is a regexp describing where to split *string*. If *fieldsep* is omitted, the value of FS is used. *split()* returns the number of elements created. *seps* is a gawk extension, with *seps[i]* being the separator string between *array[i]* and *array[i+1]*. If *fieldsep* is a single space, then any leading whitespace goes into *seps[0]* and any trailing whitespace goes into *seps[n]*, where *n* is the return value of *split()* (i.e., the number of elements in array).
+The split() function splits strings into pieces in the same way that input lines are split into fields.
+
+```bash
+$ awk 'BEGIN{split("matrix|zou", a, /[|]/, seps); print "array result:"; for(i=1;i<=length(a);i++)print a[i]; print length(a); print "seperator result:"; for(j=0;j<length(seps);j++) print seps[j]; print length(seps)}'
+array result:
+matrix
+zou
+2
+seperator result:
+
+|
+2
+
+$ awk 'BEGIN{split("matrix|zou", a, "|", seps); print "array result:"; for(i=1;i<=length(a);i++)print a[i]; print length(a); print "seperator result:"; for(j=0;j<length(seps);j++) print seps[j]; print length(seps)}'
+array result:
+matrix
+zou
+2
+seperator result:
+
+|
+2
+```
+
 
 
 
