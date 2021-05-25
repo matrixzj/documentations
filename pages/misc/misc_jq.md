@@ -104,6 +104,18 @@ $ cat /tmp/data | jq '.Subnets | length'
 2
 ```
 
+Count elements based on some specifict conditions
+
+```bash
+$ jq -r '.Subnets[] | select(.State == "available") | length' /tmp/data
+10
+10
+
+$ jq -r '[.Subnets[] | select(.State == "available")] | length' /tmp/data
+2
+```
+
+
 #### Show Specific Element by Index
 
 ```
