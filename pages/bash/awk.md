@@ -137,6 +137,45 @@ $ echo 0.77767686 |  awk '{ print "" 0+$0 }' CONVFMT='%.1g'
 0.8
 ```
 
+### **ENVIRON**
+An  array  containing  the values of the current environment.   
+```bash
+$ awk 'BEGIN{for(item in ENVIRON){print item, ":", ENVIRON[item]}}'
+AWKPATH : .:/usr/share/awk
+OLDPWD : /home/matrix
+SELINUX_LEVEL_REQUESTED :
+SELINUX_ROLE_REQUESTED :
+LANG : en_US.UTF-8
+PYENV_VIRTUALENV_INIT : 1
+LC_ALL : en_US.UTF-8
+HISTSIZE : 1000
+XDG_RUNTIME_DIR : /run/user/1001
+USER : matrix
+HISTFILESIZE : 10000
+_ : /usr/bin/awk
+SELINUX_USE_CURRENT_RANGE :
+TERM : screen-256color
+HISTTIMEFORMAT : %d/%m/%y %T
+SHELL : /bin/bash
+PYENV_SHELL : bash
+SSH_CONNECTION : 31.215.112.217 63239 10.0.0.4 22
+XDG_SESSION_ID : 56574
+LESSOPEN : ||/usr/bin/lesspipe.sh %s
+PATH : /home/matrix/.pyenv/plugins/pyenv-virtualenv/shims:/home/matrix/.pyenv/shims:/home/matrix/.pyenv/shims:/home/matrix/.pyenv/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/usr/local/go/bin:/home/matrix/.local/bin:/home/matrix/bin
+MAIL : /var/spool/mail/matrix
+SSH_CLIENT : 31.215.112.217 63239 22
+PYENV_ROOT : /home/matrix/.pyenv
+HOSTNAME : matrix-oracle-instance-1
+HOME : /home/matrix
+PWD : /home/matrix/git/documentations
+SSH_TTY : /dev/pts/1
+HISTCONTROL : ignoredups
+LC_CTYPE : UTF-8
+LOGNAME : matrix
+SHLVL : 1
+LS_COLORS : rs=0:di=38;5;27:ln=38;5;51:mh=44;38;5;15:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=05;48;5;232;38;5;15:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;34:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.Z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.m
+```
+
 ## Functions
 ### Numeric Functions
 #### **exp(x)**    
