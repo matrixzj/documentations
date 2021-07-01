@@ -153,6 +153,39 @@ last
 middle
 ```
 
+#### sub(regexp, replacement [, target])
+Search *target*, which is treated as a string, for the leftmost, longest substring matched by the regular expression *regexp*. Modify the entire string by replacing the matched text with *replacement*. The modified string becomes the new value of *target*. Return the number of substitutions made (zero/failure or one/success).
+The *regexp* argument may be either a regexp constant (/…/) or a string constant ("…"). In the latter case, the string is treated as a regexp to be matched. 
+This function is peculiar because *target* is not simply used to compute a value, and not just any expression will do—it must be a variable, field, or array element so that sub() can store a modified value there. If this argument is omitted, then the default is to use and alter *$0*.
+
+```bash
+$ awk 'BEGIN{test = "matrix"; result=sub("tri", "", test); print test; print result}'
+max
+1
+
+$ awk 'BEGIN{test = "matrix"; result=sub("tria", "", test); print test; print result}'
+matrix
+0
+```
+
+If the special character *&* appears in replacement, it stands for the precise substring that was matched by *regexp*. If the *regexp* can match more than one string, then this precise substring may vary.
+
+```bash
+$ awk 'BEGIN{test = "matrix"; result = sub(/matrix/, "& &", test); print test; print result}'
+matrix matrix
+1
+
+$ cat /tmp/test
+max
+maxx
+
+$ awk '{result = sub(/x+/, "& test"); print; print result}' /tmp/test
+max test
+1
+maxx test
+1
+```
+
 #### gensub(regexp, replacement, how [, target])
 Search the *target* string target for matches of the regular expression *regexp*. If *how* is a string beginning with 'g' or 'G' (short for "global"), then replace all matches of *regexp* with *replacement*. Otherwise, treat *how* as a number indicating which match of *regexp* to replace. Treat numeric values less than one as if they were one. If no *target* is supplied, use *$0*. Return the modified string as the result of the function. The original target string is *not* changed.
 *gensub()* is a general substitution function. Its purpose is to provide more features than the standard *sub()* and *gsub()* functions.
@@ -304,39 +337,6 @@ $ awk 'BEGIN{val = "0x11"; print strtonum(val)}'
 17
 ```
 
-#### sub(regexp, replacement [, target])
-Search *target*, which is treated as a string, for the leftmost, longest substring matched by the regular expression *regexp*. Modify the entire string by replacing the matched text with *replacement*. The modified string becomes the new value of *target*. Return the number of substitutions made (zero/failure or one/success).
-The *regexp* argument may be either a regexp constant (/…/) or a string constant ("…"). In the latter case, the string is treated as a regexp to be matched. 
-This function is peculiar because *target* is not simply used to compute a value, and not just any expression will do—it must be a variable, field, or array element so that sub() can store a modified value there. If this argument is omitted, then the default is to use and alter *$0*.
-
-```bash
-$ awk 'BEGIN{test = "matrix"; result=sub("tri", "", test); print test; print result}'
-max
-1
-
-$ awk 'BEGIN{test = "matrix"; result=sub("tria", "", test); print test; print result}'
-matrix
-0
-```
-
-If the special character *&* appears in replacement, it stands for the precise substring that was matched by *regexp*. If the *regexp* can match more than one string, then this precise substring may vary.
-
-```bash
-$ awk 'BEGIN{test = "matrix"; result = sub(/matrix/, "& &", test); print test; print result}'
-matrix matrix
-1
-
-$ cat /tmp/test
-max
-maxx
-
-$ awk '{result = sub(/x+/, "& test"); print; print result}' /tmp/test
-max test
-1
-maxx test
-1
-```
-
 #### substr(string, start [, length ])
 Return a *length*-character-long substring of *string*, starting at character number *start*. The first character of a string is character number one. For example, substr("washington", 5, 3) returns "ing".
 If *length* is not present, *substr()* returns the whole suffix of string that begins at character number *start*. For example, substr("washington", 5) returns "ington". The whole suffix is also returned if *length* is greater than the number of characters remaining in the *string*, counting from character *start*.
@@ -344,5 +344,13 @@ If *start* is less than one, *substr()* treats it as if it was one. If *start* i
 
 #### tolower(string) / toupper(string)
 Return a copy of *string*, with each uppercase/lowercase character in the *string* replaced with its corresponding lowercase/uppercase character. Nonalphabetic characters are left unchanged. For example, tolower("MiXeD cAsE 123") returns "mixed case 123", and toupper("MiXeD cAsE 123") returns "MIXED CASE 123". 
+
+# Operator
+**<** Less than
+**>** Greater than
+**<=** Less than or equal to >= Greater than or equal to == Equal to
+**!=** Not equal to
+**~** Matches
+**!~** Does not match
 
 {% include links.html %}
