@@ -14,8 +14,12 @@ folder: bash
 
 ## System Variables
 
-* **FS**    field separator. By default, its value is a single space. FS can also be set to any single character, or to a regular expression.
-* **OFS**   output field separator. By default awk OFS is a single space character.   
+### **FS**    
+field separator. By default, its value is a single space. FS can also be set to any single character, or to a regular expression.
+
+### **OFS**   
+output field separator. By default awk OFS is a single space character.   
+
 
 ```bash
 $ echo "matrix" | awk 'BEGIN{FS="tr"}{print $1}'
@@ -29,8 +33,11 @@ ma
 ix
 ```
 
-* **RS**    record separator. By default, its value is a newline.  
-* **ORS**   output record separator. By default, its value is a newline.   
+### **RS**    
+record separator. By default, its value is a newline.  
+
+### **ORS**   
+output record separator. By default, its value is a newline.   
 
 ```bash
 $ echo "matrix" | awk 'BEGIN{RS="tr"}{if(NR==2)print $1}'
@@ -46,9 +53,11 @@ ma|ix$
 |$
 ```
 
+### **NF**    
+number of fields for the current input record.  
 
-* **NF**    number of fields for the current input record.  
-* **NR**    number of records being processed or line number.     
+### **NR**    
+number of records being processed or line number.     
 
 ```bash
 $ echo "a|b|c" | awk 'BEGIN{FS="|"}{print NF}'
@@ -60,7 +69,8 @@ $ echo "a|b|c" | awk 'BEGIN{RS="|"}{print NR}'
 3
 ```
 
-* **FILENAME** the name of the file being read     
+### **FILENAME** 
+the name of the file being read     
 
 ```bash
 $ echo "a|b|c" | awk '{print FILENAME}'
@@ -87,7 +97,8 @@ $ awk '{print FILENAME}' /tmp/student /tmp/score
 /tmp/score
 ```
 
-* **FNR**   Number of Records relative to the current input file    
+### **FNR**   
+Number of Records relative to the current input file    
 
 ```bash
 $ awk '{print NR}' /tmp/student /tmp/score
@@ -109,8 +120,11 @@ $ awk '{print FNR}' /tmp/student /tmp/score
 3
 ```
 
-* **CONVFMT**   number-to-string conversions. By default, the value is '%.6g'
-* **OFMT**      string-to-number conversions. By default, the value is '%.6g'    
+### **CONVFMT**   
+number-to-string conversions. By default, the value is '%.6g' 
+
+### **OFMT**      
+string-to-number conversions. By default, the value is '%.6g'    
 
 ```bash
 $ awk -v OFMT="%d" 'BEGIN{print str = (5.5 + 3.2)}'
@@ -125,11 +139,20 @@ $ echo 0.77767686 |  awk '{ print "" 0+$0 }' CONVFMT='%.1g'
 
 ## Functions
 ### Numeric Functions
-* **exp(x)**    Return the exponential of x (e ^ x) or report an error if x is out of range.
-* **int(x)**    Return the nearest integer to x.
-* **log(x)**    Return the natural logarithm of x, if x is positive; otherwise, return NaN (“not a number”) on IEEE 754 systems.
-* **rand()**    Return a random number. The values of rand() are uniformly distributed between zero and one. The value could be zero but is never one.
-* **sqrt(x)**   Return the positive square root of x.
+#### **exp(x)**    
+Return the exponential of x (e ^ x) or report an error if x is out of range.
+
+#### **int(x)**    
+Return the nearest integer to x.
+
+#### **log(x)**    
+Return the natural logarithm of x, if x is positive; otherwise, return NaN (“not a number”) on IEEE 754 systems.
+
+#### **rand()**    
+Return a random number. The values of rand() are uniformly distributed between zero and one. The value could be zero but is never one.
+
+#### **sqrt(x)**   
+Return the positive square root of x.
 
 ### String Functions
 #### asort(source [, dest [, how ] ]) / asorti(source [, dest [, how ] ])   
@@ -345,12 +368,15 @@ If *start* is less than one, *substr()* treats it as if it was one. If *start* i
 #### tolower(string) / toupper(string)
 Return a copy of *string*, with each uppercase/lowercase character in the *string* replaced with its corresponding lowercase/uppercase character. Nonalphabetic characters are left unchanged. For example, tolower("MiXeD cAsE 123") returns "mixed case 123", and toupper("MiXeD cAsE 123") returns "MIXED CASE 123". 
 
-# Operator
-**<** Less than
-**>** Greater than
-**<=** Less than or equal to >= Greater than or equal to == Equal to
-**!=** Not equal to
-**~** Matches
-**!~** Does not match
+## Operator
+**<** Less than  
+**>** Greater than  
+**<=** Less than or equal to >= Greater than or equal to == Equal to  
+**!=** Not equal to  
+**~** Matches  
+**!~** Does not match  
+**||** Logical OR   
+**&&** Logical AND    
+**!** Logical NOT   
 
 {% include links.html %}
