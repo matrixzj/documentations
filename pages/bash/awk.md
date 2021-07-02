@@ -2,7 +2,7 @@
 title: awk
 tags: [bash]
 keywords: awk 
-last_updated: Mar 5, 2021
+last_updated: Jul 1, 2021
 summary: "awk tips"
 sidebar: mydoc_sidebar
 permalink: bash_awk.html
@@ -138,7 +138,8 @@ $ echo 0.77767686 |  awk '{ print "" 0+$0 }' CONVFMT='%.1g'
 ```
 
 ### **ENVIRON**
-An  array  containing  the values of the current environment.   
+An array containing the values of the current environment.   
+
 ```bash
 $ awk 'BEGIN{for(item in ENVIRON){print item, ":", ENVIRON[item]}}'
 AWKPATH : .:/usr/share/awk
@@ -174,6 +175,20 @@ LC_CTYPE : UTF-8
 LOGNAME : matrix
 SHLVL : 1
 LS_COLORS : rs=0:di=38;5;27:ln=38;5;51:mh=44;38;5;15:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=05;48;5;232;38;5;15:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;34:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.Z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.m
+```
+
+### **ARGC**   
+The number of command line arguments
+### **ARGV**        
+Array of command line arguments
+```bash
+$ awk 'BEGIN{print ARGC}' n=1
+2
+
+$ awk 'BEGIN{print ARGC; for(i=0; i<ARGC; i++){printf("%d: %s\n", i, ARGV[i])}}' n=1
+2
+0: awk
+1: n=1
 ```
 
 ## Functions
