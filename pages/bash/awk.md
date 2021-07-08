@@ -422,6 +422,34 @@ If *start* is less than one, *substr()* treats it as if it was one. If *start* i
 #### tolower(string) / toupper(string)
 Return a copy of *string*, with each uppercase/lowercase character in the *string* replaced with its corresponding lowercase/uppercase character. Nonalphabetic characters are left unchanged. For example, tolower("MiXeD cAsE 123") returns "mixed case 123", and toupper("MiXeD cAsE 123") returns "MIXED CASE 123". 
 
+### Customised Function
+```bash
+function name (parameter-list) {
+	statements
+}
+```
+
+Examples
+
+```bash
+$ cat insert.awk
+# insert.awk - insert characters on position
+
+function insert(STRING, POS, INS) {
+    before = substr(STRING, 1, POS)
+    after = substr(STRING, POS+1)
+    new_STRING = sprintf("%s%s%s", before, INS, after)
+    return new_STRING
+}
+
+BEGIN {
+    print insert("matrix", position, insertion)
+}
+
+$ awk -v position=2 -v insertion=" " -f insert.awk
+ma trix
+```
+
 ## Operator
 **<** Less than  
 **>** Greater than  
