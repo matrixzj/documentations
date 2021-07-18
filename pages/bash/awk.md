@@ -448,6 +448,22 @@ BEGIN {
 
 $ awk -v position=2 -v insertion=" " -f insert.awk
 ma trix
+
+$ cat ~/insert.awk
+# insert.awk - insert characters on position
+
+function insert(STRING, POS, INS) {
+    before = substr(STRING, 1, POS)
+    after = substr(STRING, POS+1)
+    return before INS after
+}
+
+BEGIN {
+    print insert("matrix", position, insertion)
+}
+
+$ awk -v position=3 -v insertion=' good ' -f ~/insert.awk
+mat good rix
 ```
 
 ## Operator

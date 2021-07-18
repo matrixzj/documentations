@@ -131,6 +131,17 @@ $ echo 'Hello' | sed -e 's/hello/Matrix/I'
 Matrix
 ```
 
+### `e`  
+Use output of a shell command. The external command can be based on the pattern space contents or provided as an argument. 
+
+This command allows one to pipe input from a shell command into pattern space. Without parameters, the `e` command executes the command that is found in pattern space and replaces the pattern space with the output; a trailing newline is suppressed.
+
+If a parameter is specified, instead, the `e` command interprets it as a command and sends its output to the output stream. The command can run across multiple lines, all but the last ending with a back-slash.
+```bash
+$ echo "100+20foobar"|sed -E 's#.*#echo & | wc -L#e'
+12
+```
+
 ## Commands
 
 ### `a` / `i` / `c` / `d` 
