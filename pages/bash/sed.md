@@ -544,9 +544,7 @@ Python is a cross-platform language.
 
 ## Examples
 
-### replace in a specific range
-
-#### replace specific lines match pattern
+### replace specific lines match pattern
 ```bash
 $ sudo grep net /etc/sysctl.conf
 net.ipv4.ip_forward = 1
@@ -555,7 +553,7 @@ $ sudo sed -ne '/^net/s/1/0/p' /etc/sysctl.conf
 net.ipv4.ip_forward = 0
 ```
 
-#### replace lines in a range
+### replace lines in a range
 ```bash
 $ awk '{if(NR==12)print}' /etc/sysctl.conf
 net.ipv4.ip_forward = 1
@@ -564,13 +562,7 @@ $ sed -ne '12s/1/0/p' /etc/sysctl.conf
 net.ipv4.ip_forward = 0
 ```
 
-#### replace the 2nd occurance
-```bash
-$ echo 'Python Python' | sed -e 's/Python/Go/2'
-Python Go
-```
-
-#### get a specific block 
+### get a specific block 
 Show info of `eth0` via `ifconfig` 
 ```bash
 $ ifconfig | sed -ne '/^eth0/{:a;N;/\s$/!{ba};p}'
@@ -585,7 +577,7 @@ eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1460
 
 ```
 
-#### print the last 5 lines of a file
+### print the last 5 lines of a file
 similar as `tail -n 5`
 ```bash
 $ cat /tmp/test
@@ -605,7 +597,7 @@ ff
 gg
 ```
 
-#### reverse order of lines
+### reverse order of lines
 same as `tac`
 ```bash
 $ cat /tmp/test1
@@ -619,7 +611,7 @@ bb
 aa
 ```
 
-#### reverse all characters for a line
+### reverse all characters for a line
 same as `rev`
 ```bash
 $ echo 'max' | sed '/\n/!G;s/\(.\)\(.*\n\)/&\2\1/;//D;s/.//'
