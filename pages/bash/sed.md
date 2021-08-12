@@ -20,10 +20,42 @@ folder: bash
 
 Unless special commands (like `D`) are used, the pattern space is deleted between two cycles. The hold space, on the other hand, keeps its data between cycles (see commands `h`, `H`, `x`, `g`, `G` to move n data between both buffers).
 
-## Address Range
+## In-place File Editing
+|| Note || Description ||
+| -i | after processing, write back changes to the source file(s) changes made cannot be undone, so use this option with caution |
+| -i.bkp | in addition to in-place editing, preserve original contents to a file whose name is derived from input filename and .bkp as a suffix |
+| -i'bkp.*'	| `*` here gets replaced with input filename thus providing a way to add a prefix instead of a suffix |
+| -i'backups/*' | this will place the backup copy in a different existing directory instead of source directory |
 
-### `ADDR1, +N`
-Matches `ADDR1` and the `N` lines following ADDR1.
+## Selective Editing
+
+### Conditonal execution
+```bash
+/REGEXP/s/REGEXP/REPLACEMENT/FLAGS
+```
+
+### Multiple commands
+Commands can be specified more than once by separating them using ; or using the -e command line option.
+```bash
+$ printf 'sea\neat\ndrop\n' | sed -n -e 'p' -e 's/at/AT/p'
+sea
+eat
+eAT
+drop
+
+$ printf 'sea\neat\ndrop\n' | sed -n 'p; s/at/AT/p'
+sea
+eat
+eAT
+drop
+``` 
+
+### Address Range
+
+#### Relative addressing
+
+##### `ADDR1, +N` / `/REGEXP/,+N`
+Matches `ADDR1` and the `N` lines following ADDR1, similar as `grep -A{N}`
 ```bash
 $ cat /tmp/test1
 aa
@@ -42,7 +74,7 @@ cc
 dd
 ```
 
-### `ADDR1,~N`
+##### `ADDR1,~N`
 Matches `ADDR1` and the lines following `ADDR1` the next line whose input line number is a multiple of `N`.
 ```bash
 $ cat /tmp/test1
@@ -68,8 +100,9 @@ ee
 ff
 ```
 
-### `N1~N2`
-Matches `N1` and steps over the next `N2` lines until the end of input stream 
+##### `N1~N2`
+Matches `N1` and steps over the next `N2` lines until the end of N1nput stream. `N1~N2` will filter lines numbered N1+0*N2, N1+1*N2, N1+2*N2, N1+3*N2, etc.
+
 ```
 $ cat /tmp/test1
 aa
@@ -88,6 +121,96 @@ dd
 ff
 hh
 ```
+
+## Flags
+### Matchs case-insensitive `I`
+```bash
+$ echo 'Hello' | sed -e 's/hello/Matrix/I'
+Matrix
+```
+
+### Change case in replacement section `\E` / `\l` / `\u` / `\L` / `\U` 
+* `\E`  indicates end of case conversion
+* `\l` / `\u`  convert next character to lower/upper case
+* `\L` / `\U`  convert processing string to lower/upper case, unless `\L` / `\U` / `\E` is used
+```bash
+$ echo 'test1 test2' | sed -E 's/([[:alpha:]])/\U\1/'
+Test1 test2
+
+$ echo 'test1 test2' | sed -E 's/[[:alpha:]]+/\U&/'
+TEST1 test2
+
+$ echo 'tEST1 test2' | sed -E 's/(....)/\L\1/'
+test1 test2
+
+$ echo 'test1 test2' | sed -E 's/([a-z0-9]+) ([a-z0-9]+)/\U\1 \2/'
+TEST1 TEST2
+
+$ echo 'test1 test2' | sed -E 's/([a-z0-9]+) ([a-z0-9]+)/\U\1\E \2/'
+TEST1 test2
+```
+
+### Global replace `g`
+
+### Replace specific occurrences `[Nth]`
+```bash
+$ echo 'test1 test2' | sed -E 's/([a-z]+)/\U&/2'
+test1 TEST2
+```
+
+A combination of number and `g` flag will replace all matches except the first `N-1` occurrences.
+```bash
+$ echo 'test1 test2 test3' | sed -E 's/([a-z]+)/\U&/2g'
+test1 TEST2 TEST3
+```
+
+If multiple Nth occurrences are to be replaced, use descending order for readability.
+```bash
+$ echo 'test1 test2 test3' | sed -E 's/([a-z]+)/\U&/2; s/([a-z]+)/\U&/2'
+test1 TEST2 TEST3
+
+jzou@matrix-oracle-instance-1:~ · 06:16 PM Fri Aug 06 ·
+!5046 $ echo 'test1 test2 test3' | sed -E 's/([a-z]+)/\U&/3; s/([a-z]+)/\U&/2'
+test1 TEST2 TEST3
+```
+
+### Executing external commands `e`  
+Use output of a shell command. The external command can be based on the pattern space contents or provided as an argument. 
+
+This command allows one to pipe input from a shell command into pattern space. Without parameters, the `e` command executes the command that is found in pattern space and replaces the pattern space with the output; a trailing newline is suppressed.
+
+If a parameter is specified, instead, the `e` command interprets it as a command and sends its output to the output stream. The command can run across multiple lines, all but the last ending with a back-slash.
+```bash
+$ echo "100+20foobar"|sed -E 's#.*#echo & | wc -L#e'
+12
+```
+
+### Multiline mode `m` / `M`
+The `m` (or `M`) flag will change the behavior of `^`, `$` and `.` metacharacters. This comes into play only if there are multiple lines in the pattern space to operate with.
+If `m` flag is used, the `.` metacharacter will not match the newline character.
+The `^` and `$` anchors will match every line's start and end locations
+
+## `z` / `s` command line options
+`-z` option will cause `sed` to separate lines based on the ASCII NUL `\0` character instead of the newline character.
+```bash
+$ printf 'a\n[x]\nb\n' | sed -z 's/\n/\t/g'
+a       [x]     b
+$ printf 'a\n[x]\nb\n' | sed '$!s/\n/\t/g'
+a
+[x]
+b
+
+$ printf 'a\0[x]\0b\0' | sed -n '/x/p' | od  -c
+0000000   a  \0   [   x   ]  \0   b  \0
+0000010
+
+$ printf 'a\0[x]\0b\0' | sed -nz '/x/p' | od -c
+0000000   [   x   ]  \0
+0000004
+```
+
+`-s` option will cause `sed` to treat multiple input files separately instead of treating them as single concatenated input. 
+
 
 ## Special Characters during replace
 
@@ -111,36 +234,8 @@ $ echo 'test1 test2' | sed -re 's/([[:alpha:]]+[0-9]) ([[:alpha:]]+[0-9])/(\2) (
 (test2) (test1)
 ```
 
-### `\L` / `\U` 
-Replaced processing string to lower/upper case
-```bash
-$ echo 'test1 test2' | sed -E 's/([[:alpha:]])/\U\1/'
-Test1 test2
 
-$ echo 'test1 test2' | sed -E 's/[[:alpha:]]+/\U&/'
-TEST1 test2
 
-$ echo 'tEST1 test2' | sed -E 's/(....)/\L\1/'
-test1 test2
-```
-
-### `I`
-Matchs case-insensitive 
-```bash
-$ echo 'Hello' | sed -e 's/hello/Matrix/I'
-Matrix
-```
-
-### `e`  
-Use output of a shell command. The external command can be based on the pattern space contents or provided as an argument. 
-
-This command allows one to pipe input from a shell command into pattern space. Without parameters, the `e` command executes the command that is found in pattern space and replaces the pattern space with the output; a trailing newline is suppressed.
-
-If a parameter is specified, instead, the `e` command interprets it as a command and sends its output to the output stream. The command can run across multiple lines, all but the last ending with a back-slash.
-```bash
-$ echo "100+20foobar"|sed -E 's#.*#echo & | wc -L#e'
-12
-```
 
 ## Commands
 
