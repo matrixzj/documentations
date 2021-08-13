@@ -61,6 +61,10 @@ entries:
       url: /bash_sed.html
       output: web, pdf
 
+    - title: GNU Sed Exercises
+      url: /bash_gnu_sed_exercises.html
+      output: web, pdf
+
     - title: awk
       url: /bash_awk.html
       output: web, pdf

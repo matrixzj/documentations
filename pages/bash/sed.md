@@ -2,8 +2,8 @@
 title: sed
 tags: [bash]
 keywords: sed
-last_updated: Dec 19, 2020
-summary: "sed tips"
+last_updated: Aug 13, 2021
+summary: "sed guide"
 sidebar: mydoc_sidebar
 permalink: bash_sed.html
 folder: bash

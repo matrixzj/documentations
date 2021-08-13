@@ -45,6 +45,7 @@
 - [Pure Bash Bible - Array](pages/bash/bash_pure_bible_array.md)
 - [Pure Bash Bible - Loops](pages/bash/bash_pure_bible_loops.md)
 - [sed](pages/bash/sed.md)
+- [GNU Sed Exercises](pages/bash/gnu_sed_exercies.md)
 - [awk](pages/bash/awk.md)
 
 
