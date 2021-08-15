@@ -2,8 +2,8 @@
 title: awk
 tags: [bash]
 keywords: awk 
-last_updated: Jul 1, 2021
-summary: "awk tips"
+last_updated: Aug 15, 2021
+summary: "awk howto"
 sidebar: mydoc_sidebar
 permalink: bash_awk.html
 folder: bash
@@ -53,6 +53,14 @@ ma|ix$
 |$
 ```
 
+### **RT**
+contains the text that was matched by `RS`. This variable gets updated for every input record.
+```bash
+$ echo "matrix" | awk -v RS='tr' '{print NR, RT}'
+1 tr
+2
+```
+
 ### **NF**    
 number of fields for the current input record.  
 
@@ -67,6 +75,16 @@ $ echo "a|b|c" | awk 'BEGIN{RS="|"}{print NR}'
 1
 2
 3
+```
+
+### FPAT
+defines what should the fields be made up of, AKA `field pattern`
+```bash
+$ echo 'Sample123string42with777numbers' | awk 'BEGIN{FPAT="[0-9]+"}{print $2}'
+42
+
+$ echo 'Sample123string42with777numbers' | awk -v FPAT="[0-9]+" '{print $2}'
+42
 ```
 
 ### **FILENAME** 
