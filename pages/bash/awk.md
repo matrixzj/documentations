@@ -2,7 +2,7 @@
 title: awk
 tags: [bash]
 keywords: awk 
-last_updated: Aug 15, 2021
+last_updated: Dec 26, 2021
 summary: "awk howto"
 sidebar: mydoc_sidebar
 permalink: bash_awk.html
@@ -337,13 +337,19 @@ $ awk 'BEGIN{test = "matrix"; print match(test, /t.*x/); print RLENGTH, RSTART}'
 4 3
 ```
 
-If *array* is present, it is cleared, and then the zeroth element of *array* is set to the entire portion of *string* matched by *regexp*. If *regexp* contains parentheses, the integer-indexed elements of *array* are set to contain the portion of *string* matching the corresponding parenthesized subexpression.   
-
 ```bash
 $ awk 'BEGIN{test = "matrix zou"; match(test, /(m.*x) (z.*u)/, array); count=length(array); for(i = 0; i<=2; i++)print array[i]}'
 matrix zou
 matrix
 zou
+```
+
+If *array* is present, it is cleared, and then the zeroth element of *array* is set to the entire portion of *string* matched by *regexp*. If *regexp* contains parentheses, the integer-indexed elements of *array* are set to contain the portion of *string* matching the corresponding parenthesized subexpression.   
+```bash
+$ awk 'BEGIN{test = "matrix"; if(match(test, /t.*x/, array)){for (i in array) printf("index: %s, value: %s\n", i, array[i])}}'
+index: 0start, value: 3
+index: 0length, value: 4
+index: 0, value: trix
 ```
 
 In addition, multidimensional subscripts are available providing the start index and length of each matched subexpression: 
