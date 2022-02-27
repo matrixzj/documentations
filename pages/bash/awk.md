@@ -537,5 +537,10 @@ $ awk -v position=3 -v insertion=' good ' -f ~/insert.awk
 mat good rix
 ```
 
+## Multiple file input  
+*BEGINFILE* — this block gets executed before start of each input file
+*ENDFILE*  — this block gets executed after processing each input file
+*FILENAME* — special variable having file name of current input file
+*nextfile* - skip remaining records from the current file being processed and move on to the next file
  
 {% include links.html %} 
