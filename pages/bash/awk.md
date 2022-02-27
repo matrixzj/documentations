@@ -2,7 +2,7 @@
 title: awk
 tags: [bash]
 keywords: awk 
-last_updated: Dec 26, 2021
+last_updated: Feb 27, 2022
 summary: "awk howto"
 sidebar: mydoc_sidebar
 permalink: bash_awk.html
@@ -209,6 +209,17 @@ $ awk 'BEGIN{print ARGC; for(i=0; i<ARGC; i++){printf("%d: %s\n", i, ARGV[i])}}'
 1: n=1
 ```
 
+## Operator
+| **<** | Less than |
+| **>** | Greater than |
+| **<=** | Less than or equal to >= Greater than or equal to == Equal to |
+| **!=** | Not equal to |
+| **~**  | Matches |
+| **!~** | Does not match |
+| **||** | Logical OR |
+| **&&** | Logical AND |
+| **!** | Logical NOT |
+
 ## Functions
 ### Numeric Functions
 #### **exp(x)**    
@@ -227,6 +238,9 @@ Return a random number. The values of rand() are uniformly distributed between z
 Return the positive square root of x.
 
 ### String Functions
+#### Backreferences
+Backreferences of the form *\N* can only be used with *gensub* function. *&* can be used with *sub*, *gsub* and *gensub* functions. *\0* can also be used instead of *&* with *gensub* function.
+
 #### asort(source [, dest [, how ] ]) / asorti(source [, dest [, how ] ])   
 Both functions return the number of elements in the array *source*. For *asort()*, awk sorts the values of *source* and replaces the indices of the sorted values of *source* with sequential integers starting with one. If the optional array *dest* is specified, then *source* is duplicated into *dest*. *dest* is then sorted, leaving the indices of *source* unchanged. If the *source* array contains subarrays as values, they will come last, after all scalar values. Subarrays are not recursively sorted. 
 The *asorti()* function works similarly to *asort()*; however, the indices are sorted, instead of the values.   
@@ -490,15 +504,5 @@ $ awk -v position=3 -v insertion=' good ' -f ~/insert.awk
 mat good rix
 ```
 
-## Operator
-**<** Less than  
-**>** Greater than  
-**<=** Less than or equal to >= Greater than or equal to == Equal to  
-**!=** Not equal to  
-**~** Matches  
-**!~** Does not match  
-**||** Logical OR   
-**&&** Logical AND    
-**!** Logical NOT   
-
-{% include links.html %}
+ 
+{% include links.html %} 
