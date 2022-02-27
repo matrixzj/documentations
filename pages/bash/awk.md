@@ -36,6 +36,39 @@ ix
 ### **RS**    
 record separator. By default, its value is a newline.  
 
+#### Paragraph mode
+As a special case, when *RS* is set to empty string, one or more consecutive empty lines is used as the input record separator. Consider the below sample file:
+
+```bash
+$ cat programming_quotes.txt
+Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it by Brian W. Kernighan
+
+Some people, when confronted with a problem, think - I know, I will
+use regular expressions. Now they have two problems by Jamie Zawinski
+
+A language that does not affect the way you think about programming,
+is not worth knowing by Alan Perlis
+
+There are 2 hard problems in computer science: cache invalidation,
+naming things, and off-by-1 errors by Leon Bambrick
+```
+
+Here's an example of processing input paragraph wise.
+
+```bash
+$ awk -v RS= 'NR == 1' /tmp/programming_quotes.txt
+Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it by Brian W. Kernighan
+
+$ # print all paragraphs containing 'you'
+$ # note that there'll be an empty line after the last record
+$ awk -v RS= -v ORS='\n\n' '/you/' /tmp/programming_quotes.txt
+Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it by Brian W. Kernighan
+
+A language that does not affect the way you think about programming, is not worth knowing by Alan Perlis
+```
+
 ### **ORS**   
 output record separator. By default, its value is a newline.   
 
