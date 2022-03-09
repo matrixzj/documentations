@@ -2,7 +2,7 @@
 title: Mac Reinstallation Steps
 tags: [misc]
 keywords: mac, reinstallation
-last_updated: Nov 14, 2020
+last_updated: Mar 9, 2022
 summary: "Steps to reinstall a workbox for myself"
 sidebar: mydoc_sidebar
 permalink: misc_mac_reinstallation_steps.html
@@ -82,7 +82,8 @@ brew install --cask eul
 * Kensingtonworks for K75370
 * [IINA](https://iina.io/)
 * [Keka](https://www.keka.io/en/)
-* Battery Monitor
+* [coconutBattery](https://www.coconut-flavour.com/coconutbattery/)
+* [Rectangle](https://rectangleapp.com/)
 * [Input Method - Squirrel 鼠须管](https://matrixzj.github.io/documentations/misc_mac_reinstallation_steps.html#squirrel-%E9%BC%A0%E9%A1%BB%E7%AE%A1)
 * [WeChat](https://www.wechat.com/en/)
 * [QQ](https://im.qq.com/macqq/)
@@ -156,6 +157,14 @@ sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangp
 
 
 ### Atom
+- Packages  
+  + highlight-selected
+  + markdown-folding
+  + markdown-toc
+  + pretty-json
+  + split-diff
+  + sync-settings(cbf14a66fee383e153528992cd2cf98e)
+
 - Disable ‘Enter’ for Autocomplete/Snippets  
   Settings -> Packages -> autocomplete-plus -> Settings -> Keymap For Confirming A suggestion, change it from 'tab and enter' to 'tab'
 
