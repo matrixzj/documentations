@@ -265,7 +265,7 @@ Precedence for operators
 | 5 | + - ! | Unary plus, minus, logical "not" |  
 | 6 | * / % | Multiplication, division, remainder |  
 | 7 | + - | Addition, subtraction |  
-| 8 | String concatenation | [^operator1] |  
+| 8 | String concatenation | | [^operator1]   
 | 9 | < <= == != > >= >> \| \|& | Relational and redirection[^operator2] |  
 | 10 | ~ !~ | Matching, nonmatching |  
 | 11 | in | Array membership |  
