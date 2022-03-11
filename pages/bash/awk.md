@@ -17,31 +17,27 @@ Table of Contents
 * [System Variables](#system-variables)  
 * [Operators](#operators)  
 * [Functions](#functions)  
-** [Numberic Functions](#numberic-functions)  
-** [String Functions](#string-functions)  
 * [Multiple File Input](#multiple-file-input)  
-
-
 
 ## System Variables
 
-* [FS](##FS)  
-* [OFS](##OFS)  
-* [RS](##RS)  
-* [ORS](##ORS)  
-* [RT](##RT)  
-* [NF](##NF)  
-* [NR](##NR)  
-* [FPAT](##FPAT)  
-* [FILENAME](##FILENAME)  
-* [FNR](##FNR)  
-* [CONVFMT](##CONVFMT)  
-* [OFMT](##OFMT)  
-* [ENVIRON](##ENVIRON)  
-* [ARGC](##ARGC)  
-* [ARGV](##ARGV)  
+** [FS](#FS)  
+** [OFS](#OFS)  
+** [RS](#RS)  
+** [ORS](#ORS)  
+** [RT](#RT)  
+** [NF](#NF)  
+** [NR](#NR)  
+** [FPAT](#FPAT)  
+** [FILENAME](#FILENAME)  
+** [FNR](#FNR)  
+** [CONVFMT](#CONVFMT)  
+** [OFMT](#OFMT)  
+** [ENVIRON](#ENVIRON)  
+** [ARGC](#ARGC)  
+** [ARGV](#ARGV)  
 
-### **FS**    
+# **FS**    
 field separator. By default, its value is a single space. FS can also be set to any single character, or to a regular expression.
 
 ### **OFS**   
@@ -137,7 +133,7 @@ $ echo "a|b|c" | awk 'BEGIN{RS="|"}{print NR}'
 3
 ```
 
-### FPAT
+### **FPAT**
 defines what should the fields be made up of, AKA `field pattern`
 ```bash
 $ echo 'Sample123string42with777numbers' | awk 'BEGIN{FPAT="[0-9]+"}{print $2}'
@@ -303,6 +299,10 @@ Precedence for operators
 
   
 ## Functions
+
+** [Numberic Functions](#numberic-functions)  
+** [String Functions](#string-functions)  
+
 ### Numberic Functions
 #### **exp(x)**    
 Return the exponential of x (e ^ x) or report an error if x is out of range.
