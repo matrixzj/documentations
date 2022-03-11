@@ -243,6 +243,7 @@ $ awk 'BEGIN{print ARGC; for(i=0; i<ARGC; i++){printf("%d: %s\n", i, ARGV[i])}}'
 ```
 
 ## Operator
+
 | **<** | Less than |    
 | **>** | Greater than |  
 | **<=** | Less than or equal to >= Greater than or equal to == Equal to |  
@@ -253,24 +254,24 @@ $ awk 'BEGIN{print ARGC; for(i=0; i<ARGC; i++){printf("%d: %s\n", i, ARGV[i])}}'
 | **&&** | Logical AND |  
 | **!** | Logical NOT |  
 
-Precedence for operators 
-|| Precedence || Operators || Notes ||
-| ------------: | :------------ | :------------ |
-| 1 | (…) | Grouping.
-| 2 | $ | Field reference.
-| 3 | ++ -- | Increment, decrement.
-| 4 | ^ ** | Exponentiation. These operators group right to left.
-| 5 | + - ! | Unary plus, minus, logical “not.”
-| 6 | * / % | Multiplication, division, remainder.
-| 7 | + - | Addition, subtraction.
-| 8 | String concatenation | [^operator1]
-| 9 | < <= == != > >= >> \| \|& | Relational and redirection. | [^operator2]
-| 10 | ~ !~ Matching, nonmatching.
-| 11 | in | Array membership.
-| 12 | && | Logical “and.”
-| 13 | || | Logical “or.”
-| 14 | ?: | Conditional. This operator groups right to left.
-| 15 | = += -= *= /= %= ^= **= | Assignment. These operators group right to left. 
+Precedence for operators   
+|| Precedence || Operators || Notes ||  
+| ------------: | :------------ | :------------ |  
+| 1 | (…) | Grouping |  
+| 2 | $ | Field reference |  
+| 3 | ++ -- | Increment, decrement |  
+| 4 | ^ ** | Exponentiation. These operators group right to left |  
+| 5 | + - ! | Unary plus, minus, logical "not" |  
+| 6 | * / % | Multiplication, division, remainder |  
+| 7 | + - | Addition, subtraction |  
+| 8 | String concatenation | [^operator1] |  
+| 9 | < <= == != > >= >> \| \|& | Relational and redirection | [^operator2] |  
+| 10 | ~ !~ | Matching, nonmatching |  
+| 11 | in | Array membership |  
+| 12 | && | Logical "and" |  
+| 13 | || | Logical "or" |  
+| 14 | ?: | Conditional. This operator groups right to left |  
+| 15 | = += -= *= /= %= ^= **= | Assignment. These operators group right to left |  
 
   
 ## Functions
