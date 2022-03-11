@@ -266,7 +266,7 @@ Precedence for operators
 | 6 | * / % | Multiplication, division, remainder |  
 | 7 | + - | Addition, subtraction |  
 | 8 | String concatenation | [^operator1] |  
-| 9 | < <= == != > >= >> \| \|& | Relational and redirection | [^operator2] |  
+| 9 | < <= == != > >= >> \| \|& | Relational and redirection[^operator2] |  
 | 10 | ~ !~ | Matching, nonmatching |  
 | 11 | in | Array membership |  
 | 12 | && | Logical "and" |  
@@ -566,7 +566,7 @@ mat good rix
 *nextfile* - skip remaining records from the current file being processed and move on to the next file
 
 
-[^operator1] There is no special symbol for concatenation. The operands are simply written side by side.
+[^operator1] There is no special symbol for concatenation. The operands are simply written side by side.  
 [^operator2] The relational operators and the redirections have the same precedence level. Characters such as '>' serve both as relationals and as redirections; the context distinguishes between the two meanings. Note that the I/O redirection operators in print and printf statements belong to the statement level, not to expressions. The redirection does not produce an expression that could be the operand of another operator. As a result, it does not make sense to use a redirection operator near another operator of lower precedence without parentheses. Such combinations (e.g., 'print foo > a ? b : c') result in syntax errors. The correct way to write this statement is 'print foo > (a ? b : c)'.
  
 {% include links.html %} 
