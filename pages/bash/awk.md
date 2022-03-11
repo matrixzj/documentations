@@ -2,7 +2,7 @@
 title: awk
 tags: [bash]
 keywords: awk 
-last_updated: Feb 27, 2022
+last_updated: Mar 11, 2022
 summary: "awk howto"
 sidebar: mydoc_sidebar
 permalink: bash_awk.html
@@ -243,16 +243,29 @@ $ awk 'BEGIN{print ARGC; for(i=0; i<ARGC; i++){printf("%d: %s\n", i, ARGV[i])}}'
 ```
 
 ## Operator
-| **<** | Less than |
-| **>** | Greater than |
-| **<=** | Less than or equal to >= Greater than or equal to == Equal to |
-| **!=** | Not equal to |
-| **~**  | Matches |
-| **!~** | Does not match |
-| **||** | Logical OR |
-| **&&** | Logical AND |
-| **!** | Logical NOT |
+| **<** | Less than |    
+| **>** | Greater than |  
+| **<=** | Less than or equal to >= Greater than or equal to == Equal to |  
+| **!=** | Not equal to |  
+| **~**  | Matches |  
+| **!~** | Does not match |  
+| **||** | Logical OR |  
+| **&&** | Logical AND |  
+| **!** | Logical NOT |  
 
+Priority for operators 
+|| Operators ||
+| $ |
+| +,-,!  |
+| *,/,% |
+| +,-    |
+| >,>=,<,<=,==,!= |
+| ~,!~   |
+| && |
+| || |
+| ?: |
+| =,+=,-=,*=,/=,%= |
+  
 ## Functions
 ### Numeric Functions
 #### **exp(x)**    
