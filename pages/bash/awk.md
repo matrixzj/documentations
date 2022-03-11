@@ -250,11 +250,12 @@ $ awk 'BEGIN{print ARGC; for(i=0; i<ARGC; i++){printf("%d: %s\n", i, ARGV[i])}}'
 | **!=** | Not equal to |  
 | **~**  | Matches |  
 | **!~** | Does not match |  
-| **||** | Logical OR |  
+| **\|\|** | Logical OR |  
 | **&&** | Logical AND |  
 | **!** | Logical NOT |  
 
 Precedence for operators   
+
 || Precedence || Operators || Notes ||  
 | ------------: | :------------ | :------------ |  
 | 1 | (…) | Grouping |  
@@ -269,7 +270,7 @@ Precedence for operators
 | 10 | ~ !~ | Matching, nonmatching |  
 | 11 | in | Array membership |  
 | 12 | && | Logical "and" |  
-| 13 | || | Logical "or" |  
+| 13 | \|\| | Logical "or" |  
 | 14 | ?: | Conditional. This operator groups right to left |  
 | 15 | = += -= *= /= %= ^= **= | Assignment. These operators group right to left |  
 
