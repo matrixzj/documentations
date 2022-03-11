@@ -10,19 +10,36 @@ permalink: bash_awk.html
 folder: bash
 ---
 
-Table of Contents
-* [System Variables](#system-variables)
-* [Operators](#operators)
-* [Functions](#functions)
-** [Numberic Functions](#numberic-functions)
-** [String Functions](#string-functions)
-* [Multiple File Input](#multiple-file-input)
-
-
 # awk
 =====
 
+Table of Contents
+* [System Variables](#system-variables)  
+* [Operators](#operators)  
+* [Functions](#functions)  
+** [Numberic Functions](#numberic-functions)  
+** [String Functions](#string-functions)  
+* [Multiple File Input](#multiple-file-input)  
+
+
+
 ## System Variables
+
+* [FS](##FS)  
+* [OFS](##OFS)  
+* [RS](##RS)  
+* [ORS](##ORS)  
+* [RT](##RT)  
+* [NF](##NF)  
+* [NR](##NR)  
+* [FPAT](##FPAT)  
+* [FILENAME](##FILENAME)  
+* [FNR](##FNR)  
+* [CONVFMT](##CONVFMT)  
+* [OFMT](##OFMT)  
+* [ENVIRON](##ENVIRON)  
+* [ARGC](##ARGC)  
+* [ARGV](##ARGV)  
 
 ### **FS**    
 field separator. By default, its value is a single space. FS can also be set to any single character, or to a regular expression.
@@ -252,7 +269,7 @@ $ awk 'BEGIN{print ARGC; for(i=0; i<ARGC; i++){printf("%d: %s\n", i, ARGV[i])}}'
 1: n=1
 ```
 
-## Operator
+## Operators
 
 | **<** | Less than |    
 | **>** | Greater than |  
@@ -266,7 +283,7 @@ $ awk 'BEGIN{print ARGC; for(i=0; i<ARGC; i++){printf("%d: %s\n", i, ARGV[i])}}'
 
 Precedence for operators   
 
-||Precedence||Operators||Notes||  
+| Precedence | Operators | Notes |  
 | ------------: | :------------ | :------------ |  
 | 1 | (…) | Grouping |  
 | 2 | $ | Field reference |  
