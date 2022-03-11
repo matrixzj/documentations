@@ -5,9 +5,19 @@ keywords: awk
 last_updated: Mar 11, 2022
 summary: "awk howto"
 sidebar: mydoc_sidebar
+toc: false
 permalink: bash_awk.html
 folder: bash
 ---
+
+Table of Contents
+* [System Variables](#system-variables)
+* [Operators](#operators)
+* [Functions](#functions)
+** [Numberic Functions](#numberic-functions)
+** [String Functions](#string-functions)
+* [Multiple File Input](#multiple-file-input)
+
 
 # awk
 =====
@@ -256,7 +266,7 @@ $ awk 'BEGIN{print ARGC; for(i=0; i<ARGC; i++){printf("%d: %s\n", i, ARGV[i])}}'
 
 Precedence for operators   
 
-|| Precedence || Operators || Notes ||  
+||Precedence||Operators||Notes||  
 | ------------: | :------------ | :------------ |  
 | 1 | (…) | Grouping |  
 | 2 | $ | Field reference |  
@@ -276,7 +286,7 @@ Precedence for operators
 
   
 ## Functions
-### Numeric Functions
+### Numberic Functions
 #### **exp(x)**    
 Return the exponential of x (e ^ x) or report an error if x is out of range.
 
@@ -559,11 +569,11 @@ $ awk -v position=3 -v insertion=' good ' -f ~/insert.awk
 mat good rix
 ```
 
-## Multiple file input  
-*BEGINFILE* — this block gets executed before start of each input file
-*ENDFILE*  — this block gets executed after processing each input file
-*FILENAME* — special variable having file name of current input file
-*nextfile* - skip remaining records from the current file being processed and move on to the next file
+## Multiple File Input  
+*BEGINFILE* — this block gets executed before start of each input file  
+*ENDFILE*  — this block gets executed after processing each input file  
+*FILENAME* — special variable having file name of current input file  
+*nextfile* - skip remaining records from the current file being processed and move on to the next file  
 
 
 [^operator1] There is no special symbol for concatenation. The operands are simply written side by side.  
