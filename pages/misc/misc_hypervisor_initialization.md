@@ -9,10 +9,10 @@ permalink: misc_hypervisor_initialization.html
 folder: Misc
 ---
 
-## Hypervisor Initialization
+# Hypervisor Initialization
 =====
 
-### RPM Installation
+## RPM Installation
 
 ```bash
 # yum install -y virt-install qemu libvirt kvm seabios qemu-kvm
@@ -20,7 +20,7 @@ folder: Misc
 # systemctl enable --now libvirtd
 ```
 
-### Bridge Config
+## Bridge Config
 
 `remove default NAT bridge`
 ```bash
@@ -61,7 +61,7 @@ bridge name     bridge id               STP enabled     interfaces
 br0             8000.ecb1d77fa580       no              eth0
 ```
 
-### TCP Connection and Auth 
+## TCP Connection and Auth 
 
 `Enble libvirt TCP listen`
 ```bash
@@ -182,7 +182,7 @@ NUMA cell(s):        2
 Memory size:         134089036 KiB
 ```
 
-### Fix kernel module `kvm` permission issue
+## Fix kernel module `kvm` permission issue
 
 ```bash
 # ls -al /dev/kvm

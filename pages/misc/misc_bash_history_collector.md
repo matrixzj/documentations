@@ -9,10 +9,10 @@ permalink: misc_bash_history_collector.html
 folder: Misc
 ---
 
-## Bash History Collector
+# Bash History Collector
 =====
 
-### `bash history collector` script
+## `bash history collector` script
 ```
 # cat /etc/bash_history_collector
 if [ "${SHELL##*/}" != "bash" ]; then
@@ -141,7 +141,7 @@ trap AUDIT_EXIT EXIT                                        # audit the session 
 shopt -s checkwinsize
 ```
 
-### Hook it in `/etc/bashrc`
+## Hook it in `/etc/bashrc`
 ```
 # echo "[ -f /etc/bash_history_collector ] && . /etc/bash_history_collector # added for bash history collector"  >> /etc/bashrc
 ```

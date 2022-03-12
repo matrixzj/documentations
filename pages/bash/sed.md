@@ -11,6 +11,19 @@ folder: bash
 
 # sed
 
+* [How `sed' Works](#how-sed-works)
+* [In-place File Editing](#in-place-file-editing)
+* [Selective Editing](#selective-editing)
+* [Flags](#flags)
+* [`z` / `s` command line options](#z--s-command-line-options)
+* [Special Characters during replace](#special-characters-during-replace)
+* [Commands](#commands)
+* [Advanced sed commands](#advanced-sed-commands)
+* [Advanced Commands related with `hold` space](#advanced-commands-related-with-hold-space)
+* [Branch Commands](#branch-commands)
+* [Examples](#examples)
+
+
 ## How `sed' Works
 
 `sed` maintains two data buffers: the active `pattern` space, and the auxiliary `hold` space. Both are initially empty.
@@ -51,6 +64,14 @@ drop
 ``` 
 
 ### Address Range
+
+* [Conditonal execution](#conditonal-execution)
+* [Multiple commands](#multiple-commands)
+* [Address Range](#address-range)
+    * [Relative addressing](#relative-addressing)
+        * [`ADDR1, +N` / `/REGEXP/,+N`](#add1--n--regexpn)
+        * [`ADDR1,~N`](#addr1n)
+        * [`N1~N2`](#n1n2)
 
 #### Relative addressing
 
@@ -123,6 +144,14 @@ hh
 ```
 
 ## Flags
+
+* [Matchs case-insensitive `I`](#matchs-case-insensitive-i)
+* [Change case in replacement section `\E` / `\l` / `\u` / `\L` / `\U`](#change-case-in-replacement-section-e--l--u--l--u)
+* [Global replace `g`](#global-replace-g)
+* [Replace specific occurrences `[Nth]`](#replace-specific-occurrences-nth)
+* [Executing external commands `e`  ](#executing-external-commands-e)
+* [Multiline mode `m` / `M`](#multiline-mode-m--m)
+
 ### Matchs case-insensitive `I`
 ```bash
 $ echo 'Hello' | sed -e 's/hello/Matrix/I'
@@ -234,12 +263,16 @@ $ echo 'test1 test2' | sed -re 's/([[:alpha:]]+[0-9]) ([[:alpha:]]+[0-9])/(\2) (
 (test2) (test1)
 ```
 
-
-
-
 ## Commands
 
-### `a` / `i` / `c` / `d` 
+* [`a` / `i` / `c` / `d` ](#a--i--c--d)
+* [`l` ](#l)
+* [`y` ](#y)
+* [`=` ](#-2)
+* [`r` / `w` ](#r--w)
+* [`q`](#q)
+
+### `a` / `i` / `c` / `d`   
 `a` appends a line after every line with the address or pattern  
 `i` insert a line before every line with the range or pattern  
 `c` change the range or pattern with provided string  
@@ -261,7 +294,7 @@ $ printf 'Matrix\nZou\n'  | sed '/M/d'
 Zou
 ```
 
-### `l` 
+### `l`   
 displays the contents of the pattern space, showing non-printing characters as two-digit ASCII codes
 ```bash
 $ cat /tmp/test  | sed -n -e  'l'
@@ -269,14 +302,14 @@ The Great \033 is a movie starring Steve McQueen.$
 \033$
 ```
 
-### `y` 
+* [`y` ](#`y` )
 transforms each character by position in string `abc` to its equivalent in string `xyz`
 ```bash
 $ echo 'test'  | sed -e 'y/tes/abc/'
 abca
 ```
 
-### `=` 
+### `=`  
 prints the line number of the matched line
 ```bash
 $ echo 'test'  | sed -e '='
@@ -284,7 +317,7 @@ $ echo 'test'  | sed -e '='
 test
 ```
 
-### `r` / `w` 
+### `r` / `w`    
 `r` read content of file into the `pattern` space  
 `w` write the contents of `pattern` to the file  
 ```bash
@@ -334,6 +367,10 @@ Adams, Henrietta        Northeast
 ```
 
 ## Advanced sed commands
+
+* [`n` / `N`](#n--n)
+* [`d` / `D`](#d--d)
+* [`p` / `P`](#p--p)
 
 ### `n` / `N`
 `n` outputs the contents of the pattern space and then reads the next line of input without returning to the top of the script. In effect, the next command causes the next line of input to replace the current line in the pattern space. Subsequent commands in the script are applied to the replacement line, not the current line. If the default output has not been suppressed, the current line is printed before the replacement takes place.  
@@ -427,6 +464,10 @@ lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 16384
 ```
 
 ## Advanced Commands related with `hold` space
+
+* [`h` / `H`](#h--h)
+* [`g` / `G`](#g--g)
+* [`x`](#x)
 
 ### `h` / `H`
 `h` copys contents of `pattern` space to `hold` space, `hold` space will be overwritten by copied contents.  
@@ -543,6 +584,13 @@ Python is a cross-platform language.
 ```
 
 ## Examples
+
+* [replace specific lines match pattern](#replace-specific-lines-match-pattern)
+* [replace lines in a range](#replace-lines-in-a-range)
+* [get a specific block ](#get-a-specific-block )
+* [print the last 5 lines of a file](#print-the-last-5-lines-of-a-file)
+* [reverse order of lines](#reverse-order-of-lines)
+* [reverse all characters for a line](#reverse-all-characters-for-a-line)
 
 ### replace specific lines match pattern
 ```bash

@@ -9,10 +9,10 @@ permalink: misc_ansible_tips.html
 folder: Misc
 ---
 
-## Ansible Tips
+# Ansible Tips
 =====
 
-### group_by
+## group_by
 
 group hosts via module [group_by](https://docs.ansible.com/ansible/latest/modules/group_by_module.html) dynamically by conditions
 

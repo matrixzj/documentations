@@ -9,10 +9,10 @@ permalink: misc_hpilo.html
 folder: Misc
 ---
 
-## HP iLO
+# HP iLO
 =====
 
-### Gather iLO info for a subnet with python lib `hpilo`
+## Gather iLO info for a subnet with python lib `hpilo`
 
 ```python
 #!/usr/bin/env python
@@ -89,7 +89,7 @@ iLO IP Address  iLO Type  iLO Ver Server Model  iLO Server FQDN    iLO FQDN
 192.168.100.212     iLO4     2.50 DL360 Gen9    ilo05.example.net  ilo05-iLO.example.net
 ```
 
-### Gather iLO info for a subnet with iLO restful API
+## Gather iLO info for a subnet with iLO restful API
 
 ```python
 #!/usr/bin/env python
@@ -184,7 +184,7 @@ iLO IP Address  iLO Type  iLO Ver Server Model  iLO Server FQDN
 192.168.100.212     iLO4     2.50 DL360 Gen9    ilo05.example.net               
 ```
 
-###  Set One-Time Boot Device
+##  Set One-Time Boot Device
 
 ```
 #!/usr/bin/env python

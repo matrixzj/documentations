@@ -9,10 +9,10 @@ permalink: misc_run_script_via_snmp.html
 folder: Misc
 ---
 
-## Run Script with SNMP
+# Run Script with SNMP
 =====
 
-### Create Script on target host
+## Create Script on target host
 ```bash
 $ sudo cat /root/os_info.sh
 #!/bin/bash
@@ -22,7 +22,7 @@ cat /etc/os-release  | awk -F'=' '/^NAME/{print $2}' | sed -e 's/"//g'
 $ sudo chmod 755 /root_info.sh
 ```
 
-### Add script in SNMP config
+## Add script in SNMP config
 ```bash
 # cat << EOF >> /etc/snmp/snmpd.conf
 extend  osname  /root/os_info.sh
@@ -31,7 +31,7 @@ EOF
 # systemctl restart snmpd
 ```
 
-### Retrieve result via snmpwalk/snmpget
+## Retrieve result via snmpwalk/snmpget
 ```bash
 $ snmpwalk -v 2c -c ro_community demo.example.net NET-SNMP-EXTEND-MIB::nsExtendObjects
 NET-SNMP-EXTEND-MIB::nsExtendNumEntries.0 = INTEGER: 1

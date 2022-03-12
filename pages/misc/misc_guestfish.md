@@ -9,10 +9,10 @@ permalink: misc_guestfish.html
 folder: Misc
 ---
 
-## Modify VM Image without Starting It
+# Modify VM Image without Starting It
 =====
 
-### Load image file with guestfish
+## Load image file with guestfish
 
 ```bash
 # guestfish --rw -a /export/data/kvm/images/image.qcow2
@@ -28,7 +28,7 @@ Type: ‘help’ for help on commands
  100% ⟦▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒⟧ 00:00
 ```
 
-### List available devices
+## List available devices
 
 ```bash
 ><fs> list-filesystems
@@ -38,7 +38,7 @@ Type: ‘help’ for help on commands
 ><fs> mount /dev/sda2 /
 ```
 
-### Add/Remove file attributes
+## Add/Remove file attributes
 ```bash
 ><fs> get-e2attrs /etc/resolv.conf
 ei

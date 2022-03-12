@@ -18,24 +18,25 @@ Table of Contents
 * [Operators](#operators)  
 * [Functions](#functions)  
 * [Multiple File Input](#multiple-file-input)  
+* [Exmaples](#exmaples)
 
 ## System Variables
 
-   * [FS](#FS)  
-   * [OFS](#OFS)  
-   * [RS](#RS)  
-   * [ORS](#ORS)  
-   * [RT](#RT)  
-   * [NF](#NF)  
-   * [NR](#NR)  
-   * [FPAT](#FPAT)  
-   * [FILENAME](#FILENAME)  
-   * [FNR](#FNR)  
-   * [CONVFMT](#CONVFMT)  
-   * [OFMT](#OFMT)  
-   * [ENVIRON](#ENVIRON)  
-   * [ARGC](#ARGC)  
-   * [ARGV](#ARGV)  
+* [FS](#FS)  
+* [OFS](#OFS)  
+* [RS](#RS)  
+* [ORS](#ORS)  
+* [RT](#RT)  
+* [NF](#NF)  
+* [NR](#NR)  
+* [FPAT](#FPAT)  
+* [FILENAME](#FILENAME)  
+* [FNR](#FNR)  
+* [CONVFMT](#CONVFMT)  
+* [OFMT](#OFMT)  
+* [ENVIRON](#ENVIRON)  
+* [ARGC](#ARGC)  
+* [ARGV](#ARGV)  
 
 ### **FS**    
 field separator. By default, its value is a single space. FS can also be set to any single character, or to a regular expression.
@@ -310,11 +311,11 @@ The relational operators and the redirections have the same precedence level. Ch
 
 ### Numberic Functions
 
-#[exp(x)](#exp(x))  
-#[int(x)](#int(x))  
-#[log(x)](#log(x))  
-#[rand()](#rand())  
-#[sqrt(x)](#sqrt(x))  
+* [exp(x)](#exp(x))  
+* [int(x)](#int(x))  
+* [log(x)](#log(x))  
+* [rand()](#rand())  
+* [sqrt(x)](#sqrt(x))  
 
 #### **exp(x)**    
 Return the exponential of x (e ^ x) or report an error if x is out of range.

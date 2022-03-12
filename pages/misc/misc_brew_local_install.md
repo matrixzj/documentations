@@ -9,10 +9,10 @@ permalink: misc_brew_local_install.html
 folder: Misc
 ---
 
-## Brew Install from a Local Source
+# Brew Install from a Local Source
 ======
 
-### add repo with `brew tap`
+## add repo with `brew tap`
 
 ```
 $ brew tap jeffreywildman/homebrew-virt-manager
@@ -28,7 +28,7 @@ Resolving deltas: 100% (311/311), done.
 Tapped 4 formulae (29 files, 144.6KB).
 ```
 
-### update related ruby config file
+## update related ruby config file
 ```
 $ ls -al  /usr/local/Homebrew/Library/Taps/jeffreywildman/homebrew-virt-manager
 total 40
@@ -56,7 +56,7 @@ index 64bd2e1..5bf20b2 100644
             revision 3
 ```
 
-### install with `brew install` as normal installation process
+## install with `brew install` as normal installation process
 ```
 $ brew install virt-manager
 ```

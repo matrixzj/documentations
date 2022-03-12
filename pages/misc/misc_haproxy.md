@@ -9,11 +9,11 @@ permalink: misc_haproxy.html
 folder: Misc
 ---
 
-## HAProxy
+# HAProxy
 =====
 
-### HTTP LoadBalancer
-#### HAProxy Config
+## HTTP LoadBalancer
+### HAProxy Config
 ```bash
 # yum -y install haproxy
 
@@ -57,7 +57,7 @@ folder: Misc
 # systemctl restart haproxy
 ```
 
-#### Verify
+### Verify
 ```bash
 # curl http://localhost
 web1.example.com
@@ -66,9 +66,9 @@ web1.example.com
 web2.example.com
 ```
 
-### Forward Source IP
+## Forward Source IP
 
-#### HAProxy config
+### HAProxy config
 ```bash
 # diff -Nru /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.orig
 --- /etc/haproxy/haproxy.cfg    2020-04-12 15:19:13.776177277 +0000
@@ -110,7 +110,7 @@ web2.example.com
 +    server  app4 127.0.0.1:5004 check
 ```
 
-#### HTTP Cconfig
+### HTTP Cconfig
 ```bash
 # diff -Nru /etc/httpd/conf/httpd.conf{,.orig}
 --- /etc/httpd/conf/httpd.conf  2020-04-12 15:42:52.165901625 +0000
@@ -140,9 +140,9 @@ Warning: Permanently added '192.168.0.48' (ECDSA) to the list of known hosts.
 192.168.0.40 - - [12/Apr/2020:15:49:17 +0000] "GET / HTTP/1.1" 200 19 "-" "curl/7.29.0"
 ```
 
-### HTTP SSL offloading 
+## HTTP SSL offloading 
 
-#### SSL Cert 
+### SSL Cert 
 NOTE: How to Generate Private key and Public Cert, please refer to [CA](idm_ca.html)
 ```bash
 # cat haproxy.example.com.crt haproxy.example.com.key  > haproxy.example.com.pem
@@ -150,7 +150,7 @@ NOTE: How to Generate Private key and Public Cert, please refer to [CA](idm_ca.h
 # cp haproxy.example.com.pem /etc/haproxy/
 ```
 
-#### HAProxy config
+### HAProxy config
 ```bash
 # diff -Nru /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.orig
 --- /etc/haproxy/haproxy.cfg    2020-04-12 16:26:47.688222216 +0000
@@ -193,7 +193,7 @@ NOTE: How to Generate Private key and Public Cert, please refer to [CA](idm_ca.h
 # systemctl restart haproxy
 ```
 
-#### Verify 
+### Verify 
 ```bash
 # curl -k https://localhost
 web1.example.com

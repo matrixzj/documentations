@@ -9,10 +9,10 @@ permalink: misc_rsyslog.html
 folder: Misc
 ---
 
-## Rsyslog
+# Rsyslog
 ======
 
-### Severity
+## Severity
 
 Numerical<br>Code|Severity|Description
 :------|:------|:------
@@ -27,7 +27,7 @@ Numerical<br>Code|Severity|Description
 
 [Rsyslog Gentoo Wiki](https://wiki.gentoo.org/wiki/Rsyslog)
 
-### Facility
+## Facility
 
 Numerical<br>Code|Facility|Description
 :------|:------|:------
@@ -56,7 +56,7 @@ Numerical<br>Code|Facility|Description
 22|local6|local use 6 (local6)
 23|local7|local use 7 (local7)
 
-### Selectors Overwrite (later one will overwrite precedings)
+## Selectors Overwrite (later one will overwrite precedings)
 
 ```bash
 local5.none;local5.crit                                 /var/log/matrix1
@@ -71,7 +71,7 @@ Test CMD
 
 Result: `test4` will be loggered to `/var/log/matrix1`, but `test5` will not be.
 
-### Troubleshoot Rsyslog property issue with template `RSYSLOG_DebugFormat`
+## Troubleshoot Rsyslog property issue with template `RSYSLOG_DebugFormat`
 
 [Definition](https://www.rsyslog.com/doc/v8-stable/configuration/templates.html)
 ```bash

@@ -9,10 +9,10 @@ permalink: misc_jq.html
 folder: Misc
 ---
 
-## jq
+# jq
 =====
 
-### data
+## data
 
 ```
 $ cat /tmp/data
@@ -84,9 +84,9 @@ $ cat /tmp/data
 }
 ```
 
-### Examples
+## Examples
 
-#### Show all keys 
+### Show all keys 
 
 ```
 $ cat /tmp/data | jq '. | keys[]'
@@ -97,7 +97,7 @@ $ cat /tmp/data | jq '.Subnets | keys[]'
 1
 ```
 
-#### Elements count
+### Elements count
 
 ```
 $ cat /tmp/data | jq '.Subnets | length'
@@ -116,7 +116,7 @@ $ jq -r '[.Subnets[] | select(.State == "available")] | length' /tmp/data
 ```
 
 
-#### Show Specific Element by Index
+### Show Specific Element by Index
 
 ```
 $ cat /tmp/data | jq '.Subnets[0]'
@@ -155,7 +155,7 @@ $ cat /tmp/data | jq '.Subnets[0]'
 }
 ```
 
-#### Show Multi Attibutes
+### Show Multi Attibutes
 
 ```
 $ cat /tmp/data | jq '.Subnets[].SubnetId, .Subnets[].CidrBlock'
@@ -173,7 +173,7 @@ $ cat /tmp/data | jq '.Subnets[] | .SubnetId, .CidrBlock'
 "10.1.0.0/24"
 ```
 
-#### Filter by value 
+### Filter by value 
 
 ```
 $ cat /tmp/data | jq '.Subnets[] | .SubnetId, .CidrBlock | select( . == "10.1.0.0/24" )'
@@ -193,7 +193,7 @@ $ cat /tmp/data | jq '.Subnets[] | {id: .SubnetId, network: .CidrBlock} | select
 }
 ```
 
-#### Resharp json
+### Resharp json
 
 ```
 $ cat /tmp/data | jq '.Subnets[] | { id: .SubnetId, ip_range: .CidrBlock }'
@@ -207,7 +207,7 @@ $ cat /tmp/data | jq '.Subnets[] | { id: .SubnetId, ip_range: .CidrBlock }'
 }
 ```
 
-#### skip null iterator with `?`
+### skip null iterator with `?`
 ```
 $ cat /tmp/ss-instances | jq ' .[][].Instances[] | {id: .InstanceId, tags: .Tags[]} | select(.tags.Key | test("^Name$";"i")) | select(.tags.Value | test(".*netapp.*"))'
 jq: error (at <stdin>:34578): Cannot iterate over null (null)
@@ -224,7 +224,7 @@ $ cat /tmp/ss-instances | jq ' .[][].Instances[] | {id: .InstanceId, tags: .Tags
 }
 ```
 
-#### filter case insensitive with `"i"`
+### filter case insensitive with `"i"`
 ```
 $ cat /tmp/ss-instances | jq ' .[][].Instances[] | {id: .InstanceId, tags: .Tags[]?} | select(.tags.Key | test("^Name$";"i")) | select(.tags.Value | test(".*netapp.*";"i"))'
 {
@@ -243,7 +243,7 @@ $ cat /tmp/ss-instances | jq ' .[][].Instances[] | {id: .InstanceId, tags: .Tags
 }
 ```
 
-#### pass parameters from bash
+### pass parameters from bash
 ```
 $ test_cidr='10.1.0.*'
 
@@ -264,7 +264,7 @@ $ jq -r --argjson ip_threshhold "${avaiable_ips_threshhold}" '.Subnets[] | {subn
 }
 ```
 
-#### filter value based on another is existed
+### filter value based on another is existed
 ```
 $ cat /tmp/data
 {

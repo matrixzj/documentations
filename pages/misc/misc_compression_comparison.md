@@ -9,10 +9,10 @@ permalink: misc_compression_comparison.html
 folder: Misc
 ---
 
-## Linux compress tools comparison
+# Linux compress tools comparison
 =====
 
-### Env Info
+## Env Info
 
 |Item | Info
 | :------------- | :-------------
@@ -26,7 +26,7 @@ folder: Misc
 | bzip2 info | bzip2-1.0.6-13.el7.x86_64
 {: .table-bordered }
 
-### compress time
+## compress time
 
 Source file is a 5000000000 bytes plain text file. 
 
@@ -44,9 +44,9 @@ Source file is a 5000000000 bytes plain text file.
 |9|61.819s|795.516s|746.284s
 {: .table-bordered }
 
-### compress size/ratio
+## compress size/ratio
 
-#### Size
+### Size
 
 |compress level|gzip|xz|bzip2
 | :-------------: | -------------: | ------------: | ------------:
@@ -62,7 +62,7 @@ Source file is a 5000000000 bytes plain text file.
 |9|135962314|743828  |95118532
 {: .table-bordered }
 
-#### Ratio
+### Ratio
 
 |compress level|gzip|xz|bzip2
 | :-------------: | -------------: | ------------: | ------------:
@@ -77,104 +77,6 @@ Source file is a 5000000000 bytes plain text file.
 |8|2.72%|0.01%|1.92%
 |9|2.72%|0.01%|1.90%
 {: .table-bordered }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{: .table-bordered }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{% include links.html %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 {% include links.html %}

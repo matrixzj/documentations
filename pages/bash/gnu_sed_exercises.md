@@ -11,13 +11,10 @@ folder: bash
 
 # Exercises
 
->![info](../images/info.svg) Exercise related files are available from [exercises folder](https://github.com/learnbyexample/learn_gnused/tree/master/exercises).
+Exercise related files are available from [exercises folder](https://github.com/learnbyexample/learn_gnused/tree/master/exercises).
+For solutions, see [Exercise_solutions.md](https://github.com/learnbyexample/learn_gnused/blob/master/exercises/Exercise_solutions.md).
 
->![info](../images/info.svg) For solutions, see [Exercise_solutions.md](https://github.com/learnbyexample/learn_gnused/blob/master/exercises/Exercise_solutions.md).
-
-<br>
-
-# Introduction
+## Introduction
 
 **a)** Replace `5` with `five` for the given stdin source.
 
@@ -49,9 +46,7 @@ $ echo 'goal new user sit eat dinner' | sed -e 'y/aeiou/AEIOU/'
 gOAl nEw UsEr sIt EAt dInnEr
 ```
 
-<br>
-
-# In-place file editing
+## In-place file editing
 
 **a)** For the input file `text.txt`, replace all occurrences of `in` with `an` and write back the changes to `text.txt` itself. The original contents should get saved to `text.txt.orig`
 
@@ -133,9 +128,7 @@ $ cat bkp.b1.txt
 2 apples
 ```
 
-<br>
-
-# Selective editing
+## Selective editing
 
 **a)** Remove only the third line of given input.
 
@@ -263,7 +256,7 @@ $ seq 32 100 | sed -n '1~14{/4/!p}'
 
 <br>
 
-# BRE/ERE Regular Expressions
+## BRE/ERE Regular Expressions
 
 **a)** For the given input, print all lines that start with `den` or end with `ly`.
 
@@ -392,7 +385,7 @@ $ echo $words | sed -E 's/(imp|ant|(\w+))/(\2)/g'
 
 <br>
 
-# Flags
+## Flags
 
 **a)** For the input file `para.txt`, remove all groups of lines marked with a line beginning with `start` and a line ending with `end`. Match both these markers case insensitively.
 
@@ -514,9 +507,7 @@ and sprang at us. But by this time the Professor had gained his feet,
 this time the Professor had to ask her questions, and to ask them pretty
 ```
 
-<br>
-
-# Shell substitutions
+## Shell substitutions
 
 **a)** Replace `#expr#` with value of `usr_ip` shell variable. Assume that this variable can only contain the metacharacters as shown in the sample below.
 
@@ -538,9 +529,7 @@ $ echo 'Expression: #expr#' | sed "s|#expr#|$(echo ${usr_ip} | sed -e 's|[/&]|\\
 Expression: c = (a/b/y) && (x-5)
 ```
 
-<br>
-
-# z, s and f command line options
+## z, s and f command line options
 
 **a)** Replace any character other than word characters and `.` character with `_` character for the sample filenames shown below.
 
@@ -591,9 +580,8 @@ start address: 0x5000, func1 address: 0x5000
 end address: 0x7000, func2 address: 0x6000
 ```
 
-<br>
 
-# append, change, insert
+## append, change, insert
 
 **a)** For the input file `addr.txt`, print only the third line and surround it with `-----`
 
@@ -625,9 +613,7 @@ $ seq 0 5 | sed '2~2s/.*/---/'
 ---
 ```
 
-<br>
-
-# Adding content from file
+## Adding content from file
 
 **a)** Replace third to fifth lines of input file `addr.txt` with second to fourth lines from file `para.txt`
 
@@ -678,9 +664,8 @@ end address: 0xFF, func2 address: 0xB0
 0xFF 0x7000
 ```
 
-<br>
 
-# Control structures
+## Control structures
 
 **a)** Using the input file `para.txt`, create a file named `markers.txt` with all lines that contain `start` or `end` (matched case insensitively) and a file named `rest.txt` with rest of the lines.
 
@@ -755,9 +740,8 @@ $ diff -s out.txt anchors.txt
 Files out.txt and anchors.txt are identical
 ```
 
-<br>
 
-# Processing lines bounded by distinct markers
+## Processing lines bounded by distinct markers
 
 **a)** For the input file `broken.txt`, print all lines between the markers `top` and `bottom`. The first `sed` command shown below doesn't work because `sed` will match till end of file if second address isn't found.
 
@@ -800,3 +784,5 @@ end address: 0xFF, func2 address: 0xB0
 You are funny
 ```
 
+
+{% include links.html %}
