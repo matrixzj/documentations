@@ -5,6 +5,7 @@ keywords: sed
 last_updated: Aug 13, 2021
 summary: "sed guide"
 sidebar: mydoc_sidebar
+toc: false
 permalink: bash_sed.html
 folder: bash
 ---
@@ -69,7 +70,7 @@ drop
 * [Multiple commands](#multiple-commands)
 * [Address Range](#address-range)
     * [Relative addressing](#relative-addressing)
-        * [`ADDR1, +N` / `/REGEXP/,+N`](#add1--n--regexpn)
+        * [`ADDR1, +N` / `/REGEXP/,+N`](#add1-n--regexpn)
         * [`ADDR1,~N`](#addr1n)
         * [`N1~N2`](#n1n2)
 
@@ -162,6 +163,7 @@ Matrix
 * `\E`  indicates end of case conversion
 * `\l` / `\u`  convert next character to lower/upper case
 * `\L` / `\U`  convert processing string to lower/upper case, unless `\L` / `\U` / `\E` is used
+
 ```bash
 $ echo 'test1 test2' | sed -E 's/([[:alpha:]])/\U\1/'
 Test1 test2
@@ -198,8 +200,7 @@ If multiple Nth occurrences are to be replaced, use descending order for readabi
 $ echo 'test1 test2 test3' | sed -E 's/([a-z]+)/\U&/2; s/([a-z]+)/\U&/2'
 test1 TEST2 TEST3
 
-jzou@matrix-oracle-instance-1:~ · 06:16 PM Fri Aug 06 ·
-!5046 $ echo 'test1 test2 test3' | sed -E 's/([a-z]+)/\U&/3; s/([a-z]+)/\U&/2'
+$ echo 'test1 test2 test3' | sed -E 's/([a-z]+)/\U&/3; s/([a-z]+)/\U&/2'
 test1 TEST2 TEST3
 ```
 
