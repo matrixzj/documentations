@@ -15,11 +15,11 @@ folder: bash
 
 <div id="toc">
    <ul>
-      <li><a href="#system-variables"></a>System Variables<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#LINK" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      <li><a href="#operators"></a>Operators<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#LINK" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      <li><a href="#functions"></a>Functions<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#LINK" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      <li><a href="#multiple-file-input"></a>Multiple File Input<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#LINK" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      <li><a href="#exmaples"></a>Exmaples<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#LINK" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#system-variables"></a>System Variables<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#system-variables" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#operators"></a>Operators<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#operators" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#functions"></a>Functions<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#functions" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#multiple-file-input"></a>Multiple File Input<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#multiple-file-input" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#exmaples"></a>Exmaples<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#exmaples" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
    </ul>
 </div>
 
