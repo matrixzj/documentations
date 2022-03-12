@@ -13,7 +13,15 @@ folder: bash
 # awk
 =====
 
-<div id="toc"> <ul><li><a href="#script">Script</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#script" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li><li><a href="#usage">Usage</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#usage" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li><li><a href="#example">Example</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#example" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li></ul></div>
+<div id="toc">
+   <ul>
+      <li><a href="#system-variables"></a>System Variables<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#LINK" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#operators"></a>Operators<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#LINK" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#functions"></a>Functions<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#LINK" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#multiple-file-input"></a>Multiple File Input<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#LINK" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#exmaples"></a>Exmaples<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#LINK" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+   </ul>
+</div>
 
 Table of Contents
 * [System Variables](#system-variables)  
