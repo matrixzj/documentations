@@ -28,28 +28,26 @@ folder: bash
 <div id="toc">
    <ul>
       <li>
+         <a href="#loop-over-a-range-of-numbers">Loop over a range of numbers</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#loop-over-a-range-of-numbers" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
          <ul>
-            <li><a href="#FS"></a>FS<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#FS" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#OFS"></a>OFS<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#OFS" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#RS"></a>RS<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#RS" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#ORS"></a>ORS<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ORS" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#RT"></a>RT<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#RT" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#NF"></a>NF<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#NF" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#NR"></a>NR<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#NR" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#FPAT"></a>FPAT<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#FPAT" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#FILENAME"></a>FILENAME<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#FILENAME" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#FNR"></a>FNR<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#FNR" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#CONVFMT"></a>CONVFMT<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#CONVFMT" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#OFMT"></a>OFMT<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#OFMT" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#ENVIRON"></a>ENVIRON<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ENVIRON" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#ARGC"></a>ARGC<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ARGC" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#ARGV"></a>ARGV<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ARGV" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-          </ul>
-       </li>
-    </ul>
+            <li><a href="#function">Function</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#function" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+         </ul>
+      </li>
+      <li>
+         <a href="#loop-over-file">Loop over file</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#loop-over-file" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
+         <ul>
+            <li><a href="#function-1">Function</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#function-1" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#example">Example</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#example" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+         </ul>
+      </li>
+      <li>
+         <a href="#loop-over-files-and-directories">Loop over files and directories</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#loop-over-files-and-directories" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
+         <ul>
+            <li><a href="#function-2">Function</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#function-2" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+         </ul>
+      </li>
+   </ul>
 </div>
-
-
 
 
 * [FS](#FS)  
