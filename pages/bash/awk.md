@@ -13,6 +13,8 @@ folder: bash
 # awk
 =====
 
+<div id="toc"> <ul><li><a href="#script">Script</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#script" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li><li><a href="#usage">Usage</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#usage" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li><li><a href="#example">Example</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#example" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li></ul></div>
+
 Table of Contents
 * [System Variables](#system-variables)  
 * [Operators](#operators)  
