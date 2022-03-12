@@ -35,6 +35,7 @@ folder: bash
 Unless special commands (like `D`) are used, the pattern space is deleted between two cycles. The hold space, on the other hand, keeps its data between cycles (see commands `h`, `H`, `x`, `g`, `G` to move n data between both buffers).
 
 ## In-place File Editing
+
 || Note || Description ||
 | -i | after processing, write back changes to the source file(s) changes made cannot be undone, so use this option with caution |
 | -i.bkp | in addition to in-place editing, preserve original contents to a file whose name is derived from input filename and .bkp as a suffix |
@@ -43,11 +44,18 @@ Unless special commands (like `D`) are used, the pattern space is deleted betwee
 
 ## Selective Editing
 
+* [Conditonal execution](#conditonal-execution)
+* [Multiple commands](#multiple-commands)
+* [Address Range](#address-range)
+    * [Relative addressing](#relative-addressing)
+        * [`ADDR1, +N` / `/REGEXP/,+N`](#add1-n--regexpn)
+        * [`ADDR1,~N`](#addr1n)
+        * [`N1~N2`](#n1n2)
+
 ### Conditonal execution
 ```bash
 /REGEXP/s/REGEXP/REPLACEMENT/FLAGS
 ```
-
 ### Multiple commands
 Commands can be specified more than once by separating them using ; or using the -e command line option.
 ```bash
@@ -65,14 +73,6 @@ drop
 ``` 
 
 ### Address Range
-
-* [Conditonal execution](#conditonal-execution)
-* [Multiple commands](#multiple-commands)
-* [Address Range](#address-range)
-    * [Relative addressing](#relative-addressing)
-        * [`ADDR1, +N` / `/REGEXP/,+N`](#add1-n--regexpn)
-        * [`ADDR1,~N`](#addr1n)
-        * [`N1~N2`](#n1n2)
 
 #### Relative addressing
 
