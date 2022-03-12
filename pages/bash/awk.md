@@ -297,9 +297,9 @@ Precedence for operators
 | 14 | ?: | Conditional. This operator groups right to left |  
 | 15 | = += -= *= /= %= ^= **= | Assignment. These operators group right to left |  
 
-### Note 1   
+###### Note 1   
 There is no special symbol for concatenation. The operands are simply written side by side.  
-### Note 2 
+###### Note 2 
 The relational operators and the redirections have the same precedence level. Characters such as '>' serve both as relationals and as redirections; the context distinguishes between the two meanings. Note that the I/O redirection operators in print and printf statements belong to the statement level, not to expressions. The redirection does not produce an expression that could be the operand of another operator. As a result, it does not make sense to use a redirection operator near another operator of lower precedence without parentheses. Such combinations (e.g., 'print foo > a ? b : c') result in syntax errors. The correct way to write this statement is 'print foo > (a ? b : c)'.
 
   
@@ -309,6 +309,13 @@ The relational operators and the redirections have the same precedence level. Ch
 ** [String Functions](#string-functions)  
 
 ### Numberic Functions
+
+#[exp(x)](#exp(x))  
+#[int(x)](#int(x))  
+#[log(x)](#log(x))  
+#[rand()](#rand())  
+#[sqrt(x)](#sqrt(x))  
+
 #### **exp(x)**    
 Return the exponential of x (e ^ x) or report an error if x is out of range.
 
@@ -325,6 +332,22 @@ Return a random number. The values of rand() are uniformly distributed between z
 Return the positive square root of x.
 
 ### String Functions
+
+#### Backreferences
+#### asort(source [, dest [, how ] ]) / asorti(source [, dest [, how ] ])
+#### sub(regexp, replacement [, target])
+#### gensub(regexp, replacement, how [, target])
+#### gsub(regexp, replacement [, target])
+#### index(in, find)
+#### length([string])
+#### match(string, regexp [, array])
+#### patsplit(string, array [, fieldpat [, seps ] ])
+#### split(string, array  [, fieldsep [, seps ] ])
+#### sprintf(format, expression1, …)
+#### strtonum(str)
+#### substr(string, start [, length ])
+#### tolower(string) / toupper(string)
+
 #### Backreferences
 Backreferences of the form *\N* can only be used with *gensub* function. *&* can be used with *sub*, *gsub* and *gensub* functions. *\0* can also be used instead of *&* with *gensub* function.
 

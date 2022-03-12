@@ -4,6 +4,7 @@ published: false
 sidebar: mydoc_sidebar
 permalink: mydoc_installing_bundler.html
 folder: mydoc
+search: exclude
 ---
 
 If you get permissions errors when trying to install Bundler, follow these steps:
