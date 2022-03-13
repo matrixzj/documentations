@@ -5,12 +5,56 @@ keywords: markdown
 last_updated: June 20, 2019
 summary: "Markdown Cheatsheet"
 sidebar: mydoc_sidebar
+toc: false
 permalink: misc_markdown_syntax.html
 folder: Misc
 ---
 
 # Markdown Syntax
 =====
+
+
+
+<div id="toc" style="">
+   <ul>
+      <li><a href="#headings">Headings</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#headings" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li>
+         <a href="#emphasis">Emphasis</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#emphasis" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
+         <ul>
+            <li><a href="#bold">Bold</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#bold" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#italic">Italic</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#italic" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#bold-and-italic">Bold and Italic</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#bold-and-italic" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#blockquotes">Blockquotes</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#blockquotes" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#blockquotes-with-multiple-paragraphs">Blockquotes with Multiple Paragraphs</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#blockquotes-with-multiple-paragraphs" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+         </ul>
+      </li>
+      <li>
+         <a href="#lists">Lists</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#lists" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
+         <ul>
+            <li><a href="#ordered-lists">Ordered Lists</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ordered-lists" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#unordered-lists">Unordered Lists</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#unordered-lists" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+         </ul>
+      </li>
+      <li>
+         <a href="#code">Code</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#code" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
+         <ul>
+            <li><a href="#word-or-phase">Word or Phase</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#word-or-phase" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#block">Block</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#block" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+         </ul>
+      </li>
+      <li>
+         <a href="#links">Links</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#links" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
+         <ul>
+            <li><a href="#adding-titles">Adding Titles</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#adding-titles" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#reference-style-links">Reference-style Links</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#reference-style-links" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#footnotes">Footnotes</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#footnotes" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#images">Images</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#images" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+         </ul>
+      </li>
+      <li><a href="#tables">Tables</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#tables" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+   </ul>
+</div>
+
 
 ## Headings
 
