@@ -5,7 +5,6 @@ keywords: awk
 last_updated: Mar 11, 2022
 summary: "awk howto"
 sidebar: mydoc_sidebar
-toc: false
 permalink: bash_awk.html
 folder: bash
 ---
@@ -13,60 +12,7 @@ folder: bash
 # awk
 =====
 
-<div id="toc">
-   <ul>
-      <li><a href="#system-variables">System Variables</a><a class="anchorjs-link" aria-label="Anchor" data-anchorjs-icon=""  style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
-         <ul>
-            <li><a href="#fs">FS</a><a class="anchorjs-link" aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#ofs">OFS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#rs">RS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#ors">ORS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#rt">RT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#nf">NF</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#nr">NR</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#fpat">FPAT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#filename">FILENAME</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#fnr">FNR</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#convfmt">CONVFMT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#ofmt">OFMT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#environ">ENVIRON</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#argc">ARGC</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#argv">ARGV</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-         </ul>
-      </li>
-      <li><a href="#operators">Operators</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      <li><a href="#functions">Functions</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      <li><a href="#multiple-file-input">Multiple File Input</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      <li><a href="#exmaples">Exmaples</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-   </ul>
-</div>
-
 ## System Variables
-
-<div id="toc">
-   <ul>
-      <li>
-         <ul>
-            <li><a href="#fs">FS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#fs" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#ofs">OFS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ofs" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#rs">RS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#rs" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#ors">ORS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ors" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#rt">RT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#rt" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#nf">NF</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#nf" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#nr">NR</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#nr" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#fpat">FPAT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#fpat" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#filename">FILENAME</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#filename" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#fnr">FNR</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#fnr" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#convfmt">CONVFMT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#convfmt" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#ofmt">OFMT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ofmt" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#environ">ENVIRON</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#environ" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#argc">ARGC</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#argc" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#argv">ARGV</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#argv" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-         </ul>
-      </li>
-   </ul>
-</div>
-
 
 ### **FS**    
 field separator. By default, its value is a single space. FS can also be set to any single character, or to a regular expression.
@@ -336,16 +282,17 @@ The relational operators and the redirections have the same precedence level. Ch
   
 ## Functions
 
-** [Numberic Functions](#numberic-functions)  
-** [String Functions](#string-functions)  
-
 ### Numberic Functions
 
-* [exp(x)](#exp(x))  
-* [int(x)](#int(x))  
-* [log(x)](#log(x))  
-* [rand()](#rand())  
-* [sqrt(x)](#sqrt(x))  
+<div id="toc" style="">
+   <ul>
+      <li><a href="#expx">exp(x)</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#intx">int(x)</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#logx">log(x)</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#rand">rand()</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#sqrtx">sqrt(x)</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+   </ul>
+</div>
 
 #### **exp(x)**    
 Return the exponential of x (e ^ x) or report an error if x is out of range.
@@ -364,20 +311,25 @@ Return the positive square root of x.
 
 ### String Functions
 
-# [Backreferences](#Backreferences)
-# [asort](#asort)
-# [sub](#sub)
-# [gensub](#gensub)
-# [gsub](#gsub)
-# [index](#index)
-# [length](#length)
-# [match](#match)
-# [patsplit](#patsplit)
-# [split](#split)
-# [sprintf](#sprintf)
-# [strtonum](#strtonum)
-# [substr](#substr)
-# [tolower](#tolower)
+<div id="toc" style="">
+   <ul>
+      <li><a href="#backreferences-1">Backreferences</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#asort">asort-1</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#sub">sub-1</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#gensub">gensub-1</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#gsub">gsub-1</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#index">index-1</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#length">length-1</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#match">match-1</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#patsplit">patsplit-1</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#split">split-1</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#sprintf">sprintf-1</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#strtonum">strtonum-1</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#substr">substr-1</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#tolower--toupper">tolower / toupper</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+   </ul>
+</div>
+
 
 #### Backreferences
 Backreferences of the form *\N* can only be used with *gensub* function. *&* can be used with *sub*, *gsub* and *gensub* functions. *\0* can also be used instead of *&* with *gensub* function.

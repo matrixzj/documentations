@@ -30,14 +30,6 @@ Unless special commands (like `D`) are used, the pattern space is deleted betwee
 
 ## Selective Editing
 
-* [Conditonal execution](#conditonal-execution)
-* [Multiple commands](#multiple-commands)
-* [Address Range](#address-range)
-    * [Relative addressing](#relative-addressing)
-        * [`ADDR1, +N` / `/REGEXP/,+N`](#add1-n--regexpn)
-        * [`ADDR1,~N`](#addr1n)
-        * [`N1~N2`](#n1n2)
-
 ### Conditonal execution
 ```bash
 /REGEXP/s/REGEXP/REPLACEMENT/FLAGS
@@ -62,12 +54,14 @@ drop
 
 <div id="toc" style="">
    <ul>
-      <li><a href="#relative-addressing">Relative addressing</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-	  <ul>
-         <li><a href="#addr1-n--regexpn">`ADDR1, +N` / `/REGEXP/,+N`</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-         <li><a href="#addr1n">`ADDR1,~N`</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-         <li><a href="#n1n2">`N1~N2`</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      </ul>
+      <li>
+         <a href="#relative-addressing">Relative addressing</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
+	     <ul>
+            <li><a href="#addr1-n--regexpn">`ADDR1, +N` / `/REGEXP/,+N`</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#addr1n">`ADDR1,~N`</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#n1n2">`N1~N2`</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+         </ul>
+	  </li>
    </ul>
 </div>
 
