@@ -28,7 +28,6 @@ folder: bash
 <div id="toc">
    <ul>
       <li>
-         <a href="#loop-over-a-range-of-numbers">Loop over a range of numbers</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#loop-over-a-range-of-numbers" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
          <ul>
             <li><a href="#function">Function</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#function" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
          </ul>
