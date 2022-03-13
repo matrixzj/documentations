@@ -15,9 +15,9 @@ folder: bash
 
 <div id="toc">
    <ul>
-      <li><a href="#system-variables"></a>System Variables<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#system-variables" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
+      <li><a href="#system-variables">System Variables</a><a class="anchorjs-link" aria-label="Anchor" data-anchorjs-icon=""  style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
          <ul>
-            <li><a href="#fs">FS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#fs" style="padding-left: 0.375em;"></a></li>
+            <li><a href="#fs">FS</a><a class="anchorjs-link" aria-label="Anchor" data-anchorjs-icon="" href="#fs" style="padding-left: 0.375em;"></a></li>
             <li><a href="#ofs">OFS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ofs" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
             <li><a href="#rs">RS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#rs" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
             <li><a href="#ors">ORS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ors" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
