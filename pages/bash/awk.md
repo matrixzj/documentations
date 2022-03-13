@@ -17,7 +17,9 @@ folder: bash
    <ul>
       <li><a href="#system-variables"></a>System Variables<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#system-variables" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
          <ul>
+			::before
             <li><a href="#fs">FS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#fs" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+			::before
             <li><a href="#ofs">OFS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ofs" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
             <li><a href="#rs">RS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#rs" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
             <li><a href="#ors">ORS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ors" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
