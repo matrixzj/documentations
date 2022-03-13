@@ -15,7 +15,25 @@ folder: bash
 
 <div id="toc">
    <ul>
-      <li><a href="#system-variables"></a>System Variables<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#system-variables" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#system-variables"></a>System Variables<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#system-variables" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
+         <ul>
+            <li><a href="#fs">FS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#fs" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#ofs">OFS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ofs" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#rs">RS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#rs" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#ors">ORS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ors" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#rt">RT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#rt" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#nf">NF</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#nf" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#nr">NR</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#nr" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#fpat">FPAT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#fpat" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#filename">FILENAME</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#filename" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#fnr">FNR</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#fnr" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#convfmt">CONVFMT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#convfmt" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#ofmt">OFMT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ofmt" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#environ">ENVIRON</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#environ" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#argc">ARGC</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#argc" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#argv">ARGV</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#argv" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+         </ul>
+      </li>
       <li><a href="#operators"></a>Operators<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#operators" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
       <li><a href="#functions"></a>Functions<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#functions" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
       <li><a href="#multiple-file-input"></a>Multiple File Input<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#multiple-file-input" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
@@ -49,22 +67,6 @@ folder: bash
    </ul>
 </div>
 
-
-* [FS](#FS)  
-* [OFS](#OFS)  
-* [RS](#RS)  
-* [ORS](#ORS)  
-* [RT](#RT)  
-* [NF](#NF)  
-* [NR](#NR)  
-* [FPAT](#FPAT)  
-* [FILENAME](#FILENAME)  
-* [FNR](#FNR)  
-* [CONVFMT](#CONVFMT)  
-* [OFMT](#OFMT)  
-* [ENVIRON](#ENVIRON)  
-* [ARGC](#ARGC)  
-* [ARGV](#ARGV)  
 
 ### **FS**    
 field separator. By default, its value is a single space. FS can also be set to any single character, or to a regular expression.
@@ -683,6 +685,7 @@ mat good rix
 ```
 
 ## Multiple File Input  
+
 *BEGINFILE* — this block gets executed before start of each input file  
 *ENDFILE*  — this block gets executed after processing each input file  
 *FILENAME* — special variable having file name of current input file  
@@ -690,6 +693,7 @@ mat good rix
 
 
 ## Examples
+
 ### Show Duplicated Lines
 ```bash
 $ cat /tmp/test
