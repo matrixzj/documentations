@@ -10,7 +10,7 @@ folder: openstack
 ---
 
 
-## OpenStack Services
+# OpenStack Services
 =====
 
 Daemon Description | Config File | Ports | Service Name | Note  
@@ -28,7 +28,7 @@ Block Storage (cinder) | /etc/cinder/cinder.conf | 8776 | openstack-cinder-api.s
 Message Broker (AMQP traffic) | | 5672 | rabbitmq-server.service | OpenStack Block Storage, Networking, Orchestration, and Compute
 {: .table-bordered }
 
-### Nova Status 
+## Nova Status 
 
 ```
 # nova service-list 
@@ -43,7 +43,7 @@ Message Broker (AMQP traffic) | | 5672 | rabbitmq-server.service | OpenStack Blo
 | 153 | nova-compute     | nova02.example.net        | DEV-iSCSI | enabled | up    | 2019-08-22T07:17:44.000000 | -               |
 ```
 
-### Neutron Status
+## Neutron Status
 
 ```
 # neutron agent-list
@@ -56,7 +56,7 @@ Message Broker (AMQP traffic) | | 5672 | rabbitmq-server.service | OpenStack Blo
 | ef31f498-bef3-47e0-9e8f-8e966723cb3d | Linux bridge agent | controller.example.net    |                   | :-)   | True           | neutron-linuxbridge-agent |
 ```
 
-### Check VM Info
+## Check VM Info
 
 ```
 #  nova list --fields status,host,name,networks --all-tenants 

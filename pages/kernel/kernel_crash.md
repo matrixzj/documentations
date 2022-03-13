@@ -9,7 +9,7 @@ permalink: kernel_crash.html
 folder: kernel
 ---
 
-## Crash Utilities
+# Crash Utilities
 =====
 
 This repository is intended to contain several utilities written to help work
@@ -17,12 +17,12 @@ with crash [0] for vmcore analysis.
 
 [0] https://people.redhat.com/anderson/crash_whitepaper/
 
-### dm-target debugging
+## dm-target debugging
 ===================
 
 Debugging dm-targets can be a non-trivial task. Here are some tools to help.
 
-#### dm-target persistent names
+### dm-target persistent names
 ===========================
 
 Note that dm device numbers, ie, dm-13, are not persistent across reboots.
@@ -42,7 +42,7 @@ Note that even if none of this is used a system *can* boot with the same
 dm-target names ! So best is to just verify the dm-target and respective mount
 point yourselves. How to do this is explained below.
 
-#### Inspecting dm-target pending IO
+### Inspecting dm-target pending IO
 ===============================
 
 found out D state process

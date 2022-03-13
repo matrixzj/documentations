@@ -5,8 +5,8 @@ keywords: guestfish, qcow2, raw, image
 last_updated: June 23, 2019
 summary: "Edit VM Image with guestfish tool"
 sidebar: mydoc_sidebar
-permalink: misc_guestfish.html
-folder: Misc
+permalink: openstack_guestfish.html
+folder: Openstack
 ---
 
 # Modify VM Image without Starting It

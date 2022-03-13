@@ -9,10 +9,10 @@ permalink: misc_markdown_syntax.html
 folder: Misc
 ---
 
-Markdown Syntax
+# Markdown Syntax
 =====
 
-### Headings
+## Headings
 
 To create a heading, add number signs (`#`) in front of a word or phrase. The number of number signs you use should correspond to the heading level. For example, to create a heading level three (`<h3>`), use three number signs (e.g., `### My Header`).  
 
@@ -27,9 +27,9 @@ To create a heading, add number signs (`#`) in front of a word or phrase. The nu
 {: .table-bordered }
 
 
-### Emphasis 
+## Emphasis 
 
-#### Bold
+### Bold
 
 To bold text, add two asterisks or underscores before and after a word or phrase. To bold the middle of a word for emphasis, add two asterisks without spaces around the letters.    
 
@@ -40,7 +40,7 @@ To bold text, add two asterisks or underscores before and after a word or phrase
 `Love**is**bold` | `Love<strong>is</strong>bold` | Love<strong>is</strong>bold  
 {: .table-bordered }
 
-#### Italic
+### Italic
 
 To italicize text, add one asterisk or underscore before and after a word or phrase. To italicize the middle of a word for emphasis, add one asterisk without spaces around the letters.  
 
@@ -51,7 +51,7 @@ To italicize text, add one asterisk or underscore before and after a word or phr
 `A*cat*meow` | `A<em>cat</em>meow` | A<em>cat</em>meow  
 {: .table-bordered }
 
-#### Bold and Italic
+### Bold and Italic
 
 To emphasize text with bold and italics at the same time, add three asterisks or underscores before and after a word or phrase.  
 
@@ -63,7 +63,7 @@ To emphasize text with bold and italics at the same time, add three asterisks or
 `This text is **_really important_**.` | `This text is <strong><em>really important</em></strong>.` | This text is <strong><em>really important</em></strong>.  
 {: .table-bordered }
 
-#### Blockquotes
+### Blockquotes
 
 To create a blockquote, add a `>` in front of a paragraph.  
 
@@ -73,7 +73,7 @@ The rendered output looks like this:
 
 > Dorothy followed her through many of the beautiful rooms in her castle.
 
-#### Blockquotes with Multiple Paragraphs
+### Blockquotes with Multiple Paragraphs
 
 Blockquotes can contain multiple paragraphs. Add a `>` on the blank lines between the paragraphs.  
 
@@ -87,11 +87,11 @@ The rendered output looks like this:
 >
 > The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.
 
-### Lists
+## Lists
 
 You can organize items into ordered and unordered lists.
 
-#### Ordered Lists
+### Ordered Lists
 
 To create an ordered list, add line items with numbers followed by periods. The numbers don’t have to be in numerical order, but the list should start with the number one.
 
@@ -101,7 +101,7 @@ To create an ordered list, add line items with numbers followed by periods. The 
 `1. First item`<br>`2. Second item`<br>`3. Third item`<br>`    1. Indented item`<br>`    2. Indented item`<br>`4. Fourth item ` | `<ol>`<br>`<li>First item</li>`<br>`<li>Second item</li>`<br>`<li>Third item</li>`<br>`<ol>`<br>`<li>Indented item</li>`<br>`<li>Indented item</li>`<br>`</ol>`<br>`<li>Fourth item</li>`<br>`</ol> ` | {::nomarkdown}<ol><li>First item</li><li>Second item</li><li>Third item</li><ol><li>Indented item</li><li>Indented item</li></ol><li>Fourth item</li></ol>{:/}
 {: .table-bordered }
 
-#### Unordered Lists
+### Unordered Lists
 
 To create an unordered list, add dashes (`-`), asterisks (`*`), or plus signs (`+`) in front of line items. Indent one or more items to create a nested list.
 
@@ -112,9 +112,9 @@ To create an unordered list, add dashes (`-`), asterisks (`*`), or plus signs (`
 `+ First item`<br>`+ Second item`<br>`+ Third item`<br>`+ Fourth item` | `<ul>`<br>`<li>First item</li>`<br>`<li>Second item</li>`<br>`<li>Third item</li>`<br>`<li>Fourth item</li>`<br>`</ul>` | {::nomarkdown}<ul><li>First item</li><li>Second item</li><li>Third item</li><li>Fourth item</li></ul>{:/}
 {: .table-bordered }
 
-### Code
+## Code
 
-#### Word or Phase
+### Word or Phase
 
 To denote a word or phrase as code, enclose it in tick marks (`` ` ``).
 
@@ -123,7 +123,7 @@ To denote a word or phrase as code, enclose it in tick marks (`` ` ``).
 ``At the command prompt, type `nano`.`` | `At the command prompt, type <code>nano</code>.` | {::nomarkdown}At the command prompt, type <code>nano</code>.{:/}
 {: .table-bordered }
 
-#### Block
+### Block
 
 To create code blocks, indent every line of the block by at least four spaces or one tab, or put three tick marks (```` ``` ````) or three tildes (`~~~`) on the lines before and after the code block.  
 ````
@@ -151,7 +151,7 @@ Rendered Output:
     </html>
 ```
 
-### Links
+## Links
 
 To create a link, enclose the link text in brackets (e.g., [Duck Duck Go]) and then follow it immediately with the URL in parentheses (e.g., (https://duckduckgo.com)).
 
@@ -161,7 +161,7 @@ The rendered output looks like this:
 
 My own site is [Matrix Garden](https://matrixzj.github.io).
 
-#### Adding Titles
+### Adding Titles
 
 You can optionally add a title for a link. This will appear as a tooltip when the user hovers over the link. To add a title, enclose it in parentheses after the URL.
 
@@ -171,7 +171,7 @@ The rendered output looks like this:
 
 My own site is [Matrix Garden](https://matrixzj.github.io "best site").
 
-#### Reference-style Links
+### Reference-style Links
 
 Reference-style links are constructed in two parts: the part you keep inline with your text and the part you store somewhere else in the file to keep the text easy to read.
 
@@ -200,7 +200,7 @@ The rendered output looks like this:
 [2]: <https://matrixzj.github.io/resume> "about Matrix"
 [3]: <https://matrixzj.github.io/documentations> "Markdown Syntax"
 
-#### Footnotes
+### Footnotes
 
 Footnotes are built with 2 parts: 
     1 label, enclose with brackets and label text must be lead by `^'
@@ -219,7 +219,7 @@ Note: footnote will be shown in the end of page.
 [^1]: This is a footnote
 [^label]: A footnote on "label"
 
-#### Images
+### Images
 
 To add an image, add an exclamation mark (!), followed by alt text in brackets, and the path or URL to the image asset in parentheses. You can optionally add a title after the URL in the parentheses.
 
@@ -229,7 +229,7 @@ Rendered output:
 
 ![Matrix](images/misc/markdown/Portrait.JPG)
 
-##### Linking Images
+#### Linking Images
 
 To add a link to an image, enclose the Markdown for the image in brackets, and then add the link in parentheses.
 
@@ -239,7 +239,7 @@ Rendered output
 
 [![Matrix](images/misc/markdown/Portrait.JPG)](https://matrixzj.github.io/resume)
 
-### Tables
+## Tables
 
 Tables aren't part of the core Markdown spec, but they are part of GFM and Markdown Here supports them. 
 

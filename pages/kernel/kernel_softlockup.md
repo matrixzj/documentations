@@ -10,7 +10,7 @@ folder: kernel
 ---
 
 
-## CPU Soft lockup
+# CPU Soft lockup
 =====
 
 A **soft lockup** is the symptom of a task or kernel thread using and not releasing a CPU for a longer period of time than allowed.
@@ -23,7 +23,7 @@ Spinlocks are efficient when they are blocked for only a brief period of time, b
 
 The Kernel will report a soft lockup warning when it detects that the CPU was busy for a long time without releasing a spinlock. This is because threads should not sleep while holding the spinlock, as it might lead to deadlock. Because the threads do not sleep, the nmiwatchdog thread never gets to run, the CPU data structure timestamp never gets updated, and the kernel detects the condition and produces the warning.
 
-### Example Root Cause Analysis:
+## Example Root Cause Analysis:
 
 Reviewing the sample log messages below, we see reported soft lockups on CPU 1:
 

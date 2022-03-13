@@ -10,9 +10,11 @@ folder: python
 ---
 
 
-## Ansible Filter Plugins
+# Ansible Filter Plugins
 =====
 
+
+## How-to
 
 ### demo.py
 
@@ -68,7 +70,9 @@ PLAY RECAP *********************************************************************
 localhost              : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
-### Another example with viariable
+## Examples
+
+### A new Viariable
 ```bash
 $ cat plugins/filter/demo.py
 #!/usr/bin/env python
@@ -114,7 +118,7 @@ PLAY RECAP *********************************************************************
 localhost             : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
-### Filter to check rpm installed with wrong distro
+## Filter to check rpm installed with wrong distro
 ```bash
 $ cat plugins/filter/rpm_distro_check.py
 #!/usr/bin/env python
@@ -172,6 +176,5 @@ PLAY RECAP *********************************************************************
 test117.example.net        : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 ```
-
 
 {% include links.html %}

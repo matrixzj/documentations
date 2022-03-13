@@ -10,23 +10,23 @@ folder: python
 ---
 
 
-## Python Virtual Environment
+# Python Virtual Environment
 =====
 
 
-### Prequist
+## Prequist
 
 ```
 $ sudo yum -y install epel-release
 $ sudo yum install git gcc zlib-devel bzip2-devel readline-devel sqlite-devel openssl-devel
 ```
 
-### Install PyEnv from GitHub
+## Install PyEnv from GitHub
 ```
 $ git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv
 ```
 
-### Update Bash Env Config
+## Update Bash Env Config
 ```
 $ cat << EOF >> $HOME/.bashrc
 ## pyenv configs
@@ -41,7 +41,7 @@ EOF
 # source $HOME/.bashrc
 ```
 
-### List available Python Versions and Install 
+## List available Python Versions and Install 
 ```
 $ pyenv install -l
 Available versions:
@@ -62,7 +62,7 @@ Installing Python-3.7.6...
 Installed Python-3.7.6 to /home/jzou/.pyenv/versions/3.7.6
 ```
 
-### Install pyenv-virtualenv plugin and add config in `.bashrc`
+## Install pyenv-virtualenv plugin and add config in `.bashrc`
 ```
 $ git clone https://github.com/yyuu/pyenv-virtualenv.git $HOME/.pyenv/plugins/pyenv-virtualenv
 
@@ -75,14 +75,14 @@ EOF
 $ source .bashrc
 ```
 
-### List Installed Python Versions 
+## List Installed Python Versions 
 ```
 $ pyenv versions
 * system (set by /home/jzou/.pyenv/version)
   3.7.6
 ```
 
-### Create Virtual Env with Installed Python Version
+## Create Virtual Env with Installed Python Version
 ```
  $ pyenv virtualenv 3.7.6 learning
 Looking in links: /tmp/tmp16s1axfi
@@ -100,7 +100,7 @@ pyenv-virtualenv: prompt changing will be removed from future release. configure
 (learning)
 ```
 
-### De-Activate Virtual Env
+## De-Activate Virtual Env
 ```
 $ pyenv deactivate
 ```

@@ -9,10 +9,10 @@ permalink: memory_segfaults.html
 folder: memory
 ---
 
-## Segmentation Faults(Segfaults)
+# Segmentation Faults(Segfaults)
 =====
 
-### What is a segfault?
+## What is a segfault?
 
 A segmentation fault (aka segfault) is a common condition that causes programs to crash. Segfaults are caused by a program trying to read or write an illegal memory location. Program memory is divided into different segments: 
 
@@ -24,7 +24,7 @@ A segmentation fault (aka segfault) is a common condition that causes programs t
 A segfault occurs when a reference to a variable falls outside the segment where that variable resides, or when a write is attempted to a location that is in a read-only segment. In practice, segfaults are almost always due to trying to read or write a non-existent array element, not properly defining a pointer before using it, or (in C programs) accidentally using a variable's value as an address (see the scanf example below).  
 On Unix family operating systems, a signal called SIGSEGV - signal #11, defined in the system header file signal.h - is then sent to to process. The default action for SIGSEGV is abnormal termination: the process ends and an application core file may be written (depending on the system's configuration).
 
-### Why does a segfault occur?
+## Why does a segfault occur?
 
 A segmentation fault can occur under the following circumstances:
 
@@ -34,10 +34,12 @@ A segmentation fault can occur under the following circumstances:
 
 3. An attempt is made to execute a program that was not compiled/built correctly.
 
-### How to inteprete segfault log? 
+## How to inteprete segfault log? 
+
 ```bash
 May 18 23:55:05 dhcp-192-66 kernel: test[7779]: segfault at 0 ip 00007fdddf181664 sp 00007ffcbb5eb568 error 6 in libc-2.17.so[7fdddf0f2000+1c3000]
 ```
+
 * **test[7779]**   
    program name and pid number
 * **segfault at 0**
@@ -50,7 +52,7 @@ May 18 23:55:05 dhcp-192-66 kernel: test[7779]: segfault at 0 ip 00007fdddf18166
    error and return code, which is defined in arch/x86/mm/fault.c  
    [Segmentation fault error decoder](https://rgeissert.blogspot.com/p/segmentation-fault-error.html)
 
-### segfault error code
+## segfault error code
 ```
 /*
  * Page fault error code bits:
@@ -90,7 +92,7 @@ enum x86_pf_error_code {
    a user-mode write resulting in a protection fault / a reserved bit was detected / write(instruction fetch) / a reserved bit was detected + write(instruction fetch)
 * [protection keys](https://lwn.net/Articles/643797/)
 
-### Example
+## Example
 * calling memset() as shown below would cause a program to segfault:
 
    ```bash

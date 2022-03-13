@@ -84,8 +84,7 @@ Before migration if image file format is configured as qcow2 and thin-provision.
 
 ### Migrate CMD (migrate smtp01 from kvm01 to kvm02 via ssh auth)
 ```
-root@kvm01:~ · 06:15 AM Tue Jan 21 ·
-!394 # virsh migrate --live smtp01 qemu+ssh://kvm02/system --copy-storage-all --verbose
+# virsh migrate --live smtp01 qemu+ssh://kvm02/system --copy-storage-all --verbose
 root@kvm02's password:
 Migration: [100 %]
  
@@ -96,8 +95,8 @@ root@kvm02:~ · 06:08 AM Tue Jan 21 ·
 ----------------------------------------------------
  11    smtp01                      running
 ```
- --copy-storage-all        copy storage image files to dest hypervisor  
- --verbose                 show migration progess  
- --persistent              create VM define XML file  
+`--copy-storage-all`        copy storage image files to dest hypervisor  
+`--verbose`                 show migration progess  
+`--persistent`             create VM define XML file  
 
 {% include links.html %}

@@ -158,6 +158,10 @@ entries:
       url: /kvm_migration_without_shared_storage.html
       output: web, pdf
 
+    - title: Modify VM Image without Starting IT
+      url: /opensstack_guestfish.html
+      output: web, pdf
+
   - title: Python
     output: web, pdf
     folderitems:
@@ -184,10 +188,6 @@ entries:
 
     - title: Markdown Syntax
       url: /misc_markdown_syntax.html
-      output: web, pdf
-
-    - title: Modify VM Image without Starting IT
-      url: /misc_guestfish.html
       output: web, pdf
 
     - title: HP iLO
