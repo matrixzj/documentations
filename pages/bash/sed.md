@@ -5,7 +5,6 @@ keywords: sed
 last_updated: Aug 13, 2021
 summary: "sed guide"
 sidebar: mydoc_sidebar
-toc: false
 permalink: bash_sed.html
 folder: bash
 ---
