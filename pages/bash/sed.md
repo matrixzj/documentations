@@ -11,19 +11,6 @@ folder: bash
 
 # sed
 
-* [How `sed' Works](#how-sed-works)
-* [In-place File Editing](#in-place-file-editing)
-* [Selective Editing](#selective-editing)
-* [Flags](#flags)
-* [`z` / `s` command line options](#z--s-command-line-options)
-* [Special Characters during replace](#special-characters-during-replace)
-* [Commands](#commands)
-* [Advanced sed commands](#advanced-sed-commands)
-* [Advanced Commands related with `hold` space](#advanced-commands-related-with-hold-space)
-* [Branch Commands](#branch-commands)
-* [Examples](#examples)
-
-
 ## How `sed' Works
 
 `sed` maintains two data buffers: the active `pattern` space, and the auxiliary `hold` space. Both are initially empty.
@@ -72,6 +59,17 @@ drop
 ``` 
 
 ### Address Range
+
+<div id="toc" style="">
+   <ul>
+      <li><a href="#relative-addressing">Relative addressing</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+	  <ul>
+         <li><a href="#addr1-n--regexpn">`ADDR1, +N` / `/REGEXP/,+N`</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+         <li><a href="#addr1n">`ADDR1,~N`</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+         <li><a href="#n1n2">`N1~N2`</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      </ul>
+   </ul>
+</div>
 
 #### Relative addressing
 
