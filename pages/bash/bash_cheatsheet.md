@@ -61,11 +61,21 @@ comment
 ```
 
 ### Strict Mode
+
 ```bash
 set -euo pipefail
 IFS=$'\n\t'
 ```
 [Unofficial bash strict mode](http://redsymbol.net/articles/unofficial-bash-strict-mode/)
+
+<div id="toc" style="">
+   <ul>
+      <li><a href="#set--e">`set -e`</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#set--u">`set -u`</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#set--o-pipefail">`set -o pipefail`</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#set-ifs">set `IFS`</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+   </ul>
+</div>
 
 #### `set -e`
 The `set -e` option instructs bash to immediately exit if any command has a non-zero exit status. You wouldn't want to set this for your command-line shell, but in a script it's massively helpful. Specifically, if any pipeline; any command in parentheses; or a command executed as part of a command list in braces exits with a non-zero exit status, the script exits immediately with that same status. 
@@ -792,6 +802,19 @@ Orange
 ```
 
 ### Array operations
+
+<div id="toc" style="">
+   <ul>
+      <li><a href="#"push-an-element"">"Push an element"</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#"remove-element"">"Remove element"</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#"duplicate--concatenate-array"">"Duplicate / Concatenate array"</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#"read-from-file"">"Read from file"</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#"number-of-elements"">"Number of elements"</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#"length-of-an-element"">"Length of an element"</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#"slicing-of-an-array"">"Slicing of an array"</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+   </ul>
+</div>
+
 #### Push an element
 ```bash
 $ Fruits=("${Fruits[@]}" "Waterlemon")
@@ -854,7 +877,6 @@ $ echo "${Fruits[1]}"
 Orange
 ```
 
-### Working with arrays
 #### Number of elements
 ```bash
 $ echo "${Fruits[@]}"
@@ -894,26 +916,16 @@ $ sounds[cow]="moo"
 $ sounds[wolf]="howl"
 ```
 
-### Iteratiing dictionary
-```bash
-$ echo "${sounds[@]}"
-bark howl moo
-
-$ for i in "${sounds[@]}"; do echo "$i"; done
-bark
-howl
-moo
-
-$ echo "${!sounds[@]}"
-dog wolf cow 
-
-$ for i in "${!sounds[@]}"; do echo "$i"; done
-dog
-wolf
-cow
-```
-
 ### Working with dictionary
+
+<div id="toc" style="">
+   <ul>
+      <li><a href="#"number-of-elements"">"Number of elements"</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#"add--remove-element"">"Add / Remove element"</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+      <li><a href="#"iteration"">"Iteration"</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+   </ul>
+</div>
+
 #### Number of elements
 ```bash
 $ echo "${#sounds[@]}"
@@ -955,7 +967,6 @@ dog wolf cow
    howl
    moo
    ```
-
 
 
 {% include links.html %}
