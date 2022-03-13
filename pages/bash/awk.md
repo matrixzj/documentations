@@ -29,20 +29,21 @@ folder: bash
    <ul>
       <li>
          <ul>
-            <li><a href="#function">Function</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#function" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-         </ul>
-      </li>
-      <li>
-         <a href="#loop-over-file">Loop over file</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#loop-over-file" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
-         <ul>
-            <li><a href="#function-1">Function</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#function-1" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-            <li><a href="#example">Example</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#example" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-         </ul>
-      </li>
-      <li>
-         <a href="#loop-over-files-and-directories">Loop over files and directories</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#loop-over-files-and-directories" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a>
-         <ul>
-            <li><a href="#function-2">Function</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#function-2" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#fs">FS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#fs" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#ofs">OFS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ofs" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#rs">RS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#rs" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#ors">ORS</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ors" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#rt">RT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#rt" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#nf">NF</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#nf" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#nr">NR</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#nr" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#fpat">FPAT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#fpat" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#filename">FILENAME</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#filename" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#fnr">FNR</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#fnr" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#convfmt">CONVFMT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#convfmt" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#ofmt">OFMT</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#ofmt" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#environ">ENVIRON</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#environ" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#argc">ARGC</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#argc" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
+            <li><a href="#argv">ARGV</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#argv" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
          </ul>
       </li>
    </ul>
