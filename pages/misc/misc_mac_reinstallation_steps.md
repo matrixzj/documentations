@@ -14,11 +14,14 @@ folder: Misc
 
 ## Mandantory
 
+### Install Xcode Command Line Tools
+[Xode Command Line Tools](https://developer.apple.com/download/more/)
+
 ### Install Brew
 [Homebrew](https://brew.sh/)
 
 ```bash
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
 ### Install zsh
@@ -28,10 +31,13 @@ folder: Misc
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 ```
 
-### Install git
+### Install tmux
 ```bash
-brew install git
+brew install tmux
+```
 
+### Git Config
+```bash
 git config --global user.name "Matrix Zou"
 
 git config --global user.email matrix.zj@gmail.com
@@ -77,17 +83,20 @@ brew install --cask eul
 ### Application Install list
 * [Karabiner-Elements](https://karabiner-elements.pqrs.org/)
 * [iTerm2](https://iterm2.com/downloads.html)
-* [Office](https://www.office.com/)
-* [Microsoft Teams](https://www.microsoft.com/en-ww/microsoft-teams/download-app)
-* Kensingtonworks for K75370
-* [IINA](https://iina.io/)
-* [Keka](https://www.keka.io/en/)
+* [ATOM](https://atom.io/)
+* [AIDente](https://github.com/davidwernhart/AlDente/releases)
 * [coconutBattery](https://www.coconut-flavour.com/coconutbattery/)
 * [Rectangle](https://rectangleapp.com/)
 * [Input Method - Squirrel 鼠须管](https://matrixzj.github.io/documentations/misc_mac_reinstallation_steps.html#squirrel-%E9%BC%A0%E9%A1%BB%E7%AE%A1)
+* [IINA](https://iina.io/)
+* [Keka](https://www.keka.io/en/)
 * [WeChat](https://www.wechat.com/en/)
 * [QQ](https://im.qq.com/macqq/)
 * [Discord](https://discord.com/)
+* [Logitech Options](https://www.logitech.com/en-us/software/options.html)
+* [Office](https://www.office.com/)
+* [Microsoft Teams](https://www.microsoft.com/en-ww/microsoft-teams/download-app)
+* Kensingtonworks for K75370
 
 ## Applicaiton Setup
 

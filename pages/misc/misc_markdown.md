@@ -10,11 +10,6 @@ permalink: misc_markdown_syntax.html
 folder: Misc
 ---
 
-# Markdown Syntax
-=====
-
-
-
 <div id="toc" style="">
    <ul>
       <li><a href="#headings">Headings</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" href="#headings" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
@@ -55,6 +50,8 @@ folder: Misc
    </ul>
 </div>
 
+# Markdown Syntax
+=====
 
 ## Headings
 

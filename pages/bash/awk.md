@@ -260,7 +260,7 @@ Precedence for operators
 | ------------: | :------------ | :------------ |  
 | 1 | (…) | Grouping |  
 | 2 | $ | Field reference |  
-| 3 | ++ -- | Increment, decrement |  
+| 3 | ++ -\- | Increment, decrement |  
 | 4 | ^ ** | Exponentiation. These operators group right to left |  
 | 5 | + - ! | Unary plus, minus, logical "not" |  
 | 6 | * / % | Multiplication, division, remainder |  
