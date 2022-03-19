@@ -166,7 +166,7 @@ sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangp
 
 
 ### Atom
-- Packages  
+- [Packages](https://atom.io/packages)
   + highlight-selected
   + markdown-folding
   + markdown-toc
