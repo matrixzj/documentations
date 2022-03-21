@@ -76,7 +76,7 @@ $ brew list gnu-sed | grep 'bin/sed'
 ```
 awk_path=$(brew list gawk | grep '/bin/awk')
 sed_path=$(brew list gnu-sed | grep 'bin/sed')
-echo "export PATH=\"${awk_path}:${sed_path}:$PATH\"" >> ~/.zshrc
+echo "export PATH=\"${awk_path%/awk}:${sed_path%/sed}:$PATH\"" >> ~/.zshrc
 ```
 
 ### eul MacOS Monitor 
