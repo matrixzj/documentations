@@ -2,7 +2,7 @@
 title: Mac Reinstallation Steps
 tags: [misc]
 keywords: mac, reinstallation
-last_updated: Mar 9, 2022
+last_updated: Mar 21, 2022
 summary: "Steps to reinstall a workbox for myself"
 sidebar: mydoc_sidebar
 permalink: misc_mac_reinstallation_steps.html
@@ -66,13 +66,17 @@ brew install gawk
 
 PATH config
 ```
-$ brew list gawk | grep 'bin/awk'
+$ brew list gawk | grep '/bin/awk'
 /usr/local/Cellar/gawk/5.1.0/bin/awk
 
-$ brew list gnu-sed | grep 'bin'
-/usr/local/Cellar/gnu-sed/4.8/bin/gsed
+$ brew list gnu-sed | grep 'bin/sed'
+/usr/local/Cellar/gnu-sed/4.8/libexec/gnubin/sed
+```
 
-$ echo 'export PATH="/usr/local/Cellar/gawk/5.1.0/bi:/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"' >> ~/.zshrc
+```
+awk_path=$(brew list gawk | grep '/bin/awk')
+sed_path=$(brew list gnu-sed | grep 'bin/sed')
+echo "export PATH=\"${awk_path}:${sed_path}:$PATH\"" >> ~/.zshrc
 ```
 
 ### eul MacOS Monitor 
@@ -101,12 +105,10 @@ brew install --cask eul
 ## Applicaiton Setup
 
 ### iTerm2  
-- Enable utf-8 for iTerm2
-
-```bash
-echo 'export LC_ALL=en_US.UTF-8' >> ~/.zshrc
-echo 'export LANG=en_US.UTF-8' >> ~/.zshrc
-```
+- Access System Clipboard (General - Selection - Check `Applications in terminal may access clipboard`)
+- Window Transparency (Profile - Window - Transparency `30`)
+- Disable Bell (Profile - Terminal - Check `Silence bell`)
+- Mac `Option` key for `Alt` in Bash (Profile - Keys - Left/Right Option key `Esc+`)
 
 ### Karabiner Complex Modifications  
 complex modifications config location
@@ -158,29 +160,20 @@ patch:
 echo "胖胖\teueu" >> wubi86_jidian.dict.yaml
 ```
 
+### Atom
+- install `sync-settings` to sync custom settting (https://atom.io/packages)
+  + Gist ID: cbf14a66fee383e153528992cd2cf98e
+  + [Link](https://atom.io/packages/search?q=sync-settings)
+
+### Mail Signature
+
+## Optional   
 ### Prevent GlobalProtect VPN from auto-starting on the Mac
 ```
 sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangpa.plist
 sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangps.plist
 ```
 
-
-### Atom
-- [Packages](https://atom.io/packages)
-  + highlight-selected
-  + markdown-folding
-  + markdown-toc
-  + pretty-json
-  + split-diff
-  + sync-settings(cbf14a66fee383e153528992cd2cf98e)
-
-- Disable ‘Enter’ for Autocomplete/Snippets  
-  Settings -> Packages -> autocomplete-plus -> Settings -> Keymap For Confirming A suggestion, change it from 'tab and enter' to 'tab'
-
-
-### Mail Signature
-
-## Optional   
 ### Virt-Manager on Mac
 [virt-manager on Mac github repo](https://github.com/jeffreywildman/homebrew-virt-manager)
 
