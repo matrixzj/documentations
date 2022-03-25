@@ -2,7 +2,7 @@
 title: Mac Reinstallation Steps
 tags: [misc]
 keywords: mac, reinstallation
-last_updated: Mar 21, 2022
+last_updated: Mar 25, 2022
 summary: "Steps to reinstall a workbox for myself"
 sidebar: mydoc_sidebar
 permalink: misc_mac_reinstallation_steps.html
@@ -136,6 +136,9 @@ cp -aRv rime-wubi86-jidian/* ~/Library/Rime
 $ cat /Applications/iTerm.app/Contents/Info.plist | grep -i identifier -A 1
     <key>CFBundleIdentifier</key>
     <string>com.googlecode.iterm2</string>
+
+$ osascript -e 'id of app "Google Chrome"'
+com.google.Chrome
 ```
 
 - Find out Atom Bundle Identifier: com.github.atom
@@ -143,6 +146,9 @@ $ cat /Applications/iTerm.app/Contents/Info.plist | grep -i identifier -A 1
 $ cat /Applications/Atom.app/Contents/Info.plist | grep -i identifier -A 1
     <key>CFBundleIdentifier</key>
     <string>com.github.atom</string>
+
+$ osascript -e 'id of app "Atom"'
+com.github.atom
 ```
 
 - Update RIME config
