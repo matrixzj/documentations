@@ -161,7 +161,7 @@ echo "胖胖\teueu" >> wubi86_jidian.dict.yaml
 ```
 
 ### Atom
-- install `sync-settings` to sync custom settting (https://atom.io/packages)
+- install `sync-settings` to sync custom settting (https://atom.io/packages/sync-settings)
   + Gist ID: cbf14a66fee383e153528992cd2cf98e
   + [Link](https://atom.io/packages/search?q=sync-settings)
 
