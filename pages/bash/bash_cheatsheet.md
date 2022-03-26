@@ -2,7 +2,7 @@
 title: Bash CheatSheet
 tags: [bash]
 keywords: bash, script
-last_updated: June 8, 2020
+last_updated: Mar 27, 2022
 summary: "Bash Script cheatsheet"
 sidebar: mydoc_sidebar
 permalink: bash_cheatsheet.html
@@ -278,6 +278,22 @@ NOTE: `[[` is a bash extension, so if you are writing sh-compatible scripts then
 
 [What's the difference between `[` and `[[` in Bash](https://stackoverflow.com/questions/3427872/whats-the-difference-between-and-in-bash)
 
+### Escape `'` within `'` strings
+```bash
+$ echo 'it is a single quote \''
+>
+```
+
+```bash
+$ echo 'it is a single quote '"'"''
+it is a single quote '
+```
+Explanation of how '"'"' is interpreted as just ':
+1. `'` End first quotation which uses single quotes.
+2. `"` Start second quotation, using double-quotes.
+3. `'` Quoted character.
+4. `"` End second quotation, using double-quotes.
+5. `'` Start third quotation, using single quotes.
 
 
 ## Parameter expansions

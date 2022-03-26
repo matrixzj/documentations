@@ -2,7 +2,7 @@
 title: Mac Reinstallation Steps
 tags: [misc]
 keywords: mac, reinstallation
-last_updated: Mar 25, 2022
+last_updated: Mar 26, 2022
 summary: "Steps to reinstall a workbox for myself"
 sidebar: mydoc_sidebar
 permalink: misc_mac_reinstallation_steps.html
@@ -165,6 +165,39 @@ patch:
 ```
 echo "胖胖\teueu" >> wubi86_jidian.dict.yaml
 ```
+
+#### English / Chinese Mix input
+- Update Default Squirrel config
+`inline_ascii` 在输入法的临时英文编辑区内输入字母，数字，符号，空格等，回车上屏后自动复位到中文
+disable `enter` clear all inputs
+
+```
+$ diff ~/Library/Rime/default.custom.yaml{,.bak}
+39c39
+<     good_old_caps_lock: false       # true: 在保持 cap 键原有的特征， false: 点击不会切换大小写
+---
+>     good_old_caps_lock: true       # true: 在保持 cap 键原有的特征， false: 点击不会切换大小写
+42,43c42,43
+<       Shift_L: inline_ascii          # macOs 上 shift 键不区别左右，设置参数同上
+<       Shift_R: inline_ascii
+---
+>       Shift_L: commit_code          # macOs 上 shift 键不区别左右，设置参数同上
+>       Shift_R: commit_code
+64c64
+< #      - { when: composing, accept: Return, send: Escape }
+---
+>       - { when: composing, accept: Return, send: Escape }
+```
+
+- Update config for Wubi
+```
+$ diff wubi86_jidian.schema.yaml{,.bak}
+56c56
+<   max_code_length: 20                    # 四码上屏
+---
+>   max_code_length: 4                    # 四码上屏
+```
+
 
 ### Atom
 - install `sync-settings` to sync custom settting (https://atom.io/packages/sync-settings)
