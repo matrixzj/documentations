@@ -2,7 +2,7 @@
 title: awk
 tags: [bash]
 keywords: awk 
-last_updated: Mar 11, 2022
+last_updated: Apr 3, 2022
 summary: "awk howto"
 sidebar: mydoc_sidebar
 permalink: bash_awk.html
@@ -655,8 +655,23 @@ test2
 test2
 test3
 
-$ awk 'p == $0{print}{p=$0}' /tmp/test
+$ awk 'a[$0]++ {b[$0]}; END{for (i in b) print i}' /tmp/test
 test2
+
+$ cat show_dup.awk
+# put entry counts 2+ in array `b`, but count 3 and more will overwrite previous
+a[$0]++ {
+  b[$0]
+}
+
+# iterate array `b`
+END {
+  for (i in b) print i
+}
+
+$ awk -f show_dup.awk /tmp/test
+test2
+test3
 ```
 
  
