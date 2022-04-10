@@ -2,7 +2,7 @@
 title: CA(Certificate Authority)
 tags: [idm]
 keywords: certs, tls, ssl
-last_updated: April 11th, 2020
+last_updated: Apr 10, 2022
 summary: "Self-signed CA Setup"
 sidebar: mydoc_sidebar
 permalink: idm_ca.html
@@ -12,6 +12,7 @@ folder: idm
 CA(Certificate Authority)
 ======
 
+## CA config file
 ### Certs Path Config  
 Open `/etc/pki/tls/openssl.cnf`, find the section labeled `[ CA_default ]`, and edit as the following:
 
@@ -52,24 +53,24 @@ commonName              = supplied
 emailAddress            = optional
 ```
 
-### Generate CA pricate key / public cert
+## Generate CA pricate key / public cert
 
-#### Create all directories needed
+### Create all directories needed
 ```
 # mkdir /etc/pki/CA/{certs,crl,newcerts}
 ```
 
-#### Create an empty certificate index:
+### Create an empty certificate index:
 ```
 # touch /etc/pki/CA/index.txt
 ```
 
-#### In addition, create a file to indicate the next certificate serial number to be issued:
+### In addition, create a file to indicate the next certificate serial number to be issued:
 ```
 # echo 01 > /etc/pki/CA/serial
 ```
 
-#### Generate CA private key
+### Generate CA private key
 ```
 # (umask 077; openssl genrsa -out /etc/pki/CA/private/my-ca.key -des3 2048)
 Generating RSA private key, 2048 bit long modulus
@@ -80,7 +81,7 @@ Enter pass phrase for /etc/pki/CA/private/my-ca.key:
 Verifying - Enter pass phrase for /etc/pki/CA/private/my-ca.key:
 ```
 
-#### Generate CA public key
+### Generate CA public key
 
 ```bash
 # openssl req -new -x509 -key /etc/pki/CA/private/my-ca.key -days 365 > /etc/pki/CA/my-ca.crt
@@ -99,6 +100,39 @@ Organization Name (eg, company) [Example]:
 Organizational Unit Name (eg, section) []:OPS
 Common Name (eg, your name or your server's hostname) []:ca.example.net
 Email Address []:root@ca.example.net
+```
+
+### Generate Cert Sign request
+```bash
+$ openssl req -new -newkey rsa:2048 -nodes -keyout master01.example.net.key -out master01.example.net.csr
+Generating a 2048 bit RSA private key
+..................+++
+.......................................+++
+writing new private key to 'master01.example.net.key'
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [XX]:CN
+State or Province Name (full name) []:Beijing
+Locality Name (eg, city) [Default City]:Beijing
+Organization Name (eg, company) [Default Company Ltd]:MA
+Organizational Unit Name (eg, section) []:Matrix
+Common Name (eg, your name or your server's hostname) []:master01.example.net
+Email Address []:root@master01.net
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+
+$ ls -l  master01.example.net.*
+-rw-rw-r-- 1 jun_zou jun_zou 1062 Apr 10 08:01 master01.example.net.csr
+-rw-rw-r-- 1 jun_zou jun_zou 1704 Apr 10 08:01 master01.example.net.key
 ```
 
 ### Check Cert Request Content
