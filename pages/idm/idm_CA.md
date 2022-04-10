@@ -412,8 +412,8 @@ No Revoked Certificates.
          b6:a2:fe:da
 ```
 
-### HTTPS 
-#### Generate Private key
+## HTTPS 
+### Generate Private key
 ```bash
 # openssl genrsa -out web1.example.com.key 2048
 Generating RSA private key, 2048 bit long modulus
@@ -422,7 +422,7 @@ Generating RSA private key, 2048 bit long modulus
 e is 65537 (0x10001)
 ```
 
-#### Generate Cert Request
+### Generate Cert Request
 ```bash
 # openssl req -new -sha256 -key web1.example.com.key -out web1.example.com.csr
 You are about to be asked to enter information that will be incorporated
@@ -446,7 +446,7 @@ A challenge password []:
 An optional company name []:
 ```
 
-#### Sign Cert 
+### Sign Cert 
 ```bash
 # openssl ca -in web1.example.com.csr -out web1.example.com.crt
 Using configuration from /etc/pki/tls/openssl.cnf
@@ -484,7 +484,7 @@ Write out database with 1 new entries
 Data Base Updated
 ```
 
-#### Update http config
+### Update http config
 ```bash
 # yum install mod_ssl
 
