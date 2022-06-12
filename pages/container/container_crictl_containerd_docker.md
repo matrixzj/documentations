@@ -33,7 +33,7 @@ folder: Container
 | Run cmd inside Container | crictl exec -it app sh | ctr -n k8s.io task exec -t exec-id pid app sh | docker exec -it app sh |
 | Container Status | crictl stats | ctr -n k8s.io task metric app | docker top app |
 | Container Log | crictl logs | ctr -n k8s.io event | docker logs --tail 50 app |
-| Copy files from Container | | 1 挂载本地磁盘/tmp/mymount到app容器：ctr -n k8s.io snapshot mounts /tmp/mymount app | xargs sudo <br> 2 从本地/tmp/mymount目录复制文件：cp /tmp/mymount/data ~/data 3、卸载/tmp/mymount目录：umount /tmp/mymount | docker cp |
+| Copy files from Container | | 1 挂载本地磁盘/tmp/mymount到app容器：ctr -n k8s.io snapshot mounts /tmp/mymount app <br/> 2 从本地/tmp/mymount目录复制文件：cp /tmp/mymount/data ~/data <br/> 3 卸载/tmp/mymount目录：umount /tmp/mymount | docker cp |
 
 
 {% include links.html %}
