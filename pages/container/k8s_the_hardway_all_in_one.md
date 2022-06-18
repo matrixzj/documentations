@@ -13,12 +13,12 @@ folder: Container
 =====
 
 ## Env
-| Item | Explanation |  Value in config | config file |
-| :------ | :------ | :------ | :------ |
-| cluster-name | | ecs-matrix-k8s-cluster-all-in-one | admin.kubeconfig, kubelet.kubeconfig, kube-proxy.kubeconfig |
-| service-cluster-ip-range | A CIDR IP range from which to assign service cluster IPs | 10.32.0.0/24 | kube-apiserver.service |
-| cluster-cidr | CIDR Range for Pods in cluster | 10.64.1.0/24 | kube-controller-manager.service, kube-proxy-config.yaml |
-| podCIDR | | 10.64.1.0/24 | 10-bridge.conf,  kubelet-config.yaml |
+| Item | Explanation |  Value in config | config file |  
+| :------ | :------ | :------ | :------ |  
+| cluster-name | | ecs-matrix-k8s-cluster-all-in-one | admin.kubeconfig, kubelet.kubeconfig, kube-proxy.kubeconfig |  
+| service-cluster-ip-range | A CIDR IP range from which to assign service cluster IPs | 10.32.0.0/24 | kube-apiserver.service |  
+| cluster-cidr | CIDR Range for Pods in cluster | 10.64.1.0/24 | kube-controller-manager.service, kube-proxy-config.yaml |  
+| podCIDR | | 10.64.1.0/24 | 10-bridge.conf, kubelet-config.yaml |  
 
 ## CA
 ### Config
@@ -478,6 +478,7 @@ RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
+EOF
 
 # systemctl daemon-reload
 
