@@ -170,6 +170,10 @@ entries:
       url: /container_crictl_containerd_docker.html
       output: web, pdf
 
+    - title: Kubernetes All-in-One Deployment in the Hard Way
+      url: /k8s_the_hardway_all_in_one.html
+      output: web, pdf
+
   - title: Python
     output: web, pdf
     folderitems:
