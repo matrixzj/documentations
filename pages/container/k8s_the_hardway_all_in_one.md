@@ -1,6 +1,6 @@
 ---
 title: Kubernetes All-in-One Deployment in the Hard Way 
-tags: [contianer]
+tags: [container]
 keywords: kubernetes, k8s
 last_updated: Jun 18, 2022
 summary: "All in one deployment for Kubernetes cluster in the hard Way"
