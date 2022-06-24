@@ -21,26 +21,7 @@ folder: Container
 # yum install -y yum-utils device-mapper-persistent-data lvm2
 ```
 
-### `golang` installation
-```bash
-# curl -o installer_linux https://storage.googleapis.com/golang/getgo/installer_linux
 
-# chmod 755 installer_linux
-
-# ./installer_linux
-Welcome to the Go installer!
-Downloading Go version go1.18.3 to /root/.go
-This may take a bit of time...
-Downloaded!
-Setting up GOPATH
-GOPATH has been set up!
-
-One more thing! Run `source /root/.bash_profile` to persist the
-new environment variables to your current session, or open a
-new shell prompt.
-
-# source /root/.bash_profile
-```
 
 ## Option 1: Install `docker` as `CRI`/`CNI`
 ### Docker 
