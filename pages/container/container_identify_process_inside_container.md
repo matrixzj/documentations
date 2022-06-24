@@ -12,7 +12,6 @@ folder: Container
 # Identify whether a Process running inside Container
 ======
 
-
 ## cgroup
 ```bash
 # ps aux  | grep coredns

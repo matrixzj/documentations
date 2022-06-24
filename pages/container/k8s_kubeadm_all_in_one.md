@@ -18,12 +18,31 @@ folder: Container
 
 # echo "$(ifconfig eth0 | awk '/inet /{print $2}')" "$(hostname)" >> /etc/hosts
 
-# yum install -y yum-utils device-mapper-persistent-data lvm2
+# yum install -y yum-utils device-mapper-persistent-data lvm2 wget
 ```
 
-
-
 ## Option 1: Install `docker` as `CRI`/`CNI`
+### `golang` installation
+```bash
+# curl -o installer_linux https://storage.googleapis.com/golang/getgo/installer_linux
+
+# chmod 755 installer_linux
+
+# ./installer_linux
+Welcome to the Go installer!
+Downloading Go version go1.18.3 to /root/.go
+This may take a bit of time...
+Downloaded!
+Setting up GOPATH
+GOPATH has been set up!
+
+One more thing! Run `source /root/.bash_profile` to persist the
+new environment variables to your current session, or open a
+new shell prompt.
+
+# source /root/.bash_profile
+```
+
 ### Docker 
 #### Installation
 ```bash
@@ -245,7 +264,7 @@ kubeadm join 172.16.1.89:6443 --token 0ag8cm.xljiqneqb3oin11d \
 
 # mkdir /opt/cni/bin -p
 
-# tar xvf cni-plugins-linux-amd64-v0.9.1.tgz -C /opt/cni/bin/
+# tar xvf cni-plugins-linux-amd64-v1.1.1.tgz -C /opt/cni/bin/
 ./
 ./macvlan
 ./flannel
@@ -302,7 +321,7 @@ EOF
 
 # mkdir -p containerd
 
-# tar xvf containerd-1.4.4-linux-amd64.tar.gz -C containerd
+# tar xvf containerd-1.6.6-linux-amd64.tar.gz -C containerd
 bin/
 bin/containerd
 bin/containerd-shim
@@ -374,7 +393,38 @@ EOF
 
 # yum -y install kubelet kubeadm kubectl
 
+# systemctl enable --now kubelet
+
 # kubeadm init --ignore-preflight-errors all
+```
+
+## Option3: Install `containerd` as CRI, `weave-net` add-on as CNI
+[CRI Installation](#cri)
+
+### CNI addon `weave-net`
+```bash
+# kubectl get node
+NAME                       STATUS     ROLES           AGE    VERSION
+ecs-matrix-k8s-cluster-3   NotReady   control-plane   2m7s   v1.24.2
+
+# kubectl describe node ecs-matrix-k8s-cluster-3 | grep Ready
+  Ready            False   Fri, 24 Jun 2022 16:46:39 +0000   Fri, 24 Jun 2022 16:41:30 +0000   KubeletNotReady              container runtime network not ready: NetworkReady=false reason:NetworkPluginNotReady message:Network plugin returns error: cni plugin not initialized
+
+# kubectl version --short 2>/dev/null | awk '/Server/{print $3}'
+v1.24.2
+
+# sysctl -w net.ipv4.ip_forward=1
+net.ipv4.ip_forward = 1
+
+# curl -L -o weave-net.yaml 'https://cloud.weave.works/k8s/net?k8s-version=v1.24.2'
+
+# kubectl apply -f weave-net.yaml
+serviceaccount/weave-net configured
+clusterrole.rbac.authorization.k8s.io/weave-net configured
+clusterrolebinding.rbac.authorization.k8s.io/weave-net configured
+role.rbac.authorization.k8s.io/weave-net configured
+rolebinding.rbac.authorization.k8s.io/weave-net configured
+daemonset.apps/weave-net configured
 ```
 
 ## Verify
