@@ -182,6 +182,10 @@ entries:
       url: /container_identify_process_inside_container.html
       output: web, pdf
 
+    - title: Docker CLI Memo
+      url: /docker_cli_memo.html
+      output: web, pdf
+
   - title: Python
     output: web, pdf
     folderitems:
