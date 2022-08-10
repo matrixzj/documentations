@@ -132,7 +132,7 @@ cp -aRv rime-wubi86-jidian/* ~/Library/Rime
 
 #### Enable Chinese Input in Atom/iterm2
 - Find out iTerm2 Bundle Identifier: com.googlecode.iterm2
-```
+```bash
 $ cat /Applications/iTerm.app/Contents/Info.plist | grep -i identifier -A 1
     <key>CFBundleIdentifier</key>
     <string>com.googlecode.iterm2</string>
@@ -142,7 +142,7 @@ com.google.Chrome
 ```
 
 - Find out Atom Bundle Identifier: com.github.atom
-```
+```bash
 $ cat /Applications/Atom.app/Contents/Info.plist | grep -i identifier -A 1
     <key>CFBundleIdentifier</key>
     <string>com.github.atom</string>
@@ -170,8 +170,7 @@ echo "胖胖\teueu" >> wubi86_jidian.dict.yaml
 - Update Default Squirrel config
 `inline_ascii` 在输入法的临时英文编辑区内输入字母，数字，符号，空格等，回车上屏后自动复位到中文
 disable `enter` clear all inputs
-
-```
+```bash
 $ diff ~/Library/Rime/default.custom.yaml{,.bak}
 39c39
 <     good_old_caps_lock: false       # true: 在保持 cap 键原有的特征， false: 点击不会切换大小写
@@ -190,7 +189,7 @@ $ diff ~/Library/Rime/default.custom.yaml{,.bak}
 ```
 
 - Update config for Wubi
-```
+```bash
 $ diff wubi86_jidian.schema.yaml{,.bak}
 56c56
 <   max_code_length: 20                    # 四码上屏

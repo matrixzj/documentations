@@ -1,6 +1,6 @@
 ---
 title: Crictl Containerd Docker
-tags: [contianer]
+tags: [container]
 keywords: crictl,containerd,docker
 last_updated: Jun 12, 2022
 summary: "cli memo for ctictl/containerd/docker"
