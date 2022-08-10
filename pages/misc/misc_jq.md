@@ -2,7 +2,7 @@
 title: jq
 tags: [misc]
 keywords: json, jq
-last_updated: Apr 23, 2021
+last_updated: Jul 14, 2022
 summary: "parse json with jq"
 sidebar: mydoc_sidebar
 permalink: misc_jq.html
@@ -282,5 +282,47 @@ $ cat /tmp/data
 $ jq '.Subnets[] | {az: .AvailabilityZone, subnet: .SubnetId} | select(.az != null).subnet ' /tmp/data
 "subnet-xxxxxx"
 ```
+
+### combine 2 values
+```bash
+$ jq -r '.Subnets[] | (.AvailabilityZone + ", " + .CidrBlock)' /tmp/data
+us-east-1a, 10.1.2.0/24
+us-east-1a, 10.1.0.0/24
+```
+
+### resharp result as an array
+```bash
+$ jq -r '[.Subnets[] | {info: (.AvailabilityZone + ", " + .CidrBlock)}]' /tmp/data
+[
+  {
+    "info": "us-east-1a, 10.1.2.0/24"
+  },
+  {
+    "info": "us-east-1a, 10.1.0.0/24"
+  }
+]
+```
+
+### `split`
+```bash
+$ jq -r '.Subnets[] | .AvailabilityZone | split("-")[0]' /tmp/data
+us
+us
+```
+
+### get substring with `capture`
+Collects the named captures in a JSON object, with the name of each capture as the key, and the matched string as the corresponding value.
+```bash
+$ jq -r '.Subnets[].AvailabilityZone | capture("(?<country>[^-]+)")' /tmp/data
+{
+  "country": "us"
+}
+{
+  "country": "us"
+}
+```
+
+
+
 
 {% include links.html %}
