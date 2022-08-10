@@ -142,6 +142,7 @@ com.google.Chrome
 ```
 
 - Find out Atom Bundle Identifier: com.github.atom   
+
 ```bash   
 $ cat /Applications/Atom.app/Contents/Info.plist | grep -i identifier -A 1
     <key>CFBundleIdentifier</key>
@@ -152,6 +153,7 @@ com.github.atom
 ```
 
 - Update RIME config
+
 add folloing block to ~/Library/Rime/squirrel.custom.yaml
 ```bash
 patch:  
@@ -206,11 +208,22 @@ $ diff wubi86_jidian.schema.yaml{,.bak}
 ### Mail Signature
 
 ## Optional   
-### Prevent GlobalProtect VPN from auto-starting on the Mac
+### GlobalProtect VPN
+#### Prevent auto-starting on the Mac
 ```
 sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangpa.plist
 sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangps.plist
 ```
+
+#### Trust Cert 
+Import CA Cert and private Cert
+Open the Keychain Access application and locate the Machine Certificate issued to Mac OS X Client in the System keychain.
+Right-click on the private key associated with Certificate and click Get Info, then go to the Access Control tab
+Click '+' to select an Application to allow
+Press key combination <Command> + <Shift> + G to open Go to Folder
+Enter '/Applications/GlobalProtect.app/Contents/Resources' and click Go
+Find PanGPS and click it, and then press Add
+Save Changes to private key
 
 ### Virt-Manager on Mac
 [virt-manager on Mac github repo](https://github.com/jeffreywildman/homebrew-virt-manager)
