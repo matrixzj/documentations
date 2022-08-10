@@ -131,7 +131,7 @@ cp -aRv rime-wubi86-jidian/* ~/Library/Rime
 ```
 
 #### Enable Chinese Input in Atom/iterm2
-- Find out iTerm2 Bundle Identifier: com.googlecode.iterm2
+- Find out iTerm2 Bundle Identifier: com.googlecode.iterm2   
 ```bash
 $ cat /Applications/iTerm.app/Contents/Info.plist | grep -i identifier -A 1
     <key>CFBundleIdentifier</key>
@@ -141,7 +141,7 @@ $ osascript -e 'id of app "Google Chrome"'
 com.google.Chrome
 ```
 
-- Find out Atom Bundle Identifier: com.github.atom
+- Find out Atom Bundle Identifier: com.github.atom   
 ```bash
 $ cat /Applications/Atom.app/Contents/Info.plist | grep -i identifier -A 1
     <key>CFBundleIdentifier</key>
