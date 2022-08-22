@@ -186,6 +186,10 @@ entries:
       url: /docker_cli_memo.html
       output: web, pdf
 
+    - title: Network Namespace
+      url: /network_namespace.html
+      output: web, pdf
+
   - title: Python
     output: web, pdf
     folderitems:
