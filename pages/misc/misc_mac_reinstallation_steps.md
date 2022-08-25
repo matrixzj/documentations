@@ -131,8 +131,8 @@ cp -aRv rime-wubi86-jidian/* ~/Library/Rime
 ```
 
 #### Enable Chinese Input in Atom/iterm2
-- Find out iTerm2 Bundle Identifier: com.googlecode.iterm2
-```
+- Find out iTerm2 Bundle Identifier: com.googlecode.iterm2   
+```bash   
 $ cat /Applications/iTerm.app/Contents/Info.plist | grep -i identifier -A 1
     <key>CFBundleIdentifier</key>
     <string>com.googlecode.iterm2</string>
@@ -141,8 +141,9 @@ $ osascript -e 'id of app "Google Chrome"'
 com.google.Chrome
 ```
 
-- Find out Atom Bundle Identifier: com.github.atom
-```
+- Find out Atom Bundle Identifier: com.github.atom   
+
+```bash   
 $ cat /Applications/Atom.app/Contents/Info.plist | grep -i identifier -A 1
     <key>CFBundleIdentifier</key>
     <string>com.github.atom</string>
@@ -152,6 +153,7 @@ com.github.atom
 ```
 
 - Update RIME config
+
 add folloing block to ~/Library/Rime/squirrel.custom.yaml
 ```bash
 patch:  
@@ -170,8 +172,7 @@ echo "胖胖\teueu" >> wubi86_jidian.dict.yaml
 - Update Default Squirrel config
 `inline_ascii` 在输入法的临时英文编辑区内输入字母，数字，符号，空格等，回车上屏后自动复位到中文
 disable `enter` clear all inputs
-
-```
+```bash
 $ diff ~/Library/Rime/default.custom.yaml{,.bak}
 39c39
 <     good_old_caps_lock: false       # true: 在保持 cap 键原有的特征， false: 点击不会切换大小写
@@ -190,7 +191,7 @@ $ diff ~/Library/Rime/default.custom.yaml{,.bak}
 ```
 
 - Update config for Wubi
-```
+```bash
 $ diff wubi86_jidian.schema.yaml{,.bak}
 56c56
 <   max_code_length: 20                    # 四码上屏
@@ -207,11 +208,22 @@ $ diff wubi86_jidian.schema.yaml{,.bak}
 ### Mail Signature
 
 ## Optional   
-### Prevent GlobalProtect VPN from auto-starting on the Mac
+### GlobalProtect VPN
+#### Prevent auto-starting on the Mac
 ```
 sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangpa.plist
 sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangps.plist
 ```
+
+#### Trust Cert 
+Import CA Cert and private Cert
+Open the Keychain Access application and locate the Machine Certificate issued to Mac OS X Client in the System keychain.
+Right-click on the private key associated with Certificate and click Get Info, then go to the Access Control tab
+Click '+' to select an Application to allow
+Press key combination <Command> + <Shift> + G to open Go to Folder
+Enter '/Applications/GlobalProtect.app/Contents/Resources' and click Go
+Find PanGPS and click it, and then press Add
+Save Changes to private key
 
 ### Virt-Manager on Mac
 [virt-manager on Mac github repo](https://github.com/jeffreywildman/homebrew-virt-manager)
