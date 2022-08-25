@@ -189,6 +189,10 @@ entries:
     - title: Network Namespace
       url: /network_namespace.html
       output: web, pdf
+    
+    - title: Kube-Proxy IPTABLES
+      url: /kube-proxy_iptables.html
+      output: web, pdf
 
   - title: Python
     output: web, pdf

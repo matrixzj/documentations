@@ -1,4 +1,16 @@
+---
+title: Network Namespace 
+tags: [container]
+keywords: namespace, veth
+last_updated: Aug 22, 2022
+summary: "network namespace with containers"
+sidebar: mydoc_sidebar
+permalink: network_namespace.html
+folder: Container
+---
+
 # Network Namespace
+=================
 
 ## Connect 2 different namespaces
 ### Create network namespaces
@@ -329,6 +341,11 @@ cni-dbc2223b-c0a9-90ad-0c29-6e7bc8b5f340 (id: 0)
 4026532264 net       2  2298 65535 /pause
 ```
 
+```bash
+$ sudo ip netns identify 2196
+cni-dbc2223b-c0a9-90ad-0c29-6e7bc8b5f340
+```
+
 ### List links inside network namespaces
 ```bash
 # ip -n cni-5a457186-93e6-ad40-54b3-2310eafdf4f8 link show
@@ -347,3 +364,5 @@ cni-dbc2223b-c0a9-90ad-0c29-6e7bc8b5f340 (id: 0)
 ```
 
 So `vethc9051bae` is paired with `eth0` inside network namespace `cni-5a457186-93e6-ad40-54b3-2310eafdf4f8`
+
+{% include links.html %}
