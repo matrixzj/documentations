@@ -19,6 +19,7 @@ folder: Container
 ![kubernetes-svc-clusterip](images/container/kubernetes-svc-clusterip.jpg)
 
 1. chain `PREROUTING` in table `nat` 
+
 ```bash
 $ sudo iptables -t nat -L PREROUTING -vn
 Chain PREROUTING (policy ACCEPT 1 packets, 60 bytes)
@@ -30,6 +31,7 @@ $ grep '\-A PREROUTING' /tmp/iptables-save
 ```
 
 2. chain `KUBE-SERVICES` in table `nat` 
+   
 ```bash
 $ sudo iptables -t nat -L KUBE-SERVICES  -vn
 Chain KUBE-SERVICES (2 references)
@@ -49,6 +51,7 @@ $ grep '\-A KUBE-SERVICES' /tmp/iptables-save
 ```
 
 3. chain `KUBE-SVC-TCOU7JCQXEZGVUNU` in table `nat` 
+
 ```bash
 $ sudo iptables -t nat -L KUBE-SVC-TCOU7JCQXEZGVUNU -vn
 Chain KUBE-SVC-TCOU7JCQXEZGVUNU (1 references)
@@ -62,6 +65,7 @@ $ grep '\-A KUBE-SVC-TCOU7JCQXEZGVUNU' /tmp/iptables-save
 ```
 
 4. chain `KUBE-MARK-MASQ` in table `nat` 
+   
 ```bash
 $ sudo iptables -t nat -L KUBE-MARK-MASQ -vn
 Chain KUBE-MARK-MASQ (8 references)
@@ -74,6 +78,7 @@ $ grep '\-A KUBE-MARK-MASQ' /tmp/iptables-save
 Purpose: mark set in this step will be used during `POSTROUTING`.
 
 5. chain `KUBE-SEP-TYGHG4DTIAC24P3K` in table `nat` 
+   
 ```bash
 $ sudo iptables -t nat -L KUBE-SEP-TYGHG4DTIAC24P3K -vn
 Chain KUBE-SEP-TYGHG4DTIAC24P3K (1 references)
@@ -111,6 +116,7 @@ udp      17 21 src=172.16.1.35 dst=10.32.0.10 sport=44560 dport=53 src=10.64.1.7
 ![kubernetes-svc-nodeport](images/container/kubernetes-svc-nodeport.jpg)
 
 1. chain `PREROUTING` in table `nat` 
+
 ```bash
 $ sudo iptables -t nat -L PREROUTING -v -n
 Chain PREROUTING (policy ACCEPT 2 packets, 120 bytes)
@@ -122,6 +128,7 @@ $ grep '\-A PREROUTING' /tmp/iptables-save-svc
 ```
 
 2. chain `KUBE-SERVICES` in table `nat` 
+
 ```bash
 $ sudo iptables -t nat -L KUBE-SERVICES -v -n
 Chain KUBE-SERVICES (2 references)
@@ -143,6 +150,7 @@ $ grep '\-A KUBE-SERVICES' /tmp/iptables-save-svc
 ```
 
 3. chain `KUBE-NODEPORTS` in table `nat` 
+
 ```bash
 $ sudo iptables -t nat -L KUBE-NODEPORTS -v -n
 Chain KUBE-NODEPORTS (1 references)
@@ -154,6 +162,7 @@ $ grep '\-A KUBE-NODEPORTS' /tmp/iptables-save-svc
 ```
 
 4. chain `KUBE-SVC-YVE4DVDYZJRPV46I` in table `nat` 
+
 ```bash
 $ sudo iptables -t nat -L KUBE-SVC-YVE4DVDYZJRPV46I -v -n
 Chain KUBE-SVC-YVE4DVDYZJRPV46I (2 references)
@@ -170,6 +179,7 @@ $ grep '\-A KUBE-SVC-YVE4DVDYZJRPV46I' /tmp/iptables-save-svc
 `Rule 1` is for traffic NOT from `pod_network` and to `cluster_svc_ip`:`port` 
 
 5. chain `KUBE-MARK-MASQ` in table `nat` 
+
 ```bash
 $ sudo iptables -t nat -L KUBE-MARK-MASQ -v -n
 Chain KUBE-MARK-MASQ (11 references)
@@ -182,6 +192,7 @@ $ grep '\-A KUBE-MARK-MASQ' /tmp/iptables-save-svc
 Purpose: mark set in this step will be used during `POSTROUTING`.
 
 6. chain `KUBE-SEP-CC3QGOI23D5U3CR7` in table `nat` 
+
 ```bash
 $ sudo iptables -t nat -L KUBE-SEP-CC3QGOI23D5U3CR7 -v -n
 Chain KUBE-SEP-CC3QGOI23D5U3CR7 (1 references)
