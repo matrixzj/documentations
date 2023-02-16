@@ -124,6 +124,7 @@ brew install --cask squirrel
 ```
 
 [Install Wubi jidian Input](https://awesomeopensource.com/project/KyleBing/rime-wubi86-jidian)
+
 ```bash
 cd Downloads
 git clone https://github.com/KyleBing/rime-wubi86-jidian.git
@@ -132,6 +133,7 @@ cp -aRv rime-wubi86-jidian/* ~/Library/Rime
 
 #### Enable Chinese Input in Atom/iterm2
 - Find out iTerm2 Bundle Identifier: com.googlecode.iterm2   
+
 ```bash   
 $ cat /Applications/iTerm.app/Contents/Info.plist | grep -i identifier -A 1
     <key>CFBundleIdentifier</key>
