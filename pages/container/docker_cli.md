@@ -15,7 +15,7 @@ folder: Container
 ## Run
 
 ### Publish or export port with `--expose` / `-p`
-[`host_ip_addr`:]`host_port`:`container_port`/`protocal`
+`-p [host_ip_addr:]host_port:container_port/protocol`
 
 ```bash
 docker run --name clickcounter -p 8085:5000 --links redis kodekloud/click-counter
@@ -52,6 +52,12 @@ clickcounter:
   links:
   - redis
 ```
+
+## volumes
+`--mount type=bind,source=/opt/data,target=/var/lib/mysql`
+`type` The type of the mount, which can be `bind`, `volume`, or `tmpfs`. 
+`source`/`src` The source of mount
+`target`/`dst` The path where the file or directory is mounted in the container
 
 ```bash
 docker-compose -f docker-compose.yml up
