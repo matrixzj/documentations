@@ -202,11 +202,6 @@ $ diff wubi86_jidian.schema.yaml{,.bak}
 ```
 
 
-### Atom
-- install `sync-settings` to sync custom settting (https://atom.io/packages/sync-settings)
-  + Gist ID: cbf14a66fee383e153528992cd2cf98e
-  + [Link](https://atom.io/packages/search?q=sync-settings)
-
 ### Mail Signature
 
 ## Optional   
@@ -218,14 +213,14 @@ sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangp
 ```
 
 #### Trust Cert 
-Import CA Cert and private Cert
-Open the Keychain Access application and locate the Machine Certificate issued to Mac OS X Client in the System keychain.
-Right-click on the private key associated with Certificate and click Get Info, then go to the Access Control tab
+Import CA Cert and private Cert  
+Open the Keychain Access application and locate the Machine Certificate issued to Mac OS X Client in the System keychain.  
+Right-click on the private key associated with Certificate and click Get Info, then go to the Access Control tab  
 Click '+' to select an Application to allow
-Press key combination <Command> + <Shift> + G to open Go to Folder
-Enter '/Applications/GlobalProtect.app/Contents/Resources' and click Go
-Find PanGPS and click it, and then press Add
-Save Changes to private key
+Press key combination <Command> + <Shift> + G to open Go to Folder  
+Enter '/Applications/GlobalProtect.app/Contents/Resources' and click Go  
+Find PanGPS and click it, and then press Add  
+Save Changes to private key  
 
 ### Virt-Manager on Mac
 [virt-manager on Mac github repo](https://github.com/jeffreywildman/homebrew-virt-manager)
