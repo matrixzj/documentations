@@ -1,0 +1,109 @@
+---
+title: find
+tags: [find]
+keywords: find 
+last_updated: Mar 5, 2023
+summary: "find howto"
+sidebar: mydoc_sidebar
+permalink: bash_find.html
+folder: bash
+---
+
+# find
+=====
+
+## Format
+```bash
+find [-H] [-L] [-P] [-D debugopts] [-Olevel] [path...] [expression]
+```
+
+## Options
+`-P`    Never follow symbolic links. Default Behaviors.
+`-L`    Follow symbolic links.
+`-H`    Don't follow symbolic links unless it was specified in `path`
+
+### Examples
+```bash
+$ ls -al
+total 0
+drwxrwxr-x   5 matrix matrix 157 Mar  5 07:40 .
+drwxrwxrwt. 10 root    root    197 Mar  5 07:40 ..
+-rw-rw-r--   1 matrix matrix   0 Mar  4 20:20 abc
+-rw-rw-r--   1 matrix matrix   0 Mar  4 20:20 about.html
+-rw-rw-r--   1 matrix matrix   0 Mar  4 20:20 a.log
+-rw-rw-r--   1 matrix matrix   0 Mar  4 20:20 a.txt
+-rw-rw-r--   1 matrix matrix   0 Mar  4 20:20 axyz.log
+-rw-rw-r--   1 matrix matrix   0 Mar  4 20:26 b.html
+lrwxrwxrwx   1 matrix matrix   4 Mar  5 07:40 etc -> /etc
+lrwxrwxrwx   1 matrix matrix  10 Mar  5 07:36 hosts -> /etc/hosts
+drwxrwxr-x   2 matrix matrix  19 Mar  4 20:21 testdir
+drwxrwxr-x   2 matrix matrix   6 Mar  4 20:31 testdir1
+drwxrwxr-x   2 matrix matrix  22 Mar  4 20:21 xyz
+
+$ find . -name "host*" 2>/dev/null
+./hosts
+
+$ find -H . -path './etc/*' -name 'host*' 2>/dev/null | wc -l
+0
+
+$ find -H ./etc -path './etc/*' -name 'host*'  2>/dev/null
+./etc/host.conf
+./etc/hosts
+./etc/hosts.allow
+./etc/hosts.deny
+./etc/cloud/templates/hosts.debian.tmpl
+./etc/cloud/templates/hosts.freebsd.tmpl
+./etc/cloud/templates/hosts.redhat.tmpl
+./etc/cloud/templates/hosts.suse.tmpl
+./etc/hostname
+
+$ find -L etc -path 'etc/*' -name 'host*'  2>/dev/null
+etc/host.conf
+etc/hosts
+etc/hosts.allow
+etc/hosts.deny
+etc/cloud/templates/hosts.debian.tmpl
+etc/cloud/templates/hosts.freebsd.tmpl
+etc/cloud/templates/hosts.redhat.tmpl
+etc/cloud/templates/hosts.suse.tmpl
+etc/hostname
+```
+
+`-D`    debugoptions
+    `rates`     Prints a summary indicating how often each predicate succeeded or failed
+
+`-O`   enable query optimisation
+
+## Expressions
+made up of 
+* `options` affect overall operation rather than the processing of a specific file, and always return true
+* `tests`   return a true or false value
+* `actions` have side effects and return a true or false value
+and all expressions are connected with `operators`
+
+### `Operators`
+Listed in order of decreasing precedence:
+| Operators | Explanations |
+| :------ | :------ |
+| ( expr ) | Force precedence. Always need escape with `\`,  use '\(...\)' instead of '(...)' |
+| ! expr / -not expr | True if expr is false.  |
+| expr1 expr2 / expr1 -a expr2 / expr1 -and expr2 | "and"; expr2 is not evaluated if expr1 is false |
+| expr1 -o expr2 / expr1 -or expr2 | "or"; expr2 is not evaluated if expr1 is true |
+| expr1 , expr2 | List; both expr1 and expr2 are always evaluated. The value of expr1 is discarded; the value of the list is the value of expr2 |
+
+### `options`
+* `-daystart`
+  Measure time from the beginning of today rather than from 24 hours ago
+    
+* `-depth`
+  Process each directory's contents before the directory 
+   
+* `-maxdepth level`
+  Search only at most `level` (a non-negative integer) levels
+    
+* `-mindepth level`
+  Not apply any tests or actions at levels less than `level` (a non-negative integer). `1` means that all files except the command line arguments
+
+```bash
+
+```

@@ -69,6 +69,10 @@ entries:
       url: /bash_awk.html
       output: web, pdf
 
+    - title: find
+      url: /bash_find.html
+      output: web, pdf
+
   - title: Kernel
     output: web, pdf
     folderitems:
