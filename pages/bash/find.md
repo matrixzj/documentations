@@ -18,9 +18,9 @@ find [-H] [-L] [-P] [-D debugopts] [-Olevel] [path...] [expression]
 ```
 
 ## Options
-`-P`    Never follow symbolic links. Default Behaviors.
-`-L`    Follow symbolic links.
-`-H`    Don't follow symbolic links unless it was specified in `path`
+`-P`    Never follow symbolic links. Default Behaviors.   
+`-L`    Follow symbolic links.   
+`-H`    Don't follow symbolic links unless it was specified in `path`  
 
 ### Examples
 ```bash
@@ -69,10 +69,13 @@ etc/cloud/templates/hosts.suse.tmpl
 etc/hostname
 ```
 
-`-D`    debugoptions
+`-D`    debugoptions   
     `rates`     Prints a summary indicating how often each predicate succeeded or failed
 
 `-O`   enable query optimisation
+
+`-regextype type`  
+    available options: `emacs`(default), `posix-awk`,  `posix-basic`,  `posix-egrep` and `posix-              extended`
 
 ## Expressions
 made up of 
@@ -92,18 +95,55 @@ Listed in order of decreasing precedence:
 | expr1 , expr2 | List; both expr1 and expr2 are always evaluated. The value of expr1 is discarded; the value of the list is the value of expr2 |
 
 ### `options`
-* `-daystart`
+* `-daystart`  
   Measure time from the beginning of today rather than from 24 hours ago
     
-* `-depth`
+* `-depth`  
   Process each directory's contents before the directory 
    
-* `-maxdepth level`
+* `-maxdepth level`  
   Search only at most `level` (a non-negative integer) levels
     
-* `-mindepth level`
+* `-mindepth level`  
   Not apply any tests or actions at levels less than `level` (a non-negative integer). `1` means that all files except the command line arguments
 
 ```bash
+$ date
+Sun Mar  5 19:20:25 UTC 2023
 
+$ stat -c'%y %n' /tmp/find/abc
+2023-03-04 20:20:40.991547101 +0000 /tmp/find/abc
+
+$ find /tmp/find -daystart -type f -atime -1 -name 'abc' | wc -l
+0
+
+$ find /tmp/find  -type f -atime -1 -name 'abc'
+/tmp/find/abc
 ```
+
+### `tests`
+#### Match time
+* `-amin n` / `-cmin n` / `-mmin n`
+* `-atime n` / `-ctime n` / `-mtime n` (Unit: days)
+* `-anewer file` / `-cnewer file` / `-newer file` 
+* `-newerat TIME` / `-newerct TIME` / `-newermt TIME` 
+
+```bash
+$ stat -c'%y %n' b.html
+2023-03-04 20:26:55.897968386 +0000 b.html
+
+$ find . -type f -newerct '2023-03-04 20:25:00 +0000'
+./b.html
+```
+
+#### Match file name
+* `-iname pattern`  
+  match filename (without path) in case insensitive
+
+* `-path pattern` / `-ipath pattern`
+  match filename (with path) 
+
+* `-regex pattern` / `-iregex pattern`
+  match regular expression `pattern`
+
+#### Match permissions
