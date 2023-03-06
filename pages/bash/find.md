@@ -85,7 +85,7 @@ made up of
 and all expressions are connected with `operators`
 
 ### `Operators`
-Listed in order of decreasing precedence:
+Listed in order of decreasing precedence:  
 | Operators | Explanations |  
 | :------ | :------ |  
 | ( expr ) | Force precedence. Always need escape with `\`,  use '\(...\)' instead of '(...)' |  
@@ -172,5 +172,48 @@ $ stat -c %a a.txt
 
 * `-gid n` / `-group gname`
 
-* `-nogroup` / `-nouser` 
+* `-nogroup` / `-nouser`   
   match `group` or `owner` unable to map to any name
+
+#### Misc
+* `-false`  
+  
+* `-true`
+
+### actions
+* `-print`
+  print all matching files / dirs with full relative path, and it is default action if no action was specified
+
+* `-printf`
+  print all matching files / dirs with specified format
+
+* `-print0`
+  print all matching files / dirs ended with '\0'
+
+* `-delete`
+
+* `-exec command \;`
+
+* `-ok command \;` 
+  interactively run `command` for all matching files / dirs 
+
+* `-prune`
+  if matching is dir, skip it. If `-depth` used, matching `dir` will not be skipped as contents of `dir` will be processed firstly. 
+
+```bash
+$ find . -name 'a.log'
+./a.log
+./testdir/a.log
+
+$ find .  -path './testdir' -prune ! -name 'testdir' -o -name 'a.log'
+./a.log
+
+$ find . -depth -path './testdir' -prune ! -name 'testdir' -o -name 'a.log'
+./a.log
+./testdir/a.log
+
+ $ find . -depth -path './testdir' -prune -o -name 'a.log'
+./a.log
+./testdir/a.log
+./testdir
+```
