@@ -93,7 +93,9 @@ Listed in order of decreasing precedence:
 | ! expr / -not expr | True if expr is false |  
 | expr1 expr2 / expr1 -a expr2 / expr1 -and expr2 | "and"; expr2 is not evaluated if expr1 is false |  
 | expr1 -o expr2 / expr1 -or expr2 | "or"; expr2 is not evaluated if expr1 is true |  
-| expr1 , expr2 | List; both expr1 and expr2 are always evaluated. The value of expr1 is discarded; the value of the list is the value of expr2 |
+| expr1 , expr2 | List; both expr1 and expr2 are always evaluated. The value of expr1 is discarded; the value of the list is the value of expr2 |  
+{: .table-bordered }
+
 
 ### `options`
 * `-daystart`  
