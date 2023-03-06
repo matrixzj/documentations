@@ -86,6 +86,7 @@ and all expressions are connected with `operators`
 
 ### `Operators`
 Listed in order of decreasing precedence:  
+
 | Operators | Explanations |  
 | :------ | :------ |  
 | ( expr ) | Force precedence. Always need escape with `\`,  use '\(...\)' instead of '(...)' |  
@@ -137,23 +138,23 @@ $ find . -type f -newerct '2023-03-04 20:25:00 +0000'
 ```
 
 #### Match file name
-* `-iname pattern`  
+* `-iname pattern`    
   match filename (without path) in case insensitive
 
-* `-path pattern` / `-ipath pattern`
+* `-path pattern` / `-ipath pattern`  
   match filename (with path) 
 
-* `-regex pattern` / `-iregex pattern`
+* `-regex pattern` / `-iregex pattern`  
   match regular expression `pattern`
 
 #### Match permissions / owner / group
 * `-perm mode`   
   exactly match `mode`
 
-* `-perm -mode`
+* `-perm -mode`  
   All of the permission `bits` of `mode` are set 
 
-* `-perm /mode`
+* `-perm /mode`  
   Any of the permission `bits` of `mode` are set 
 
 ```bash
@@ -181,23 +182,23 @@ $ stat -c %a a.txt
 * `-true`
 
 ### actions
-* `-print`
+* `-print`  
   print all matching files / dirs with full relative path, and it is default action if no action was specified
 
-* `-printf`
+* `-printf`  
   print all matching files / dirs with specified format
 
-* `-print0`
+* `-print0`  
   print all matching files / dirs ended with '\0'
 
-* `-delete`
+* `-delete`  
 
-* `-exec command \;`
+* `-exec command \;`  
 
-* `-ok command \;` 
+* `-ok command \;`   
   interactively run `command` for all matching files / dirs 
 
-* `-prune`
+* `-prune`  
   if matching is dir, skip it. If `-depth` used, matching `dir` will not be skipped as contents of `dir` will be processed firstly. 
 
 ```bash
