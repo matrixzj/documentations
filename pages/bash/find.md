@@ -1,8 +1,8 @@
 ---
 title: find
-tags: [find]
+tags: [bash]
 keywords: find 
-last_updated: Mar 5, 2023
+last_updated: Mar 6, 2023
 summary: "find howto"
 sidebar: mydoc_sidebar
 permalink: bash_find.html
@@ -70,10 +70,10 @@ etc/hostname
 ```
 
 `-D`    debugoptions   
-    `rates`     Prints a summary indicating how often each predicate succeeded or failed
-
+    `rates`     Prints a summary indicating how often each predicate succeeded or failed   
+    
 `-O`   enable query optimisation
-
+    
 `-regextype type`  
     available options: `emacs`(default), `posix-awk`,  `posix-basic`,  `posix-egrep` and `posix-              extended`
 
@@ -86,12 +86,12 @@ and all expressions are connected with `operators`
 
 ### `Operators`
 Listed in order of decreasing precedence:
-| Operators | Explanations |
-| :------ | :------ |
-| ( expr ) | Force precedence. Always need escape with `\`,  use '\(...\)' instead of '(...)' |
-| ! expr / -not expr | True if expr is false.  |
-| expr1 expr2 / expr1 -a expr2 / expr1 -and expr2 | "and"; expr2 is not evaluated if expr1 is false |
-| expr1 -o expr2 / expr1 -or expr2 | "or"; expr2 is not evaluated if expr1 is true |
+| Operators | Explanations |  
+| :------ | :------ |  
+| ( expr ) | Force precedence. Always need escape with `\`,  use '\(...\)' instead of '(...)' |  
+| ! expr / -not expr | True if expr is false |  
+| expr1 expr2 / expr1 -a expr2 / expr1 -and expr2 | "and"; expr2 is not evaluated if expr1 is false |  
+| expr1 -o expr2 / expr1 -or expr2 | "or"; expr2 is not evaluated if expr1 is true |  
 | expr1 , expr2 | List; both expr1 and expr2 are always evaluated. The value of expr1 is discarded; the value of the list is the value of expr2 |
 
 ### `options`
@@ -146,4 +146,31 @@ $ find . -type f -newerct '2023-03-04 20:25:00 +0000'
 * `-regex pattern` / `-iregex pattern`
   match regular expression `pattern`
 
-#### Match permissions
+#### Match permissions / owner / group
+* `-perm mode`   
+  exactly match `mode`
+
+* `-perm -mode`
+  All of the permission `bits` of `mode` are set 
+
+* `-perm /mode`
+  Any of the permission `bits` of `mode` are set 
+
+```bash
+# 640 = 000 110 100 000
+$ find . -perm /640 -name a.txt
+./a.txt
+
+$ stat -c %a a.txt
+400
+# 400 = 000 100 000 000
+```
+  
+* `-readable` / `-writable` / `executable`
+
+* `-uid n` / `-user uname`
+
+* `-gid n` / `-group gname`
+
+* `-nogroup` / `-nouser` 
+  match `group` or `owner` unable to map to any name
