@@ -9,8 +9,8 @@ permalink: bash_xargs.html
 folder: bash
 ---
 
-# xargs
-=====
+# xargs 
+=========  
 `xargs` takes items from stdin, delimited by blanks / newlines, and executes the command (default `/bin/echo`) one or more times. Blank lines on the standard input are ignored.
 
 Processing sequence for `xargs`:
@@ -22,12 +22,12 @@ Processing sequence for `xargs`:
 * `-0`  
   Input items are splitted by `\0` instead of by whitespace. The GNU `find -print0` option produces input suitable for this mode.
 
-* `-d delim`
+* `-d delim`   
   Input items are splitte by specified `delim`.  Multibyte characters are NOT supported. 
 
 ## batch
-* `-n n`
-  maximum `n` results after splitted will be in a batch, and every batch will be appended a '\n' during print
+* `-n n`   
+  maximum `n` results after splitted will be in a batch, and every batch will be appended a '\n' during print   
 ```bash
 $ ls
 a  b  c  d  logdir  one space.log  shdir  test  vmware-root
@@ -100,7 +100,7 @@ $
   maximum `n` lines after splitted will be in a batch   
 
 ## send
-* `-i`    
+* `-i`     
   replace occurrences of `{}` with batch sent
 ```bash
 $ find . -type f -name abc | xargs -i ls -al {} {}
@@ -108,7 +108,7 @@ $ find . -type f -name abc | xargs -i ls -al {} {}
 -rw-rw-r-- 1 jun_zou jun_zou 0 Mar  4 20:20 ./abc
 ```
 
-* `-I replace-str`
+* `-I replace-str`   
   replace occurrences of `replace-str` with batch sent, and `replace-str`
 ```bash
 $ find . -type f -name abc | xargs -I arg ls -al arg arg
@@ -117,11 +117,11 @@ $ find . -type f -name abc | xargs -I arg ls -al arg arg
 ```
 
 ## misc
-* `-t`
+* `-t`   
   Print the command line on stderr before executing it
 
-* `-p` 
+* `-p`    
   interactive run mode
 
-* `-P max-procs`
+* `-P max-procs`   
   parrellel run `max-procs` processes; the default is 1
