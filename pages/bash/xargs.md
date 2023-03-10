@@ -28,6 +28,7 @@ Processing sequence for `xargs`:
 ## batch
 * `-n n`   
   maximum `n` results after splitted will be in a batch, and every batch will be appended a '\n' during print   
+  
 ```bash
 $ ls
 a  b  c  d  logdir  one space.log  shdir  test  vmware-root
