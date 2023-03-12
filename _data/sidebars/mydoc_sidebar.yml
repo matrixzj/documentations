@@ -73,6 +73,10 @@ entries:
       url: /bash_find.html
       output: web, pdf
 
+    - title: xargs
+      url: /bash_xargs.html
+      output: web, pdf
+
   - title: Kernel
     output: web, pdf
     folderitems:
