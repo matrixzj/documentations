@@ -219,7 +219,7 @@ verify return:1
 site `www.example.net` cert was signed by `ExampleGlobalCA`. And `ExampleGlobalCA` was signed by `ExampleRootCA`. So that both public certs of `ExampleGlobalCA` and `ExampleRootCA` need to be combined in file `ca.crt`
 ```bash
 $ cat ca.crt
-$ cat /etc/docker/certs.d/registry.public.g42cloud.net/ca.crt
+$ cat /etc/docker/certs.d/registry.public.example.net/ca.crt
 -----BEGIN CERTIFICATE-----
 MIIDnzCCAoegAwIBAgIBATANBgkqhkiG9w0BAQsFADA8MQswCQYDVQQGEwJBRTER
 MA8GA1UECgwIRzQyQ2xvdWQxGjAYBgNVBAMMEUc0MkNsb3VkUGJsUm9vdENBMB4X

@@ -75,7 +75,7 @@ $ curl -s -H referer:https://idm.example.net/ipa -H "Content-Type:application/js
         "/home/john"
       ],
       "mail": [
-        "john@g42cloud.ai"
+        "john@example.net"
       ],
       "krbprincipalname": [
         "john@EXAMPLE.NET"
