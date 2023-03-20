@@ -1,15 +1,15 @@
 ---
-title: sed
+title: GNU Sed
 tags: [bash]
 keywords: sed
 last_updated: Aug 13, 2021
 summary: "sed guide"
 sidebar: mydoc_sidebar
-permalink: bash_sed.html
+permalink: bash_gnu_sed.html
 folder: bash
 ---
 
-# sed
+# GNU Sed
 
 ## How `sed' Works
 

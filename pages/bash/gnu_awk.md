@@ -1,11 +1,11 @@
 ---
-title: awk
+title: GNU AWK
 tags: [bash]
 keywords: awk 
 last_updated: Apr 3, 2022
 summary: "awk howto"
 sidebar: mydoc_sidebar
-permalink: bash_awk.html
+permalink: bash_gnu_awk.html
 folder: bash
 ---
 
@@ -279,7 +279,40 @@ There is no special symbol for concatenation. The operands are simply written si
 ###### Note 2 
 The relational operators and the redirections have the same precedence level. Characters such as '>' serve both as relationals and as redirections; the context distinguishes between the two meanings. Note that the I/O redirection operators in print and printf statements belong to the statement level, not to expressions. The redirection does not produce an expression that could be the operand of another operator. As a result, it does not make sense to use a redirection operator near another operator of lower precedence without parentheses. Such combinations (e.g., 'print foo > a ? b : c') result in syntax errors. The correct way to write this statement is 'print foo > (a ? b : c)'.
 
-  
+## Array sorting   
+### `"@unsorted"`   
+Array elements are processed in arbitrary order, which is the default awk behavior.
+
+### `"@ind_str_asc"`   
+Order by indices in ascending order compared as strings. (Internally, array indices are always strings, so with ‘a[2*5] = 1’ the index is "10" rather than numeric 10.)
+
+### `"@ind_num_asc"`   
+Order by indices in ascending order but force them to be treated as numbers in the process. Any index with a non-numeric value will end up positioned as if it were zero.
+
+### `"@val_type_asc"`    
+Order by element values in ascending order. Ordering is by the type: numeric values; string values; all subarrays.
+
+### `"@val_str_asc"`   
+Order by element values in ascending order. Scalar values are compared as strings. If the string values are identical, the index string values are compared instead. When comparing non-scalar values, "@val_type_asc" sort ordering is used, so subarrays, if present, come out last.
+
+### `"@val_num_asc"`   
+Order by element values in ascending order. Scalar values are compared as numbers. Non-scalar values are compared using "@val_type_asc" sort ordering, so subarrays, if present, come out last. When numeric values are equal, the string values are used to provide an ordering. If the string values are also identical, the index string values are compared instead.
+
+### `"@ind_str_desc"`   
+ Like `"@ind_str_asc"`, but the string indices are ordered from high to low.
+
+### `"@ind_num_desc"`     
+Like `"@ind_num_asc"`, but the numeric indices are ordered from high to low.
+
+### `"@val_type_desc"`     
+Like `"@val_type_asc"`, but the element values, based on type, are ordered from high to low. Subarrays, if present, come out first.
+
+### `"@val_str_desc"`        
+Like "@val_str_asc", but the element values, treated as strings, are ordered from high to low. If the string values are identical, the index string values are compared instead. When comparing non-scalar values, `"@val_type_desc"` sort ordering is used, so subarrays, if present, come out first.
+
+### `"@val_num_desc"`    
+Like `"@val_num_asc"`, but the element values, treated as numbers, are ordered from high to low. If the numeric values are equal, the string values are compared instead. If they are also identical, the index string values are compared instead. Non-scalar values are compared using `"@val_type_desc"` sort ordering, so subarrays, if present, come out first. 
+
 ## Functions
 
 ### Numberic Functions
@@ -413,6 +446,10 @@ The *gsub()* function returns the number of substitutions made. If the variable 
 $ awk 'BEGIN{test="matrix matrix"; count = gsub(/matrix/, "zou", test); print test; print count}'
 zou zou
 2
+
+$ awk 'BEGIN{test="matrix matrix"; count = gsub(/matrix/, "[&] test", test); print test; print count}'
+[matrix] test [matrix] test
+2
 ```
 
 #### index
@@ -450,8 +487,8 @@ match(string, regexp [, array])
 ```
 Search *string* for the longest, leftmost substring matched by the regular expression *regexp* and return the character position (index) at which that substring begins (one, if it starts at the beginning of *string*). If no match is found, return zero.
 The *regexp* argument may be either a regexp constant (/…/) or a string constant ("…").  
-The order of the first two arguments is the opposite of most other string functions that work with regular expressions, such as *sub()* and *gsub()*. It might help to remember that for *match()*, the order is the same as for the ‘~’ operator: ‘string ~ regexp’.  
-The match() function sets the predefined variable RSTART to the index. It also sets the predefined variable RLENGTH to the length in characters of the matched substring. If no match is found, RSTART is set to zero, and RLENGTH to -1.   
+The order of the first two arguments is the opposite of most other string functions that work with regular expressions, such as *sub()* and *gsub()*. It might help to remember that for *match()*, the order is the same as for the *~* operator: *string ~ regexp*.  
+The match() function sets the predefined variable *RSTART* to the index. It also sets the predefined variable *RLENGTH* to the length in characters of the matched substring. If no match is found, *RSTART* is set to zero, and *RLENGTH* to -1.   
 ```bash
 $ awk 'BEGIN{test = "matrix"; print match(test, /t.*x/); print RLENGTH, RSTART}'
 3
@@ -465,7 +502,7 @@ matrix
 zou
 ```
 
-If *array* is present, it is cleared, and then the zeroth element of *array* is set to the entire portion of *string* matched by *regexp*. If *regexp* contains parentheses, the integer-indexed elements of *array* are set to contain the portion of *string* matching the corresponding parenthesized subexpression.   
+If *array* is present, it is cleared, and then the firth (0) element of *array* is set to the entire portion of *string* matched by *regexp*. If *regexp* contains parentheses, the integer-indexed elements of *array* are set to contain the portion of *string* matching the corresponding parenthesized subexpression.   
 ```bash
 $ awk 'BEGIN{test = "matrix"; if(match(test, /t.*x/, array)){for (i in array) printf("index: %s, value: %s\n", i, array[i])}}'
 index: 0start, value: 3
@@ -491,7 +528,7 @@ $ awk 'BEGIN{test = "matrix zou"; match(test, /(m.*x) (z.*u)/, array); for (x in
 ```bash
 patsplit(string, array [, fieldpat [, seps ] ])
 ```
-Search *fieldpat* in  *string* and store the pieces in *array* and the separator strings in the *seps* array. The first piece is stored in *array[1]*, the second piece in *array[2]*, and so forth. The third argument, *fieldpat*, is a regexp describing the fields in *string*. It may be either a regexp constant or a string. If *fieldpat* is omitted, the value of FPAT is used. *patsplit()* returns the number of elements created. *seps[i]* is the possibly null separator string after *array[i]*. The possibly null leading separator will be in *seps[0]*. So a non-null string with *n* fields will have *n+1* separators.   
+Search *fieldpat* in  *string* and store the pieces in *array* and the separator strings in the *seps* array. The first piece is stored in *array[1]*, the second piece in *array[2]*, and so forth. The third argument, *fieldpat*, is a regexp describing the fields in *string*. It may be either a regexp constant or a string. If *fieldpat* is omitted, the value of FPAT is used. *patsplit()* returns the number of elements created. *seps[i]* is the possibly null separator string after *array[i]*.     
 ```bash
 $ awk 'BEGIN{patsplit("matrix|zou", a, /[a-z]*/, seps); print "array result:"; for(i=1;i<=length(a);i++)print a[i]; print length(a); print "seperator result:"; for(j=0;j<length(seps);j++) print seps[j]; print length(seps)}'
 array result:
@@ -513,14 +550,26 @@ seperator result:
 |
 2
 ```
-NOTE: *seps* start from *0*, instead of *1*
-*regexp [^|]* refers to everything except *|* 
+NOTE: *regexp [^|]* refers to everything except *|* 
+
+The possibly null leading separator will be in *seps[0]*. So a non-null string with *n* fields will have *n+1* separators.   
+```bash
+$ echo test- | awk '{patsplit($0, result, /\w+/, seps); for (x in result) print x, result[x]; for (y in seps) print y, seps[y]}'
+1 test
+0
+1 -
+
+$ echo -test- | awk '{patsplit($0, result, /\w+/, seps); for (x in result) print x, result[x]; for (y in seps) print y, seps[y]}'
+1 test
+0 -
+1 -
+```
 
 #### split
 ```bash
 split(string, array  [, fieldsep [, seps ] ])
 ```
-Divide *string* into pieces separated by *fieldsep* and store the pieces in *array* and the separator strings in the *seps* array.  The first piece is stored in *array[1]*, the second piece in *array[2]*, and so forth. The string value of the third argument, *fieldsep*, is a regexp describing where to split *string*. If *fieldsep* is omitted, the value of FS is used. *split()* returns the number of elements created. *seps* is a gawk extension, with *seps[i]* being the separator string between *array[i]* and *array[i+1]*. If *fieldsep* is a single space, then any leading whitespace goes into *seps[0]* and any trailing whitespace goes into *seps[n]*, where *n* is the return value of *split()* (i.e., the number of elements in array).   
+Divide *string* into pieces separated by *fieldsep* and store the pieces in *array* and the separator strings in the *seps* array.  The first piece is stored in *array[1]*, the second piece in *array[2]*, and so forth. The string value of the third argument, *fieldsep*, is a regexp describing where to split *string*. If *fieldsep* is omitted, the value of FS is used. *split()* returns the number of elements created. *seps* is a gawk extension, with *seps[i]* being the separator string between *array[i]* and *array[i+1]*. If *fieldsep* is a single space, then any leading whitespace goes into *seps[0]* and any trailing whitespace goes into *seps[n]*, where *n* is the return value of *split()* (i.e., the number of elements in array).    
 The split() function splits strings into pieces in the same way that input lines are split into fields.    
 ```bash
 $ awk 'BEGIN{split("matrix|zou", a, /[|]/, seps); print "array result:"; for(i=1;i<=length(a);i++)print a[i]; print length(a); print "seperator result:"; for(j=0;j<length(seps);j++) print seps[j]; print length(seps)}'
@@ -542,6 +591,17 @@ seperator result:
 
 |
 2
+```
+NOTE: Index for list `array` is started from `1`, and index for list `seps` is also started from `0`
+
+For the `string` will be splitted, if `fieldsep` is on the start of `string`, `array[1]` will be an `empty` result. It will be similar if `fieldsep` is in the end of `string`
+```bash
+$ echo -test- | awk '{split($0, result, /-/, seps); for (x in result) print x, result[x]; for (y in seps) print y, seps[y]}'
+1
+2 test
+3
+1 -
+2 -
 ```
 
 #### sprintf
@@ -629,10 +689,11 @@ mat good rix
 *FILENAME* — special variable having file name of current input file  
 *nextfile* - skip remaining records from the current file being processed and move on to the next file  
 
+## `$1 = $1`    
+force record to be reconstituted
 
-## Examples
-
-### Show Duplicated Lines
+## Examples   
+### Show Duplicated Lines   
 ```bash
 $ cat /tmp/test
 test

@@ -13,10 +13,8 @@ folder: bash
 
 Exercise related files are available from [exercises folder of learn_gnuawk repo](https://github.com/learnbyexample/learn_gnuawk/tree/master/exercises). For solutions, see [Exercise_solutions.md](https://github.com/learnbyexample/learn_gnuawk/blob/master/exercises/Exercise_solutions.md).
 
-## awk introduction
-
-**a)** For the input file `addr.txt`, display all lines containing `is`.
-
+## awk introduction   
+**a)** For the input file `addr.txt`, display all lines containing `is`.     
 ```bash
 $ cat addr.txt
 Hello World
@@ -31,8 +29,7 @@ This game is good
 Today is sunny
 ```
 
-**b)** For the input file `addr.txt`, display first field of lines *not* containing `y`. Consider space as the field separator for this file.
-
+**b)** For the input file `addr.txt`, display first field of lines *not* containing `y`. Consider space as the field separator for this file.   
 ```bash
 $ awk '!/y/{print $1}' addr.txt
 Hello
@@ -40,7 +37,7 @@ This
 12345
 ```
 
-**c)** For the input file `addr.txt`, display all lines containing no more than 2 fields.
+**c)** For the input file `addr.txt`, display all lines containing no more than 2 fields.    
 ```bash
 $ awk 'NF <= 2' addr.txt
 Hello World
@@ -54,8 +51,7 @@ $ awk '$2 ~ /is/' addr.txt
 Today is sunny
 ```
 
-**e)** For each line of the input file `addr.txt`, replace first occurrence of `o` with `0`.
-
+**e)** For each line of the input file `addr.txt`, replace first occurrence of `o` with `0`.    
 ```bash
 $ awk '{print gensub(/o/, "0", "1")}' addr.txt
 Hell0 World
@@ -66,8 +62,7 @@ T0day is sunny
 Y0u are funny
 ```
 
-**f)** For the input file `table.txt`, calculate and display the product of numbers in the last field of each line. Consider space as the field separator for this file.
-
+**f)** For the input file `table.txt`, calculate and display the product of numbers in the last field of each line. Consider space as the field separator for this file.   
 ```bash
 $ cat table.txt
 brown bread mat hair 42
@@ -78,8 +73,7 @@ $ awk 'BEGIN{result=1}{result = result * $NF}END{print result}' table.txt
 -923.16
 ```
 
-**g)** Append `.` to all the input lines for the given `stdin` data.
-
+**g)** Append `.` to all the input lines for the given `stdin` data.   
 ```bash
 $ printf 'last\nappend\nstop\ntail\n' | awk '{printf("%s.\n", $0)}'
 last.
@@ -88,10 +82,8 @@ stop.
 tail.
 ```
 
-## Regular Expressions
-
-**a)** For the given input, print all lines that start with `den` or end with `ly`.
-
+## Regular Expressions   
+**a)** For the given input, print all lines that start with `den` or end with `ly`.   
 ```bash
 $ lines='lovely\n1 dentist\n2 lonely\neden\nfly away\ndent\n'
 $ printf "%b" "$lines" | awk '/^den|ly$/'
@@ -100,8 +92,7 @@ lovely
 dent
 ```
 
-**b)** Replace all occurrences of `42` with `[42]` unless it is at the edge of a word. Note that **word** in these exercises have same meaning as defined in regular expressions.
-
+**b)** Replace all occurrences of `42` with `[42]` unless it is at the edge of a word. Note that **word** in these exercises have same meaning as defined in regular expressions.    
 ```bash
 $ echo 'hi42bye nice421423 bad42 cool_42a 42c' | awk '{print gensub(/[^ ](42)[^ ]/, "[\\1]", "g")}'
 h[42]ye nic[42]423 bad42 cool[42] 42c
@@ -113,8 +104,7 @@ $ echo 'hi42bye nice421423 bad42 cool_42a 42c' | awk '{gsub(/\B(42)\B/, "[&]"); 
 hi[42]bye nice[42]1[42]3 bad42 cool_[42]a 42c
 ```
 
-**c)** Add `[]` around words starting with `s` and containing `e` and `t` in any order.
-
+**c)** Add `[]` around words starting with `s` and containing `e` and `t` in any order.  
 ```bash
 $ words='sequoia subtle exhibit asset sets tests site'
 $ echo "$words" | awk '{gsub(/\<s[a-z]*(e[a-z]*t|t[a-z]*e)[a-z]*\>/, "[&]")} 1'
@@ -124,8 +114,7 @@ $ echo "$words" | awk '{print gensub(/ (s[a-z]*[et][a-z]*[et][a-z]*)/, " [\\1]",
 sequoia [subtle] exhibit asset [sets] tests [site]
 ```
 
-**d)** Replace the space character that occurs after a word ending with `a` or `r` with a newline character.
-
+**d)** Replace the space character that occurs after a word ending with `a` or `r` with a newline character.  
 ```bash
 $ echo 'area not a _a2_ roar took 22' | awk '{gsub(/[ar]\> /, "&\n")} 1'
 area
@@ -140,17 +129,14 @@ _a2_ roar
 took 22
 ```
 
-**e)** Replace all occurrences of `[4]|*` with `2` for the given input.
-
+**e)** Replace all occurrences of `[4]|*` with `2` for the given input.  
 ```bash
 $ echo '2.3/[4]|*6 foo 5.3-[4]|*9' | awk '{gsub(/\[4\]\|\*/, "2")} 1'
 2.3/26 foo 5.3-29
 ```
 
-**f)** `awk '/\<[a-z](on|no)[a-z]\>/'` is same as `awk '/\<[a-z][on]{2}[a-z]\>/'`. True or False? Sample input shown below might help to understand the differences, if any.
-
-False. `nn` or `oo` can't be matched with `'/\<[a-z](on|no)[a-z]\>/'`, but will be matched with `'/\<[a-z][on]{2}[a-z]\>/'`
-
+**f)** `awk '/\<[a-z](on|no)[a-z]\>/'` is same as `awk '/\<[a-z][on]{2}[a-z]\>/'`. True or False? Sample input shown below might help to understand the differences, if any.  
+False. `nn` or `oo` can't be matched with `'/\<[a-z](on|no)[a-z]\>/'`, but will be matched with `'/\<[a-z][on]{2}[a-z]\>/'`    
 ```bash
 $ printf 'known\nmood\nknow\npony\ninns\n'
 known
@@ -158,10 +144,19 @@ mood
 know
 pony
 inns
+
+$ printf 'known\nmood\nknow\npony\ninns\n' | awk '/\<[a-z](on|no)[a-z]\>/'
+know
+pony
+
+$ printf 'known\nmood\nknow\npony\ninns\n' | awk '/\<[a-z][on]{2}[a-z]\>/'
+mood
+know
+pony
+inns
 ```
 
-**g)** Print all lines that start with `hand` and ends with `s` or `y` or `le` or no further character. For example, `handed` shouldn't be printed even though it starts with `hand`.
-
+**g)** Print all lines that start with `hand` and ends with `s` or `y` or `le` or no further character. For example, `handed` shouldn't be printed even though it starts with `hand`.   
 ```bash
 $ lines='handed\nhand\nhandy\nunhand\nhands\nhandle\n'
 $ printf '%b' "$lines"  | awk '/^hand([a-z]*(s|y|le))?$/'
@@ -171,25 +166,29 @@ hands
 handle
 ```
 
-**h)** Replace `42//5` or `42/5` with `8` for the given input.
-
+**h)** Replace `42//5` or `42/5` with `8` for the given input.     
 ```bash
 $ echo 'a+42//5-c pressure*3+42/5-14256' | awk '{print gensub(/42(\/){1,2}5/, "8", "g")}'
 a+8-c pressure*3+8-14256
 ```
 
-**i)** For the given quantifiers, what would be the equivalent form using `{m,n}` representation?
-
+**i)** For the given quantifiers, what would be the equivalent form using `{m,n}` representation?   
 * `?` is same as {,1}
 * `*` is same as {0,}
 * `+` is same as {1,}
 
-**j)** True or False? `(a*|b*)` is same as `(a|b)*` 
+**j)** True or False? `(a*|b*)` is same as `(a|b)*`   
 
-False. `abab` can't be matched with `(a*|b*)`, but can be matched with `(a|b)*`.
+False. `abab` can't be matched with `(a*|b*)`, but can be matched with `(a|b)*`.    
+```bash
+$ echo 'abab' | awk '/\<(a*|b*)\>/' | wc -l
+0
 
-**k)** For the given input, construct two different regexps to get the outputs as shown below.
+$ echo 'abab' | awk '/\<(a|b)*\>/'
+abab
+```
 
+**k)** For the given input, construct two different regexps to get the outputs as shown below.   
 ```bash
 $ # delete from '(' till next ')'
 $ echo 'a/b(division) + c%d() - (a#(b)2(' | awk '{gsub(/\([^)]*\)/, "")} 1'
@@ -200,8 +199,7 @@ $ echo 'a/b(division) + c%d() - (a#(b)2(' | awk '{gsub(/\([^()]*\)/, "")} 1'
 a/b + c%d - (a#2(
 ```
 
-**l)** For the input file `anchors.txt`, convert **markdown** anchors to corresponding **hyperlinks**.
-
+**l)** For the input file `anchors.txt`, convert **markdown** anchors to corresponding **hyperlinks**.   
 ```bash
 $ cat anchors.txt
 # <a name="regular-expressions"></a>Regular Expressions
@@ -217,12 +215,11 @@ $ awk '/^#/{print gensub(/^#.*name="(.*)".*>(.*)/, "[\\2](#\\1)", "g")}' anchors
 * `professor` matched irrespective of case
 * `quip` or `this` matched case sensitively
 
-Input is a file downloaded from internet as shown below.
-
+Input is a file downloaded from internet as shown below.  
 ```bash
-$ wget https://www.gutenberg.org/files/345/345.txt -O dracula.txt
+$ wget https://www.gutenberg.org/cache/epub/345/pg345.txt -O dracula.txt
 
-$ awk ##### add your solution here
+$ awk 'tolower($0) ~ /professor/ && /(quip|this)/' dracula.txt
 equipment of a professor of the healing craft. When we were shown in,
 should be. I could see that the Professor had carried out in this room,
 "Not up to this moment, Professor," she said impulsively, "but up to
@@ -230,40 +227,43 @@ and sprang at us. But by this time the Professor had gained his feet,
 this time the Professor had to ask her questions, and to ask them pretty
 ```
 
-**n)** Given sample strings have fields separated by `,` and field values cannot be empty. Replace the third field with `42`.
-
+**n)** Given sample strings have fields separated by `,` and field values cannot be empty. Replace the third field with `42`.  
 ```bash
-$ echo 'lion,ant,road,neon' | awk ##### add your solution here
+$ echo 'lion,ant,road,neon' | awk -v FS=',' -v OFS=',' '{$3 = 42; print $0}'
 lion,ant,42,neon
 
-$ echo '_;3%,.,=-=,:' | awk ##### add your solution here
+$ echo '_;3%,.,=-=,:' | awk -v FS=',' -v OFS=',' '{$3 = 42; print $0}'
 _;3%,.,42,:
 ```
 
-**o)** For the given strings, replace last but third `so` with `X`. Only print the lines which are changed by the substitution.
-
+**o)** For the given strings, replace last but third `so` with `X`. Only print the lines which are changed by the substitution.  
 ```bash
-$ printf 'so and so also sow and soup' | awk ##### add your solution here
+$ printf 'so and so also sow and soup' | awk '$0 ~ /(.*)so(.*(so.*){3})/{print gensub(/(.*)so(.*(so.*){3})/, "\\1X\\2", "g")}'
 so and X also sow and soup
 
-$ printf 'sososososososo\nso and so\n' | awk ##### add your solution here
+$ printf 'so and so also sow and soup' | awk -v r="(.*)so(.*(so.*){3})" '$0 ~ r{print gensub(r, "\\1X\\2", "g")}'
+so and X also sow and soup
+
+$ printf 'sososososososo\nso and so\n' | awk '$0 ~ /(.*)so(.*(so.*){3})/{print gensub(/(.*)so(.*(so.*){3})/, "\\1X\\2", "g")}'
+sososoXsososo
+
+$ printf 'sososososososo\nso and so\n' | awk -v r="(.*)so(.*(so.*){3})" '$0 ~ r{print gensub(r, "\\1X\\2", "g")}'
 sososoXsososo
 ```
 
-**p)** Surround all whole words with `()`. Additionally, if the whole word is `imp` or `ant`, delete them. Can you do it with single substitution?
-
+**p)** Surround all whole words with `()`. Additionally, if the whole word is `imp` or `ant`, delete them. Can you do it with single substitution?    
 ```bash
 $ words='tiger imp goat eagle ant important'
 $ echo "$words" | awk '{print gensub(/imp|ant|(\<[a-z]+\>)/, "(\\1)", "g")} '
 (tiger) () (goat) (eagle) () (important)
+
+$ echo $words  | awk '{print gensub( /(imp|ant|([^ ]*))/, "(\\2)", "g")}'
+(tiger) () (goat) (eagle) () (important)
 ```
 
-<br>
+## Field separators
 
-# Field separators
-
-**a)** Extract only the contents between `()` or `)(` from each input line. Assume that `()` characters will be present only once every line.
-
+**a)** Extract only the contents between `()` or `)(` from each input line. Assume that `()` characters will be present only once every line.   
 ```bash
 $ cat brackets.txt
 foo blah blah(ice) 123 xyz$ 
@@ -274,10 +274,14 @@ $ awk 'BEGIN{FS="[()]"}{print $2}' /tmp/brackets.txt
 ice
 almond-pista
 yoyo
+
+$ awk '{patsplit($0, result, /[()]/, seps); print seps[1]}' brackets.txt
+ice
+almond-pista
+yoyo
 ```
 
-**b)** For the input file `scores.csv`, extract `Name` and `Physics` fields in the format shown below.
-
+**b)** For the input file `scores.csv`, extract `Name` and `Physics` fields in the format shown below.   
 ```bash
 $ cat scores.csv
 Name,Maths,Physics,Chemistry
@@ -298,17 +302,20 @@ Ort:72
 Ith:100
 ```
 
-**c)** For the input file `scores.csv`, display names of those who've scored above `70` in Maths.
-
+**c)** For the input file `scores.csv`, display names of those who've scored above `70` in Maths.   
 ```bash
 $ awk 'BEGIN{FS=","}$2 > 70{if(NR>1)print $1}' /tmp/scores.csv
 Lin
 Cy
 Ith
+
+$ awk -F',' '$2 > 70 && NR > 1{print $1}' scores.csv
+Lin
+Cy
+Ith
 ```
 
-**d)** Display the number of word characters for the given inputs. Word definition here is same as used in regular expressions. Can you construct a solution with `gsub` and one without substitution functions?
-
+**d)** Display the number of word characters for the given inputs. Word definition here is same as used in regular expressions. Can you construct a solution with `gsub` and one without substitution functions?  
 ```bash
 $ echo 'hi there' | awk '{count=gsub(/\w/, "x"); print count}'
 7
@@ -316,25 +323,38 @@ $ echo 'hi there' | awk '{count=gsub(/\w/, "x"); print count}'
 $ echo 'hi there' | awk 'BEGIN{FS="\\w"}{print NF-1}'
 7
 
+$ echo 'hi there' | awk '{patsplit($0, result, /\w/, seps); print length(result)}'
+7
+
+$ echo 'hi there' | awk '{split($0, result, /\w/, seps); print length(seps)}'
+7
+
 $ echo 'u-no;co%."(do_12:as' | awk '{count=gsub(/\w/, "x"); print count}'
 12
 
 $ echo 'u-no;co%."(do_12:as' | awk 'BEGIN{FS="\\w"}{print NF-1}'
 12
+
+$ echo 'u-no;co%."(do_12:as' | awk '{split($0, result, /\w/, seps); print length(seps)}'
+12
+
+$ echo 'u-no;co%."(do_12:as' | awk '{patsplit($0, result, /\w/, seps); print length(result)}'
+12
 ```
 
-**e)** Construct a solution that works for both the given sample inputs and the corresponding output shown. Solution shouldn't use substitution functions or string concatenation.
-
+**e)** Construct a solution that works for both the given sample inputs and the corresponding output shown. Solution shouldn't use substitution functions or string concatenation.   
 ```bash
 $ echo '1 "grape" and "mango" and "guava"'  | awk 'BEGIN{FPAT="\"[^\"]+\"";OFS=","}{print $1,$3}'
 "grape","guava"
 
 $ echo '("a 1""b""c-2""d")' | awk 'BEGIN{FPAT="\"[^\"]+\"";OFS=","}{print $1,$3}'
 "a 1","c-2"
+
+$ echo '("a 1""b""c-2""d")' | awk -vOFS="," '{patsplit($0, result, /\"[^\"]+\"/); print result[1], result[3]}'
+"a 1","c-2"
 ```
 
-**f)** Construct a solution that works for both the given sample inputs and the corresponding output shown. Solution shouldn't use substitution functions. Can you do it without explicitly using `print` function as well?
-
+**f)** Construct a solution that works for both the given sample inputs and the corresponding output shown. Solution shouldn't use substitution functions. Can you do it without explicitly using `print` function as well?   
 ```bash
 $ echo 'hi,bye,there,was,here,to' | awk 'BEGIN{FS=",";OFS=","}{$3=$NF;NF=3} 1'
 hi,bye,to
@@ -360,21 +380,22 @@ $ awk ##### add your solution here
 4.2,kt,45.1
 ```
 
-**h)** Display only the third and fifth characters from each line input line as shown below.
-
+**h)** Display only the third and fifth characters from each line input line as shown below.   
 ```bash
 $ printf 'restore\ncat one\ncricket' | awk 'BEGIN{FS="";OFS=""}{print $3,$5}'
 so
 to
 ik
+
+$ printf 'restore\ncat one\ncricket' | awk -vOFS='' '{patsplit($0, result, /\w/); print result[3], result[5]}'
+so
+tn
+ik
 ```
 
-<br>
+## Record separators  
 
-# Record separators
-
-**a)** The input file `jumbled.txt` consists of words separated by various delimiters. Display all words that contain `an` or `at` or `in` or `it`, one per line.
-
+**a)** The input file `jumbled.txt` consists of words separated by various delimiters. Display all words that contain `an` or `at` or `in` or `it`, one per line.   
 ```bash
 $ cat jumbled.txt
 overcoats;furrowing-typeface%pewter##hobby
@@ -390,8 +411,7 @@ intuition
 titanic
 ```
 
-**b)** Emulate `paste -sd,` with `awk`.
-
+**b)** Emulate `paste -sd,` with `awk`.  
 ```bash
 $ # this command joins all input lines with ',' character
 $ paste -sd, addr.txt
@@ -401,6 +421,10 @@ $ # and that there's a newline character at the end of the line
 $ awk -v RS= '{gsub(/\n/, ","); print }' addr.txt
 Hello World,How are you,This game is good,Today is sunny,12345,You are funny
 
+$ awk -vORS='' '{print s $0; s = ","}END{print "\n"}' addr.txt
+Hello World,How are you,This game is good,Today is sunny,12345,You are funny
+
+
 $ # if there's only one line in input, again make sure there's no trailing ','
 $ printf 'foo' | paste -sd,
 foo
@@ -408,8 +432,7 @@ $ printf 'foo' | awk -v RS= '{gsub(/\n/, ","); print }'
 foo
 ```
 
-**c)** For the input file `scores.csv`, add another column named `GP` which is calculated out of `100` by giving `50%` weightage to `Maths` and `25%` each for `Physics` and `Chemistry`.
-
+**c)** For the input file `scores.csv`, add another column named `GP` which is calculated out of `100` by giving `50%` weightage to `Maths` and `25%` each for `Physics` and `Chemistry`.    
 ```bash
 $ awk -F, -v OFS="," '{$(NF+1) = (NR==1) ? "GP" : $2*0.5+($3+$4)*0.25; print} ' scores.csv
 Name,Maths,Physics,Chemistry,GP
@@ -421,8 +444,7 @@ Ort,68,72,66,68.5
 Ith,100,100,100,100
 ```
 
-**d)** For the input file `sample.txt`, extract all paragraphs containing `do` and exactly two lines.
-
+**d)** For the input file `sample.txt`, extract all paragraphs containing `do` and exactly two lines.   
 ```bash
 $ cat sample.txt
 Hello World
@@ -440,17 +462,26 @@ No doubt you like it too
 Much ado about nothing
 He he he
 
-$ # note that there's no extra empty line at the end of the output
+# note that there's no extra empty line at the end of the output
 $ awk -v RS= -v FS='\n'  'NF==2 && /do/{print s $0; s="\n"}' sample.txt
 Just do-it
 Believe it
 
 Much ado about nothing
 He he he
+
+$ awk -v RS=  -v FS='\n' -v OFS='\n' '/do/{NF=2; print s $0; s = "\n"}' sample.txt
+Just do-it
+Believe it
+
+Today is sunny
+Not a bit funny
+
+Much ado about nothing
+He he he
 ```
 
-**e)** For the input file `sample.txt`, change all paragraphs into single line by joining lines using `.` and a space character as the separator. And add a final `.` to each paragraph.
-
+**e)** For the input file `sample.txt`, change all paragraphs into single line by joining lines using `.` and a space character as the separator. And add a final `.` to each paragraph.    
 ```bash
 $ # note that there's no extra empty line at the end of the output
 $ awk -v RS= -v FS='\n' -v OFS='. ' '$1=$1{$NF=$NF "."; print s $0; s="\n"}' sample.txt
@@ -474,6 +505,7 @@ pink blue white yellow
 car,mat,ball,basket
 green,brown,black,purple
 
+# Change `FS` and `OFS` will be no impact for $0, so there will be nothing changed for the second record
 $ awk 'NF=2; NR>1{FS=OFS=","}' mixed_fs.txt
 rose lily
 pink blue
@@ -481,8 +513,7 @@ car,mat
 green,brown
 ```
 
-**g)** For the input file `table.txt`, get the outputs shown below. All of them feature line number as part of the solution.
-
+**g)** For the input file `table.txt`, get the outputs shown below. All of them feature line number as part of the solution.   
 ```bash
 $ # print other than second line
 $ awk 'NR != 2' table.txt
@@ -499,8 +530,7 @@ $ awk 'NR != 2{sum+=$NF}END{print sum}' table.txt
 45.14
 ```
 
-**h)** Print second and fourth line for every block of five lines.
-
+**h)** Print second and fourth line for every block of five lines.   
 ```bash
 $ seq 15 | awk 'NR%5 == 2 || NR%5 == 4'
 2
@@ -521,27 +551,61 @@ RoaR to wow-
 $ awk -F '' -v RS='\\W+' -v ORS= '$0 && $1 == $NF {$0 = "{" $0 "}"} {print $0 RT}' odd.txt
 -{oreo}-not:{a} {_a2_} {roar}<=>took%{22}
 {RoaR} to {wow}-
+
+$ cat patsplit.awk
+{
+  patsplit($0, result, /\w+/, seps)
+
+  for ( i = 0; i < length(result); i++ ) {
+    patsplit(result[i+1], chars, /\w/)
+    if (chars[1] == chars[length(result[i+1])]) {
+      result[i+1] = "{"result[i+1]"}"
+    }
+    printf("%s%s", seps[i], result[i+1])
+  }
+  print ""
+}
+
+$ awk -f patsplit.awk odd.txt
+-{oreo}-not:{a} {_a2_} {roar}<=>took%{22}
+{RoaR} to {wow}
+
+$ cat split.awk
+{
+  split($0, result, /\W+/, seps)
+
+  for ( i = 1; i <= length(result); i++ ) {
+    split(result[i], chars, "")
+    if ( result[i] && ( chars[1] == chars[length(result[i])] ) )
+      result[i] = "{"result[i]"}"
+    printf("%s%s", result[i], seps[i])
+  }
+  print ""
+}
+
+$ awk -f split.awk odd.txt
+-{oreo}-not:{a} {_a2_} {roar}<=>took%{22}
+{RoaR} to {wow}-
 ```
 
-<br>
-
-# In-place file editing
-
-**a)** For the input file `copyright.txt`, replace `copyright: 2018` with `copyright: 2020` and write back the changes to `copyright.txt` itself. The original contents should get saved to `copyright.txt.orig`
-
+## In-place file editing
+NOTE: `-i inplace` option is available from `gawk 4.1.0`   
+**a)** For the input file `copyright.txt`, replace `copyright: 2018` with `copyright: 2020` and write back the changes to `copyright.txt` itself. The original contents should get saved to `copyright.txt.orig`    
 ```bash
 $ cat copyright.txt
 bla bla 2015 bla
 blah 2018 blah
 bla bla bla
 copyright: 2018
-$ awk ##### add your solution here
+
+$ /usr/local/bin/awk -i inplace -v INPLACE_SUFFIX=.orig '{print gensub("copyright: 2018", "copyright: 2020", "1")}' copyright.txt
 
 $ cat copyright.txt
 bla bla 2015 bla
 blah 2018 blah
 bla bla bla
 copyright: 2020
+
 $ cat copyright.txt.orig
 bla bla 2015 bla
 blah 2018 blah
@@ -549,43 +613,44 @@ bla bla bla
 copyright: 2018
 ```
 
-**b)** For the input files `nums1.txt` and `nums2.txt`, retain only second and third lines and write back the changes to their respective files. No need to create backups.
-
+**b)** For the input files `nums1.txt` and `nums2.txt`, retain only second and third lines and write back the changes to their respective files. No need to create backups.   
 ```bash
 $ cat nums1.txt
 3.14
 4201
 777
 0323012
+
 $ cat nums2.txt
 -45.4
 -2
 54316.12
 0x231
 
-$ awk ##### add your solution here
+$ /usr/local/bin/awk -i inplace -v INPLACE_SUFFIX=.orig 'NR == 2 || NR ==3' nums1.txt
 $ cat nums1.txt
 4201
 777
+
+$ /usr/local/bin/awk -i inplace -v INPLACE_SUFFIX=.orig 'NR == 2 || NR ==3' nums2.txt
 $ cat nums2.txt
 -2
 54316.12
 ```
 
-<br>
-
-# Using shell variables
-
+## Using shell variables  
 **a)** Use contents of `s` variable to display all matching lines from the input file `sample.txt`. Assume that the `s` variable doesn't have any regexp metacharacters and construct a solution such that only whole words are matched.
 
 ```bash
 $ s='do'
 $ awk -v s=$s '$0 ~ "\\<"s"\\>"' sample.txt
 Just do-it
+
+$ s=$s awk '$0 ~ ENVIRON["s"]' sample.txt
+Just do-it
 ```
 
-**b)** Replace all occurrences of `o` for the input file `addr.txt` with literal contents of `s` variable. Assume that the `s` variable has regexp metacharacters.
-
+**b)** Replace all occurrences of `o` for the input file `addr.txt` with literal contents of `s` variable. Assume that the `s` variable has regexp metacharacters.    
 ```bash
 $ s='\&/'
 $ s="$s" awk 'BEGIN{gsub(/[\\&]/, "\\\\&", ENVIRON["s"])}{gsub(/o/, ENVIRON["s"])} 1' addr.txt
@@ -597,10 +662,7 @@ T\&/day is sunny
 Y\&/u are funny
 ```
 
-<br>
-
-# Control Structures
-
+## Control Structures   
 **a)** The input file `nums.txt` contains single column of numbers. Change positive numbers to negative and vice versa. Can you do it with using only `sub` function and without explicit use of `if-else` or ternary operator?
 
 ```bash
@@ -612,6 +674,7 @@ $ cat nums.txt
 -75
 
 $ awk '$0 ~ /^-/ ? sub(/-/,"") : sub(/.*/, "-&") 1' nums.txt
+
 $ awk '!sub(/^-/, ""){sub(/.*/, "-&")} 1' nums.txt
 -42
 2
@@ -620,10 +683,14 @@ $ awk '!sub(/^-/, ""){sub(/.*/, "-&")} 1' nums.txt
 75
 ```
 
-**b)** For the input file `table.txt`, change the field separator from space to `,` character. Also, any field not containing digit characters should be surrounded by double quotes.
-
+**b)** For the input file `table.txt`, change the field separator from space to `,` character. Also, any field not containing digit characters should be surrounded by double quotes.  
 ```bash
 $ awk  -v OFS=, '{for(i=1;i<=NF;i++){if($i !~ /[0-9]/) sub(/.*/, "\"&\"", $i) }} 1' tables.txt
+"brown","bread","mat","hair",42
+"blue","cake","mug","shirt",-7
+"yellow","banana","window","shoes",3.14
+
+$ awk -v OFS="," '{for (i = 1; i<=NF; i++){if($i ~ /[a-z]+/)sub(/.*/, "\"&\"", $i)}} 1' table.txt
 "brown","bread","mat","hair",42
 "blue","cake","mug","shirt",-7
 "yellow","banana","window","shoes",3.14
@@ -641,13 +708,23 @@ $ awk 'BEGIN{OFS=""}{for(i=1; i<=NF; i++) $i = gensub(/.*(.)/, "\\1", 1, $i)} 1'
 gawk
 field
 ice-2
+
+$ awk '{for (i = 1; i<=NF; i++){split($i, result, ""); printf("%s", result[length($i)])}; print ""}' secrets.txt
+gawk
+field
+ice-2
 ```
 
-**d)** Emulate `q` and `Q` commands of `sed` as shown below.
-
+**d)** Emulate `q` and `Q` commands of `sed` as shown below.    
 ```bash
 $ # sed '/are/q' sample.txt will print until (and including) line contains 'are'
 $ awk '1;  /are/{exit}' sample.txt
+Hello World
+
+Good day
+How are you
+
+$ awk '{if($0 ~ /are/){print; exit}else{print}}' sample.txt
 Hello World
 
 Good day
@@ -658,13 +735,17 @@ $ awk '/are/{exit} 1' sample.txt
 Hello World
 
 Good day
+
+$ awk '{if($0 ~ /are/){exit}else{print}}' sample.txt
+Hello World
+
+Good day
 ```
 
-**e)** For the input file `addr.txt`:
-
-* if line contains `e`
-    * delete all occurrences of `e`
-    * surround all consecutive repeated characters with `{}`
+**e)** For the input file `addr.txt`:  
+* if line contains `e`   
+    * delete all occurrences of `e`  
+    * surround all consecutive repeated characters with `{}`  
     * assume that input will not have more than two consecutive repeats (Update script to support 2 and more consecutive repeats)
 * if line doesn't contain `e` but contains `u`
     * surround all lowercase vowels in that line with `[]`
@@ -706,9 +787,48 @@ This gam is g{oo}d
 T[o]d[a]y [i]s s[u]nny
 12345
 You ar fu{nn}y
+
+$ cat addr.awk
+/e/{
+  gsub(/e/, "", $0 )
+  split($0, chars, "")
+
+  for ( i = 1; i < length(chars); i = j + 1) {
+    if ( chars[i] == chars[i+1] ) {
+      chars[i] = "{"chars[i]
+      for ( j = i + 1; j <= length(chars ); j++ ) {
+        if ( chars[i+1] != chars[j] ) {
+          chars[j-1] = chars[j-1]"}"
+          break
+        }
+      }
+    } else {
+      j = i
+    }
+  }
+  for ( i=1; i <= length(chars); i++) {
+    printf("%s", chars[i])
+  }
+  print ""
+  next
+}
+
+/u/{
+  gsub(/[aiou]/, "[&]", $0)
+}
+
+1
+
+$ awk -f addr.awk addr.txt
+H{ll}o World
+How ar you
+This gam is g{oo}d
+T[o]d[a]y [i]s s[u]nny
+12345
+You ar fu{nn}y
 ```
 
-# Built-in functions
+## Built-in functions  
 
 >![info](../images/info.svg) Exercises will also include functions and features not discussed in this chapter. Refer to [gawk manual: Functions](https://www.gnu.org/software/gawk/manual/gawk.html#Functions) for details.
 

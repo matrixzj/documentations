@@ -57,16 +57,20 @@ entries:
       url: /bash_pure_bible_file_handling.html
       output: web, pdf
 
-    - title: sed
-      url: /bash_sed.html
+    - title: GNU Sed
+      url: /bash_gnu_sed.html
       output: web, pdf
 
     - title: GNU Sed Exercises
       url: /bash_gnu_sed_exercises.html
       output: web, pdf
 
-    - title: awk
-      url: /bash_awk.html
+    - title: GNU AWK
+      url: /bash_gnu_awk.html
+      output: web, pdf
+
+    - title: GNU AWK Exercises
+      url: /bash_gnu_awk_exercises.html
       output: web, pdf
 
     - title: find
