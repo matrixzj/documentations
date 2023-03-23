@@ -515,7 +515,7 @@ sort an array with following order:
 * strings (alphabetical order)
 * array (lexical order)
 * object    
-or sort the array based on `value` of `path_expression`   
+or sort the array based on `value` of `path_expression`     
 ```bash
 $ jq -r '[.Subnets[].AvailableIpAddressCount]' /tmp/data
 [
@@ -530,7 +530,7 @@ $ jq -r '[.Subnets[].AvailableIpAddressCount] | sort' /tmp/data
 ]
 ```
 
-### `group_by(path_expression)`
+### `group_by(path_expression)`   
 takes as input an array, groups the elements having the same `path_expression` field value into separate arrays, and produces all of these arrays as elements of a larger array.
 ```bash
 $ echo '[{"a": 1}, {"b": 2}, {"a": 1}, {"a": 2}]' | jq 'group_by(.a)'
