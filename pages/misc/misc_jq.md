@@ -12,11 +12,11 @@ folder: Misc
 - [jq](#jq)
   - [data](#data)
   - [Options](#options)
-    - [sort keys `-S`](#sort-keys--s)
-    - [compact output `-c`](#compact-output--c)
-    - [read filter from file `-f`](#read-filter-from-file--f)
-    - [pass parameters from bash `--arg` / `--argjson`](#pass-parameters-from-bash---arg----argjson)
-    - [reads JSON from `file` and binds to a JSON array named as given global variable `--slrupfile`](#reads-json-from-file-and-binds-to-a-json-array-named-as-given-global-variable---slrupfile)
+    - [`-S` sort keys](#-s-sort-keys)
+    - [`-c` compact output](#-c-compact-output)
+    - [`-f` read filter from file](#-f-read-filter-from-file)
+    - [`--arg` / `--argjson` pass parameters from bash](#--arg----argjson-pass-parameters-from-bash)
+    - [`--slrupfile` reads JSON from `file` and binds to a global variable](#--slrupfile-reads-json-from-file-and-binds-to-a-global-variable)
   - [Types and Values](#types-and-values)
     - [`..` Recursive Descent](#-recursive-descent)
   - [Built-in Functions](#built-in-functions)
@@ -143,7 +143,7 @@ $ cat /tmp/data
 ```
 
 ## Options
-### sort keys `-S`
+### `-S` sort keys   
 ```bash
 $ cat /tmp/jq-data | jq -r -S '.Subnets[0]'
 {
@@ -181,13 +181,13 @@ $ cat /tmp/jq-data | jq -r -S '.Subnets[0]'
 }
 ```
 
-### compact output `-c`
+### `-c` compact output  
 ```bash
 $ cat /tmp/jq-data | jq -c
 {"Subnets":[{"AvailabilityZone":"us-east-1a","Tags":[{"Value":"DEV","Key":"Env"},{"Value":"AccountBase","Key":"aws:cloudformation:stack-name"},{"Value":"PrivateSubnet1a","Key":"aws:cloudformation:logical-id"},{"Value":"Systems","Key":"Owner"},{"Value":"PrivateSubnet1a","Key":"Name"}],"AvailableIpAddressCount":214,"DefaultForAz":false,"Ipv6CidrBlockAssociationSet":[],"State":"available","MapPublicIpOnLaunch":false,"SubnetId":"subnet-xxxxxx","CidrBlock":"10.1.2.0/24","AssignIpv6AddressOnCreation":false},{"AvailabilityZone":"us-east-1a","Tags":[{"Value":"Systems","Key":"Owner"},{"Value":"AccountBase","Key":"aws:cloudformation:stack-name"},{"Value":"PublicSubnet1a","Key":"aws:cloudformation:logical-id"},{"Value":"DEV","Key":"Env"}],"AvailableIpAddressCount":250,"DefaultForAz":false,"Ipv6CidrBlockAssociationSet":[],"State":"available","MapPublicIpOnLaunch":false,"SubnetId":"subnet-yyyyyy","CidrBlock":"10.1.0.0/24","AssignIpv6AddressOnCreation":false}]}
 ```
 
-### read filter from file `-f`
+### `-f` read filter from file   
 ```bash
 $ cat /tmp/filter
 .Subnets[].AvailabilityZone
@@ -197,7 +197,7 @@ us-east-1a
 us-east-1a
 ```
 
-### pass parameters from bash `--arg` / `--argjson`
+### `--arg` / `--argjson` pass parameters from bash  
 ```bash
 $ test_cidr='10.1.0.*'
 
@@ -224,7 +224,7 @@ $ jq -r --arg ip_threshhold "${avaiable_ips_threshhold}" '.Subnets[] | {subnetid
 }
 ```
 
-### reads JSON from `file` and binds to a JSON array named as given global variable `--slrupfile`
+### `--slrupfile` reads JSON from `file` and binds to a global variable   
 ```bash
 $ cat /tmp/filter | jq .
 {
@@ -389,8 +389,8 @@ $ cat /tmp/data| jq 'setpath(["Subnets", 0, "AvailableIpAddressCount"]; 0) | .Su
 ```
 
 ### `to_entries`, `from_entries`, `with_entries`
-`to_entries` converts an array to `{"key": k, "value": v}`. 
-`from_entries` converts on the opposite way.
+`to_entries` converts an array to `{"key": k, "value": v}`.   
+`from_entries` converts on the opposite way.    
 `with_entries(filter)` is same as `to_entries | map(filter) | from_entries`
 ```bash
 $ cat /tmp/data | jq '.Subnets[].Tags | from_entries'
@@ -482,10 +482,10 @@ $ cat /tmp/data | jq '[.Subnets[] | .AvailabilityZone, .AvailableIpAddressCount 
 ```
 
 ### `any` / `all` / `any(condition)` / `all(condition)`
-`any` takes an array of boolean values, and returns `true` if any of them are `true`
-`all` takes an array of boolean values, and returns `true` if all of them are `true`
-`any(condition)` applies `condition` to all elements of given array, and returns `true` if any of them are `true`
-`all(condition)` applies `condition` to all elements of given array, and returns `true` if all of them are `true`
+`any` takes an array of boolean values, and returns `true` if any of them are `true`    
+`all` takes an array of boolean values, and returns `true` if all of them are `true`   
+`any(condition)` applies `condition` to all elements of given array, and returns `true` if any of them are `true`   
+`all(condition)` applies `condition` to all elements of given array, and returns `true` if all of them are `true`    
 ```bash
 $ cat /tmp/data | jq '[.Subnets[0].AvailableIpAddressCount > 220, .Subnets[1].AvailableIpAddressCount > 220] | any '
 true
@@ -514,8 +514,8 @@ sort an array with following order:
 * nubmers
 * strings (alphabetical order)
 * array (lexical order)
-* object
-or sort the array based on `value` of `path_expression`
+* object    
+or sort the array based on `value` of `path_expression`   
 ```bash
 $ jq -r '[.Subnets[].AvailableIpAddressCount]' /tmp/data
 [

@@ -313,6 +313,20 @@ Like "@val_str_asc", but the element values, treated as strings, are ordered fro
 ### `"@val_num_desc"`    
 Like `"@val_num_asc"`, but the element values, treated as numbers, are ordered from high to low. If the numeric values are equal, the string values are compared instead. If they are also identical, the index string values are compared instead. Non-scalar values are compared using `"@val_type_desc"` sort ordering, so subarrays, if present, come out first. 
 
+```bash
+$ awk 'BEGIN{array[1]="a"; array[2]="c"; array[3]="b"; array[4]=0; PROCINFO["sorted_in"] = "@ind_num_desc"; for(x in array) print x, array[x]}'
+4 0
+3 b
+2 c
+1 a
+
+$ awk 'BEGIN{array[1]="a"; array[2]="c"; array[3]="b"; array[4]=0; PROCINFO["sorted_in"] = "@val_num_asc"; for(x in array) print x, array[x]}'
+4 0
+1 a
+3 b
+2 c
+```
+
 ## Functions
 
 ### Numberic Functions
@@ -454,9 +468,9 @@ $ awk 'BEGIN{test="matrix matrix"; count = gsub(/matrix/, "[&] test", test); pri
 
 #### index
 ```bash
-index(in, find)
+index(string, target_string)
 ```
-Search the string *in* for the first occurrence of the string *find*, and return the position in characters where that occurrence begins in the string *in*.   
+Search the string *string* for the first occurrence of the string *target_string*, and return the position in characters where that occurrence begins in the string *string*.   
 ```bash
 $ awk 'BEGIN{print index("matrix matrix", " matrix")}'                        
 7
@@ -526,9 +540,9 @@ $ awk 'BEGIN{test = "matrix zou"; match(test, /(m.*x) (z.*u)/, array); for (x in
 
 #### patsplit
 ```bash
-patsplit(string, array [, fieldpat [, seps ] ])
+patsplit(string, array [, regexp [, seps ] ])
 ```
-Search *fieldpat* in  *string* and store the pieces in *array* and the separator strings in the *seps* array. The first piece is stored in *array[1]*, the second piece in *array[2]*, and so forth. The third argument, *fieldpat*, is a regexp describing the fields in *string*. It may be either a regexp constant or a string. If *fieldpat* is omitted, the value of FPAT is used. *patsplit()* returns the number of elements created. *seps[i]* is the possibly null separator string after *array[i]*.     
+Search *regexp* in *string* and store the pieces in *array* and the separator strings in the *seps* array. The first piece is stored in *array[1]*, the second piece in *array[2]*, and so forth. The third argument, *fieldpat*, is a regexp describing the fields in *string*. It may be either a regexp constant or a string. If *regexp* is omitted, the value of FPAT is used. *patsplit()* returns the number of elements created. *seps[i]* is the possibly null separator string after *array[i]*.     
 ```bash
 $ awk 'BEGIN{patsplit("matrix|zou", a, /[a-z]*/, seps); print "array result:"; for(i=1;i<=length(a);i++)print a[i]; print length(a); print "seperator result:"; for(j=0;j<length(seps);j++) print seps[j]; print length(seps)}'
 array result:
@@ -567,9 +581,9 @@ $ echo -test- | awk '{patsplit($0, result, /\w+/, seps); for (x in result) print
 
 #### split
 ```bash
-split(string, array  [, fieldsep [, seps ] ])
+split(string, array  [, regexp [, seps ] ])
 ```
-Divide *string* into pieces separated by *fieldsep* and store the pieces in *array* and the separator strings in the *seps* array.  The first piece is stored in *array[1]*, the second piece in *array[2]*, and so forth. The string value of the third argument, *fieldsep*, is a regexp describing where to split *string*. If *fieldsep* is omitted, the value of FS is used. *split()* returns the number of elements created. *seps* is a gawk extension, with *seps[i]* being the separator string between *array[i]* and *array[i+1]*. If *fieldsep* is a single space, then any leading whitespace goes into *seps[0]* and any trailing whitespace goes into *seps[n]*, where *n* is the return value of *split()* (i.e., the number of elements in array).    
+Divide *string* into pieces separated by *regexp* and store the pieces in *array* and the separator strings in the *seps* array.  The first piece is stored in *array[1]*, the second piece in *array[2]*, and so forth. The string value of the third argument, *regexp*, is a regexp describing where to split *string*. If *regexp* is omitted, the value of FS is used. *split()* returns the number of elements created. *seps* is a gawk extension, with *seps[i]* being the separator string between *array[i]* and *array[i+1]*. If *regexp* is a single space, then any leading whitespace goes into *seps[0]* and any trailing whitespace goes into *seps[n]*, where *n* is the return value of *split()* (i.e., the number of elements in array).    
 The split() function splits strings into pieces in the same way that input lines are split into fields.    
 ```bash
 $ awk 'BEGIN{split("matrix|zou", a, /[|]/, seps); print "array result:"; for(i=1;i<=length(a);i++)print a[i]; print length(a); print "seperator result:"; for(j=0;j<length(seps);j++) print seps[j]; print length(seps)}'

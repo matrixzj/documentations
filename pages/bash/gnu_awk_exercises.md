@@ -261,8 +261,7 @@ $ echo $words  | awk '{print gensub( /(imp|ant|([^ ]*))/, "(\\2)", "g")}'
 (tiger) () (goat) (eagle) () (important)
 ```
 
-## Field separators
-
+## Field separators   
 **a)** Extract only the contents between `()` or `)(` from each input line. Assume that `()` characters will be present only once every line.   
 ```bash
 $ cat brackets.txt
@@ -828,12 +827,8 @@ T[o]d[a]y [i]s s[u]nny
 You ar fu{nn}y
 ```
 
-## Built-in functions  
-
->![info](../images/info.svg) Exercises will also include functions and features not discussed in this chapter. Refer to [gawk manual: Functions](https://www.gnu.org/software/gawk/manual/gawk.html#Functions) for details.
-
-**a)** For the input file `scores.csv`, sort the rows based on **Physics** values in descending order. Header should be retained as the first line in output.
-
+## Built-in functions   
+**a)** For the input file `scores.csv`, sort the rows based on **Physics** values in descending order. Header should be retained as the first line in output.     
 ```bash
 $ awk 'BEGIN{FS=","; PROCINFO["sorted_in"] = "@ind_num_desc"}{if(NR==1)header = $0; else {a[$3] = $0}}END{print header; for(i in a) print i, a[i]}' /tmp/scores.csv
 Name,Maths,Physics,Chemistry
@@ -843,10 +838,18 @@ Lin,78,83,80
 Er,56,79,92
 Ort,68,72,66
 Blue,67,46,99
+
+$ awk -F',' '{if(NR == 1){print; next}; array[$3,$1,$2,$4] = $0}END{PROCINFO["sorted_in"] = "@ind_num_desc"; for (x in array) print array[x]}' scores.csv
+Name,Maths,Physics,Chemistry
+Ith,100,100,100
+Cy,97,98,95
+Lin,78,83,80
+Er,56,79,92
+Ort,68,72,66
+Blue,67,46,99
 ```
 
-**b)** For the input file `nums3.txt`, calculate the square root of numbers and display in two different formats. First with four digits after fractional point and next in scientific notation, again with four digits after fractional point. Assume input has only single column positive numbers.
-
+**b)** For the input file `nums3.txt`, calculate the square root of numbers and display in two different formats. First with four digits after fractional point and next in scientific notation, again with four digits after fractional point. Assume input has only single column positive numbers.   
 ```bash
 $ cat /tmp/nums3.txt
 3.14
@@ -854,73 +857,80 @@ $ cat /tmp/nums3.txt
 777
 323012
 
-$ awk '{printf("%4.4f\n", sqrt($0))}' /tmp/nums3.txt
+$ awk '{printf("%.4f\n", sqrt($0))}' /tmp/nums3.txt
 1.7720
 64.8151
 27.8747
 568.3414
 
-$ awk '{printf("%4.4e\n", sqrt($0))}' /tmp/nums3.txt
+$ awk '{printf("%.4e\n", sqrt($0))}' /tmp/nums3.txt
 1.7720e+00
 6.4815e+01
 2.7875e+01
 5.6834e+02
 ```
 
-**c)** Transform the given input strings to the corresponding output shown. Assume space as the field separators. From the second field, remove the second `:` and the number that follows. Modify the last field by multiplying it by the number that was deleted from the second field. The numbers can be positive/negative integers or floating-point numbers (including scientific notation).
-
+**c)** Transform the given input strings to the corresponding output shown. Assume space as the field separators. From the second field, remove the second `:` and the number that follows. Modify the last field by multiplying it by the number that was deleted from the second field. The numbers can be positive/negative integers or floating-point numbers (including scientific notation).   
 ```bash
 $ echo 'go x:12:-425 og 6.2' | awk '{split($2, a,  ":"); $2 = a[1] ":" a[2]; $NF = $NF * a[3]} 1'
 go x:12 og -2635
 
+$ echo 'go x:12:-425 og 6.2' | awk '{split($2, result, ":"); gsub(":"result[3], "", $2); print $1, $2, $3, $4 * result[3]}'
+go x:12 og -2635
+
 $ echo 'rx zwt:3.64:12.89e2 ljg 5' | awk '{split($2, a,  ":"); $2 = a[1] ":" a[2]; $NF = $NF * a[3]} 1'
+rx zwt:3.64 ljg 6445
+
+$ echo 'rx zwt:3.64:12.89e2 ljg 5' | awk '{split($2, result, ":"); gsub(":"result[3], "", $2); print $1, $2, $3, $4 * result[3]}'
 rx zwt:3.64 ljg 6445
 ```
 
-**d)** Transform the given input strings to the corresponding output shown. Assume space as the field separators. Replace the second field with sum of the two numbers embedded in it. The numbers can be positive/negative integers or floating-point numbers (but not scientific notation).
-
+**d)** Transform the given input strings to the corresponding output shown. Assume space as the field separators. Replace the second field with sum of the two numbers embedded in it. The numbers can be positive/negative integers or floating-point numbers (but not scientific notation).    
 ```bash
 $ echo 'f2:z3 kt//-42\\3.14//tw 5y6' | awk '{patsplit($2, a, /[+-]?[0-9]+(\.[0-9]+)?/); for (i in a) $2 += a[i]} 1'
 f2:z3 -38.86 5y6
 
+$ echo 'f2:z3 kt//-42\\3.14//tw 5y6' | awk '{patsplit($2, result, /-?[0-9]+(\.[0-9]+)?/); $2 = result[1] + result[2]; $1 = $1; print }'
+f2:z3 -38.86 5y6
+
 $ echo 't5:x7 qr;wq<=>+10{-8764.124}yb u9' | awk '{patsplit($2, a, /[+-]?[0-9]+(\.[0-9]+)?/); for (i in a) $2 += a[i]} 1'
+t5:x7 -8754.12 u9
+
+$ echo 't5:x7 qr;wq<=>+10{-8764.124}yb u9' | awk '{patsplit($2, result, /-?[0-9]+(\.[0-9]+)?/); $2 = result[1] + result[2]; $1 = $1; print }'
 t5:x7 -8754.12 u9
 ```
 
-**e)** For the given input strings, extract portion of the line starting from the matching location specified by shell variable `s` till the end of the line. If there is no match, do not print that line. The contents of `s` should be matched literally.
-
+**e)** For the given input strings, extract portion of the line starting from the matching location specified by shell variable `s` till the end of the line. If there is no match, do not print that line. The contents of `s` should be matched literally.    
 ```bash
 $ s='(a^b)'
 $ echo '3*f + (a^b) - 45' | s=$s awk 'n=index($0, ENVIRON["s"]){print substr($0, n)}'
 (a^b) - 45
 
 $ s='\&/'
-$ # should be no output for this input
 $ echo 'f\&z\&2.14' | s=$s awk 'n=index($0, ENVIRON["s"]){print substr($0, n)}'
-$ # but this one has a match
+
 $ echo 'f\&z\&/2.14' | s=$s awk 'n=index($0, ENVIRON["s"]){print substr($0, n)}'
 \&/2.14
 ```
 
-**f)** Extract all positive integers preceded by `-` and followed by `:` or `;` and display all such matches separated by a newline character.
-
+**f)** Extract all positive integers preceded by `-` and followed by `:` or `;` and display all such matches separated by a newline character.    
 ```bash
 $ s='42 foo-5; baz3; x-83, y-20:-34; f12'
-$ echo "$s" | awk '{patsplit($0, a, /(-)?[0-9]+;/); for (i in a){result = gensub(/[-]?([0-9]+);/, "\\1", "g", a[i]); print result}}'
+$ echo $s | awk '{patsplit($0, result, /-[0-9]+(;|:)/); for (x in result){print gensub(/-([0-9]+);?:?/, "\\1", "g", result[x])}}'
 5
-3
+20
 34
 
-$ echo "$s" | awk '{while (match($0, /-?([0-9]+);/, array)){print array[1]; $0 = substr($0, RSTART+RLENGTH)}}'
+
+$ echo "$s" | awk '{while (match($0, /-([0-9]+)(;|:)/, array)){print array[1]; $0 = substr($0, RSTART+RLENGTH)}}'
 5
-3
+20
 34
 ```
 
-**g)** For the input file `scores.csv`, calculate the average of three marks for each `Name`. Those with average greater than or equal to `80` should be saved in `pass.csv` and the rest in `fail.csv`. The format is `Name` and average score (up to two decimal points) separated by a tab character.
-
+**g)** For the input file `scores.csv`, calculate the average of three marks for each `Name`. Those with average greater than or equal to `80` should be saved in `pass.csv` and the rest in `fail.csv`. The format is `Name` and average score (up to two decimal points) separated by a tab character.    
 ```bash
-$ awk 'NR==1{FS=","; next} { average = ($2 + $3 + $4)/3; output = sprintf("%s\t%2.2f", $1, average); if (average >= 80){print output > "/tmp/pass.csv"} else {print output > "/tmp/fail.csv"}}' /tmp/scores.csv
+$ awk -v FS="," 'NR>1{avg=($2 + $3 + $4)/3; output = sprintf("%s\t%.2f", $1, avg); if(avg > 80){print output > "pass.csv"} else{print output > "fail.csv"}}' scores.csv
 
 $ cat fail.csv
 Blue    70.67
@@ -933,7 +943,7 @@ Cy      96.67
 Ith     100.00
 ```
 
-Be carefule for sequence. *average* need to be calculated before *sprintf*. Otherwise, result will be wrong.
+Be carefule for sequence. *average* need to be calculated before *sprintf*. Otherwise, result will be wrong.   
 ```bash
 awk 'NR==1{FS=","; next} { output = sprintf("%s\t%2.2f", $1, average); average = ($2 + $3 + $4)/3; if (average >= 80){print output > "/tmp/pass.csv"} else {print output > "/tmp/fail.csv"}}' /tmp/scores.csv
 
@@ -948,8 +958,7 @@ Cy      75.67
 Ith     68.67
 ```
 
-**h)** For the input file `files.txt`, replace lines starting with a space with the output of that line executed as a shell command.
-
+**h)** For the input file `files.txt`, replace lines starting with a space with the output of that line executed as a shell command.   
 ```bash
 $ cat files.txt
  sed -n '2p' addr.txt
@@ -970,8 +979,7 @@ yellow
 -----------
 ```
 
-**i)** For the input file `fw.txt`, format the last column of numbers in scientific notation with two digits after the decimal point.
-
+**i)** For the input file `fw.txt`, format the last column of numbers in scientific notation with two digits after the decimal point.    
 ```bash
 $ awk -v FIELDWIDTHS='14 8' '{printf("%s\t%.2e\n", $1, $2)}' fw.txt
 1.3  rs   90    1.35e-01
@@ -980,10 +988,8 @@ $ awk -v FIELDWIDTHS='14 8' '{printf("%s\t%.2e\n", $1, $2)}' fw.txt
 4.2  kt   32    4.51e+01
 ```
 
-**j)** For the input file `addr.txt`, display all lines containing `e` or `u` but not both.
-
->![info](../images/info.svg) Hint — [gawk manual: Bit-Manipulation Functions](https://www.gnu.org/software/gawk/manual/gawk.html#Bitwise-Functions).
-
+**j)** For the input file `addr.txt`, display all lines containing `e` or `u` but not both.    
+Hint — [gawk manual: Bit-Manipulation Functions](https://www.gnu.org/software/gawk/manual/gawk.html#Bitwise-Functions).   
 ```bash
 $ awk 'xor(/e/, /u/)' /tmp/addr.txt
 Hello World
@@ -991,9 +997,7 @@ This game is good
 Today is sunny
 ```
 
-<br>
-
-# Multiple file input
+## Multiple file input
 
 **a)** Print the last field of first two lines for the input files `table.txt`, `scores.csv` and `fw.txt`. The field separators for these files are space, comma and fixed width respectively. To make the output more informative, print filenames and a separator as shown in the output below. Assume input files will have at least two lines.
 
