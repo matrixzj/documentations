@@ -2,7 +2,7 @@
 title: GNU Awk Exercises
 tags: [bash]
 keywords: awk samples
-last_updated: Mar 12, 2023
+last_updated: Mar 26, 2023
 summary: "awk exercises"
 sidebar: mydoc_sidebar
 permalink: bash_gnu_awk_exercises.html
@@ -997,10 +997,8 @@ This game is good
 Today is sunny
 ```
 
-## Multiple file input
-
-**a)** Print the last field of first two lines for the input files `table.txt`, `scores.csv` and `fw.txt`. The field separators for these files are space, comma and fixed width respectively. To make the output more informative, print filenames and a separator as shown in the output below. Assume input files will have at least two lines.
-
+## Multiple file input    
+**a)** Print the last field of first two lines for the input files `table.txt`, `scores.csv` and `fw.txt`. The field separators for these files are space, comma and fixed width respectively. To make the output more informative, print filenames and a separator as shown in the output below. Assume input files will have at least two lines.  
 ```bash
 $ awk 'BEGINFILE{printf(">%s<\n", FILENAME)}{if(FNR<3){print $NF}}ENDFILE{print "--------"}' table.txt FS="," scores.csv FS= fw.txt
 $ awk 'BEGINFILE{printf(">%s<\n", FILENAME)}{print $NF}FNR>2{nextfile}ENDFILE{print "--------"}' table.txt FS="," scores.csv FS= fw.txt
@@ -1018,8 +1016,7 @@ Chemistry
 ----------
 ```
 
-**b)** For the given list of input files, display all filenames that contain `at` or `fun` in the third field. Assume space as the field separator.
-
+**b)** For the given list of input files, display all filenames that contain `at` or `fun` in the third field. Assume space as the field separator.   
 ```bash
 $ awk '$3 ~ /(at|fun)/{print FILENAME; nextfile}' sample.txt secrets.txt addr.txt table.txt
 secrets.txt
@@ -1027,28 +1024,28 @@ addr.txt
 table.txt
 ```
 
-# Processing multiple records
-
-**a)** For the input file `sample.txt`, print a matching line containing `do` only if the previous line is empty and the line before that contains `you`.
-
+## Processing multiple records   
+**a)** For the input file `sample.txt`, print a matching line containing `do` only if the previous line is empty and the line before that contains `you`.   
 ```bash
-$ awk ##### add your solution here
+$ awk '{a[NR]=$0; if(a[NR-2] ~ /you/ && a[NR-1] ~ /^$/ && a[NR] ~ /do/){print a[NR]}}' sample.txt
+Just do-it
+Much ado about nothing
+
+$ awk 'NR>2{if(p2 ~ /you/ && p1 ~ /^$/ && $0 ~ /do/){print $0}}{p2 = p1; p1 = $0}' sample.txt
 Just do-it
 Much ado about nothing
 ```
 
-**b)** Print only the second matching line respectively for the search terms `do` and `not` for the input file `sample.txt`. Match these terms case insensitively.
-
+**b)** Print only the second matching line respectively for the search terms `do` and `not` for the input file `sample.txt`. Match these terms case insensitively.    
 ```bash
 $ awk ##### add your solution here
 No doubt you like it too
 Much ado about nothing
 ```
 
-**c)** For the input file `sample.txt`, print the matching lines containing `are` or `bit` as well as `n` lines around the matching lines. The value for `n` is passed to the `awk` command via the `-v` option.
-
+**c)** For the input file `sample.txt`, print the matching lines containing `are` or `bit` as well as `n` lines around the matching lines. The value for `n` is passed to the `awk` command via the `-v` option.   
 ```bash
-$ awk -v n=1 ##### add your solution here
+$ awk -v n=1 '{a[NR]=$0; if($0 ~ /bit|are/){m=n+1; for(i=m-1; i>0; i--){if(NR-i > 0){print a[NR-i]}}}; if(m && m--)print $0}' sample.txt
 Good day
 How are you
 
@@ -1056,8 +1053,7 @@ Today is sunny
 Not a bit funny
 No doubt you like it too
 
-$ # note that first and last line are empty for this case
-$ awk -v n=2 ##### add your solution here
+$ awk -v n=1 '{a[NR]=$0; if($0 ~ /bit|are/){m=n+1; for(i=m-1; i>0; i--){if(NR-i > 0){print a[NR-i]}}}; if(m && m--)print $0}' sample.txt
 
 Good day
 How are you
@@ -1070,8 +1066,7 @@ No doubt you like it too
 
 ```
 
-**d)** For the input file `broken.txt`, print all lines between the markers `top` and `bottom`. The first `awk` command shown below doesn't work because it is matching till end of file if second marker isn't found. Assume that the input file cannot have two `top` markers without a `bottom` marker appearing in between and vice-versa.
-
+**d)** For the input file `broken.txt`, print all lines between the markers `top` and `bottom`. The first `awk` command shown below doesn't work because it is matching till end of file if second marker isn't found. Assume that the input file cannot have two `top` markers without a `bottom` marker appearing in between and vice-versa.    
 ```bash
 $ cat broken.txt
 top
@@ -1086,7 +1081,7 @@ Hi there
 Have a nice day
 Good bye
 
-$ # wrong output
+# wrong output
 $ awk '/bottom/{f=0} f; /top/{f=1}' broken.txt
 3.14
 1234567890
@@ -1094,14 +1089,12 @@ Hi there
 Have a nice day
 Good bye
 
-$ # expected output
-$ ##### add your solution here
+$ awk '/bottom/{f=0; print gensub(ORS, "", "1", buf)}; f{buf=buf ORS $0}; /top/{f=1; buf=""}' broken.txt
 3.14
 1234567890
 ```
 
-**e)** For the input file `concat.txt`, extract contents from a line starting with ``### `` until but not including the next such line. The block to be extracted is indicated by variable `n` passed via the `-v` option.
-
+**e)** For the input file `concat.txt`, extract contents from a line starting with ``### `` until but not including the next such line. The block to be extracted is indicated by variable `n` passed via the `-v` option.     
 ```bash
 $ cat concat.txt
 ### addr.txt
@@ -1119,29 +1112,52 @@ Believe it
 pink blue white yellow
 car,mat,ball,basket
 
-$ awk -v n=2 ##### add your solution here
+$ awk -v n=2 '/^### /{c++} c==n' concat.txt
 ### broken.txt
 top
 1234567890
 bottom
-$ awk -v n=4 ##### add your solution here
+
+$ awk -v n=4 '/^### /{c++} c==n' concat.txt
 ### mixed_fs.txt
 pink blue white yellow
 car,mat,ball,basket
 ```
 
-**f)** For the input file `ruby.md`, replace all occurrences of `ruby` (irrespective of case) with `Ruby`. But, do not replace any matches between ` ```ruby ` and ` ``` ` lines (`ruby` in these markers shouldn't be replaced either).
-
+Print `n` block and following `n` lines  
 ```bash
-$ awk ##### add your solution here ruby.md > out.md
+$ awk -v n=3 '/^### /{c++; if(c == n){p = 1; line = c + 1} else {p = 0}}; p && line && line--' concat.txt
+### sample.txt
+Just do-it
+Believe it
+```
+
+**f)** For the input file `ruby.md`, replace all occurrences of `ruby` (irrespective of case) with `Ruby`. But, do not replace any matches between ` ```ruby ` and ` ``` ` lines (`ruby` in these markers shouldn't be replaced either).  
+```bash
+$ awk 'BEGIN{f=1};/```ruby/{f=0}; f{IGNORECASE=1; print gensub(/ruby/, "Ruby", "g", $0)}; !f ; /```$/{f=1}' ruby.md > out.md
+
+$ cat 12-f.awk
+BEGIN {
+  IGNORECASE=1
+}
+/```ruby/ {
+  f = 1
+}
+!f {
+  gsub(/ruby/, "Ruby")
+}
+/```$/ {
+  f = 0
+}
+1
+
+$ awk -f 12-f.awk ruby.md > out.md
+
 $ diff -sq out.md expected.md 
 Files out.md and expected.md are identical
 ```
 
-<br>
-
-# Two file processing
-
+## Two file processing   
 **a)** Use contents of `match_words.txt` file to display matching lines from `jumbled.txt` and `sample.txt`. The matching criteria is that the second word of lines from these files should match the third word of lines from `match_words.txt`.
 
 ```bash
@@ -1149,17 +1165,14 @@ $ cat match_words.txt
 %whole(Hello)--{doubt}==ado==
 just,\joint*,concession<=nice
 
-$ # 'concession' is one of the third words from 'match_words.txt'
-$ # and second word from 'jumbled.txt'
-$ awk ##### add your solution here
+$ awk 'NR==FNR{patsplit($0, result, /\w+/); a[result[3]]}; {patsplit($0, result, /\w+/); if (result[2] in a)print $0}' match_words.txt  jumbled.txt sample.txt
 wavering:concession/woof\retailer
 No doubt you like it too
 ```
 
-**b)** Interleave contents of `secrets.txt` with the contents of a file passed via `-v` option as shown below.
-
+**b)** Interleave contents of `secrets.txt` with the contents of a file passed via `-v` option as shown below.   
 ```bash
-$ awk -v f='table.txt' ##### add your solution here
+$ awk -v f='table.txt'" '{getline line < f; print $0 ORS line; print "---"}' secrets.txt
 stag area row tick
 brown bread mat hair 42
 ---
@@ -1171,8 +1184,7 @@ yellow banana window shoes 3.14
 ---
 ```
 
-**c)** The file `search_terms.txt` contains one search string per line (these have no regexp metacharacters). Construct an `awk` command that reads this file and displays search terms (matched case insensitively) that were found in all of the other file arguments. Note that these terms should be matched with any part of the line, not just whole words.
-
+**c)** The file `search_terms.txt` contains one search string per line (these have no regexp metacharacters). Construct an `awk` command that reads this file and displays search terms (matched case insensitively) that were found in all of the other file arguments. Note that these terms should be matched with any part of the line, not just whole words.   
 ```bash
 $ cat search_terms.txt
 hello
@@ -1181,12 +1193,39 @@ you
 is
 at
 
-$ awk ##### add your solution here
-##file list## search_terms.txt jumbled.txt mixed_fs.txt secrets.txt table.txt
+$ cat 13-c2.awk
+BEGIN {
+  IGNORECASE=1
+}
+FNR == NR {
+  search[$0]
+  next
+}
+{
+  for (x in search) {
+    if ($0 ~ x) {
+      word[x]
+    }
+  }
+}
+ENDFILE {
+  for (x in search) {
+    if (x in word) count[x]++
+  }
+  delete word
+}
+END {
+  for (x in search) {
+    if (count[x] == (ARGC - 2)) print x
+  }
+}
+
+
+$ awk -f 13-c2.awk search_terms.txt jumbled.txt mixed_fs.txt secrets.txt table.txt
 at
 row
-$ awk ##### add your solution here
-##file list## search_terms.txt addr.txt sample.txt
+
+$ awk -f 13-c2.awk search_terms.txt addr.txt sample.txt
 is
 you
 hello
@@ -1194,10 +1233,8 @@ hello
 
 <br>
 
-# Dealing with duplicates
-
-**a)** Retain only first copy of a line for the input file `lines.txt`. Case should be ignored while comparing lines. For example `hi there` and `HI TheRE` will be considered as duplicates.
-
+## Dealing with duplicates   
+**a)** Retain only first copy of a line for the input file `lines.txt`. Case should be ignored while comparing lines. For example `hi there` and `HI TheRE` will be considered as duplicates.   
 ```bash
 $ cat lines.txt
 Go There
@@ -1210,7 +1247,7 @@ come on!
 2 Apples
 COME ON
 
-$ awk ##### add your solution here
+$ awk '!a[tolower($0)]++' lines.txt
 Go There
 come on
 ---
@@ -1219,8 +1256,7 @@ come on!
 2 Apples
 ```
 
-**b)** Retain only first copy of a line for the input file `lines.txt`. Assume space as field separator with two fields on each line. Compare the lines irrespective of order of the fields. For example, `hehe haha` and `haha hehe` will be considered as duplicates.
-
+**b)** Retain only first copy of a line for the input file `lines.txt`. Assume space as field separator with two fields on each line. Compare the lines irrespective of order of the fields. For example, `hehe haha` and `haha hehe` will be considered as duplicates.     
 ```bash
 $ cat twos.txt
 hehe haha
@@ -1234,7 +1270,7 @@ floor door
 tru eblue
 haha hehe
 
-$ awk ##### add your solution here
+$ awk '{if (!(($1, $2) in a || ($2, $1) in a))print; a[$1, $2]}' twos.txt
 hehe haha
 door floor
 6;8 3-4
@@ -1246,12 +1282,47 @@ tru eblue
 **c)** For the input file `twos.txt`, create a file `uniq.txt` with all the unique lines and `dupl.txt` with all the duplicate lines. Assume space as field separator with two fields on each line. Compare the lines irrespective of order of the fields. For example, `hehe haha` and `haha hehe` will be considered as duplicates.
 
 ```bash
-$ awk ##### add your solution here
+$ cat 14-c.awk
+{
+  a[$1, $2]++
+}
+END {
+  for (i in a) {
+    split(i, array, "\\034")
+    count = a[array[1], array[2]] + a[array[2], array[1]]
+    # print array[1], array[2], a[array[1], array[2]]
+    if (count == 1) {
+      print array[1], array[2] > "uniq.txt"
+    } else {
+      while(a[array[1], array[2]]--) {
+        print array[1], array[2] > "dupl.txt"
+      }
+    }
+  }
+}
+
+$ awk -f 14-c.awk twos.txt
+
+$ cat 14-c.awk
+FNR == NR {
+  a[$1, $2]++
+  next
+}
+{
+  if (a[$1, $2] + a[$2, $1] > 1) {
+    print $0 > "dupl.txt"
+  } else {
+    print $0 > "uniq.txt"
+  }
+}
+
+$ awk -f 14-c.awk twos.txt
 
 $ cat uniq.txt 
 true blue
 hehe bebe
 tru eblue
+
 $ cat dupl.txt 
 hehe haha
 door floor
@@ -1262,12 +1333,8 @@ floor door
 haha hehe
 ```
 
-<br>
-
-# awk scripts
-
-**a)** Before explaining the problem statement, here's an example of markdown headers and their converted link version. Note the use of `-1` for the second occurrence of `Summary` header. Also note that this sample doesn't simulate all the rules.
-
+## awk scripts  
+**a)** Before explaining the problem statement, here's an example of markdown headers and their converted link version. Note the use of `-1` for the second occurrence of `Summary` header. Also note that this sample doesn't simulate all the rules.  
 ```bash
 # Field separators
 ## Summary
@@ -1297,22 +1364,66 @@ For the input file `gawk.md`, construct table of content links as per the detail
 As the input file `gawk.md` is too long, only the commands to verify your solution is shown.
 
 ```bash
+$ cat toc.awk
+/```bash$/ {
+  ignore=1
+}
+
+/```$/ {
+  ignore=0
+}
+
+! ignore {
+  if ($0 ~ /^#/) {
+    if ($0 ~ /^## /) {
+      header = "    * "
+      content = gensub(/^## /, "", "1", $0)
+    }
+    if ($0 ~ /^# /) {
+      header = "* "
+      content = gensub(/^# /, "", "1", $0)
+    }
+    lower_content = tolower(gensub(/\s/, "-", "g", content))
+    array_index[lower_content]++
+    index_count = array_index[lower_content] - 1
+    if (index_count == 0) {
+      index_content = lower_content
+    } else {
+      index_content = lower_content "-" index_count
+    }
+    print header "[" content "](#" index_content ")"
+  }
+}
+
 $ awk -f toc.awk gawk.md > out.md
 $ diff -sq out.md toc_expected.md
 Files out.md and toc_expected.md are identical
 ```
 
-**b)** For the input file `odd.txt`, surround first two whole words of each line with `{}` that start and end with the same word character. Assume that input file will not require case insensitive comparison. This is a contrived exercise that needs around 10 instructions and makes you recall various features presented in this book.
-
+**b)** For the input file `odd.txt`, surround first two whole words of each line with `{}` that start and end with the same word character. Assume that input file will not require case insensitive comparison. This is a contrived exercise that needs around 10 instructions and makes you recall various features presented in this book.  
 ```bash
 $ cat odd.txt
 -oreo-not:a _a2_ roar<=>took%22
 RoaR to wow-
 
+$ cat same.awk
+{
+  split($0, result, /\W+/, seps)
+  count=0
+  for (i=0; i<length(result); i++) {
+    split(result[i], chars, "")
+    if (length(result[i]) > 0 && (chars[1] == chars[length(result[i])]) && count < 2) {
+      result[i] = "{"result[i]"}"
+      count++
+    }
+    printf("%s%s", result[i], seps[i])
+  }
+  print ""
+}
+
 $ awk -f same.awk odd.txt
 -{oreo}-not:{a} _a2_ roar<=>took%22
 {RoaR} to {wow}-
 ```
-
 
 {% include links.html %}
