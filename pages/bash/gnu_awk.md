@@ -9,7 +9,7 @@ permalink: bash_gnu_awk.html
 folder: bash
 ---
 
-# awk
+AWK
 =====
 
 ## System Variables
@@ -311,7 +311,7 @@ Like `"@val_type_asc"`, but the element values, based on type, are ordered from 
 Like "@val_str_asc", but the element values, treated as strings, are ordered from high to low. If the string values are identical, the index string values are compared instead. When comparing non-scalar values, `"@val_type_desc"` sort ordering is used, so subarrays, if present, come out first.
 
 ### `"@val_num_desc"`    
-Like `"@val_num_asc"`, but the element values, treated as numbers, are ordered from high to low. If the numeric values are equal, the string values are compared instead. If they are also identical, the index string values are compared instead. Non-scalar values are compared using `"@val_type_desc"` sort ordering, so subarrays, if present, come out first. 
+Like `"@val_num_asc"`, but the element values, treated as numbers, are ordered from high to low. If the numeric values are equal, the string values are compared instead. If they are also identical, the index string values are compared instead. Non-scalar values are compared using `"@val_type_desc"` sort ordering, so subarrays, if present, come out first.    
 
 ```bash
 $ awk 'BEGIN{array[1]="a"; array[2]="c"; array[3]="b"; array[4]=0; PROCINFO["sorted_in"] = "@ind_num_desc"; for(x in array) print x, array[x]}'
@@ -325,6 +325,39 @@ $ awk 'BEGIN{array[1]="a"; array[2]="c"; array[3]="b"; array[4]=0; PROCINFO["sor
 1 a
 3 b
 2 c
+```
+
+## Multidimensional Arrays
+A `multidimensional array` is an array in which an element is identified by two or more indices. For example, a two-dimensional array element is similar as grid[x,y].   
+Multidimensional arrays are supported in `awk` through `concatenation` of indices into one string. awk converts the indices into strings and concatenates them together with a default separator (`SUBSEP` / `\034`). 
+
+```bash
+$ awk 'BEGIN{print SUBSEP}'  | sed -n 'l'
+\034$
+
+$ awk 'BEGIN{a[1, 2]; for (x in a)print x}' | sed -n 'l'
+1\0342$
+```
+
+To iterate over a `multidimensional array`   
+```bash
+$ cat awk
+BEGIN {
+  a[1, 2] = "the first element"
+  a[3, 4] = "the second element"
+  a[5, 6] = "the third element"
+
+  PROCINFO["sorted_in"] = "@ind_num_asc"
+  for (x in a) {
+    split(x, indices, SUBSEP)
+    print indices[1], indices[2], a[indices[1], indices[2]]
+  }
+}
+
+$ awk -f awk
+1 2 the first element
+3 4 the second element
+5 6 the third element
 ```
 
 ## Functions
@@ -356,8 +389,7 @@ Return a random number. The values of rand() are uniformly distributed between z
 #### **sqrt(x)**   
 Return the positive square root of x.
 
-### String Functions
-
+### String Functions    
 <div id="toc" style="">
    <ul>
       <li><a href="#backreferences-1">Backreferences</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>

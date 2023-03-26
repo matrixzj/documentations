@@ -10,6 +10,7 @@ folder: bash
 ---
 
 # GNU Sed
+=====
 
 ## How `sed' Works
 
