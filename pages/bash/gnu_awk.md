@@ -9,7 +9,7 @@ permalink: bash_gnu_awk.html
 folder: bash
 ---
 
-AWK
+GNU AWK
 =====
 
 ## System Variables

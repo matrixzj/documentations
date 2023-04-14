@@ -2,7 +2,7 @@
 title: docker cli memo
 tags: [container]
 keywords: docker, cli
-last_updated: Jul 8, 2022
+last_updated: Mar 27, 2023
 summary: "docker cli memo"
 sidebar: mydoc_sidebar
 permalink: docker_cli_memo.html
@@ -13,6 +13,32 @@ folder: Container
 ======
 
 ## Run
+
+### `entrypoint` / `parameters`
+in DockerFile
+```bash
+ENTRYPOINT ["sleep"]
+CMD ["5"]
+```
+
+in cmdline
+```bash
+docker run -name test --entrypoint sleep2.0 [docker image name] 10
+```
+`sleep2.0` will overwrite `ENTRYPOINT` defined in DockerFile
+`10` will overwrite parameters defined in DockerFile `CMD` 
+
+in kubernetes pod yaml file
+```bash
+spec: 
+  containers: 
+    - name: test
+      image: [docker image name]
+      command: ["sleep2.0"]
+      args: ["10"]
+```
+`command` will overwrite `ENTRYPOINT` defined in DockerFile
+`args` will overwrite parameters defined in DockerFile `CMD` 
 
 ### Publish or export port with `--expose` / `-p`
 `-p [host_ip_addr:]host_port:container_port/protocol`

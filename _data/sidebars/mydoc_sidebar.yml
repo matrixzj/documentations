@@ -105,7 +105,6 @@ entries:
       url: /memory_meminfo.html
       output: web, pdf
 
-
   - title: Storage
     output: web, pdf
     folderitems:
@@ -276,4 +275,8 @@ entries:
 
     - title: Regex POSIX Bracket Expressions
       url: /misc_regex_posix_bracket_repressions.html
+      output: web, pdf
+
+    - title: CentOS vs Ubuntu on Package Management
+      url: /misc_centos_ubuntu_package_management.html
       output: web, pdf

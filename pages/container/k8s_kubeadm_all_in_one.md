@@ -29,10 +29,11 @@ br_netfilter
 EOF
 
 $ sudo modprobe overlay
-sudo modprobe br_netfilter
 
-$ sysctl params required by setup, params persist across reboots
-cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+$ sudo modprobe br_netfilter
+
+# sysctl params required by setup, params persist across reboots
+$ cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
@@ -346,6 +347,57 @@ $ kubectl apply -f weave-daemonset-k8s.yaml
 $ kubectl get nodes
 NAME                       STATUS   ROLES           AGE   VERSION
 ecs-matrix-k8s-cluster-1   Ready    control-plane   26m   v1.25.0
+```
+
+## Kubernetes bash auto-completion  
+```bash
+$ sudo apt-get install bash-completion
+
+$ sudo source /usr/share/bash-completion/bash_completion
+
+$ cat <<EOF >>.bashrc
+source <(kubectl completion bash)
+alias k=kubectl
+complete -o default -F __start_kubectl k
+EOF
+
+$ source ~/.bashrc
+```
+
+## (Optional) Remove master node taints  
+```bash
+kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+```
+
+## Decode token info 
+```bash
+$ k -n kube-system exec  weave-net-bv2b9  -c weave -- sh -c 'cat /var/run/secrets/kubernetes.io/serviceaccount/token' | jq -R 'split(".") | select(length > 0) | .[0], .[1] | @base64d | fromjson'
+{
+  "alg": "RS256",
+  "kid": "Sw_lrOlnDDEjGw5A7kjnqvNiUirGqMROuR6ZIKA4edo"
+}
+{
+  "aud": [
+    "https://kubernetes.default.svc.cluster.local"
+  ],
+  "exp": 1711725869,
+  "iat": 1680189869,
+  "iss": "https://kubernetes.default.svc.cluster.local",
+  "kubernetes.io": {
+    "namespace": "kube-system",
+    "pod": {
+      "name": "weave-net-bv2b9",
+      "uid": "bf8a1f9c-8434-4733-856f-a177caad41a4"
+    },
+    "serviceaccount": {
+      "name": "weave-net",
+      "uid": "cd709bc3-d226-4532-a5ec-97dd6f1e64c3"
+    },
+    "warnafter": 1680193476
+  },
+  "nbf": 1680189869,
+  "sub": "system:serviceaccount:kube-system:weave-net"
+}
 ```
 
 ## Test
