@@ -876,7 +876,11 @@ $ echo '["matrix"]' | jq '.[] | ascii_upcase'
 run `update` while `contidion` is true
 run `next` until until `condition` is true
 ```bash
+$ echo 5 | jq '[., ., 1] | [while(.[1] > 0; [.[0], .[1] - 1, .[2] * .[1]])] | .[length -1][2]'
+120
 
+$ echo 5 | jq '[., 1] | until(.[0] < 1; [.[0] - 1, .[1] * .[0]]) | .[1]'
+120
 ```
 
 ## Examples

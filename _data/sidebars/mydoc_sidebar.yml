@@ -280,3 +280,7 @@ entries:
     - title: CentOS vs Ubuntu on Package Management
       url: /misc_centos_ubuntu_package_management.html
       output: web, pdf
+
+    - title: Terraform
+      url: terraform.html
+      output: web, pdf
