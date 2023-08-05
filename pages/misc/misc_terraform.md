@@ -185,20 +185,20 @@ https://developer.hashicorp.com/terraform/cli/commands/
 #### `validate`
 Validates the configuration files in a directory
 
-### `fmt`
+#### `fmt`
 Rewrite Terraform configuration files to a canonical format and style
 
-### `providers`
+#### `providers`
 List all of the provider requirements for all current conguration files
 ```bash
 terraform provides mirror ${target directory}
 ```
 Copy all required provider plugins to a target directory
 
-### `refresh`
+#### `refresh`
 Fetch the current state from all managed remote objects and updates the Terraform state.
 
-### `graph`
+#### `graph`
 Outputs the visual execution graph.
 ```bash
 terraform graph | dot -Tsvg > graph.svg
@@ -349,9 +349,9 @@ terraform init
 ```
 
 ### `state` cmd
-`terraform state list` list all resources
-`terraform state show <address>` show the attributes of a single resource 
-`terraform state mv SOURCE DESTINATION` move resource in state file
+`terraform state list` list all resources  
+`terraform state show <address>` show the attributes of a single resource   
+`terraform state mv SOURCE DESTINATION` move resource in state file   
 `terraform state rm ADDRESS` remove resource in state file
 
 ## Provisioners
