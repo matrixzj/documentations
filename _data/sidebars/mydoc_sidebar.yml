@@ -37,6 +37,10 @@ entries:
       url: /bash_basic.html
       output: web, pdf
 
+    - title: Bash Special Parameters
+      url: /bash_special_parameters.html
+      output: web, pdf
+
     - title: Bash Parameter Expansions
       url: /bash_parameter_expansions.html
       output: web, pdf

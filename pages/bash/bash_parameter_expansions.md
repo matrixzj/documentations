@@ -39,7 +39,7 @@ Cup cake
 ## Case Modification
 `^` modifies the first character to uppercase.  
 `,` modifies the first character to lowercase.  
-`~  reverse the case for the first character.    
+`~`  reverse the case for the first character.      
 When using the double-form (`^^` / `,,` / `~~` ), all characters are converted.
 ```bash
 $ name="matrix"
@@ -69,6 +69,18 @@ matrix
 
 $ echo ${name~~}
 matRIX
+```
+
+`${parameter^pattern}` / `${parameter^^pattern}` / `${parameter,pattern}` / `${parameter,,pattern}`   
+While trying to convert case, it will compare with `pattern`. The `pattern` should not attempt to match more than one character. 
+```bash
+$ name="matrix"
+
+$ echo ${name^a}
+matrix
+
+$ echo ${name^m}
+Matrix
 ```
 
 ## Variable Name Expansion

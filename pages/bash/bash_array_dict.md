@@ -32,21 +32,7 @@ Banana
 Orange
 ```
 
-### Array Operations
-
-<div id="toc" style="">
-   <ul>
-      <li><a href="#push-an-element">Push an element</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      <li><a href="#remove-element">Remove element</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      <li><a href="#duplicate--concatenate-array">Duplicate / Concatenate array</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      <li><a href="#read-from-file">Read from file</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      <li><a href="#number-of-elements">Number of elements</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      <li><a href="#length-of-an-element">Length of an element</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      <li><a href="#slicing-of-an-array">Slicing of an array</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-   </ul>
-</div>
-
-#### Push an Element
+### Push an Element
 ```bash
 $ Fruits=("${Fruits[@]}" "Waterlemon")
 
@@ -59,7 +45,7 @@ $ echo "${Fruits[@]}"
 Apple Banana Orange Waterlemon Cherry
 ```
 
-#### Remove an Element
+### Remove an Element
 ```bash
 $ echo "${Fruits[@]}"
 Apple Banana Orange Waterlemon Cherry
@@ -75,7 +61,7 @@ $ echo "${Fruits[@]}"
 Orange Waterlemon Cherry
 ```
 
-#### Duplicate / Concatenate array
+### Duplicate / Concatenate array
 ```bash
 $ echo "${Fruits[@]}"
 Orange Waterlemon Cherry
@@ -91,7 +77,7 @@ $ echo "${Fruits[@]}"
 Orange Waterlemon Cherry Orange Waterlemon Cherry
 ```
 
-#### Read from file
+### Read from File
 ```bash
 $ cat /tmp/test
 Apple
@@ -147,23 +133,13 @@ $ sounds[cow]="moo"
 $ sounds[wolf]="howl"
 ```
 
-### Working with Dict
-
-<div id="toc" style="">
-   <ul>
-      <li><a href="#number-of-elements">Number of elements</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      <li><a href="#add--remove-element">Add / Remove element</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-      <li><a href="#iteration">Iteration</a><a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="" style="font: 1em / 1 anchorjs-icons; padding-left: 0.375em;"></a></li>
-   </ul>
-</div>
-
-#### Lenght of Dict
+### Lenght of Dict
 ```bash
 $ echo "${#sounds[@]}"
 3
 ```
 
-#### Add / Remove Element
+### Add / Remove Element
 ```bash
 $ sounds[bird]="tweet"
 
@@ -182,7 +158,7 @@ $ echo "${!sounds[@]}"
 dog wolf cow
 ```
 
-#### Iteration 
+### Iteration 
 * Over key
    ```bash
    $ for i in  "${!sounds[@]}"; do echo "${i}"; done
