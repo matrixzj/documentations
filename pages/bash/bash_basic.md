@@ -1,15 +1,15 @@
 ---
-title: Bash CheatSheet
+title: Bash Basic
 tags: [bash]
 keywords: bash, script
-last_updated: Mar 27, 2022
-summary: "Bash Script cheatsheet"
+last_updated: Aug 5, 2023
+summary: "Bash Basic"
 sidebar: mydoc_sidebar
-permalink: bash_cheatsheet.html
+permalink: bash_basic.html
 folder: bash
 ---
 
-# Bash Cheatsheet
+# Bash Basic
 =====
 
 ## Basic
@@ -32,7 +32,6 @@ I'm in /home/Matrix/documentations
 $ echo "I'm in `pwd`"
 I'm in /home/Matrix/documentations
 ```
-[Command Substitution](http://wiki.bash-hackers.org/syntax/expansion/cmdsubst)
 
 ### Functions
 ```bash

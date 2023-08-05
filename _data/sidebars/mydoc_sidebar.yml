@@ -33,9 +33,17 @@ entries:
     type: homepage
     folderitems:
 
-    - title: Bash CheatSheet
-      url: /bash_cheatsheet.html
+    - title: Bash Basic
+      url: /bash_basic.html
       output: web, pdf
+
+    - title: Bash Parameter Expansions
+      url: /bash_parameter_expansions.html
+      output: web, pdf
+
+    - title: Bash Array and Dict
+      url: /bash_array_dict.html
+      output: web, pdf      
 
     - title: Ssh Break Out While-Loop
       url: /bash_ssh_break_out_of_while_loop.html
