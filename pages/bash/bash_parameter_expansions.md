@@ -37,8 +37,10 @@ Cup cake
 ```
 
 ## Case Modification
-The `^` operator modifies the first character to uppercase, the `,` operator to lowercase. 
-When using the double-form (`^^` / `,,`), all characters are converted, and `~~` to reverse case.
+`^` modifies the first character to uppercase.  
+`,` modifies the first character to lowercase.  
+`~  reverse the case for the first character.    
+When using the double-form (`^^` / `,,` / `~~` ), all characters are converted.
 ```bash
 $ name="matrix"
 
