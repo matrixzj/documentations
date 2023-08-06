@@ -12,6 +12,10 @@ folder: bash
 # Bash Basic
 =====
 
+Useful Documentations:  
+[Bash Reference Manual](https://www.gnu.org/software/bash/manual/html_node/index.html)
+[Advanced Bash-Scripting Guide](https://tldp.org/LDP/abs/html/index.html)
+
 ## String quotes
 ```bash
 $ NAME="Matrix"
@@ -218,7 +222,8 @@ $ echo $?
 1
 ```
 
-## Difference between `[` and `[[`  
+## Various Useful Questions
+### Difference between `[` and `[[`  
 NOTE: `[[` is a bash extension, so if you are writing sh-compatible scripts then you need to stick with `[`. Make sure you have the `#!/bin/bash` shebang line for your script if you use double brackets.
 
 1. empty strings and strings with whitespaces can be intuitively handled 
@@ -311,7 +316,7 @@ NOTE: `[[` is a bash extension, so if you are writing sh-compatible scripts then
 
 [What's the difference between `[` and `[[` in Bash](https://stackoverflow.com/questions/3427872/whats-the-difference-between-and-in-bash)
 
-## Escape `'` within `'` strings
+### Escape `'` within `'` strings
 ```bash
 $ echo 'it is a single quote \''
 >
@@ -321,7 +326,7 @@ $ echo 'it is a single quote \''
 $ echo 'it is a single quote '"'"''
 it is a single quote '
 ```
-Explanation of how '"'"' is interpreted as just ':
+Explanation of how `'"'"'` is interpreted as just :
 1. `'` End first quotation which uses single quotes.
 2. `"` Start second quotation, using double-quotes.
 3. `'` Quoted character.
