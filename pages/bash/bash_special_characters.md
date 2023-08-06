@@ -1,21 +1,33 @@
 ---
-title: Bash Special Parameters
+title: Bash Special Characters
 tags: [bash]
-keywords: bash, parameters
-last_updated: Aug 5, 2023
-summary: "Bash Special Parameters"
+keywords: bash, parameters, characters
+last_updated: Aug 7, 2023
+summary: "Bash Special Characters"
 sidebar: mydoc_sidebar
-permalink: bash_special_parameters.html
+permalink: bash_special_characters.html
 folder: bash
 ---
 
-# Bash Special Parameters
+# Bash Special Characters
 =====
 
-### `*` asterisk / `@` at-sign
+## `#` Comments
+comments can be occurred following the end of a command and even embedded with a pipe.
+```bash
+$ echo "test" |\
+# delete `e` from it
+ed -e 's/e//g'
+tst
+```
+
+## `;` semicolon
+Command separator. It will permits putting two or more commands on the same line.
+
+## `*` asterisk / `@` at-sign
 The positional parameters starting from the first.  
 ```bash
-$ cat ./bash_special_parmeters.sh
+$ cat ./bash_special_characers.sh
 #!/bin/bash
 
 echo "$*"
@@ -68,7 +80,7 @@ apple pear grape lemon
 apple|pear|grape|lemon
 ```
 
-### `#` hash mark
+## `#` hash mark
 Number of positional parameters (decimal) 
 ```bash
 $ cat ./bash_special_parmeters.sh
@@ -80,10 +92,10 @@ $ ./bash_special_parmeters.sh  12 34
 2
 ```
 
-### `?` question mark
+## `?` question mark
 Status of the most recently executed foreground-pipeline (exit/return code)
 
-### `-` dash
+## `-` dash
 Current option flags set by the shell itself.
 ```bash
 $ cat bash_special_parmeters.sh
@@ -100,7 +112,7 @@ hB
 ehuB
 ```
 
-### `$` dollar-sign
+## `$` dollar-sign
 The process ID (PID) of the shell. In an explicit subshell it expands to the PID of the current "main shell", not the subshell. This is different from `$BASHPID`!
 ```bash
 $ echo $$; echo $BASHPID ; ( cd /usr; pstree -p | grep $$; echo "$$" )
@@ -116,7 +128,7 @@ $ echo $$; echo $BASHPID ; ( cd /usr; pstree -p | grep $$; echo "$BASHPID" )
 34977
 ```
 
-### `!` exclamation mark
+## `!` exclamation mark
 The process ID (PID) of the most recently executed background pipeline
 ```bash
 $ ping -c 1000 localhost > /dev/null  &
@@ -126,7 +138,7 @@ $ echo $!
 47589
 ```
 
-### `0` zero 
+## `0` zero 
 The name of the shell or the shell script (filename).
 ```bash
 $ echo $0
@@ -141,7 +153,7 @@ $ ./bash_special_parmeters.sh
 ./bash_special_parmeters.sh
 ```
 
-### `_` underscore
+## `_` underscore
 A kind of catch-all parameter. Directly after shell invocation, it's set to the filename used to invoke Bash, or the absolute or relative path to the script, just like $0 would show it. Subsequently, expands to the last argument to the previous command. 
 ```bash
 $ cat bash_special_parmeters.sh
@@ -165,3 +177,5 @@ test
 ```
 
 [More about bash special parameters and shell vaviables](https://wiki.bash-hackers.org/syntax/shellvars)
+
+{% include links.html %}

@@ -37,8 +37,8 @@ entries:
       url: /bash_basic.html
       output: web, pdf
 
-    - title: Bash Special Parameters
-      url: /bash_special_parameters.html
+    - title: Bash Special Characters
+      url: /bash_special_characters.html
       output: web, pdf
 
     - title: Bash Parameter Expansions

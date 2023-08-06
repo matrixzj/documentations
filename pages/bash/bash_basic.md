@@ -2,7 +2,7 @@
 title: Bash Basic
 tags: [bash]
 keywords: bash, script
-last_updated: Aug 5, 2023
+last_updated: Aug 6, 2023
 summary: "Bash Basic"
 sidebar: mydoc_sidebar
 permalink: bash_basic.html
