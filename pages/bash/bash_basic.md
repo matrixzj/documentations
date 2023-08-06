@@ -347,10 +347,10 @@ $ echo $file_count; ls -1 | while read -r line; do let file_count++; done; echo 
 
 > Each command in a multi-command pipeline, where pipes are created, is executed in its own subshell, which is a separate process (see [Command Execution Environment](https://www.gnu.org/software/bash/manual/html_node/Command-Execution-Environment.html)). If the lastpipe option is enabled using the shopt builtin (see [The Shopt Builtin](https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html)), the last element of a pipeline may be run by the shell process when job control is not active. [^1]
 
-So as whole 1while-loop` is running in a subshell, even value of `file_count` was updated in it, but `file_count` in original shell and other subshells are still with `0`
+So as whole `while-loop` is running in a subshell, even value of `file_count` was updated in it, but `file_count` in original shell and other subshells are still with `0`
 
-> lastpipe
-> If set, and job control is not active, the shell runs the last command of a pipeline not executed in the background in the current shell environment.[^2]
+> lastpipe   
+>     If set, and job control is not active, the shell runs the last command of a pipeline not executed in the background in the current shell environment.[^2]
 
 
 ```bash
