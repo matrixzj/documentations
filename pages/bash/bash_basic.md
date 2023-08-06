@@ -13,8 +13,8 @@ folder: bash
 =====
 
 Useful Documentations:  
-[Bash Reference Manual](https://www.gnu.org/software/bash/manual/html_node/index.html)
-[Advanced Bash-Scripting Guide](https://tldp.org/LDP/abs/html/index.html)
+[Bash Reference Manual](https://www.gnu.org/software/bash/manual/html_node/index.html)   
+[Advanced Bash-Scripting Guide](https://tldp.org/LDP/abs/html/index.html)  
 
 ## String quotes
 ```bash
@@ -332,5 +332,84 @@ Explanation of how `'"'"'` is interpreted as just :
 3. `'` Quoted character.
 4. `"` End second quotation, using double-quotes.
 5. `'` Start third quotation, using single quotes.
+
+### `pipelines` trap  
+```bash
+$ ls -1
+test
+
+$ file_count=0
+
+$ echo $file_count; ls -1 | while read -r line; do let file_count++; done; echo $file_count
+0
+0
+```
+
+> Each command in a multi-command pipeline, where pipes are created, is executed in its own subshell, which is a separate process (see [Command Execution Environment](https://www.gnu.org/software/bash/manual/html_node/Command-Execution-Environment.html)). If the lastpipe option is enabled using the shopt builtin (see [The Shopt Builtin](https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html)), the last element of a pipeline may be run by the shell process when job control is not active. [^1]
+
+So as whole 1while-loop` is running in a subshell, even value of `file_count` was updated in it, but `file_count` in original shell and other subshells are still with `0`
+
+> lastpipe
+> If set, and job control is not active, the shell runs the last command of a pipeline not executed in the background in the current shell environment.[^2]
+
+
+```bash
+cat <<EOF> test.sh
+#!/bin/bash
+
+# Disable Job Controle
+set +m
+
+shopt -u lastpipe
+shopt | grep lastpipe
+
+echo "This is first pipe"  | { echo $BASH_SUBSHELL; }
+
+shopt -s lastpipe
+shopt | grep lastpipe
+
+echo "This is first pipe"  | { echo $BASH_SUBSHELL; }
+
+$ ./test.sh
+lastpipe        off
+1
+lastpipe        on
+0
+```
+Note: `{}` is very important in above example. Without it, `$BASH_SUBSHELL` will be expanded before it was really running. As a result, no matter `lastpipe` is `on` or `off`, the result will be always `0`.   
+```bash
+$ cat <<EOF> test.sh
+#!/bin/bash
+
+set +m
+
+shopt -u lastpipe
+shopt | grep lastpipe
+
+echo "This is first pipe"  | echo $BASH_SUBSHELL
+
+shopt -s lastpipe
+shopt | grep lastpipe
+
+echo "This is first pipe"  | echo $BASH_SUBSHELL
+EOF
+
+$ ./test.sh
+lastpipe        off
+0
+lastpipe        on
+0
+```
+To resolve the original issue to change `file_count` value after `while-loop` ended, [Process Substitution](https://tldp.org/LDP/abs/html/process-sub.html) will be used.
+```bash
+$ file_count=0
+
+$ echo $file_count; while read -r line; do let file_count++; done < <(ls -1); echo $file_count
+0
+1
+```
+
+[^1]: REF: [Bash Reference Manual - Pipelines](https://www.gnu.org/software/bash/manual/html_node/Pipelines.html)
+[^2]: REF: [Bash Reference Manual - Shopt Builtin](https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html)
 
 {% include links.html %}
