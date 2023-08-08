@@ -2,7 +2,7 @@
 title: Bash Special Characters
 tags: [bash]
 keywords: bash, parameters, characters
-last_updated: Aug 7, 2023
+last_updated: Aug 8, 2023
 summary: "Bash Special Characters"
 sidebar: mydoc_sidebar
 permalink: bash_special_characters.html
@@ -23,6 +23,80 @@ tst
 
 ## `;` semicolon
 Command separator. It will permits putting two or more commands on the same line.
+
+## `;;` / `;;&` / `:&`
+Terminators of `case` option. `;;&` / `:&` are compatible with verison 4+.
+
+## `.` dot
+Equivalent to `source`, which is a bash built-in cmd.
+
+## `,` comma
+links together a series of arithmetic operations. All are evaluated, but only the last one is returned. 
+```bash
+$ let "b=((a=9, 15 / 3))"; echo $a $b
+9 5
+```
+concatenate strings. 
+```bash
+$ ls /{,tmp}
+/:
+bin  boot  dev  etc  export  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+
+/tmp:
+bash_test.sh  dido  matrix  pid  set  test  test_pipe  test.sh
+```
+convert to lowercase
+```bash
+$ name="MATRIX"; echo ${name,}; echo ${name,,}
+mATRIX
+matrix
+```
+
+## `\` backslash
+Escape
+
+## `\`` backquote
+command substitution
+```bastion
+$ for i in  `ls -1`; do echo $i; done
+bash_test.sh
+dido
+matrix
+pid
+set
+test
+test_pipe
+test.sh
+```
+
+## `:` colon
+null command. It will always return `true` and equivalent as `NO-OP`(do-nothing operation)
+```bash
+$ ls -1 | grep colon; echo $?
+1
+
+$ ls -1 | grep colon; :;  echo $?
+0
+```
+Provide a placeholder where a binary operation is expected. 
+```bash
+$ n=1; $((n = $n + 1)); echo $n
+-bash: 2: command not found
+2
+
+$ n=1; : $((n = $n + 1)); echo $n
+2
+```
+Provide a placeholder where a command is expected.
+```bash
+$ n=1; if [ $n -eq 2 ]; then : ; else echo $n; fi
+1
+```
+Used in parameter substitution / Variable expansion / substring replacement.
+combination with the redirection operators
+    with `>`, truncates a file to zero length, without changing its permissions. If the file did not previously exist, creates it.
+    with `>>`, has no effect on a pre-existing target file. If the file did not previously exist, creates it.
+NOTE: applies to regular files, not pipes, symlinks, and certain special files.
 
 ## `*` asterisk / `@` at-sign
 The positional parameters starting from the first.  
