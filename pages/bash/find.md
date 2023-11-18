@@ -2,7 +2,7 @@
 title: find
 tags: [bash]
 keywords: find 
-last_updated: Mar 6, 2023
+last_updated: Sep 21, 2023
 summary: "find howto"
 sidebar: mydoc_sidebar
 permalink: bash_find.html
@@ -130,6 +130,11 @@ $ find /tmp/find  -type f -atime -1 -name 'abc'
 * `-atime n` / `-ctime n` / `-mtime n` (Unit: days)
 * `-anewer file` / `-cnewer file` / `-newer file` 
 * `-newerat TIME` / `-newerct TIME` / `-newermt TIME` 
+
+Note: 
+`-mtime -N` time range `< N` days
+`-mtime N`  time range `N <= A < N+1` days
+`-mtime +N` time range `>= N+1` days
 
 ```bash
 $ stat -c'%y %n' b.html
