@@ -49,7 +49,11 @@ entries:
       url: /bash_array_dict.html
       output: web, pdf      
 
-    - title: Ssh Break Out While-Loop
+    - title: Bash Internal Variables
+      url: /bash_internal_variables.html
+      output: web, pdf
+
+    - title: SSh Break Out While-Loop
       url: /bash_ssh_break_out_of_while_loop.html
       output: web, pdf
 

@@ -2,7 +2,7 @@
 title: Bash Special Characters
 tags: [bash]
 keywords: bash, parameters, characters
-last_updated: Aug 19, 2023
+last_updated: Sep 7, 2023
 summary: "Bash Special Characters"
 sidebar: mydoc_sidebar
 permalink: bash_special_characters.html
@@ -127,6 +127,9 @@ Quoted string expansion
 ```bash
 $ echo $'\ttest'
         test
+
+$ echo $'aa\x27'
+aa'
 ```
 
 ## `()` parentheses

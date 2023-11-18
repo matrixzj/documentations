@@ -1,15 +1,15 @@
 ---
-title: Bash Parameter expansions
+title: Bash Parameter Expansions
 tags: [bash]
-keywords: bash, Parameter expansions
+keywords: bash, parameter expansions
 last_updated: Aug 5, 2023
-summary: "Bash Parameter expansions"
+summary: "Bash parameter expansions"
 sidebar: mydoc_sidebar
 permalink: bash_parameter_expansions.html
 folder: bash
 ---
 
-# Bash Parameter expansions
+# Bash Parameter Expansions
 =====
 
 ## Basic

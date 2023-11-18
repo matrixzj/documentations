@@ -1,5 +1,5 @@
 ---
-title: Ssh Break Out While-Loop
+title: SSh Break Out While-Loop
 tags: [bash]
 keywords: bash, ssh
 last_updated: May 28, 2020
@@ -9,7 +9,7 @@ permalink: bash_ssh_break_out_of_while_loop.html
 folder: bash
 ---
 
-# Ssh Break Out While-Loop
+# SSh Break Out While-Loop
 =====
 
 ## Issue

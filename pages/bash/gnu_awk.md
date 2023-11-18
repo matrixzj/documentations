@@ -2,7 +2,7 @@
 title: GNU AWK
 tags: [bash]
 keywords: awk 
-last_updated: Apr 3, 2022
+last_updated: Nov 19, 2023
 summary: "awk howto"
 sidebar: mydoc_sidebar
 permalink: bash_gnu_awk.html
@@ -685,6 +685,31 @@ If *start* is less than one, *substr()* treats it as if it was one. If *start* i
 tolower(string) / toupper(string)
 ```
 Return a copy of *string*, with each uppercase/lowercase character in the *string* replaced with its corresponding lowercase/uppercase character. Nonalphabetic characters are left unchanged. For example, tolower("MiXeD cAsE 123") returns "mixed case 123", and toupper("MiXeD cAsE 123") returns "MIXED CASE 123". 
+
+### IO Function
+Important: `awk` also buffers its output, and buffer size by default is 4k
+```bash
+$ tail -F -n 0 /tmp/test | awk '{print $0}' | while read -r line; do echo $line; done
+```
+Inject `test\n` to file `/tmp/test` until there is some output
+```bash
+$ count=1; while [ $count -le 820 ]; do echo $((count++)); echo test >> /tmp/test ; done
+```
+If it is `819`, there will be no output
+
+#### fflush
+```bash
+fflush()
+```
+Flush any buffered output 
+```bash
+$ tail -F -n 0 /tmp/test | awk '{print $0; fflush}' | while read -r line; do echo $line; done
+```
+Output will be always shown in console
+Alternative way with `stdbuf`
+```bash
+$ tail -F -n 0 /tmp/test | stdbuf -oL awk '{print $0}' | while read -r line; do echo $line; done
+```
 
 ### Customised Function
 ```bash
