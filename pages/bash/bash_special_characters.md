@@ -247,36 +247,58 @@ $ echo ~+; cd ~-; echo ~+ ; cd ~-; echo ~+
 ```
 
 ## `$*` / `$@` 
-The positional parameters starting from the first.  
+The positional parameters starting from the first.   
+With doublequotes `"`, both are same. If without, `$*` will take all as a single word. `$@` will take each parameter as a quoted string, that is, the parameters are passed on intact, without interpretation or expansion.  
 ```bash
-$ cat ./bash_special_characers.sh
+$ cat <<EOF> ./bash_special_characers.sh
 #!/bin/bash
 
-echo "$*"
+function print_all_parameters() {
+  echo "There are $# parameters here: "
+  i=1
+  while [ ${i} -le $# ]
+  do
+    echo "$i parameter: ${!i}"
+    : $((++i))
+  done
+  echo ""
+}
 
-echo "$@"
+echo "Unquoted \$*"
+print_all_parameters $*
 
-IFS=$'\n'
+echo "Quoted \"\$*\""
+print_all_parameters "$*"
 
-echo "$*"
+echo "Unquoted \$@"
+print_all_parameters $@
 
-echo "$@"
+echo "Quoted \"\$@\""
+print_all_parameters "$@"
+EOF
 
-echo $1
+$ ./bash_special_characers.sh 12 34
+Unquoted $*
+There are 2 parameters here:
+1 parameter: 12
+2 parameter: 34
 
-echo $2
+Quoted $*
+There are 1 parameters here:
+1 parameter: 12 34
 
-$ ./bash_special_parmeters.sh  12 34
-12 34
-12 34
-12
-34
-12 34
-12
-34
+Unquoted $@
+There are 2 parameters here:
+1 parameter: 12
+2 parameter: 34
+
+Quoted $@
+There are 2 parameters here:
+1 parameter: 12
+2 parameter: 34
 ```
 
-When used inside doublequotes (see quoting), like `$*`, it expands to all positional parameters as one word, delimited by the first character of the **IFS** variable (a space in this example): "$1 $2 $3 $4". But `$@` will be not take **IFS** as delimiter.   
+When working with doublequotes `"`, all parameters in `$*` will put the first character of `IFS` between the elements in order to construct the final output string. But `$&` will not do in this way.  
 ```bash
 $ cat bash_special_parmeters.sh
 #! /bin/bash
