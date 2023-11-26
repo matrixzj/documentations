@@ -45,6 +45,10 @@ entries:
       url: /bash_parameter_expansions.html
       output: web, pdf
 
+    - title: Bash String Manipulate
+      url: /bash_string_manipulate.html
+      output: web, pdf
+
     - title: Bash Array and Dict
       url: /bash_array_dict.html
       output: web, pdf      
