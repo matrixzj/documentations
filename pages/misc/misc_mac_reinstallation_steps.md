@@ -79,17 +79,9 @@ sed_path=$(brew list gnu-sed | grep 'bin/sed')
 echo "export PATH=\"${awk_path%/awk}:${sed_path%/sed}:$PATH\"" >> ~/.zshrc
 ```
 
-### eul MacOS Monitor 
-```
-brew install --cask eul
-```
-
 ### Application Install list
 * [Karabiner-Elements](https://karabiner-elements.pqrs.org/)
 * [iTerm2](https://iterm2.com/downloads.html)
-* [ATOM](https://atom.io/)
-* [AIDente](https://github.com/davidwernhart/AlDente/releases)
-* [coconutBattery](https://www.coconut-flavour.com/coconutbattery/)
 * [Rectangle](https://rectangleapp.com/)
 * [Input Method - Squirrel 鼠须管](https://matrixzj.github.io/documentations/misc_mac_reinstallation_steps.html#squirrel-%E9%BC%A0%E9%A1%BB%E7%AE%A1)
 * [IINA](https://iina.io/)
@@ -98,9 +90,13 @@ brew install --cask eul
 * [QQ](https://im.qq.com/macqq/)
 * [Discord](https://discord.com/)
 * [Logitech Options](https://www.logitech.com/en-us/software/options.html)
+
+* Kensingtonworks for K75370
+
+Optional
+* [coconutBattery](https://www.coconut-flavour.com/coconutbattery/)
 * [Office](https://www.office.com/)
 * [Microsoft Teams](https://www.microsoft.com/en-ww/microsoft-teams/download-app)
-* Kensingtonworks for K75370
 
 ## Applicaiton Setup
 
@@ -126,7 +122,7 @@ brew install --cask squirrel
 [Install Wubi jidian Input](https://awesomeopensource.com/project/KyleBing/rime-wubi86-jidian)
 
 ```bash
-cd Downloads
+cd ~/Downloads
 git clone https://github.com/KyleBing/rime-wubi86-jidian.git
 cp -aRv rime-wubi86-jidian/* ~/Library/Rime
 ```
