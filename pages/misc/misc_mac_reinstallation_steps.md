@@ -51,9 +51,10 @@ defaults write com.apple.finder _FXShowPosixPathInTitle -bool true; killall Find
 ### Set New Hostname
 
 ```bash
-sudo scutil --set HostName <new host name>
-sudo scutil --set LocalHostName <new host name>
-sudo scutil --set ComputerName <new name>
+hostname=""
+sudo scutil --set HostName "${hostname}"
+sudo scutil --set LocalHostName "${hostname}"
+sudo scutil --set ComputerName "${hostname}"
 dscacheutil -flushcache
 ```
 reboot to take it in effect
@@ -66,11 +67,11 @@ brew install gawk
 
 PATH config
 ```
-$ brew list gawk | grep '/bin/awk'
-/usr/local/Cellar/gawk/5.1.0/bin/awk
-
 $ brew list gnu-sed | grep 'bin/sed'
 /usr/local/Cellar/gnu-sed/4.8/libexec/gnubin/sed
+
+$ brew list gawk | grep 'bin/awk'
+/usr/local/Cellar/gawk/5.3.0/libexec/gnubin/awk
 ```
 
 ```
@@ -84,19 +85,18 @@ echo "export PATH=\"${awk_path%/awk}:${sed_path%/sed}:$PATH\"" >> ~/.zshrc
 * [iTerm2](https://iterm2.com/downloads.html)
 * [Rectangle](https://rectangleapp.com/)
 * [Input Method - Squirrel 鼠须管](https://matrixzj.github.io/documentations/misc_mac_reinstallation_steps.html#squirrel-%E9%BC%A0%E9%A1%BB%E7%AE%A1)
+* [Visual Studio Code](https://code.visualstudio.com/download)
 * [IINA](https://iina.io/)
 * [Keka](https://www.keka.io/en/)
 * [WeChat](https://www.wechat.com/en/)
 * [QQ](https://im.qq.com/macqq/)
 * [Discord](https://discord.com/)
-* [Logitech Options](https://www.logitech.com/en-us/software/options.html)
-
-* Kensingtonworks for K75370
 
 Optional
 * [coconutBattery](https://www.coconut-flavour.com/coconutbattery/)
 * [Office](https://www.office.com/)
 * [Microsoft Teams](https://www.microsoft.com/en-ww/microsoft-teams/download-app)
+* Kensingtonworks for K75370
 
 ## Applicaiton Setup
 
@@ -127,9 +127,8 @@ git clone https://github.com/KyleBing/rime-wubi86-jidian.git
 cp -aRv rime-wubi86-jidian/* ~/Library/Rime
 ```
 
-#### Enable Chinese Input in Atom/iterm2
-- Find out iTerm2 Bundle Identifier: com.googlecode.iterm2   
-
+#### Enable Chinese Input in `iterm2``
+- Find out iTerm2 Bundle Identifier: com.googlecode.iterm2     
 ```bash   
 $ cat /Applications/iTerm.app/Contents/Info.plist | grep -i identifier -A 1
     <key>CFBundleIdentifier</key>
@@ -137,17 +136,6 @@ $ cat /Applications/iTerm.app/Contents/Info.plist | grep -i identifier -A 1
 
 $ osascript -e 'id of app "Google Chrome"'
 com.google.Chrome
-```
-
-- Find out Atom Bundle Identifier: com.github.atom   
-
-```bash   
-$ cat /Applications/Atom.app/Contents/Info.plist | grep -i identifier -A 1
-    <key>CFBundleIdentifier</key>
-    <string>com.github.atom</string>
-
-$ osascript -e 'id of app "Atom"'
-com.github.atom
 ```
 
 - Update RIME config
@@ -198,36 +186,25 @@ $ diff wubi86_jidian.schema.yaml{,.bak}
 ```
 
 
-### Mail Signature
-
 ## Optional   
-### GlobalProtect VPN
-#### Prevent auto-starting on the Mac
-```
-sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangpa.plist
-sudo sed -i 's/true/false/g' /Library/LaunchAgents/com.paloaltonetworks.gp.pangps.plist
-```
-
-#### Trust Cert 
-Import CA Cert and private Cert  
+### Trust Cert 
+Import CA Cert and private Cert   
 Open the Keychain Access application and locate the Machine Certificate issued to Mac OS X Client in the System keychain.  
-Right-click on the private key associated with Certificate and click Get Info, then go to the Access Control tab  
-Click '+' to select an Application to allow
-Press key combination <Command> + <Shift> + G to open Go to Folder  
-Enter '/Applications/GlobalProtect.app/Contents/Resources' and click Go  
-Find PanGPS and click it, and then press Add  
-Save Changes to private key  
+Right-click on the private key associated with Certificate and click Get Info, then go to the Access Control tab   
+Click '+' to select an Application to allow  
+Press key combination <Command> + <Shift> + G to open Go to Folder    
+Enter '/Applications/GlobalProtect.app/Contents/Resources' and click Go    
+Find PanGPS and click it, and then press Add    
+Save Changes to private key    
 
 ### Virt-Manager on Mac
-[virt-manager on Mac github repo](https://github.com/jeffreywildman/homebrew-virt-manager)
-
+[virt-manager on Mac github repo](https://github.com/jeffreywildman/homebrew-virt-manager)   
 ```bash
 brew tap jeffreywildman/homebrew-virt-manager
 brew install virt-manager virt-viewer
 ```
 
-### iStart Menus Activation Key
-
+### iStart Menus Activation Key  
 ```bash
 Email: 982092332@qq.com
 SN: GAWAE-FCWQ3-P8NYB-C7GF7-NEDRT-Q5DTB-MFZG6-6NEQC-CRMUD-8MZ2K-66SRB-SU8EW-EDLZ9-TGH3S-8SGA
