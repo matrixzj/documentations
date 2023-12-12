@@ -22,11 +22,10 @@ folder: Misc
 [Xcode vs MacOS Compatibility](https://developer.apple.com/support/xcode/)
 
 ### Install Brew
-[Homebrew](https://brew.sh/)
-
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
+[Homebrew](https://brew.sh/)
 
 ### Install zsh
 ```bash
@@ -40,7 +39,7 @@ brew install tmux
 ```
 
 ### Env Config
-Clone from Github to `~/Documents`
+Git clone from Github to `~/Documents`
 
 ### Git Config
 ```bash
@@ -69,9 +68,8 @@ reboot to take it in effect
 brew install gnu-sed
 brew install gawk
 ```
-
-PATH config
-```
+PATH config   
+```bash
 $ brew list gnu-sed | grep 'bin/sed'
 /usr/local/Cellar/gnu-sed/4.8/libexec/gnubin/sed
 
@@ -79,7 +77,7 @@ $ brew list gawk | grep 'bin/awk'
 /usr/local/Cellar/gawk/5.3.0/libexec/gnubin/awk
 ```
 
-```
+```bash
 sed_path=$(brew list gnu-sed | grep 'bin/sed')
 awk_path=$(brew list gawk | grep '/bin/awk')
 echo "export PATH=\"${awk_path%/awk}:${sed_path%/sed}:$PATH\"" >> ~/.zshrc
@@ -104,7 +102,6 @@ Optional
 * Kensingtonworks for K75370
 
 ## Applicaiton Setup
-
 ### iTerm2  
 - Access System Clipboard (General - Selection - Check `Applications in terminal may access clipboard`)
 - Window Transparency (Profile - Window - Transparency `30`)
@@ -112,7 +109,7 @@ Optional
 - Mac `Option` key for `Alt` in Bash (Profile - Keys - Left/Right Option key `Esc+`)
 
 ### Karabiner Complex Modifications  
-complex modifications config location
+complex modifications config location   
 ```bash
 /Users/jzou/.config/karabiner/assets/complex_modifications
 ```
@@ -123,6 +120,7 @@ complex modifications config location
 ```bash
 brew install --cask squirrel
 ```
+Launch `System Prereferences`, `Keyboard`, tab `Input Sources`, Add `Squirrel`.  
 [Install Wubi jidian Input](https://awesomeopensource.com/project/KyleBing/rime-wubi86-jidian)   
 ```bash
 cd ~/Downloads
@@ -130,7 +128,7 @@ git clone https://github.com/KyleBing/rime-wubi86-jidian.git
 cp -aRv rime-wubi86-jidian/* ~/Library/Rime
 ```
 
-#### Enable Chinese Input in `iterm2``
+#### Enable Chinese Input in `iterm2`
 - Find out iTerm2 Bundle Identifier: com.googlecode.iterm2  
    
 ```bash   
@@ -142,8 +140,7 @@ $ $ osascript -e 'id of app "iTerm2"'
 com.googlecode.iterm2
 ```
 
-- Update RIME config
-
+- Update RIME config  
 add folloing block to ~/Library/Rime/squirrel.custom.yaml
 ```bash
 patch:  
@@ -187,7 +184,6 @@ $ diff wubi86_jidian.schema.yaml{,.bak}
 ---
 >   max_code_length: 4                    # 四码上屏
 ```
-
 
 ## Optional   
 ### Trust Cert 
