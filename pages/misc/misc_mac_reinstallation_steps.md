@@ -101,6 +101,7 @@ Optional
 * [coconutBattery](https://www.coconut-flavour.com/coconutbattery/)
 * [Office](https://www.office.com/)
 * [Microsoft Teams](https://www.microsoft.com/en-ww/microsoft-teams/download-app)
+* [Logitech Options+](https://www.logitech.com/en-us/software/logi-options-plus.html)
 * Kensingtonworks for K75370
 
 ## Applicaiton Setup
