@@ -12,8 +12,11 @@ folder: Misc
 # Mac Reinstallation Steps
 =====
 
-## Mandantory
+## Backup List 
+- SSH Config
+- Karabiner Complex Modifications
 
+## Mandantory
 ### Install Xcode Command Line Tools
 [Xcode Command Line Tools](https://developer.apple.com/download/more/)  
 [Xcode vs MacOS Compatibility](https://developer.apple.com/support/xcode/)
@@ -91,7 +94,7 @@ echo "export PATH=\"${awk_path%/awk}:${sed_path%/sed}:$PATH\"" >> ~/.zshrc
 * [IINA](https://iina.io/)
 * [Keka](https://www.keka.io/en/)
 * [WeChat](https://www.wechat.com/en/)
-* [QQ](https://im.qq.com/macqq/)
+* QQ ver6.8.2 
 * [Discord](https://discord.com/)
 
 Optional
