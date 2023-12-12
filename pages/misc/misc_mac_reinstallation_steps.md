@@ -15,7 +15,8 @@ folder: Misc
 ## Mandantory
 
 ### Install Xcode Command Line Tools
-[Xode Command Line Tools](https://developer.apple.com/download/more/)
+[Xcode Command Line Tools](https://developer.apple.com/download/more/)  
+[Xcode vs MacOS Compatibility](https://developer.apple.com/support/xcode/)
 
 ### Install Brew
 [Homebrew](https://brew.sh/)
@@ -25,16 +26,18 @@ folder: Misc
 ```
 
 ### Install zsh
-[on-my-zsh github repo](https://github.com/robbyrussell/oh-my-zsh)
-
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 ```
+[on-my-zsh github repo](https://github.com/robbyrussell/oh-my-zsh)
 
 ### Install tmux
 ```bash
 brew install tmux
 ```
+
+### Env Config
+Clone from Github to `~/Documents`
 
 ### Git Config
 ```bash
@@ -49,7 +52,6 @@ defaults write com.apple.finder _FXShowPosixPathInTitle -bool true; killall Find
 ```
 
 ### Set New Hostname
-
 ```bash
 hostname=""
 sudo scutil --set HostName "${hostname}"
@@ -75,8 +77,8 @@ $ brew list gawk | grep 'bin/awk'
 ```
 
 ```
-awk_path=$(brew list gawk | grep '/bin/awk')
 sed_path=$(brew list gnu-sed | grep 'bin/sed')
+awk_path=$(brew list gawk | grep '/bin/awk')
 echo "export PATH=\"${awk_path%/awk}:${sed_path%/sed}:$PATH\"" >> ~/.zshrc
 ```
 
@@ -118,9 +120,7 @@ complex modifications config location
 ```bash
 brew install --cask squirrel
 ```
-
-[Install Wubi jidian Input](https://awesomeopensource.com/project/KyleBing/rime-wubi86-jidian)
-
+[Install Wubi jidian Input](https://awesomeopensource.com/project/KyleBing/rime-wubi86-jidian)   
 ```bash
 cd ~/Downloads
 git clone https://github.com/KyleBing/rime-wubi86-jidian.git
@@ -135,8 +135,8 @@ $ cat /Applications/iTerm.app/Contents/Info.plist | grep -i identifier -A 1
     <key>CFBundleIdentifier</key>
     <string>com.googlecode.iterm2</string>
 
-$ osascript -e 'id of app "Google Chrome"'
-com.google.Chrome
+$ $ osascript -e 'id of app "iTerm2"'
+com.googlecode.iterm2
 ```
 
 - Update RIME config
@@ -146,7 +146,6 @@ add folloing block to ~/Library/Rime/squirrel.custom.yaml
 patch:  
   app_options/com.apple.Xcode:   
     ascii_mode: true    
-  app_options/com.github.atom: {}   
   app_options/com.googlecode.iterm2: {}    
 ```
 
@@ -189,14 +188,13 @@ $ diff wubi86_jidian.schema.yaml{,.bak}
 
 ## Optional   
 ### Trust Cert 
-Import CA Cert and private Cert   
-Open the Keychain Access application and locate the Machine Certificate issued to Mac OS X Client in the System keychain.  
+- Import CA Cert and private Cert   
+- Open `Keychain Access` application and locate the Machine Certificate issued to Mac OS X Client in the System keychain.  
 Right-click on the private key associated with Certificate and click Get Info, then go to the Access Control tab   
-Click '+' to select an Application to allow  
-Press key combination <Command> + <Shift> + G to open Go to Folder    
-Enter '/Applications/GlobalProtect.app/Contents/Resources' and click Go    
-Find PanGPS and click it, and then press Add    
-Save Changes to private key    
+- Click `+` to select an Application to allow  
+- Press key combination `<Command> + <Shift> + G` to open `Go to Folder` in `Finder` Application. Enter `/Applications/GlobalProtect.app/Contents/Resources` and click Go    
+- Find `PanGPS` and click it, and then press `Add`    
+- Save Changes to private key    
 
 ### Virt-Manager on Mac
 [virt-manager on Mac github repo](https://github.com/jeffreywildman/homebrew-virt-manager)   
