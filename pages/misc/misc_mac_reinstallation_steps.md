@@ -16,6 +16,11 @@ folder: Misc
 - SSH Config
 - Karabiner Complex Modifications
 
+## Create Installation Media
+```bash
+sudo /Applications/Install\ macOS\ Ventura.app/Contents/Resources/createinstallmedia --volume /Volumes/MyVolume
+```
+
 ## Mandantory
 ### Install Xcode Command Line Tools
 [Xcode Command Line Tools](https://developer.apple.com/download/more/)  
@@ -45,7 +50,6 @@ Git clone from Github to `~/Documents`
 ### Git Config
 ```bash
 git config --global user.name "Matrix Zou"
-
 git config --global user.email matrix.zj@gmail.com
 ```
 
