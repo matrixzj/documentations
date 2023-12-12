@@ -2,7 +2,7 @@
 title: Mac Reinstallation Steps
 tags: [misc]
 keywords: mac, reinstallation
-last_updated: Mar 26, 2022
+last_updated: Dec 12, 2023
 summary: "Steps to reinstall a workbox for myself"
 sidebar: mydoc_sidebar
 permalink: misc_mac_reinstallation_steps.html
@@ -89,6 +89,8 @@ echo "export PATH=\"${awk_path%/awk}:${sed_path%/sed}:$PATH\"" >> ~/.zshrc
 * [Rectangle](https://rectangleapp.com/)
 * [Input Method - Squirrel 鼠须管](https://matrixzj.github.io/documentations/misc_mac_reinstallation_steps.html#squirrel-%E9%BC%A0%E9%A1%BB%E7%AE%A1)
 * [Visual Studio Code](https://code.visualstudio.com/download)
+* [Firefox](https://www.mozilla.org/en-US/firefox/new/)
+* [Google Chrome](https://www.google.com/chrome/)
 * [IINA](https://iina.io/)
 * [Keka](https://www.keka.io/en/)
 * [WeChat](https://www.wechat.com/en/)
