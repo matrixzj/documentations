@@ -23,6 +23,7 @@ folder: Misc
 
 ### Install Brew
 ```bash
+git config --global http.version HTTP/1.1
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 [Homebrew](https://brew.sh/)
