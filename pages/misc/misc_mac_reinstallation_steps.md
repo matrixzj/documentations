@@ -108,13 +108,15 @@ Optional
 * [Microsoft Teams](https://www.microsoft.com/en-ww/microsoft-teams/download-app)
 * [Logitech Options+](https://www.logitech.com/en-us/software/logi-options-plus.html)
 * Kensingtonworks for K75370
+* [OpenEmu](https://openemu.org/)
 
 ## Applicaiton Setup
 ### iTerm2  
 - Access System Clipboard (General - Selection - Check `Applications in terminal may access clipboard`)
-- Window Transparency (Profile - Window - Transparency `30`)
+- Window Transparency (Profile - Window - Transparency `30`, check `Keep background colors opaque`)
 - Disable Bell (Profile - Terminal - Check `Silence bell`)
 - Mac `Option` key for `Alt` in Bash (Profile - Keys - Left/Right Option key `Esc+`)
+- Disable Color Schema Change between Mac `light mode` and `dark mode` (Profile - Colors - uncheck `Use different colors for light mode and dark mode`)
 
 ### Karabiner Complex Modifications  
 complex modifications config location   
