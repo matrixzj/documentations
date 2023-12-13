@@ -143,7 +143,7 @@ $ cat /Applications/iTerm.app/Contents/Info.plist | grep -i identifier -A 1
     <key>CFBundleIdentifier</key>
     <string>com.googlecode.iterm2</string>
 
-$ $ osascript -e 'id of app "iTerm2"'
+$ osascript -e 'id of app "iTerm2"'
 com.googlecode.iterm2
 ```
 
