@@ -139,7 +139,8 @@ cp -aRv rime-wubi86-jidian/* ~/Library/Rime
 ```
 
 #### Enable Chinese Input in `iterm2`
-- Find out iTerm2 Bundle Identifier: `com.googlecode.iterm2`  
+- Find out iTerm2 Bundle Identifier: `com.googlecode.iterm2`
+
 ```bash   
 $ cat /Applications/iTerm.app/Contents/Info.plist | grep -i identifier -A 1
     <key>CFBundleIdentifier</key>
@@ -151,6 +152,7 @@ com.googlecode.iterm2
 
 - Update RIME config  
 add folloing block to ~/Library/Rime/squirrel.custom.yaml
+
 ```bash
 patch:  
   app_options/com.apple.Xcode:   
