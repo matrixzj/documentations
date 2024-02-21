@@ -14,21 +14,46 @@ folder: Container
 ==================
 
 ## Output
-### Cluster IP svc
+### Cluster IP SVC
+```bash
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nginx
+  name: nginx
+  namespace: default
+spec:
+  clusterIP: 10.32.0.251
+  clusterIPs:
+  - 10.32.0.251
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: nginx-pod
+  sessionAffinity: None
+  type: ClusterIP
+```
+
 #### IPTABLES
 ![kubernetes-svc-clusterip](images/container/kubernetes-svc-clusterip.jpg)
 
-1. chain `PREROUTING` in table `nat` 
-
-```bash
-$ sudo iptables -t nat -L PREROUTING -vn
-Chain PREROUTING (policy ACCEPT 1 packets, 60 bytes)
- pkts bytes target     prot opt in     out     source               destination
-   54  3657 KUBE-SERVICES  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service portals */
-
-$ grep '\-A PREROUTING' /tmp/iptables-save
--A PREROUTING -m comment --comment "kubernetes service portals" -j KUBE-SERVICES
-```
+1. chain `PREROUTING` in table `nat`  
+    ```bash
+    $ sudo iptables -t nat -L PREROUTING -vn
+    Chain PREROUTING (policy ACCEPT 1 packets, 60 bytes)
+     pkts bytes target     prot opt in     out     source               destination
+       54  3657 KUBE-SERVICES  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service portals */
+    
+    $ grep '\-A PREROUTING' /tmp/iptables-save
+    -A PREROUTING -m comment --comment "kubernetes service portals" -j KUBE-SERVICES
+    ```
 
 2. chain `KUBE-SERVICES` in table `nat` 
    
