@@ -47,93 +47,86 @@ spec:
 1. chain `PREROUTING` in table `nat`  
     ```bash
     $ sudo iptables -t nat -L PREROUTING -vn
-    Chain PREROUTING (policy ACCEPT 1 packets, 60 bytes)
+    Chain PREROUTING (policy ACCEPT 91 packets, 17780 bytes)
      pkts bytes target     prot opt in     out     source               destination
-       54  3657 KUBE-SERVICES  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service portals */
-    
-    $ grep '\-A PREROUTING' /tmp/iptables-save
+     3102  597K KUBE-SERVICES  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service portals */
+
+    $ grep '\-A PREROUTING' /tmp/iptables
     -A PREROUTING -m comment --comment "kubernetes service portals" -j KUBE-SERVICES
     ```
 
 2. chain `KUBE-SERVICES` in table `nat` 
-   
-```bash
-$ sudo iptables -t nat -L KUBE-SERVICES  -vn
-Chain KUBE-SERVICES (2 references)
- pkts bytes target     prot opt in     out     source               destination
-    0     0 KUBE-SVC-NPX46M4PTMTKRN6Y  tcp  --  *      *       0.0.0.0/0            10.32.0.1            /* default/kubernetes:https cluster IP */ tcp dpt:443
-    0     0 KUBE-SVC-ERIFXISQEP7F7OF4  tcp  --  *      *       0.0.0.0/0            10.32.0.10           /* kube-system/kube-dns:dns-tcp cluster IP */ tcp dpt:53
-    0     0 KUBE-SVC-TCOU7JCQXEZGVUNU  udp  --  *      *       0.0.0.0/0            10.32.0.10           /* kube-system/kube-dns:dns cluster IP */ udp dpt:53
-    0     0 KUBE-SVC-JD5MR3NA4I4DYORP  tcp  --  *      *       0.0.0.0/0            10.32.0.10           /* kube-system/kube-dns:metrics cluster IP */ tcp dpt:9153
-    4   240 KUBE-NODEPORTS  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service nodeports; NOTE: this must be the last rule in this chain */ ADDRTYPE match dst-type LOCAL
+    ```bash
+    $ sudo iptables -t nat -L KUBE-SERVICES -vn
+    Chain KUBE-SERVICES (2 references)
+     pkts bytes target     prot opt in     out     source               destination
+        2   120 KUBE-SVC-2CMXP7HKUVJN7L6M  tcp  --  *      *       0.0.0.0/0            10.32.0.251          /* default/nginx cluster IP */ tcp dpt:80
+        0     0 KUBE-SVC-NPX46M4PTMTKRN6Y  tcp  --  *      *       0.0.0.0/0            10.32.0.1            /* default/kubernetes:https cluster IP */ tcp dpt:443
+        0     0 KUBE-SVC-TCOU7JCQXEZGVUNU  udp  --  *      *       0.0.0.0/0            10.32.0.10           /* kube-system/kube-dns:dns cluster IP */ udp dpt:53
+        0     0 KUBE-SVC-ERIFXISQEP7F7OF4  tcp  --  *      *       0.0.0.0/0            10.32.0.10           /* kube-system/kube-dns:dns-tcp cluster IP */ tcp dpt:53
+        0     0 KUBE-SVC-JD5MR3NA4I4DYORP  tcp  --  *      *       0.0.0.0/0            10.32.0.10           /* kube-system/kube-dns:metrics cluster IP */ tcp dpt:9153
+     3858  231K KUBE-NODEPORTS  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service nodeports; NOTE: this must be the last rule in this chain */ ADDRTYPE match dst-type LOCAL
+    
+    $ grep '\-A KUBE-SERVICES' /tmp/iptables
+    -A KUBE-SERVICES -d 10.32.0.251/32 -p tcp -m comment --comment "default/nginx cluster IP" -m tcp --dport 80 -j KUBE-SVC-2CMXP7HKUVJN7L6M
+    -A KUBE-SERVICES -d 10.32.0.1/32 -p tcp -m comment --comment "default/kubernetes:https cluster IP" -m tcp --dport 443 -j KUBE-SVC-NPX46M4PTMTKRN6Y
+    -A KUBE-SERVICES -d 10.32.0.10/32 -p udp -m comment --comment "kube-system/kube-dns:dns cluster IP" -m udp --dport 53 -j KUBE-SVC-TCOU7JCQXEZGVUNU
+    -A KUBE-SERVICES -d 10.32.0.10/32 -p tcp -m comment --comment "kube-system/kube-dns:dns-tcp cluster IP" -m tcp --dport 53 -j KUBE-SVC-ERIFXISQEP7F7OF4
+    -A KUBE-SERVICES -d 10.32.0.10/32 -p tcp -m comment --comment "kube-system/kube-dns:metrics cluster IP" -m tcp --dport 9153 -j KUBE-SVC-JD5MR3NA4I4DYORP
+    -A KUBE-SERVICES -m comment --comment "kubernetes service nodeports; NOTE: this must be the last rule in this chain" -m addrtype --dst-type LOCAL -j KUBE-NODEPORTS
+    ```
 
-$ grep '\-A KUBE-SERVICES' /tmp/iptables-save
--A KUBE-SERVICES -d 10.32.0.1/32 -p tcp -m comment --comment "default/kubernetes:https cluster IP" -m tcp --dport 443 -j KUBE-SVC-NPX46M4PTMTKRN6Y
--A KUBE-SERVICES -d 10.32.0.10/32 -p tcp -m comment --comment "kube-system/kube-dns:dns-tcp cluster IP" -m tcp --dport 53 -j KUBE-SVC-ERIFXISQEP7F7OF4
--A KUBE-SERVICES -d 10.32.0.10/32 -p udp -m comment --comment "kube-system/kube-dns:dns cluster IP" -m udp --dport 53 -j KUBE-SVC-TCOU7JCQXEZGVUNU
--A KUBE-SERVICES -d 10.32.0.10/32 -p tcp -m comment --comment "kube-system/kube-dns:metrics cluster IP" -m tcp --dport 9153 -j KUBE-SVC-JD5MR3NA4I4DYORP
--A KUBE-SERVICES -m comment --comment "kubernetes service nodeports; NOTE: this must be the last rule in this chain" -m addrtype --dst-type LOCAL -j KUBE-NODEPORTS
-```
+3. chain `KUBE-SVC-2CMXP7HKUVJN7L6M` in table `nat` 
+    ```bash
+    $ sudo iptables -t nat -L KUBE-SVC-2CMXP7HKUVJN7L6M -vn
+    Chain KUBE-SVC-2CMXP7HKUVJN7L6M (1 references)
+     pkts bytes target     prot opt in     out     source               destination
+        2   120 KUBE-SEP-YVT6EXXEKT4LDXBC  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/nginx -> 10.64.2.4:80 */
+    
+    $ grep '\-A KUBE-SVC-2CMXP7HKUVJN7L6M' /tmp/iptables
+    -A KUBE-SVC-2CMXP7HKUVJN7L6M -m comment --comment "default/nginx -> 10.64.2.4:80" -j KUBE-SEP-YVT6EXXEKT4LDXBC
+    ```
 
-3. chain `KUBE-SVC-TCOU7JCQXEZGVUNU` in table `nat` 
-
-```bash
-$ sudo iptables -t nat -L KUBE-SVC-TCOU7JCQXEZGVUNU -vn
-Chain KUBE-SVC-TCOU7JCQXEZGVUNU (1 references)
- pkts bytes target     prot opt in     out     source               destination
-    0     0 KUBE-MARK-MASQ  udp  --  *      *      !10.64.1.0/24         10.32.0.10           /* kube-system/kube-dns:dns cluster IP */ udp dpt:53
-    0     0 KUBE-SEP-TYGHG4DTIAC24P3K  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kube-system/kube-dns:dns */
-
-$ grep '\-A KUBE-SVC-TCOU7JCQXEZGVUNU' /tmp/iptables-save
--A KUBE-SVC-TCOU7JCQXEZGVUNU ! -s 10.64.1.0/24 -d 10.32.0.10/32 -p udp -m comment --comment "kube-system/kube-dns:dns cluster IP" -m udp --dport 53 -j KUBE-MARK-MASQ
--A KUBE-SVC-TCOU7JCQXEZGVUNU -m comment --comment "kube-system/kube-dns:dns" -j KUBE-SEP-TYGHG4DTIAC24P3K
-```
-
-4. chain `KUBE-MARK-MASQ` in table `nat` 
-   
-```bash
-$ sudo iptables -t nat -L KUBE-MARK-MASQ -vn
-Chain KUBE-MARK-MASQ (8 references)
- pkts bytes target     prot opt in     out     source               destination
-    0     0 MARK       all  --  *      *       0.0.0.0/0            0.0.0.0/0            MARK or 0x4000
-
-$ grep '\-A KUBE-MARK-MASQ' /tmp/iptables-save
--A KUBE-MARK-MASQ -j MARK --set-xmark 0x4000/0x4000
-```
-Purpose: mark set in this step will be used during `POSTROUTING`.
-
-5. chain `KUBE-SEP-TYGHG4DTIAC24P3K` in table `nat` 
-   
-```bash
-$ sudo iptables -t nat -L KUBE-SEP-TYGHG4DTIAC24P3K -vn
-Chain KUBE-SEP-TYGHG4DTIAC24P3K (1 references)
- pkts bytes target     prot opt in     out     source               destination
-    0     0 KUBE-MARK-MASQ  all  --  *      *       10.64.1.7            0.0.0.0/0            /* kube-system/kube-dns:dns */
-    0     0 DNAT       udp  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kube-system/kube-dns:dns */ udp to:10.64.1.7:53
-
-$ grep '\-A KUBE-SEP-TYGHG4DTIAC24P3K' /tmp/iptables-save
--A KUBE-SEP-TYGHG4DTIAC24P3K -s 10.64.1.7/32 -m comment --comment "kube-system/kube-dns:dns" -j KUBE-MARK-MASQ
--A KUBE-SEP-TYGHG4DTIAC24P3K -p udp -m comment --comment "kube-system/kube-dns:dns" -m udp -j DNAT --to-destination 10.64.1.7:53
-```
+4. chain `KUBE-SEP-YVT6EXXEKT4LDXBC` in table `nat` 
+    ```bash
+    $ sudo iptables -t nat -L KUBE-SEP-YVT6EXXEKT4LDXBC -vn
+    Chain KUBE-SEP-YVT6EXXEKT4LDXBC (1 references)
+     pkts bytes target     prot opt in     out     source               destination
+        0     0 KUBE-MARK-MASQ  all  --  *      *       10.64.2.4            0.0.0.0/0            /* default/nginx */
+        2   120 DNAT       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/nginx */ tcp to:10.64.2.4:80
+    
+    $ grep '\-A KUBE-SEP-YVT6EXXEKT4LDXBC' /tmp/iptables
+    -A KUBE-SEP-YVT6EXXEKT4LDXBC -s 10.64.2.4/32 -m comment --comment "default/nginx" -j KUBE-MARK-MASQ
+    -A KUBE-SEP-YVT6EXXEKT4LDXBC -p tcp -m comment --comment "default/nginx" -m tcp -j DNAT --to-destination 10.64.2.4:80
+    ```
 
 #### TCPDUMP
-From `tcpdump`, src ip is `10.64.1.1` and dst ip is `10.64.1.7`
+From `tcpdump`, src ip is `172.16.1.152` and dst ip is `10.64.2.4`
 ```bash
-$ sudo tshark -r dns.pcap frame.number eq 1
-Running as user "root" and group "root". This could be dangerous.
-  1          0    10.64.1.1 -> 10.64.1.7    DNS 90 Standard query 0xb710  A www.microsoft.com
+$ tshark -r /tmp/http.pcap tcp.stream==4 -n
+ 23          4 172.16.1.152 -> 10.64.2.4    TCP 74 45088 > 80 [SYN] Seq=0 Win=64240 Len=0 MSS=1460 SACK_PERM=1 TSval=445053550 TSecr=0 WS=128
+ 24          4    10.64.2.4 -> 172.16.1.152 TCP 74 80 > 45088 [SYN, ACK] Seq=0 Ack=1 Win=65160 Len=0 MSS=1460 SACK_PERM=1 TSval=480000512 TSecr=445053550 WS=128
+ 25          4 172.16.1.152 -> 10.64.2.4    TCP 66 45088 > 80 [ACK] Seq=1 Ack=1 Win=64256 Len=0 TSval=445053550 TSecr=480000512
+ 26          4 172.16.1.152 -> 10.64.2.4    HTTP 141 GET / HTTP/1.1
+ 27          4    10.64.2.4 -> 172.16.1.152 TCP 66 80 > 45088 [ACK] Seq=1 Ack=76 Win=65152 Len=0 TSval=480000512 TSecr=445053550
+ 28          4    10.64.2.4 -> 172.16.1.152 TCP 302 [TCP segment of a reassembled PDU]
+ 29          4 172.16.1.152 -> 10.64.2.4    TCP 66 45088 > 80 [ACK] Seq=76 Ack=237 Win=64128 Len=0 TSval=445053550 TSecr=480000512
+ 30          4    10.64.2.4 -> 172.16.1.152 HTTP 85 HTTP/1.1 200 OK  (text/html)
+ 31          4 172.16.1.152 -> 10.64.2.4    TCP 66 45088 > 80 [ACK] Seq=76 Ack=256 Win=64128 Len=0 TSval=445053550 TSecr=480000513
+ 33          4 172.16.1.152 -> 10.64.2.4    TCP 66 45088 > 80 [FIN, ACK] Seq=76 Ack=256 Win=64128 Len=0 TSval=445053550 TSecr=480000513
+ 35          4    10.64.2.4 -> 172.16.1.152 TCP 66 80 > 45088 [FIN, ACK] Seq=256 Ack=77 Win=65152 Len=0 TSval=480000513 TSecr=445053550
+ 36          4 172.16.1.152 -> 10.64.2.4    TCP 66 45088 > 80 [ACK] Seq=77 Ack=257 Win=64128 Len=0 TSval=445053551 TSecr=480000513
 
-$ sudo tshark -r dns.pcap frame.number eq 1 -T fields -e ip.src -e udp.srcport -e ip.dst -e udp.dstport  -E separator=, -E quote=d
-Running as user "root" and group "root". This could be dangerous.
-"10.64.1.1","44560","10.64.1.7","53
+$ tshark -r /tmp/http.pcap frame.number eq 24 -T fields -e ip.src -e tcp.srcport -e ip.dst -e tcp.dstport  -E separator=, -E quote=d
+"10.64.2.4","80","172.16.1.152","45088"
 ```
 
 #### CONNTRACK
-`conntrock -L` result
+`conntrock -L` result or check `/proc/net/nf_conntrack`
 Both src ip and dst ip has been NAT as shown in tcpdump result. 
 ```bash
-$ grep 44560 /tmp/conntrack
-udp      17 21 src=172.16.1.35 dst=10.32.0.10 sport=44560 dport=53 src=10.64.1.7 dst=10.64.1.1 sport=53 dport=44560 mark=0 use=1
+$ grep 'dport=80 ' /tmp/conntrack
+tcp      6 118 TIME_WAIT src=172.16.1.152 dst=10.32.0.251 sport=43400 dport=80 src=10.64.2.4 dst=172.16.1.152 sport=80 dport=43400 [ASSURED] mark=0 use=1
 ```
 
 ### NodePort IP svc
