@@ -2,8 +2,8 @@
 title: Kube-Proxy IPTABLES
 tags: [container]
 keywords: kubernetes, service, iptables
-last_updated: Jul 8, 2022
-summary: "how kubernetes services implemented with iptables "
+last_updated: Feb 27, 2024
+summary: "how kubernetes services implemented with iptables"
 sidebar: mydoc_sidebar
 permalink: kube-proxy_iptables.html
 folder: Container
@@ -13,8 +13,7 @@ folder: Container
 
 ==================
 
-## Output
-### Cluster IP SVC
+## Cluster IP SVC
 ```bash
 apiVersion: v1
 kind: Service
@@ -41,7 +40,7 @@ spec:
   type: ClusterIP
 ```
 
-#### IPTABLES
+### IPTABLES
 ![kubernetes-svc-clusterip](images/container/kubernetes-svc-clusterip.jpg)
 
 1. chain `PREROUTING` in table `nat`  
@@ -100,7 +99,7 @@ spec:
     -A KUBE-SEP-YVT6EXXEKT4LDXBC -p tcp -m comment --comment "default/nginx" -m tcp -j DNAT --to-destination 10.64.2.4:80
     ```
 
-#### TCPDUMP
+### TCPDUMP
 From `tcpdump`, src ip is `172.16.1.152` and dst ip is `10.64.2.4`
 ```bash
 $ tshark -r /tmp/http.pcap tcp.stream==4 -n
@@ -121,7 +120,7 @@ $ tshark -r /tmp/http.pcap frame.number eq 24 -T fields -e ip.src -e tcp.srcport
 "10.64.2.4","80","172.16.1.152","45088"
 ```
 
-#### CONNTRACK
+### CONNTRACK
 `conntrock -L` result or check `/proc/net/nf_conntrack`
 Both src ip and dst ip has been NAT as shown in tcpdump result. 
 ```bash
