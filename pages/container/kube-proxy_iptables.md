@@ -2,7 +2,7 @@
 title: Kube-Proxy IPTABLES
 tags: [container]
 keywords: kubernetes, service, iptables
-last_updated: Feb 27, 2024
+last_updated: Mar 1, 2024
 summary: "how kubernetes services implemented with iptables"
 sidebar: mydoc_sidebar
 permalink: kube-proxy_iptables.html
@@ -12,6 +12,13 @@ folder: Container
 # Kube-Proxy IPTABLES
 
 ==================
+
+## General 
+* `KUBE-SVC-`	a load balancer, which the main iptables chain for that service, used for dispatching to endpoints when using `Cluster` traffic policy.
+* `KUBE-SVL-`	a load balancer, which handles dispatching to local endpoints when using `Local` traffic policy. This chain only exists if the service has `Local` internal or external traffic policy.
+* `KUBE-EXT-` implements "short-circuiting" for internally-originated external-destination traffic when using `Local` external traffic policy. It forwards traffic from local sources to the `KUBE-SVC-` chain and traffic from external sources to the `KUBE-SVL-` chain.
+* 
+* `KUBE-SEP-` a Service EndPoint. It simply does DNAT, replacing service IP:port with pod’s endpoint IP:Port.
 
 ## Cluster IP SVC
 ```bash
@@ -129,7 +136,7 @@ $ grep 'dport=80 ' /tmp/conntrack
 tcp      6 118 TIME_WAIT src=172.16.1.152 dst=10.32.0.251 sport=43400 dport=80 src=10.64.2.4 dst=172.16.1.152 sport=80 dport=43400 [ASSURED] mark=0 use=1
 ```
 
-## NodePort IP SVC
+## NodePort SVC with `Cluster` Traffic Policy
 ```bash
 apiVersion: v1
 kind: Service
@@ -351,184 +358,157 @@ conntrack v1.4.4 (conntrack-tools): 4 flow entries have been shown.
 tcp      6 101 TIME_WAIT src=172.16.1.152 dst=10.64.2.4 sport=35739 dport=80 src=10.64.2.4 dst=172.16.1.152 sport=80 dport=35739 [ASSURED] mark=0 use=1
 ```
 
-### NodePort IP SVC with `externalTrafficPolicy: Local`
-
-#### Env
+## NodePort SVC with `Local` Traffic Policy
 ```bash
 $ kubectl get svc http-svc -o yaml
 apiVersion: v1
 kind: Service
 metadata:
-  creationTimestamp: "2022-09-10T18:31:34Z"
   labels:
-    app: http-svc
-    name: http-svc
-  name: http-svc
+    app: nginx
+  name: nginx
   namespace: default
-  resourceVersion: "1461446"
-  uid: 4d8a211f-f8a4-496d-913a-9ac9cf60bf3b
 spec:
-  clusterIP: 10.32.0.227
+  clusterIP: 10.32.0.61
   clusterIPs:
-  - 10.32.0.227
+  - 10.32.0.61
   externalTrafficPolicy: Local
   internalTrafficPolicy: Cluster
   ipFamilies:
   - IPv4
   ipFamilyPolicy: SingleStack
   ports:
-  - name: http-svc
-    nodePort: 30080
-    port: 8080
+  - nodePort: 30783
+    port: 80
     protocol: TCP
-    targetPort: 8080
+    targetPort: 80
   selector:
-    name: httpd-pod
+    app: nginx-pod
   sessionAffinity: None
   type: NodePort
-status:
-  loadBalancer: {}
 
 $ kubectl get pods -o wide
-NAME                     READY   STATUS    RESTARTS   AGE     IP          NODE                       NOMINATED NODE   READINESS GATES
-httpd-65d9c88fb9-lpztt   1/1     Running   0          7d22h   10.44.0.1   ecs-matrix-k8s-cluster-3   <none>           <none>
+NAME                     READY   STATUS    RESTARTS   AGE     IP          NODE                              NOMINATED NODE   READINESS GATES
+nginx-74b5c74d54-569hj   1/1     Running   0          7d19h   10.64.2.4   ecs-matrix-k8s-cluster-worker02   <none>           <none>
 ```
 
-#### IPTABLES
+### IPTABLES
+#### Ingress 
+##### On nodes where pods are NOT running
+1. chain `INPUT` 
+    ```bash
+    $ sudo iptables -L INPUT -vn
+    Chain INPUT (policy ACCEPT 503K packets, 79M bytes)
+    pkts bytes target     prot opt in     out     source               destination
+    988K   59M KUBE-PROXY-FIREWALL  all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate NEW /* kubernetes load balancer firewall */
+    101M   16G KUBE-NODEPORTS  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes health check service ports */
+    988K   59M KUBE-EXTERNAL-SERVICES  all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate NEW /* kubernetes externally-visible service portals */
+    101M   16G KUBE-FIREWALL  all  --  *      *       0.0.0.0/0            0.0.0.0/0
 
-1. chain `PREROUTING` in table `nat` 
+    $ grep '\-A INPUT' /tmp/iptables_local
+    -A INPUT -m conntrack --ctstate NEW -m comment --comment "kubernetes load balancer firewall" -j KUBE-PROXY-FIREWALL
+    -A INPUT -m comment --comment "kubernetes health check service ports" -j KUBE-NODEPORTS
+    -A INPUT -m conntrack --ctstate NEW -m comment --comment "kubernetes externally-visible service portals" -j KUBE-EXTERNAL-SERVICES
+    -A INPUT -j KUBE-FIREWALL
+    ```
 
-```bash
-$ sudo iptables -t nat -L PREROUTING -v -n
-Chain PREROUTING (policy ACCEPT 36 packets, 3606 bytes)
- pkts bytes target     prot opt in     out     source               destination
- 2055  216K KUBE-SERVICES  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service portals */
+2. chain `KUBE-EXTERNAL-SERVICES` 
+    ```bash
+    $ sudo iptables -L KUBE-EXTERNAL-SERVICES -vn
+    Chain KUBE-EXTERNAL-SERVICES (2 references)
+    pkts bytes target     prot opt in     out     source               destination
+        0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/nginx has no local endpoints */ ADDRTYPE match dst-type LOCAL tcp dpt:30783
 
-$ grep '\-A PREROUTING' iptables-save
--A PREROUTING -m comment --comment "kubernetes service portals" -j KUBE-SERVICES
-```
+    $ grep '\-A KUBE-EXTERNAL-SERVICES' /tmp/iptables_local
+    -A KUBE-EXTERNAL-SERVICES -p tcp -m comment --comment "default/nginx has no local endpoints" -m addrtype --dst-type LOCAL -m tcp --dport 30783 -j DROP
+    ```
 
-2. chain `KUBE-SERVICES` in table `nat` 
+##### On nodes where pods are running
+1. chain `INPUT`
+    ```bash
+    $ sudo iptables -L INPUT -vn
+    Chain INPUT (policy ACCEPT 3444 packets, 1570K bytes)
+    pkts bytes target     prot opt in     out     source               destination
+      268 21119 KUBE-PROXY-FIREWALL  all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate NEW /* kubernetes load balancer firewall */
+    951K  652M KUBE-NODEPORTS  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes health check service ports */
+      268 21119 KUBE-EXTERNAL-SERVICES  all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate NEW /* kubernetes externally-visible service portals */
+    963K  681M KUBE-FIREWALL  all  --  *      *       0.0.0.0/0            0.0.0.0/0
 
-```bash
-$ sudo iptables -t nat -L KUBE-SERVICES -v -n
-Chain KUBE-SERVICES (2 references)
- pkts bytes target     prot opt in     out     source               destination
-    0     0 KUBE-SVC-NPX46M4PTMTKRN6Y  tcp  --  *      *       0.0.0.0/0            10.32.0.1            /* default/kubernetes:https cluster IP */ tcp dpt:443
-    0     0 KUBE-SVC-VTKRMSW4V2DPQX6X  tcp  --  *      *       0.0.0.0/0            10.32.0.227          /* default/http-svc:http-svc cluster IP */ tcp dpt:8080
-    0     0 KUBE-SVC-TCOU7JCQXEZGVUNU  udp  --  *      *       0.0.0.0/0            10.32.0.10           /* kube-system/kube-dns:dns cluster IP */ udp dpt:53
-    0     0 KUBE-SVC-ERIFXISQEP7F7OF4  tcp  --  *      *       0.0.0.0/0            10.32.0.10           /* kube-system/kube-dns:dns-tcp cluster IP */ tcp dpt:53
-    0     0 KUBE-SVC-JD5MR3NA4I4DYORP  tcp  --  *      *       0.0.0.0/0            10.32.0.10           /* kube-system/kube-dns:metrics cluster IP */ tcp dpt:9153
- 5239  315K KUBE-NODEPORTS  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service nodeports; NOTE: this must be the last rule in this chain */ ADDRTYPE match dst-type LOCAL
+    $ grep '\-A INPUT' /tmp/iptables_local
+    -A INPUT -m conntrack --ctstate NEW -m comment --comment "kubernetes load balancer firewall" -j KUBE-PROXY-FIREWALL
+    -A INPUT -m comment --comment "kubernetes health check service ports" -j KUBE-NODEPORTS
+    -A INPUT -m conntrack --ctstate NEW -m comment --comment "kubernetes externally-visible service portals" -j KUBE-EXTERNAL-SERVICES
+    -A INPUT -j KUBE-FIREWALL
+    ```
 
-$ grep '\-A KUBE-SERVICES' iptables-save
--A KUBE-SERVICES -d 10.32.0.10/32 -p tcp -m comment --comment "kube-system/kube-dns:metrics cluster IP" -m tcp --dport 9153 -j KUBE-SVC-JD5MR3NA4I4DYORP
--A KUBE-SERVICES -d 10.32.0.1/32 -p tcp -m comment --comment "default/kubernetes:https cluster IP" -m tcp --dport 443 -j KUBE-SVC-NPX46M4PTMTKRN6Y
--A KUBE-SERVICES -d 10.32.0.227/32 -p tcp -m comment --comment "default/http-svc:http-svc cluster IP" -m tcp --dport 8080 -j KUBE-SVC-VTKRMSW4V2DPQX6X
--A KUBE-SERVICES -d 10.32.0.10/32 -p udp -m comment --comment "kube-system/kube-dns:dns cluster IP" -m udp --dport 53 -j KUBE-SVC-TCOU7JCQXEZGVUNU
--A KUBE-SERVICES -d 10.32.0.10/32 -p tcp -m comment --comment "kube-system/kube-dns:dns-tcp cluster IP" -m tcp --dport 53 -j KUBE-SVC-ERIFXISQEP7F7OF4
--A KUBE-SERVICES -m comment --comment "kubernetes service nodeports; NOTE: this must be the last rule in this chain" -m addrtype --dst-type LOCAL -j KUBE-NODEPORTS
-```
+2. chain `KUBE-NODEPORTS` in table `nat`
+    ```bash
+    $ sudo iptables -t nat -L KUBE-NODEPORTS -vn
+    Chain KUBE-NODEPORTS (1 references)
+    pkts bytes target     prot opt in     out     source               destination
+        0     0 KUBE-EXT-2CMXP7HKUVJN7L6M  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/nginx */ tcp dpt:30783
 
-3. chain `KUBE-NODEPORTS` in table `nat` 
+    $ grep '\-A KUBE-NODEPORTS' /tmp/iptables_local
+    -A KUBE-NODEPORTS -p tcp -m comment --comment "default/nginx" -m tcp --dport 30783 -j KUBE-EXT-2CMXP7HKUVJN7L6M
+    ```
 
-```bash
-$ sudo iptables -t nat -L KUBE-NODEPORTS -v -n
-Chain KUBE-NODEPORTS (1 references)
- pkts bytes target     prot opt in     out     source               destination
-    0     0 KUBE-EXT-VTKRMSW4V2DPQX6X  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/http-svc:http-svc */ tcp dpt:30080
+3. chain `KUBE-EXT-2CMXP7HKUVJN7L6M` in table `nat` 
+    ```bash
+    $ sudo iptables -t nat -L KUBE-EXT-2CMXP7HKUVJN7L6M -vn
+    Chain KUBE-EXT-2CMXP7HKUVJN7L6M (1 references)
+    pkts bytes target     prot opt in     out     source               destination
+        0     0 KUBE-MARK-MASQ  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* masquerade LOCAL traffic for default/nginx external destinations */ ADDRTYPE match src-type LOCAL
+        0     0 KUBE-SVC-2CMXP7HKUVJN7L6M  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* route LOCAL traffic for default/nginx external destinations */ ADDRTYPE match src-type LOCAL
+        1    60 KUBE-SVL-2CMXP7HKUVJN7L6M  all  --  *      *       0.0.0.0/0            0.0.0.0/0
 
-$ grep '\-A KUBE-NODEPORTS' iptables-save
--A KUBE-NODEPORTS -p tcp -m comment --comment "default/http-svc:http-svc" -m tcp --dport 30080 -j KUBE-EXT-VTKRMSW4V2DPQX6X
-```
+    $ grep '\-A KUBE-EXT-2CMXP7HKUVJN7L6M' /tmp/iptables_local
+    -A KUBE-EXT-2CMXP7HKUVJN7L6M -m comment --comment "masquerade LOCAL traffic for default/nginx external destinations" -m addrtype --src-type LOCAL -j KUBE-MARK-MASQ
+    -A KUBE-EXT-2CMXP7HKUVJN7L6M -m comment --comment "route LOCAL traffic for default/nginx external destinations" -m addrtype --src-type LOCAL -j KUBE-SVC-2CMXP7HKUVJN7L6M
+    -A KUBE-EXT-2CMXP7HKUVJN7L6M -j KUBE-SVL-2CMXP7HKUVJN7L6M
+    ```
 
-4. chain `KUBE-EXT-VTKRMSW4V2DPQX6X` in table `nat` 
+4. chain `KUBE-SVL-2CMXP7HKUVJN7L6M` in table `nat` if src is from other hosts
+    ```bash
+    $ sudo iptables -t nat -L KUBE-SVL-2CMXP7HKUVJN7L6M -vn
+    Chain KUBE-SVL-2CMXP7HKUVJN7L6M (1 references)
+    pkts bytes target     prot opt in     out     source               destination
+        1    60 KUBE-SEP-YVT6EXXEKT4LDXBC  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/nginx -> 10.64.2.4:80 */
 
-```bash
-$ sudo iptables -t nat -L KUBE-EXT-VTKRMSW4V2DPQX6X -v -n
-Chain KUBE-EXT-VTKRMSW4V2DPQX6X (1 references)
- pkts bytes target     prot opt in     out     source               destination
-    0     0 KUBE-SVC-VTKRMSW4V2DPQX6X  all  --  *      *       10.64.1.0/24         0.0.0.0/0            /* pod traffic for default/http-svc:http-svc external destinations */
-    0     0 KUBE-MARK-MASQ  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* masquerade LOCAL traffic for default/http-svc:http-svc external destinations */ ADDRTYPE match src-type LOCAL
-    0     0 KUBE-SVC-VTKRMSW4V2DPQX6X  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* route LOCAL traffic for default/http-svc:http-svc external destinations */ ADDRTYPE match src-type LOCAL
-    0     0 KUBE-SVL-VTKRMSW4V2DPQX6X  all  --  *      *       0.0.0.0/0            0.0.0.0/0
+    $ grep '\-A KUBE-SVL-2CMXP7HKUVJN7L6M' /tmp/iptables_local
+    -A KUBE-SVL-2CMXP7HKUVJN7L6M -m comment --comment "default/nginx -> 10.64.2.4:80" -j KUBE-SEP-YVT6EXXEKT4LDXBC
+    ```
+    
+    chain `KUBE-SVC-2CMXP7HKUVJN7L6M` in table `nat` if src is from other hosts
+    ```bash
+    $ sudo iptables -t nat -L KUBE-SVC-2CMXP7HKUVJN7L6M -vn
+    Chain KUBE-SVC-2CMXP7HKUVJN7L6M (2 references)
+    pkts bytes target     prot opt in     out     source               destination
+        0     0 KUBE-SEP-YVT6EXXEKT4LDXBC  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/nginx -> 10.64.2.4:80 */
 
-$ grep '\-A KUBE-EXT-VTKRMSW4V2DPQX6X' iptables-save
--A KUBE-EXT-VTKRMSW4V2DPQX6X -s 10.64.1.0/24 -m comment --comment "pod traffic for default/http-svc:http-svc external destinations" -j KUBE-SVC-VTKRMSW4V2DPQX6X
--A KUBE-EXT-VTKRMSW4V2DPQX6X -m comment --comment "masquerade LOCAL traffic for default/http-svc:http-svc external destinations" -m addrtype --src-type LOCAL -j KUBE-MARK-MASQ
--A KUBE-EXT-VTKRMSW4V2DPQX6X -m comment --comment "route LOCAL traffic for default/http-svc:http-svc external destinations" -m addrtype --src-type LOCAL -j KUBE-SVC-VTKRMSW4V2DPQX6X
--A KUBE-EXT-VTKRMSW4V2DPQX6X -j KUBE-SVL-VTKRMSW4V2DPQX6X
-```
+    $ grep '\-A KUBE-SVC-2CMXP7HKUVJN7L6M' /tmp/iptables_local
+    -A KUBE-SVC-2CMXP7HKUVJN7L6M -m comment --comment "default/nginx -> 10.64.2.4:80" -j KUBE-SEP-YVT6EXXEKT4LDXBC
+    ```
 
-5. chain `KUBE-MARK-MASQ` in table `nat` 
+5. chain `KUBE-SEP-YVT6EXXEKT4LDXBC` in table `nat` 
+    ```bash
+    $ grep '\-A KUBE-SEP-YVT6EXXEKT4LDXBC' /tmp/iptables_local
+    -A KUBE-SEP-YVT6EXXEKT4LDXBC -s 10.64.2.4/32 -m comment --comment "default/nginx" -j KUBE-MARK-MASQ
+    -A KUBE-SEP-YVT6EXXEKT4LDXBC -p tcp -m comment --comment "default/nginx" -m tcp -j DNAT --to-destination 10.64.2.4:80
 
-```bash
-$ sudo iptables -t nat -L KUBE-MARK-MASQ -v -n
-Chain KUBE-MARK-MASQ (14 references)
- pkts bytes target     prot opt in     out     source               destination
-    0     0 MARK       all  --  *      *       0.0.0.0/0            0.0.0.0/0            MARK or 0x4000
+    $ sudo iptables -t nat -L KUBE-SEP-YVT6EXXEKT4LDXBC -vn
+    Chain KUBE-SEP-YVT6EXXEKT4LDXBC (2 references)
+    pkts bytes target     prot opt in     out     source               destination
+        0     0 KUBE-MARK-MASQ  all  --  *      *       10.64.2.4            0.0.0.0/0            /* default/nginx */
+        1    60 DNAT       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/nginx */ tcp to:10.64.2.4:80
+    ```
 
-$ grep '\-A KUBE-MARK-MASQ' iptables-save
--A KUBE-MARK-MASQ -j MARK --set-xmark 0x4000/0x4000
-```
+#### Egress 
 
-6. chain `KUBE-SVC-VTKRMSW4V2DPQX6X` in table `nat` 
 
-```bash
-$ sudo iptables -t nat -L KUBE-SVC-VTKRMSW4V2DPQX6X -v -n
-Chain KUBE-SVC-VTKRMSW4V2DPQX6X (3 references)
- pkts bytes target     prot opt in     out     source               destination
-    0     0 KUBE-MARK-MASQ  tcp  --  *      *      !10.64.1.0/24         10.32.0.227          /* default/http-svc:http-svc cluster IP */ tcp dpt:8080
-    0     0 KUBE-SEP-INRYTRHBMCVQPY6Q  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/http-svc:http-svc -> 10.44.0.1:8080 */
-
-$ grep '\-A KUBE-SVC-VTKRMSW4V2DPQX6X' iptables-save
--A KUBE-SVC-VTKRMSW4V2DPQX6X ! -s 10.64.1.0/24 -d 10.32.0.227/32 -p tcp -m comment --comment "default/http-svc:http-svc cluster IP" -m tcp --dport 8080 -j KUBE-MARK-MASQ
--A KUBE-SVC-VTKRMSW4V2DPQX6X -m comment --comment "default/http-svc:http-svc -> 10.44.0.1:8080" -j KUBE-SEP-INRYTRHBMCVQPY6Q
-```
-
-7. chain `KUBE-SVL-VTKRMSW4V2DPQX6X` in table `nat`
-on nodes which service pods are not running
-```bash
-$ sudo iptables -t nat -L KUBE-SVL-VTKRMSW4V2DPQX6X -v -n
-Chain KUBE-SVL-VTKRMSW4V2DPQX6X (1 references)
- pkts bytes target     prot opt in     out     source               destination
-    0     0 KUBE-MARK-DROP  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/http-svc:http-svc has no local endpoints */
-
-$ grep '\-A KUBE-SVL-VTKRMSW4V2DPQX6X' iptables-save
--A KUBE-SVL-VTKRMSW4V2DPQX6X -m comment --comment "default/http-svc:http-svc has no local endpoints" -j KUBE-MARK-DROP
-```
-
-on nodes which service pods are running
-```bash
-$ grep '\-A KUBE-SVL-VTKRMSW4V2DPQX6X' iptables-save
--A KUBE-SVL-VTKRMSW4V2DPQX6X -m comment --comment "default/http-svc:http-svc -> 10.44.0.1:8080" -j KUBE-SEP-INRYTRHBMCVQPY6Q
-
-$ sudo iptables -t nat -L KUBE-SVL-VTKRMSW4V2DPQX6X -v -n
-Chain KUBE-SVL-VTKRMSW4V2DPQX6X (1 references)
- pkts bytes target     prot opt in     out     source               destination
-   24  1440 KUBE-SEP-INRYTRHBMCVQPY6Q  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/http-svc:http-svc -> 10.44.0.1:8080 */
-```
-
-8. chain `KUBE-SEP-INRYTRHBMCVQPY6Q` in table `nat`
-
-```bash
-$ grep '\-A KUBE-SEP-INRYTRHBMCVQPY6Q' iptables-save
--A KUBE-SEP-INRYTRHBMCVQPY6Q -s 10.44.0.1/32 -m comment --comment "default/http-svc:http-svc" -j KUBE-MARK-MASQ
--A KUBE-SEP-INRYTRHBMCVQPY6Q -p tcp -m comment --comment "default/http-svc:http-svc" -m tcp -j DNAT --to-destination 10.44.0.1:8080
-
-$ sudo iptables -t nat -L KUBE-SEP-INRYTRHBMCVQPY6Q -v -n
-Chain KUBE-SEP-INRYTRHBMCVQPY6Q (2 references)
- pkts bytes target     prot opt in     out     source               destination
-    0     0 KUBE-MARK-MASQ  all  --  *      *       10.44.0.1            0.0.0.0/0            /* default/http-svc:http-svc */
-   24  1440 DNAT       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/http-svc:http-svc */ tcp to:10.44.0.1:8080
-```
-
-NOTE: 
-Troubleshoot IPTABLES via `LOG` module
+## Troubleshoot IPTABLES
+via `LOG` module
 ```bash
 sudo iptables -t nat -D KUBE-SVC-YVE4DVDYZJRPV46I -p tcp -j LOG --log-prefix "INPUT packets"
 ```
-
-
 
 {% include links.html %}
