@@ -17,11 +17,12 @@ folder: Container
 * `KUBE-SVC-`	a load balancer, which the main iptables chain for that service, used for dispatching to endpoints when using `Cluster` traffic policy.
 * `KUBE-SVL-`	a load balancer, which handles dispatching to local endpoints when using `Local` traffic policy. This chain only exists if the service has `Local` internal or external traffic policy.
 * `KUBE-EXT-` implements "short-circuiting" for internally-originated external-destination traffic when using `Local` external traffic policy. It forwards traffic from local sources to the `KUBE-SVC-` chain and traffic from external sources to the `KUBE-SVL-` chain.
-* 
 * `KUBE-SEP-` a Service EndPoint. It simply does DNAT, replacing service IP:port with pod’s endpoint IP:Port.
 
 ## Cluster IP SVC
+### Env
 ```bash
+$ kubectl get svc nginx -o yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -45,11 +46,15 @@ spec:
     app: nginx-pod
   sessionAffinity: None
   type: ClusterIP
+
+$ kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE     IP          NODE                              NOMINATED NODE   READINESS GATES
+nginx-74b5c74d54-569hj   1/1     Running   0          7d19h   10.64.2.4   ecs-matrix-k8s-cluster-worker02   <none>           <none>
 ```
 
 ### IPTABLES
-For Egress
-![kubernetes-svc-clusterip](images/container/kubernetes-svc-clusterip.jpg)
+#### Egress
+`PREROUTING` ==> `KUBE-SERVICE` ==> `KUBE-SVC-2CMXP7HKUVJN7L6M` ==> `KUBE-SEP-YVT6EXXEKT4LDXBC`
 
 1. chain `PREROUTING` in table `nat`  
     ```bash
@@ -137,6 +142,7 @@ tcp      6 118 TIME_WAIT src=172.16.1.152 dst=10.32.0.251 sport=43400 dport=80 s
 ```
 
 ## NodePort SVC with `Cluster` Traffic Policy
+### Env
 ```bash
 apiVersion: v1
 kind: Service
@@ -167,6 +173,8 @@ spec:
 
 ### IPTABLES
 #### Ingress 
+`INPUT` ==> `KUBE-NODEPORTS` ==> `KUBE-EXT-2CMXP7HKUVJN7L6M` ==> `KUBE-MARK-MASQ` ==> `KUBE-SVC-2CMXP7HKUVJN7L6M` ==> `KUBE-SEP-YVT6EXXEKT4LDXBC`
+
 1. chain `INPUT` in table `filter` 
     ```bash
     $ sudo iptables -t filter -L INPUT -vn
@@ -246,6 +254,8 @@ spec:
     ```
 
 #### Egress
+`PREROUTING` ==> `KUBE-SERVICES` ==> `KUBE-NODEPORTS` ==> `KUBE-EXT-2CMXP7HKUVJN7L6M` ==> `KUBE-MARK-MASQ` ==> `KUBE-SVC-2CMXP7HKUVJN7L6M` ==> `KUBE-SEP-YVT6EXXEKT4LDXBC`
+
 1. chain `PREROUTING` in table `nat` 
     ```bash
     $ sudo iptables -t nat -L PREROUTING -vn
@@ -359,8 +369,9 @@ tcp      6 101 TIME_WAIT src=172.16.1.152 dst=10.64.2.4 sport=35739 dport=80 src
 ```
 
 ## NodePort SVC with `Local` Traffic Policy
+### Env
 ```bash
-$ kubectl get svc http-svc -o yaml
+$ kubectl get svc nginx -o yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -395,6 +406,8 @@ nginx-74b5c74d54-569hj   1/1     Running   0          7d19h   10.64.2.4   ecs-ma
 ### IPTABLES
 #### Ingress 
 ##### On nodes where pods are NOT running
+`INPUT` ==> `KUBE-EXTERNAL-SERVICES` ==> `DROP`
+
 1. chain `INPUT` 
     ```bash
     $ sudo iptables -L INPUT -vn
@@ -424,6 +437,8 @@ nginx-74b5c74d54-569hj   1/1     Running   0          7d19h   10.64.2.4   ecs-ma
     ```
 
 ##### On nodes where pods are running
+`INPUT` ==> `KUBE-NODEPORTS` ==> `KUBE-EXT-2CMXP7HKUVJN7L6M` ==> `KUBE-SVL-2CMXP7HKUVJN7L6M` / `KUBE-SVC-2CMXP7HKUVJN7L6M` ==> `KUBE-SEP-YVT6EXXEKT4LDXBC`
+
 1. chain `INPUT`
     ```bash
     $ sudo iptables -L INPUT -vn
@@ -478,7 +493,7 @@ nginx-74b5c74d54-569hj   1/1     Running   0          7d19h   10.64.2.4   ecs-ma
     -A KUBE-SVL-2CMXP7HKUVJN7L6M -m comment --comment "default/nginx -> 10.64.2.4:80" -j KUBE-SEP-YVT6EXXEKT4LDXBC
     ```
     
-    chain `KUBE-SVC-2CMXP7HKUVJN7L6M` in table `nat` if src is from other hosts
+    chain `KUBE-SVC-2CMXP7HKUVJN7L6M` in table `nat` if src is from local
     ```bash
     $ sudo iptables -t nat -L KUBE-SVC-2CMXP7HKUVJN7L6M -vn
     Chain KUBE-SVC-2CMXP7HKUVJN7L6M (2 references)
