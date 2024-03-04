@@ -62,76 +62,76 @@ nginx-74b5c74d54-569hj   1/1     Running   0          7d19h   10.64.2.4   ecs-ma
 `PREROUTING` ==> `KUBE-SERVICE` ==> `KUBE-SVC-2CMXP7HKUVJN7L6M` ==> `KUBE-SEP-YVT6EXXEKT4LDXBC`
 
 #### Egress
+`OUTPUT` ==> `KUBE-SERVICE` ==> `KUBE-SVC-2CMXP7HKUVJN7L6M` ==> `KUBE-SEP-YVT6EXXEKT4LDXBC`  
 From a node where pod is not running there
-`OUTPUT` ==> `KUBE-SERVICE` ==> `KUBE-SVC-2CMXP7HKUVJN7L6M` ==> `KUBE-SEP-YVT6EXXEKT4LDXBC`
 
 #### Rules
 * chain `PREROUTING` in table `nat`
-```bash
-$ sudo iptables -t nat -L PREROUTING -vn
-Chain PREROUTING (policy ACCEPT 16 packets, 3200 bytes)
-  pkts bytes target     prot opt in     out     source               destination
-37207 7396K KUBE-SERVICES  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service portals */
+  ```bash
+  $ sudo iptables -t nat -L PREROUTING -vn
+  Chain PREROUTING (policy ACCEPT 16 packets, 3200 bytes)
+    pkts bytes target     prot opt in     out     source               destination
+  37207 7396K KUBE-SERVICES  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service portals */
 
-$ sed -n '/*nat/{:a;N;/\*filter/!{ba};p}' /tmp/iptables | grep '\-A PREROUTING'
--A PREROUTING -m comment --comment "kubernetes service portals" -j KUBE-SERVICES
-```
+  $ sed -n '/*nat/{:a;N;/\*filter/!{ba};p}' /tmp/iptables | grep '\-A PREROUTING'
+  -A PREROUTING -m comment --comment "kubernetes service portals" -j KUBE-SERVICES
+  ```
 
 * chain `OUTPUT` in table `nat`  
-```bash
-$ sudo iptables -t nat -L OUTPUT -vn
-Chain OUTPUT (policy ACCEPT 5826 packets, 350K bytes)
- pkts bytes target     prot opt in     out     source               destination
-2054K  123M KUBE-SERVICES  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service portals */
+  ```bash
+  $ sudo iptables -t nat -L OUTPUT -vn
+  Chain OUTPUT (policy ACCEPT 5826 packets, 350K bytes)
+  pkts bytes target     prot opt in     out     source               destination
+  2054K  123M KUBE-SERVICES  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service portals */
 
-$ sed -n '/*nat/{:a;N;/\*filter/!{ba};p}' /tmp/iptables | grep '\-A OUTPUT'
--A OUTPUT -m comment --comment "kubernetes service portals" -j KUBE-SERVICES
-```
+  $ sed -n '/*nat/{:a;N;/\*filter/!{ba};p}' /tmp/iptables | grep '\-A OUTPUT'
+  -A OUTPUT -m comment --comment "kubernetes service portals" -j KUBE-SERVICES
+  ```
 
 * chain `KUBE-SERVICES` in table `nat` 
-```bash
-$ sudo iptables -t nat -L KUBE-SERVICES -vn
-Chain KUBE-SERVICES (2 references)
-  pkts bytes target     prot opt in     out     source               destination
-    2   120 KUBE-SVC-2CMXP7HKUVJN7L6M  tcp  --  *      *       0.0.0.0/0            10.32.0.251          /* default/nginx cluster IP */ tcp dpt:80
-    0     0 KUBE-SVC-NPX46M4PTMTKRN6Y  tcp  --  *      *       0.0.0.0/0            10.32.0.1            /* default/kubernetes:https cluster IP */ tcp dpt:443
-    0     0 KUBE-SVC-TCOU7JCQXEZGVUNU  udp  --  *      *       0.0.0.0/0            10.32.0.10           /* kube-system/kube-dns:dns cluster IP */ udp dpt:53
-    0     0 KUBE-SVC-ERIFXISQEP7F7OF4  tcp  --  *      *       0.0.0.0/0            10.32.0.10           /* kube-system/kube-dns:dns-tcp cluster IP */ tcp dpt:53
-    0     0 KUBE-SVC-JD5MR3NA4I4DYORP  tcp  --  *      *       0.0.0.0/0            10.32.0.10           /* kube-system/kube-dns:metrics cluster IP */ tcp dpt:9153
-  3858  231K KUBE-NODEPORTS  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service nodeports; NOTE: this must be the last rule in this chain */ ADDRTYPE match dst-type LOCAL
+  ```bash
+  $ sudo iptables -t nat -L KUBE-SERVICES -vn
+  Chain KUBE-SERVICES (2 references)
+    pkts bytes target     prot opt in     out     source               destination
+      2   120 KUBE-SVC-2CMXP7HKUVJN7L6M  tcp  --  *      *       0.0.0.0/0            10.32.0.251          /* default/nginx cluster IP */ tcp dpt:80
+      0     0 KUBE-SVC-NPX46M4PTMTKRN6Y  tcp  --  *      *       0.0.0.0/0            10.32.0.1            /* default/kubernetes:https cluster IP */ tcp dpt:443
+      0     0 KUBE-SVC-TCOU7JCQXEZGVUNU  udp  --  *      *       0.0.0.0/0            10.32.0.10           /* kube-system/kube-dns:dns cluster IP */ udp dpt:53
+      0     0 KUBE-SVC-ERIFXISQEP7F7OF4  tcp  --  *      *       0.0.0.0/0            10.32.0.10           /* kube-system/kube-dns:dns-tcp cluster IP */ tcp dpt:53
+      0     0 KUBE-SVC-JD5MR3NA4I4DYORP  tcp  --  *      *       0.0.0.0/0            10.32.0.10           /* kube-system/kube-dns:metrics cluster IP */ tcp dpt:9153
+    3858  231K KUBE-NODEPORTS  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* kubernetes service nodeports; NOTE: this must be the last rule in this chain */ ADDRTYPE match dst-type LOCAL
 
-$ grep '\-A KUBE-SERVICES' /tmp/iptables
--A KUBE-SERVICES -d 10.32.0.251/32 -p tcp -m comment --comment "default/nginx cluster IP" -m tcp --dport 80 -j KUBE-SVC-2CMXP7HKUVJN7L6M
--A KUBE-SERVICES -d 10.32.0.1/32 -p tcp -m comment --comment "default/kubernetes:https cluster IP" -m tcp --dport 443 -j KUBE-SVC-NPX46M4PTMTKRN6Y
--A KUBE-SERVICES -d 10.32.0.10/32 -p udp -m comment --comment "kube-system/kube-dns:dns cluster IP" -m udp --dport 53 -j KUBE-SVC-TCOU7JCQXEZGVUNU
--A KUBE-SERVICES -d 10.32.0.10/32 -p tcp -m comment --comment "kube-system/kube-dns:dns-tcp cluster IP" -m tcp --dport 53 -j KUBE-SVC-ERIFXISQEP7F7OF4
--A KUBE-SERVICES -d 10.32.0.10/32 -p tcp -m comment --comment "kube-system/kube-dns:metrics cluster IP" -m tcp --dport 9153 -j KUBE-SVC-JD5MR3NA4I4DYORP
--A KUBE-SERVICES -m comment --comment "kubernetes service nodeports; NOTE: this must be the last rule in this chain" -m addrtype --dst-type LOCAL -j KUBE-NODEPORTS
-```
+  $ grep '\-A KUBE-SERVICES' /tmp/iptables
+  -A KUBE-SERVICES -d 10.32.0.251/32 -p tcp -m comment --comment "default/nginx cluster IP" -m tcp --dport 80 -j KUBE-SVC-2CMXP7HKUVJN7L6M
+  -A KUBE-SERVICES -d 10.32.0.1/32 -p tcp -m comment --comment "default/kubernetes:https cluster IP" -m tcp --dport 443 -j KUBE-SVC-NPX46M4PTMTKRN6Y
+  -A KUBE-SERVICES -d 10.32.0.10/32 -p udp -m comment --comment "kube-system/kube-dns:dns cluster IP" -m udp --dport 53 -j KUBE-SVC-TCOU7JCQXEZGVUNU
+  -A KUBE-SERVICES -d 10.32.0.10/32 -p tcp -m comment --comment "kube-system/kube-dns:dns-tcp cluster IP" -m tcp --dport 53 -j KUBE-SVC-ERIFXISQEP7F7OF4
+  -A KUBE-SERVICES -d 10.32.0.10/32 -p tcp -m comment --comment "kube-system/kube-dns:metrics cluster IP" -m tcp --dport 9153 -j KUBE-SVC-JD5MR3NA4I4DYORP
+  -A KUBE-SERVICES -m comment --comment "kubernetes service nodeports; NOTE: this must be the last rule in this chain" -m addrtype --dst-type LOCAL -j KUBE-NODEPORTS
+  ```
 
 * chain `KUBE-SVC-2CMXP7HKUVJN7L6M` in table `nat` 
-```bash
-$ sudo iptables -t nat -L KUBE-SVC-2CMXP7HKUVJN7L6M -vn
-Chain KUBE-SVC-2CMXP7HKUVJN7L6M (1 references)
-  pkts bytes target     prot opt in     out     source               destination
-    2   120 KUBE-SEP-YVT6EXXEKT4LDXBC  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/nginx -> 10.64.2.4:80 */
+  ```bash
+  $ sudo iptables -t nat -L KUBE-SVC-2CMXP7HKUVJN7L6M -vn
+  Chain KUBE-SVC-2CMXP7HKUVJN7L6M (1 references)
+    pkts bytes target     prot opt in     out     source               destination
+      2   120 KUBE-SEP-YVT6EXXEKT4LDXBC  all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/nginx -> 10.64.2.4:80 */
 
-$ grep '\-A KUBE-SVC-2CMXP7HKUVJN7L6M' /tmp/iptables
--A KUBE-SVC-2CMXP7HKUVJN7L6M -m comment --comment "default/nginx -> 10.64.2.4:80" -j KUBE-SEP-YVT6EXXEKT4LDXBC
-```
+  $ grep '\-A KUBE-SVC-2CMXP7HKUVJN7L6M' /tmp/iptables
+  -A KUBE-SVC-2CMXP7HKUVJN7L6M -m comment --comment "default/nginx -> 10.64.2.4:80" -j KUBE-SEP-YVT6EXXEKT4LDXBC
+  ```
 
 * chain `KUBE-SEP-YVT6EXXEKT4LDXBC` in table `nat` 
-```bash
-$ sudo iptables -t nat -L KUBE-SEP-YVT6EXXEKT4LDXBC -vn
-Chain KUBE-SEP-YVT6EXXEKT4LDXBC (1 references)
-  pkts bytes target     prot opt in     out     source               destination
-    0     0 KUBE-MARK-MASQ  all  --  *      *       10.64.2.4            0.0.0.0/0            /* default/nginx */
-    2   120 DNAT       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/nginx */ tcp to:10.64.2.4:80
+  ```bash
+  $ sudo iptables -t nat -L KUBE-SEP-YVT6EXXEKT4LDXBC -vn
+  Chain KUBE-SEP-YVT6EXXEKT4LDXBC (1 references)
+    pkts bytes target     prot opt in     out     source               destination
+      0     0 KUBE-MARK-MASQ  all  --  *      *       10.64.2.4            0.0.0.0/0            /* default/nginx */
+      2   120 DNAT       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            /* default/nginx */ tcp to:10.64.2.4:80
 
-$ grep '\-A KUBE-SEP-YVT6EXXEKT4LDXBC' /tmp/iptables
--A KUBE-SEP-YVT6EXXEKT4LDXBC -s 10.64.2.4/32 -m comment --comment "default/nginx" -j KUBE-MARK-MASQ
--A KUBE-SEP-YVT6EXXEKT4LDXBC -p tcp -m comment --comment "default/nginx" -m tcp -j DNAT --to-destination 10.64.2.4:80
-```
+  $ grep '\-A KUBE-SEP-YVT6EXXEKT4LDXBC' /tmp/iptables
+  -A KUBE-SEP-YVT6EXXEKT4LDXBC -s 10.64.2.4/32 -m comment --comment "default/nginx" -j KUBE-MARK-MASQ
+  -A KUBE-SEP-YVT6EXXEKT4LDXBC -p tcp -m comment --comment "default/nginx" -m tcp -j DNAT --to-destination 10.64.2.4:80
+  ```
 
 ### TCPDUMP
 From `tcpdump`, src ip is `172.16.1.152` and dst ip is `10.64.2.4`
