@@ -2,7 +2,7 @@
 title: Mac Reinstallation Steps
 tags: [misc]
 keywords: mac, reinstallation
-last_updated: Dec 12, 2023
+last_updated: May 12, 2024
 summary: "Steps to reinstall a workbox for myself"
 sidebar: mydoc_sidebar
 permalink: misc_mac_reinstallation_steps.html
@@ -84,7 +84,7 @@ $ brew list gawk | grep 'bin/awk'
 
 ```bash
 sed_path=$(brew list gnu-sed | grep 'bin/sed')
-awk_path=$(brew list gawk | grep '/bin/awk')
+awk_path=$(brew list gawk | grep 'bin/awk')
 echo "export PATH=\"${awk_path%/awk}:${sed_path%/sed}:$PATH\"" >> ~/.zshrc
 ```
 
@@ -151,7 +151,7 @@ com.googlecode.iterm2
 ```
 
 - Update RIME config  
-add folloing block to ~/Library/Rime/squirrel.custom.yaml
+add following block to `~/Library/Rime/squirrel.custom.yaml`
 
 ```bash
 patch:  
