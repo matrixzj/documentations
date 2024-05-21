@@ -44,6 +44,12 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 brew install tmux
 ```
 
+### Install jq
+```bash
+brew install jq
+```
+Note: It is needed for `tmux-powerline`
+
 ### Env Config
 Git clone from Github to `~/Documents`
 
