@@ -369,12 +369,13 @@ nginx-74b5c74d54-569hj   1/1     Running   0          7d19h   10.64.2.4   ecs-ma
 
 ### IPTABLES
 #### Ingress 
-`INPUT` ==> `KUBE-EXTERNAL-SERVICES` ==> `DROP`
+`INPUT` ==> `KUBE-EXTERNAL-SERVICES` ==> `DROP`  
 To nodes where pods are NOT running
 
-`INPUT` ==> `KUBE-NODEPORTS` ==> `KUBE-EXT-2CMXP7HKUVJN7L6M` ==> `KUBE-SVL-2CMXP7HKUVJN7L6M` / `KUBE-SVC-2CMXP7HKUVJN7L6M` ==> `KUBE-SEP-YVT6EXXEKT4LDXBC`
+`INPUT` ==> `KUBE-NODEPORTS` ==> `KUBE-EXT-2CMXP7HKUVJN7L6M` ==> `KUBE-SVL-2CMXP7HKUVJN7L6M` / `KUBE-SVC-2CMXP7HKUVJN7L6M` ==> `KUBE-SEP-YVT6EXXEKT4LDXBC`  
 To nodes where pods are running
 
+#### Rules
 * chain `INPUT` in table `filter`
   ```bash
   $ sudo iptables -t filter -L INPUT -vn
@@ -463,9 +464,6 @@ To nodes where pods are running
   -A KUBE-SEP-YVT6EXXEKT4LDXBC -s 10.64.2.4/32 -m comment --comment "default/nginx" -j KUBE-MARK-MASQ
   -A KUBE-SEP-YVT6EXXEKT4LDXBC -p tcp -m comment --comment "default/nginx" -m tcp -j DNAT --to-destination 10.64.2.4:80
   ```
-
-#### Egress 
-
 
 ## Troubleshoot IPTABLES
 via `LOG` module
