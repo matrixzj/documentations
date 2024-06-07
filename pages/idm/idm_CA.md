@@ -2,7 +2,7 @@
 title: CA(Certificate Authority)
 tags: [idm]
 keywords: certs, tls, ssl
-last_updated: Jun 6, 2024
+last_updated: Jun 7, 2024
 summary: "Self-signed CA Setup"
 sidebar: mydoc_sidebar
 permalink: idm_ca.html
@@ -12,11 +12,11 @@ folder: idm
 CA(Certificate Authority)
 ======
 
-## CA
-### Certs Path Config  
-Open `/etc/pki/tls/openssl.cnf`, find the section labeled `[ CA_default ]`, and edit as the following:  
+## General
+### Config  
 ```bash
 $ sudo cp /etc/pki/tls/openssl.cnf{,.orig}
+
 $ cat <<EOF | sudo tee /etc/pki/tls/openssl.cnf
 HOME                    = .
 RANDFILE                = \$ENV::HOME/.rnd
@@ -37,14 +37,14 @@ crl_dir         = \$dir/crl             # Where the issued crl are kept
 database        = \$dir/index.txt       # database index file.
                                         # several ctificates with same subject.
 new_certs_dir   = \$dir/newcerts        # default place for new certs.
-certificate     = \$dir/ca.crt          # The CA certificate
+certificate     = \$dir/root-ca.crt          # The CA certificate
 serial          = \$dir/serial          # The current serial number
 crlnumber       = \$dir/crlnumber       # the current crl number
                                         # must be commented out to leave a V1 CRL
-crl             = \$dir/ca.crl          # The current CRL
-private_key     = \$dir/private/ca.key  # The private key
+crl             = \$dir/root-ca.crl          # The current CRL
+private_key     = \$dir/private/root-ca.key  # The private key
 RANDFILE        = \$dir/private/.rand   # private random number file
-x509_extensions = v3_ca                 # The extentions to add to the cert
+x509_extensions = root_ca                 # The extentions to add to the cert
 name_opt        = ca_default            # Subject Name options
 cert_opt        = ca_default            # Certificate field options
 default_days    = 365                   # how long to certify for
@@ -67,7 +67,7 @@ default_md              = sha256
 default_keyfile         = privkey.pem
 distinguished_name      = req_distinguished_name
 attributes              = req_attributes
-x509_extensions         = v3_ca # The extentions to add to the self signed cert
+x509_extensions         = root_ca # The extentions to add to the self signed cert
 string_mask             = utf8only
 
 [ req_distinguished_name ]
@@ -93,11 +93,25 @@ challengePassword_min           = 4
 challengePassword_max           = 20
 unstructuredName                = An optional company name
 
-[ v3_ca ]
+[ root_ca ]
 subjectKeyIdentifier            = hash
 authorityKeyIdentifier          = keyid:always,issuer
 basicConstraints                = CA:true
-EOF  
+crlDistributionPoints           = @crl_section
+
+[ crl_section ]
+URI.1                           = http://ecs-matrix-ca/root-ca.crl
+
+[ level1_ca ]
+subjectKeyIdentifier            = hash
+authorityKeyIdentifier          = keyid:always,issuer
+basicConstraints                = CA:true, pathlen:1
+keyUsage                        = cRLSign, keyCertSign
+crlDistributionPoints           = @crl_section
+
+[ crl_section ]
+URI.1                           = http://ecs-matrix-ca/level1-ca.crl
+EOF
 ```
 
 ### Certs Info
@@ -128,12 +142,12 @@ emailAddress            = optional
 ```
 
 ### Create all directories needed
-```
+```bash
 $ sudo mkdir /etc/pki/CA/{certs,crl,newcerts}
 ```
 
-### Create an empty certificate index:
-```
+### Create an empty certificate index
+```bash
 $ sudo touch /etc/pki/CA/index.txt
 ```
 
@@ -144,25 +158,18 @@ $ echo 01 | sudo tee /etc/pki/CA/serial
 
 ## RootCA
 ### Generate RootCA Private Key
-```
-$ sudo openssl genrsa -out /etc/pki/CA/private/ca.key -des3 2048
-Enter pass phrase for /etc/pki/CA/private/ca.key:
-Verifying - Enter pass phrase for /etc/pki/CA/private/ca.key:
+```bash
+$ sudo openssl genrsa -out /etc/pki/CA/private/root-ca.key -des3 2048
+Enter pass phrase for /etc/pki/CA/private/root-ca.key:
+Verifying - Enter pass phrase for /etc/pki/CA/private/root-ca.key:
 
-$ sudo chmod 600 /etc/pki/CA/private/ca.key
+$ sudo chmod 600 /etc/pki/CA/private/root-ca.key
 ```
 
 ### Generate RootCA Public Cert
 ```bash
-$ sudo openssl req -new -x509 -key /etc/pki/CA/private/ca.key -days 3650 -subj '/C=CN/ST=Beijing/L=Beijing/O=Example Ltd/OU=RootCA/CN=RootCA/emailAddress=root@localhost' -out /etc/pki/CA/ca.crt
-Enter pass phrase for /etc/pki/CA/private/ca.key:
-```
-
-### Check RootCA Private Key / Public Cert
-```bash
-$ sudo openssl rsa -in /etc/pki/CA/private/ca.key -text -noout
-
-$ openssl x509 -in /etc/pki/CA/ca.crt -text -noout
+$ sudo openssl req -new -x509 -key /etc/pki/CA/private/root-ca.key -days 3650 -subj '/C=CN/ST=Beijing/L=Beijing/O=Example Ltd/OU=RootCA/CN=RootCA/emailAddress=root@localhost' -out /etc/pki/CA/root-ca.crt
+Enter pass phrase for /etc/pki/CA/private/root-ca.key:
 ```
 
 ## Level-1 CA
@@ -171,10 +178,11 @@ Note: It will be signed by `RootCA`
 ```bash
 $ mkdir -p CA-Level1
 
+# Config for Level-1 CA CSR Generation
 $ cat <<EOF> CA-Level1/CA-Level1.cnf
 [ req ]
 distinguished_name      = req_distinguished_name
-req_extensions          = v3_ca # The extensions to add to a certificate request
+req_extensions          = leve1_ca # The extensions to add to a certificate request
 
 [ req_distinguished_name ]
 countryName                     = Country Name (2 letter code)
@@ -185,10 +193,14 @@ organizationalUnitName          = Organizational Unit Name (eg, section)
 commonName                      = Common Name (eg, your name or your server\'s hostname)
 emailAddress                    = Email Address
 
-[ v3_ca ]
+[ leve1_ca ]
 subjectKeyIdentifier            = hash
 basicConstraints                = CA:true, pathlen:1
 keyUsage                        = cRLSign, keyCertSign
+crlDistributionPoints           = @crl_section
+
+[ crl_section ]
+URI.1                           = http://ecs-matrix-ca/level1-ca.crl
 EOF
 ```
 
@@ -200,20 +212,21 @@ $ openssl genrsa -out CA-Level1/CA-Level1.key -des3 2048
 ### Generate Level-1 CA Cert Sign Request
 ```bash
 $ openssl req -new -out CA-Level1/CA-Level1.csr -key CA-Level1/CA-Level1.key -config CA-Level1/CA-Level1.cnf -subj '/C=CN/ST=Beijing/L=Beijing/O=Example Ltd/OU=CA-Level1/CN=CA-Level1/emailAddress=root@localhost'
+Enter pass phrase for CA-Level1/CA-Level1.key:
 ```
  
 ### Sign Level-1 CA Public Cert
 ```bash
-$ sudo openssl ca -in CA-Level1/CA-Level1.csr -out CA-Level1/CA-Level1.crt -config CA-Level1/CA-Level1.cnf
-Using configuration from CA-Level1/CA-Level1.cnf
-Enter pass phrase for /etc/pki/CA/private/ca.key:
+$ $ sudo openssl ca -in CA-Level1/CA-Level1.csr -out CA-Level1/CA-Level1.crt -extensions level1_ca
+Using configuration from /etc/pki/tls/openssl.cnf
+Enter pass phrase for /etc/pki/CA/private/root-ca.key:
 Check that the request matches the signature
 Signature ok
 Certificate Details:
         Serial Number: 1 (0x1)
         Validity
-            Not Before: Jun  6 05:51:10 2024 GMT
-            Not After : Jun  6 05:51:10 2025 GMT
+            Not Before: Jun  7 06:59:16 2024 GMT
+            Not After : Jun  7 06:59:16 2025 GMT
         Subject:
             countryName               = CN
             stateOrProvinceName       = Beijing
@@ -223,27 +236,26 @@ Certificate Details:
             emailAddress              = root@localhost
         X509v3 extensions:
             X509v3 Subject Key Identifier:
-                EF:23:28:B5:46:52:86:AB:8D:05:95:5E:4F:A4:8F:11:49:F5:7F:F2
+                4F:EA:92:62:A6:FF:9A:50:5B:7F:56:D7:95:BF:EC:85:A8:1F:1C:BD
+            X509v3 Authority Key Identifier:
+                keyid:3B:0A:78:EE:FD:01:31:08:11:63:C5:2A:43:EF:95:AD:98:38:A2:FB
+
             X509v3 Basic Constraints:
                 CA:TRUE, pathlen:1
             X509v3 Key Usage:
                 Certificate Sign, CRL Sign
-Certificate is to be certified until Jun  6 05:51:10 2025 GMT (365 days)
+            X509v3 CRL Distribution Points:
+
+                Full Name:
+                  URI:http://ecs-matrix-ca/level1-ca.crl
+
+Certificate is to be certified until Jun  7 06:59:16 2025 GMT (365 days)
 Sign the certificate? [y/n]:y
 
 
 1 out of 1 certificate requests certified, commit? [y/n]y
 Write out database with 1 new entries
 Data Base Updated
-```
-
-### Check Level-1 CA Private Key / Public Cert / Cert Sign Request
-```bash
-$ openssl rsa -in CA-Level1/CA-Level1.key -noout -text
-
-$ openssl x509 -in CA-Level1/CA-Level1.crt -noout -text
-
-$ openssl req -inCA-Level1/ CA-Level1.csr -noout -text
 ```
 
 ## Level-2 CA
@@ -255,7 +267,7 @@ $ mkdir -p CA-Level2
 $ cat <<EOF> CA-Level2/CA-Level2.cnf
 [ req ]
 distinguished_name      = req_distinguished_name
-req_extensions          = v3_ca # The extensions to add to a certificate request
+req_extensions          = leve2_ca # The extensions to add to a certificate request
 
 [ req_distinguished_name ]
 countryName                     = Country Name (2 letter code)
@@ -266,10 +278,14 @@ organizationalUnitName          = Organizational Unit Name (eg, section)
 commonName                      = Common Name (eg, your name or your server\'s hostname)
 emailAddress                    = Email Address
 
-[ v3_ca ]
+[ leve2_ca ]
 subjectKeyIdentifier            = hash
 basicConstraints                = CA:true, pathlen:0
 keyUsage                        = cRLSign, keyCertSign
+crlDistributionPoints           = @crl_section
+
+[ crl_section ]
+URI.1                           = http://ecs-matrix-ca/level2-ca.crl
 EOF
 ```
 
@@ -280,7 +296,7 @@ $ openssl genrsa -out CA-Level2/CA-Level2.key -des3 2048
 
 ### Generate Level-2 CA Cert Sign Request
 ```bash
-$ openssl req -new -out CA-Level2/CA-Level2.csr -key CA-Level2/CA-Level2.key -config CA-Level2/CA-Level2.cnf -subj '/C=CN/ST=Beijing/L=Beijing/O=Example Ltd/OU=CA-Level2/CN=CA-Level2/emailAddress=root@localhost' -extensions v3_ca
+$ openssl req -new -out CA-Level2/CA-Level2.csr -key CA-Level2/CA-Level2.key -config CA-Level2/CA-Level2.cnf -subj '/C=CN/ST=Beijing/L=Beijing/O=Example Ltd/OU=CA-Level2/CN=CA-Level2/emailAddress=root@localhost' -extensions leve2_ca
 ```
 
 ### Sign Level-2 CA Public Cert
@@ -292,6 +308,7 @@ $ touch CA-Level1/index.txt
 
 $ echo 01 > CA-Level1/serial
 
+# Config for Level-2 CA Cert Sign
 $ cat <<EOF> CA-Level1/CA-Level1-Sign.cnf
 [ ca ]
 default_ca      = CA_default            # The default ca section
@@ -307,10 +324,9 @@ certificate     = \$dir/CA-Level1.crt   # The CA certificate
 serial          = \$dir/serial          # The current serial number
 crlnumber       = \$dir/crlnumber       # the current crl number
                                         # must be commented out to leave a V1 CRL
-crl             = \$dir/ca.crl          # The current CRL
+crl             = \$dir/CA-Level1.crl   # The current CRL
 private_key     = \$dir/CA-Level1.key   # The private key
 RANDFILE        = \$dir/.rand           # private random number file
-x509_extensions = v3_ca                 # The extentions to add to the cert
 name_opt        = ca_default            # Subject Name options
 cert_opt        = ca_default            # Certificate field options
 default_days    = 365                   # how long to certify for
@@ -333,25 +349,17 @@ default_md              = sha256
 default_keyfile         = privkey.pem
 distinguished_name      = req_distinguished_name
 attributes              = req_attributes
-x509_extensions         = v3_ca # The extentions to add to the self signed cert
+x509_extensions         = level2_ca # The extentions to add to the self signed cert
 string_mask             = utf8only
 
 [ req_distinguished_name ]
 countryName                     = Country Name (2 letter code)
-countryName_default             = CN
-countryName_min                 = 2
-countryName_max                 = 2
 stateOrProvinceName             = State or Province Name (full name)
-stateOrProvinceName_default     = Beijing
 localityName                    = Locality Name (eg, city)
-localityName_default            = Beijing
-0.organizationName              = Organization Name (eg, company)
-0.organizationName_default      = Example Ltd
+organizationName                = Organization Name (eg, company)
 organizationalUnitName          = Organizational Unit Name (eg, section)
 commonName                      = Common Name (eg, your name or your server\'s hostname)
-commonName_max                  = 64
 emailAddress                    = Email Address
-emailAddress_max                = 64
 
 [ req_attributes ]
 challengePassword               = A challenge password
@@ -359,16 +367,20 @@ challengePassword_min           = 4
 challengePassword_max           = 20
 unstructuredName                = An optional company name
 
-[ v3_ca ]
+[ level2_ca ]
 subjectKeyIdentifier            = hash
 authorityKeyIdentifier          = keyid:always,issuer
-basicConstraints                = CA:true
+basicConstraints                = CA:true, pathlen:0
+crlDistributionPoints           = @crl_section
+
+[ crl_section ]
+URI.1                           = http://ecs-matrix-ca/level2-ca.crl
 EOF  
 ```
 
 #### Cert Sign
 ```bash
-$ openssl ca -in CA-Level2/CA-Level2.csr -out CA-Level2/CA-Level2.crt -config CA-Level1/CA-Level1-Sign.cnf
+$ $ openssl ca -in CA-Level2/CA-Level2.csr -out CA-Level2/CA-Level2.crt -config CA-Level1/CA-Level1-Sign.cnf -extensions level2_ca
 Using configuration from CA-Level1/CA-Level1-Sign.cnf
 Enter pass phrase for /home/jun_zou/CA-Level1/CA-Level1.key:
 Check that the request matches the signature
@@ -376,8 +388,8 @@ Signature ok
 Certificate Details:
         Serial Number: 1 (0x1)
         Validity
-            Not Before: Jun  6 06:18:27 2024 GMT
-            Not After : Jun  6 06:18:27 2025 GMT
+            Not Before: Jun  7 07:22:11 2024 GMT
+            Not After : Jun  7 07:22:11 2025 GMT
         Subject:
             countryName               = CN
             stateOrProvinceName       = Beijing
@@ -387,13 +399,18 @@ Certificate Details:
             emailAddress              = root@localhost
         X509v3 extensions:
             X509v3 Subject Key Identifier:
-                31:E6:BD:EE:23:45:39:A4:2E:05:7A:53:BC:66:46:D0:65:8E:DF:B2
+                CC:BC:89:CC:B8:4D:3F:E8:AE:73:03:14:F1:34:31:03:E8:C1:52:31
             X509v3 Authority Key Identifier:
-                keyid:EF:23:28:B5:46:52:86:AB:8D:05:95:5E:4F:A4:8F:11:49:F5:7F:F2
+                keyid:4F:EA:92:62:A6:FF:9A:50:5B:7F:56:D7:95:BF:EC:85:A8:1F:1C:BD
 
             X509v3 Basic Constraints:
-                CA:TRUE
-Certificate is to be certified until Jun  6 06:18:27 2025 GMT (365 days)
+                CA:TRUE, pathlen:0
+            X509v3 CRL Distribution Points:
+
+                Full Name:
+                  URI:http://ecs-matrix-ca/level2-ca.crl
+
+Certificate is to be certified until Jun  7 07:22:11 2025 GMT (365 days)
 Sign the certificate? [y/n]:y
 
 
@@ -425,18 +442,22 @@ emailAddress                    = Email Address
 [ v3_req ]
 basicConstraints                = CA:FALSE
 keyUsage                        = nonRepudiation, digitalSignature, keyEncipherment, keyAgreement
-subjectAltName                  = @alt_names
+subjectAltName                  = @alt_names_ecs_matrix_https_server
+crlDistributionPoints           = @crl_section
 
-[alt_names]
+[alt_names_ecs_matrix_https_server]
 DNS.1                           = ecs-matrix-https-server
-IP.1                            = 172.16.1.131
+IP.1                            = 172.16.1.157
 IP.2                            = 127.0.0.1
+
+[ crl_section ]
+URI.1                           = http://ecs-matrix-ca/level2-ca.crl
 EOF
 ```
 
 ### Generate Server Private Key
 ```bash
-$ openssl genrsa -out ecs-matrix-https-server.key 2048
+$ openssl genrsa -out ecs-matrix-https-server/ecs-matrix-https-server.key 2048
 ```
 
 ### Generate Cert Sign Request (including 'subjectAltName')
@@ -468,7 +489,7 @@ certificate     = \$dir/CA-Level2.crt   # The CA certificate
 serial          = \$dir/serial          # The current serial number
 crlnumber       = \$dir/crlnumber       # the current crl number
                                         # must be commented out to leave a V1 CRL
-crl             = \$dir/ca.crl          # The current CRL
+crl             = \$dir/CA-Level2.crl   # The current CRL
 private_key     = \$dir/CA-Level2.key   # The private key
 RANDFILE        = \$dir/.rand           # private random number file
 x509_extensions = v3_req                # The extentions to add to the cert
@@ -499,20 +520,12 @@ string_mask             = utf8only
 
 [ req_distinguished_name ]
 countryName                     = Country Name (2 letter code)
-countryName_default             = CN
-countryName_min                 = 2
-countryName_max                 = 2
 stateOrProvinceName             = State or Province Name (full name)
-stateOrProvinceName_default     = Beijing
 localityName                    = Locality Name (eg, city)
-localityName_default            = Beijing
-0.organizationName              = Organization Name (eg, company)
-0.organizationName_default      = Example Ltd
+organizationName                = Organization Name (eg, company)
 organizationalUnitName          = Organizational Unit Name (eg, section)
 commonName                      = Common Name (eg, your name or your server\'s hostname)
-commonName_max                  = 64
 emailAddress                    = Email Address
-emailAddress_max                = 64
 
 [ req_attributes ]
 challengePassword               = A challenge password
@@ -523,27 +536,31 @@ unstructuredName                = An optional company name
 [ v3_req ]
 basicConstraints                = CA:FALSE
 keyUsage                        = nonRepudiation, digitalSignature, keyEncipherment, keyAgreement
-subjectAltName                  = @alt_names
+subjectAltName                  = @alt_names_ecs_matrix_https_server
+crlDistributionPoints           = @crl_section
 
-[alt_names]
+[alt_names_ecs_matrix_https_server]
 DNS.1                           = ecs-matrix-https-server
-IP.1                            = 172.16.1.131
+IP.1                            = 172.16.1.157
 IP.2                            = 127.0.0.1
+
+[ crl_section ]
+URI.1                           = http://ecs-matrix-ca/level2-ca.crl
 EOF
 ```
 
 #### Sign Cert
 ```bash
 $ openssl ca -in ecs-matrix-https-server/ecs-matrix-https-server.csr -out ecs-matrix-https-server/ecs-matrix-https-server.crt -config CA-Level2/CA-Level2-Sign.cnf
-UUsing configuration from CA-Level1-Sign.cnf
-Enter pass phrase for /home/jun_zou/CA-Level1/private/CA-Level1.key:
+Using configuration from CA-Level2/CA-Level2-Sign.cnf
+Enter pass phrase for /home/jun_zou/CA-Level2/CA-Level2.key:
 Check that the request matches the signature
 Signature ok
 Certificate Details:
         Serial Number: 2 (0x2)
         Validity
-            Not Before: Jun  5 14:23:26 2024 GMT
-            Not After : Jun  5 14:23:26 2025 GMT
+            Not Before: Jun  7 07:48:13 2024 GMT
+            Not After : Jun  7 07:48:13 2025 GMT
         Subject:
             countryName               = CN
             stateOrProvinceName       = Beijing
@@ -554,14 +571,11 @@ Certificate Details:
         X509v3 extensions:
             X509v3 Basic Constraints:
                 CA:FALSE
-            Netscape Comment:
-                OpenSSL Generated Certificate
-            X509v3 Subject Key Identifier:
-                D7:F6:98:80:08:22:81:2C:F0:17:8F:1E:E9:BC:08:7C:30:ED:19:A9
-            X509v3 Authority Key Identifier:
-                keyid:1D:E0:AE:34:D9:B1:E7:EE:31:67:67:ED:14:C3:65:A5:B2:57:2C:CF
-
-Certificate is to be certified until Jun  5 14:23:26 2025 GMT (365 days)
+            X509v3 Key Usage:
+                Digital Signature, Non Repudiation, Key Encipherment, Key Agreement
+            X509v3 Subject Alternative Name:
+                DNS:ecs-matrix-https-server, IP Address:172.16.1.157, IP Address:127.0.0.1
+Certificate is to be certified until Jun  7 07:48:13 2025 GMT (365 days)
 Sign the certificate? [y/n]:y
 
 
@@ -570,7 +584,23 @@ Write out database with 1 new entries
 Data Base Updated
 ```
 
-### Revoke a cert
+## Revoke a cert
+### Generate CRL file
+```bash
+$ echo 01 | sudo tee /etc/pki/CA/crlnumber
+
+$ sudo openssl ca -gencrl -out /etc/pki/CA/crl.pem
+
+$ echo 01 > CA-Level1/crlnumber
+
+$ openssl ca -gencrl -config CA-Level1/CA-Level1-Sign.cnf -out CA-Level1/CA-Level1.crl
+
+$ echo 01 > CA-Level2/crlnumber
+
+$ openssl ca -gencrl -config CA-Level2/CA-Level2-Sign.cnf -out CA-Level2/CA-Level2.crl
+```
+
+### Revoke Cert
 ```bash
 $ openssl ca -revoke /etc/pki/CA/newcerts/02.pem
 Using configuration from /etc/pki/tls/openssl.cnf
@@ -579,38 +609,42 @@ Revoking Certificate 02.
 Data Base Updated
 ```
 
+### Publish CRL Info
+NOTE: Format for CRL need to be converted from `PEM` to `DER` as speficied in RFC5280 while using with `HTTP` or `FTP`
+[When the HTTP or FTP URI scheme is used, the URI MUST point to a single DER encoded CRL as specified in RFC2585](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.13) 
 ```bash
-# openssl crl -in /etc/pki/CA/my-ca.crl -noout -text
-Certificate Revocation List (CRL):
-        Version 2 (0x1)
-    Signature Algorithm: sha256WithRSAEncryption
-        Issuer: /C=US/ST=New York/L=New York/O=Example/OU=OPS/CN=ca.example.net/emailAddress=root@ca.example.net
-        Last Update: Jul  8 06:09:55 2019 GMT
-        Next Update: Aug  7 06:09:55 2019 GMT
-        CRL extensions:
-            X509v3 CRL Number:
-                0
-No Revoked Certificates.
-    Signature Algorithm: sha256WithRSAEncryption
-         45:c2:cd:91:e0:cc:9d:37:95:c2:76:dc:39:c2:ef:d5:7c:af:
-         1f:2f:61:fd:24:d5:b9:42:54:d3:dc:63:df:c5:ed:47:c2:df:
-         fd:1d:c3:ef:d7:07:54:c2:49:e6:c3:5b:87:61:29:67:6d:bd:
-         c5:a5:93:6d:4f:4e:5e:e6:41:7f:cc:2e:9c:7d:c7:ed:d7:64:
-         81:93:91:17:ea:a1:26:a8:1b:c9:e2:35:a9:99:a9:19:a5:77:
-         f3:b7:c9:a5:4c:19:fd:ed:6a:73:31:1a:36:46:9b:68:e9:42:
-         0b:d2:2c:f2:8f:95:7b:26:89:2c:20:93:ab:57:a9:dc:c0:98:
-         fc:c0:3d:d7:9b:ad:b1:81:d7:a1:ef:0c:b3:0f:fe:0a:3c:76:
-         0d:40:0c:09:92:c4:01:84:82:b5:a2:85:ec:17:da:f7:2b:78:
-         23:b8:5d:cc:15:f8:37:dd:d5:6e:5f:42:5c:7e:bd:7a:87:46:
-         ab:d0:c5:ac:3a:f7:bb:84:57:16:0e:80:75:9f:cb:41:6f:af:
-         ed:34:81:d1:c0:64:06:00:99:72:cf:ce:13:8d:2f:8a:4b:1c:
-         43:ef:3c:e3:9f:b1:c4:df:b1:77:41:45:5e:58:c0:ae:a6:b4:
-         4a:87:e6:c6:c6:3c:3d:35:e1:18:ed:fb:15:23:05:72:46:4e:
-         b6:a2:fe:da
+$ sudo openssl crl -in CA-Level2/CA-Level2.crl -outform DER -out /var/www/html/level2-ca.crl
+```
+
+### Verify
+NOTE: `openssl s_client` will not download `CRL` based on url provided in certs. For crl verification, it should be done with `openssl verify` 
+```bash
+$ sed -n -E '/BEGIN/,/END/p' CA-Level1.crt CA-Level2.crt > intermediate-ca.crt
+
+$ openssl verify  -CAfile /etc/pki/CA/root-ca.crt -untrusted intermediate-ca.crt -crl_check -crl_download ecs-matrix-https-server.crt
+ecs-matrix-https-server.crt: C = CN, ST = Beijing, O = Example Ltd, OU = ecs-matrix-https-server, CN = ecs-matrix-https-server, emailAddress = root@localhost
+error 23 at 0 depth lookup:certificate revoked
+```
+`-crl_download` will download CRL file automatically.  
+OR download it manually and verify with `
+```bash
+$ openssl x509 -in ecs-matrix-https-server.crt -noout -text  | grep -A3 'CRL'
+            X509v3 CRL Distribution Points:
+
+                Full Name:
+                  URI:http://ecs-matrix-ca/level2-ca.crl
+
+$ curl -o level2-ca.crl 'http://ecs-matrix-ca/level2-ca.crl'
+
+$ openssl crl -in level2-ca.crl -inform DER -out level2-ca-crl.pem -outform PEM
+
+$ openssl verify  -CAfile /etc/pki/CA/root-ca.crt -untrusted intermediate-ca.crt -crl_check -CRLfile level2-ca-crl.pem ecs-matrix-https-server.crt
+ecs-matrix-https-server.crt: C = CN, ST = Beijing, O = Example Ltd, OU = ecs-matrix-https-server, CN = ecs-matrix-https-server, emailAddress = root@localhost
+error 23 at 0 depth lookup:certificate revoked
 ```
 
 ## HTTPS 
-### HTTP Config
+### Apache HTTP
 ```bash
 $ sudo yum install -y mod_ssl
 
@@ -656,31 +690,35 @@ EOF
 sudo systemctl restart httpd
 ```
 
-### Verify https connection
+Verify 
 ```bash
 $ curl --cacert CA-Level2/CA-Level2.crt https://ecs-matrix-https-server
 ecs-matrix-https-server
 
-$ curl --cacert /etc/pki/CA/ca.crt https://ecs-matrix-https-server 2>/dev/null
+$ curl --cacert /etc/pki/CA/root-ca.crt https://ecs-matrix-https-server 2>/dev/null
 
 $ echo $?
 60
+
+$ echo | openssl s_client -connect ecs-matrix-https-server:443 2>/dev/null | grep 'Verify return code'
+    Verify return code: 20 (unable to get local issuer certificate)
 ```
 
 ```bash
 $ tailf /etc/httpd/logs/ssl_request_log
 ...
 [06/Jun/2024:07:42:00 +0000] 172.16.1.245 TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 "GET / HTTP/1.1" 24
+...
 ```
 
-### Alternative HTTP Config
-include cert chain in config
+### Alternative HTTP Config to include intermediate CA
+include intermediate certs in config
 ```bash
-$ sed -n -E '/BEGIN/,/END/p' CA-Level1/CA-Level1.crt CA-Level2/CA-Level2.crt > ca-chain.crt
+$ sed -n -E '/BEGIN/,/END/p' CA-Level1/CA-Level1.crt CA-Level2/CA-Level2.crt > intermediate-ca.crt
 ```
 
 ```bash
-$ sudo sed -i.bak-cert-chain '/SSLCertificateKeyFile/a\    SSLCertificateChainFile /etc/httpd/certs/ca-chain.crt' /etc/httpd/conf.d/ssl.conf
+$ sudo sed -i.bak-cert-chain '/SSLCertificateKeyFile/a\    SSLCertificateChainFile /etc/httpd/certs/intermediate-ca.crt' /etc/httpd/conf.d/ssl.conf
 
 $ diff -Nru /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.bak-cert-chain
 --- /etc/httpd/conf.d/ssl.conf  2024-06-06 07:48:16.738244189 +0000
@@ -689,16 +727,127 @@ $ diff -Nru /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.bak-cert-chain
 
      SSLCertificateFile /etc/httpd/certs/ecs-matrix-https-server.crt
      SSLCertificateKeyFile /etc/httpd/certs/ecs-matrix-https-server.key
--    SSLCertificateChainFile /etc/httpd/certs/ca-chain.crt
+-    SSLCertificateChainFile /etc/httpd/certs/intermediate-ca.crt
  </VirtualHost>
 
 $ sudo systemctl restart httpd
 ```
 
-### Verify https connection
+Verify
 ```bash
-$ curl --cacert /etc/pki/CA/ca.crt https://ecs-matrix-https-server
+$ curl --cacert /etc/pki/CA/root-ca.crt https://ecs-matrix-https-server
 ecs-matrix-https-server
+```
+
+### Nginx
+```bash
+$ sudo yum install -y nginx
+
+$ sed -n -E '/BEGIN/,/END/p' /etc/httpd/certs/ecs-matrix-https-server.crt /etc/httpd/certs/CA-Level1.crt /etc/httpd/certs/CA-Level2.crt > /etc/httpd/certs/all-certs.crt
+
+$ cat <<EOF | sudo tee /etc/nginx/conf.d/ssl.conf
+server {
+    listen              443 ssl http2;
+    server_name         ecs-matrix-https-server;
+    root                /usr/share/nginx/html;
+    ssl_certificate     /etc/httpd/certs/all-certs.crt;
+    ssl_certificate_key /etc/httpd/certs/ecs-matrix-https-server.key;
+    ssl_session_timeout 10m;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    error_page 404 /404.html;
+        location = /40x.html {
+    }
+    error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+    }
+}
+EOF
+
+$ echo "Welcome to Nginx on $(hostname -s)" | sudo tee /usr/share/nginx/html/index.html
+
+$ sudo systemctl restart nginx
+```
+
+Verify
+```bash
+$ curl --cacert /etc/pki/CA/root-ca.crt https://ecs-matrix-https-server
+Welcome to Nginx on ecs-matrix-https-server
+```
+
+## Revoke a cert
+### Generate CRL file
+```bash
+$ echo 01 | sudo tee /etc/pki/CA/crlnumber
+
+$ sudo openssl ca -gencrl -out /etc/pki/CA/root-ca.crl
+
+$ echo 01 > CA-Level1/crlnumber
+
+$ openssl ca -gencrl -config CA-Level1/CA-Level1-Sign.cnf -out CA-Level1/CA-Level1.crl
+
+$ echo 01 > CA-Level2/crlnumber
+
+$ openssl ca -gencrl -config CA-Level2/CA-Level2-Sign.cnf -out CA-Level2/CA-Level2.crl
+```
+
+### Revoke Cert
+```bash
+$ openssl ca -revoke CA-Level2/newcerts/02.pem -config CA-Level2/CA-Level2-Sign.cnf
+Using configuration from CA-Level2/CA-Level2-Sign.cnf
+Enter pass phrase for /home/jun_zou/CA-Level2/CA-Level2.key:
+Revoking Certificate 02.
+Data Base Updated
+```
+NOTE: `CRL` file need to be updated while cert was revoking as it can't be automatically updated.  
+
+## CMD Memo
+### Check Private Key File
+```bash
+$ openssl req -in <Private Key File> -noout -text
+```
+
+### Check Public Cert File
+```bash
+$ openssl x509 -in <Cert File> -noout -text
+```
+
+### Check subject info for a Public Cert File
+```bash
+$ openssl x509 -in <Cert File> -noout -subject
+```
+
+### Check issuer info for a Public Cert File
+```bash
+$ openssl x509 -in <Cert File> -noout -issuer
+```
+
+### Check Cert Request File
+```bash
+$ openssl req -in <Cert Request File> -noout -text
+```
+
+### Verify Cert with `openssl`
+```bash
+$ echo | openssl s_client -connect ecs-matrix-https-server:443 2>/dev/null | grep 'Verify return code'
+```
+If `return code` is not `0`, it means error occurred. 
+
+### Script to download Certs Chain for a site
+```bash
+$ cat <<EOF > parse_certs.sh
+#!/bin/bash
+
+echo | openssl s_client -showcerts -connect "\${1}:443" 2>&1 | \
+    awk '/\s*[0-9] s:/{split(\$0, result, "/"); name=gensub("CN=", "", "g", result[6])".crt"}; /-----BEGIN CERTIFICATE-----/{f=1; print "Copying Cert to "name}; f {print > name};  /-----END CERTIFICATE-----/{f=0}'
+EOF
+
+$ chmod 755 parse_certs.sh
+
+$ ./parse_certs.sh ecs-matrix-https-server
+Copying Cert to ecs-matrix-https-server.crt
+Copying Cert to CA-Level1.crt
+Copying Cert to CA-Level2.crt
 ```
 
 {% include links.html %}
