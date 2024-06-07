@@ -151,8 +151,9 @@ $ sudo mkdir /etc/pki/CA/{certs,crl,newcerts}
 $ sudo touch /etc/pki/CA/index.txt
 ```
 
-### In addition, create a file to indicate the next certificate serial number to be issued:
-```
+### Create a serial number file 
+to indicate the next certificate serial number to be issued
+```bash
 $ echo 01 | sudo tee /etc/pki/CA/serial
 ```
 
@@ -374,7 +375,7 @@ basicConstraints                = CA:true, pathlen:0
 crlDistributionPoints           = @crl_section
 
 [ crl_section ]
-URI.1                           = http://ecs-matrix-ca/level2-ca.crl
+URI.1                           = http://ecs-matrix-ca/level1-ca.crl
 EOF  
 ```
 
@@ -584,7 +585,7 @@ Write out database with 1 new entries
 Data Base Updated
 ```
 
-## Revoke a cert
+## Revoke a Cert
 ### Generate CRL file
 ```bash
 $ echo 01 | sudo tee /etc/pki/CA/crlnumber
@@ -607,10 +608,13 @@ Using configuration from /etc/pki/tls/openssl.cnf
 Enter pass phrase for /etc/pki/CA/private/my-ca.key:
 Revoking Certificate 02.
 Data Base Updated
+
+$ openssl ca -gencrl -config CA-Level2/CA-Level2-Sign.cnf -out CA-Level2/CA-Level2.crl
 ```
+NOTE: Everytime when cert was revoking, `CRL` file need to be manually updated as it can't be automatically updated.  
 
 ### Publish CRL Info
-NOTE: Format for CRL need to be converted from `PEM` to `DER` as speficied in RFC5280 while using with `HTTP` or `FTP`
+NOTE: Format for CRL need to be converted from `PEM` to `DER` as speficied in RFC5280 while using with `HTTP` or `FTP`  
 [When the HTTP or FTP URI scheme is used, the URI MUST point to a single DER encoded CRL as specified in RFC2585](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.13) 
 ```bash
 $ sudo openssl crl -in CA-Level2/CA-Level2.crl -outform DER -out /var/www/html/level2-ca.crl
@@ -626,7 +630,8 @@ ecs-matrix-https-server.crt: C = CN, ST = Beijing, O = Example Ltd, OU = ecs-mat
 error 23 at 0 depth lookup:certificate revoked
 ```
 `-crl_download` will download CRL file automatically.  
-OR download it manually and verify with `
+
+OR download it manually and verify with `-CRLfile` option
 ```bash
 $ openssl x509 -in ecs-matrix-https-server.crt -noout -text  | grep -A3 'CRL'
             X509v3 CRL Distribution Points:
@@ -643,7 +648,7 @@ ecs-matrix-https-server.crt: C = CN, ST = Beijing, O = Example Ltd, OU = ecs-mat
 error 23 at 0 depth lookup:certificate revoked
 ```
 
-## HTTPS 
+## HTTPS Verification
 ### Apache HTTP
 ```bash
 $ sudo yum install -y mod_ssl
@@ -774,32 +779,6 @@ Verify
 $ curl --cacert /etc/pki/CA/root-ca.crt https://ecs-matrix-https-server
 Welcome to Nginx on ecs-matrix-https-server
 ```
-
-## Revoke a cert
-### Generate CRL file
-```bash
-$ echo 01 | sudo tee /etc/pki/CA/crlnumber
-
-$ sudo openssl ca -gencrl -out /etc/pki/CA/root-ca.crl
-
-$ echo 01 > CA-Level1/crlnumber
-
-$ openssl ca -gencrl -config CA-Level1/CA-Level1-Sign.cnf -out CA-Level1/CA-Level1.crl
-
-$ echo 01 > CA-Level2/crlnumber
-
-$ openssl ca -gencrl -config CA-Level2/CA-Level2-Sign.cnf -out CA-Level2/CA-Level2.crl
-```
-
-### Revoke Cert
-```bash
-$ openssl ca -revoke CA-Level2/newcerts/02.pem -config CA-Level2/CA-Level2-Sign.cnf
-Using configuration from CA-Level2/CA-Level2-Sign.cnf
-Enter pass phrase for /home/jun_zou/CA-Level2/CA-Level2.key:
-Revoking Certificate 02.
-Data Base Updated
-```
-NOTE: `CRL` file need to be updated while cert was revoking as it can't be automatically updated.  
 
 ## CMD Memo
 ### Check Private Key File
