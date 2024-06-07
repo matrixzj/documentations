@@ -814,19 +814,36 @@ If `return code` is not `0`, it means error occurred.
 
 ### Script to download Certs Chain for a site
 ```bash
-$ cat <<EOF > parse_certs.sh
-#!/bin/bash
-
-echo | openssl s_client -showcerts -connect "\${1}:443" 2>&1 | \
-    awk '/\s*[0-9] s:/{split(\$0, result, "/"); name=gensub("CN=", "", "g", result[6])".crt"}; /-----BEGIN CERTIFICATE-----/{f=1; print "Copying Cert to "name}; f {print > name};  /-----END CERTIFICATE-----/{f=0}'
+$ cat <<EOF > cert1.awk
+/\s*[0-9] s:/ {
+    cert_cn = gensub(/.*CN ?=([^\/]*).*/, "\\\\1", "g")
+    # remove leading [*. ]
+    gsub(/^[*. ]*/, "", cert_cn)
+    # replace any of [*. -] with _
+    gsub(/[*. -]/, "_", cert_cn)
+    # replace multi continous _ with single _
+    gsub(/_{2,}/, "_", cert_cn)
+    # convert uppercase to lower
+    cert_file = tolower(cert_cn)".crt"
+}
+/-----BEGIN CERTIFICATE-----/ {
+    f=1
+    print "Copying Cert to "cert_file
+}
+f {
+    print > cert_file
+}
+/-----END CERTIFICATE-----/ {
+    f=0
+}
 EOF
 
-$ chmod 755 parse_certs.sh
+$ host='ecs-matrix-https-server'
 
-$ ./parse_certs.sh ecs-matrix-https-server
-Copying Cert to ecs-matrix-https-server.crt
-Copying Cert to CA-Level1.crt
-Copying Cert to CA-Level2.crt
+$ echo | openssl s_client -showcerts -connect "${host}:443" 2>&1 | awk -f cert1.awk
+Copying Cert to ecs_matrix_https_server.crt
+Copying Cert to ca_level1.crt
+Copying Cert to ca_level2.crt
 ```
 
 {% include links.html %}
