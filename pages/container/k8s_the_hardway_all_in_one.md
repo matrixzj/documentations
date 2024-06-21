@@ -14,7 +14,6 @@ folder: Container
 
 ## Env  
 
-## Env
 | Item | Explanation |  Value in config | config file |   
 | :------ | :------ | :------ | :------ |   
 | cluster-name | | ecs-matrix-k8s-cluster-all-in-one | admin.kubeconfig, kubelet.kubeconfig, kube-proxy.kubeconfig |   
