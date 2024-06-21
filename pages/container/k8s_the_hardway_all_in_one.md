@@ -13,6 +13,7 @@ folder: Container
 =====
 
 ## Env  
+
 | Item | Explanation |  Value in config | config file |   
 | :------ | :------ | :------ | :------ |   
 | cluster-name | | ecs-matrix-k8s-cluster-all-in-one | admin.kubeconfig, kubelet.kubeconfig, kube-proxy.kubeconfig |   
@@ -676,7 +677,7 @@ $ curl -s --cacert ca/ca.crt --cert kubelet/kubelet.crt --key kubelet/kubelet.ke
 ```
 
 ## kube-proxy
-### Tool download
+### Config
 ```bash
 sudo yum -y install socat conntrack ipset
 echo -e "$(ifconfig eth0 | awk '/inet /{print $2}')\t$(hostname -f)\t$(hostname -s)" | sudo tee -a /etc/hosts
@@ -804,7 +805,7 @@ scheduler   Healthy   ok
 ```
 
 ## kube-controller-manager
-### Tool download
+### Config
 ```bash
 [ -d kube-controller-manager ] || mkdir kube-controller-manager
 kube_ver='1.30.2'
@@ -1455,7 +1456,7 @@ sudo route add -net ${POD_CIDR of worker1} gateway ${ip of worker01}
 sudo route add -net ${POD_CIDR of master} gateway ${ip of master}
 ```
 
-## Verify
+### Verify
 ```bash
 $ kubectl get nodes
 NAME                              STATUS   ROLES    AGE     VERSION
