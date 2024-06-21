@@ -12,7 +12,7 @@ folder: Container
 # Kubernetes All-in-One Deployment in the Hard Way
 =====
 
-## Env
+## Env  
 | Item | Explanation |  Value in config | config file |   
 | :------ | :------ | :------ | :------ |   
 | cluster-name | | ecs-matrix-k8s-cluster-all-in-one | admin.kubeconfig, kubelet.kubeconfig, kube-proxy.kubeconfig |   
@@ -444,7 +444,7 @@ containerd_ver='1.7.18' && curl -s -L "https://github.com/containerd/containerd/
 kube_ver='1.30.2' && curl -s -L "https://storage.googleapis.com/kubernetes-release/release/v${kube_ver}/bin/linux/amd64/kubelet" -o "kubelet/kubelet-v${kube_ver}"
 ```
 
-#### CNI Network
+#### CNI
 ```bash
 lsmod | grep -q br_netfilter || sudo modprobe br_netfilter
 
@@ -866,7 +866,7 @@ $ curl --cacert ca/ca.crt https://127.0.0.1:10257/healthz
 ok
 ```
 
-## kube-dns add-on
+## `kube-dns` add-on
 ### Deploy
 ```bash
 cat <<EOF> kube-dns.yaml
@@ -1241,6 +1241,226 @@ test   1/1     Running   0          67m
 
 $ kubectl run test-matrix --image=nginx:stable-alpine
 Error from server (Forbidden): pods is forbidden: User "matrix" cannot create resource "pods" in API group "" in the namespace "default"
+```
+
+## Extra: add worker node
+### Cert
+```bash
+cat <<EOF>> ca/ca.cnf
+# For \`kubelet-worker01\`
+[ usr_cert_alts_worker01 ]
+basicConstraints                = CA:false
+keyUsage                        = critical, digitalSignature, keyEncipherment
+subjectAltName                  = @alt_names_alts_worker01
+
+[ alt_names_alts_worker01 ]
+DNS.1 = ${short hostname of worker01}
+DNS.2 = ${fqdn of worker01}
+IP.1 = 127.0.0.1
+IP.2 = ${ip of worker01}
+EOF
+
+[ -d kubelet-worker01 ] || mkdir kubelet-worker01
+# Private Key
+openssl genrsa -out kubelet-worker01/kubelet-worker01.key 2048
+# Cert Request
+openssl req -new -out kubelet-worker01/kubelet-worker01.csr -key kubelet-worker01/kubelet-worker01.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${short hostname of worker01}" -reqexts usr_cert_alts_worker01
+# Public Cert
+openssl ca -in kubelet-worker01/kubelet-worker01.csr -out kubelet-worker01/kubelet-worker01.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${short hostname of worker01}" -extensions usr_cert_alts_worker01 -passin pass:"$CA_KEY_PASS"
+```
+
+### CNI
+```bash
+lsmod | grep -q br_netfilter || sudo modprobe br_netfilter
+
+sudo mkdir -p /opt/cni/bin
+cni_ver='1.5.1' && sudo tar xf kubelet-worker01/cni-plugins-linux-amd64-v${cni_ver}.tgz -C /opt/cni/bin/
+
+POD_CIDR='10.64.2.0/24'
+cat <<EOF> kubelet-worker01/10-bridge.conf
+{
+    "cniVersion": "0.4.0",
+    "name": "bridge",
+    "type": "bridge",
+    "bridge": "cnio0",
+    "isGateway": true,
+    "ipMasq": true,
+    "ipam": {
+        "type": "host-local",
+        "ranges": [
+          [{"subnet": "${POD_CIDR}"}]
+        ],
+        "routes": [{"dst": "0.0.0.0/0"}]
+    }
+}
+EOF
+
+cat <<EOF> kubelet-worker01/99-loopback.conf
+{
+    "cniVersion": "0.4.0",
+    "name": "lo",
+    "type": "loopback"
+}
+EOF
+
+sudo mkdir -p /etc/cni/net.d/
+sudo cp -v kubelet-worker01/10-bridge.conf /etc/cni/net.d/10-bridge.conf
+sudo cp -v kubelet-worker01/99-loopback.conf /etc/cni/net.d/99-loopback.conf
+```
+
+### containerd
+```bash
+mkdir -p kubelet-worker01/containerd
+containerd_ver='1.7.18' && tar xf "kubelet-worker01/containerd-${containerd_ver}-linux-amd64.tar.gz" -C kubelet-worker01/containerd
+sudo cp -arv kubelet-worker01/containerd/bin/* /bin/
+runc_ver='1.1.13' && sudo cp "kubelet-worker01/runc.amd64-v${runc_ver}" /usr/local/bin/runc-v${runc_ver} && sudo chmod 755 /usr/local/bin/runc-v${runc_ver}
+
+cat <<EOF> kubelet-worker01/containerd-config.toml
+version = 2
+
+[plugins."io.containerd.grpc.v1.cri"]
+  [plugins."io.containerd.grpc.v1.cri".containerd]
+    snapshotter = "overlayfs"
+    default_runtime_name = "runc"
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+    runtime_type = "io.containerd.runc.v2"
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+    SystemdCgroup = true
+    BinaryName = "/usr/local/bin/runc-v${runc_ver}"
+[plugins."io.containerd.grpc.v1.cri".cni]
+  bin_dir = "/opt/cni/bin"
+  conf_dir = "/etc/cni/net.d"
+EOF
+
+cat <<EOF> kubelet-worker01/containerd.service
+[Unit]
+Description=containerd container runtime
+Documentation=https://containerd.io
+After=network.target
+
+[Service]
+ExecStartPre=/sbin/modprobe overlay
+ExecStart=/bin/containerd
+Restart=always
+RestartSec=5
+Delegate=yes
+KillMode=process
+OOMScoreAdjust=-999
+LimitNOFILE=1048576
+LimitNPROC=infinity
+LimitCORE=infinity
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo mkdir -p /etc/containerd/ && sudo cp kubelet-worker01/containerd-config.toml /etc/containerd/config.toml
+sudo cp -v kubelet-worker01/containerd.service /etc/systemd/system/containerd.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now containerd.service
+
+# crictl installation
+cat <<EOF> kubelet-worker01/crictl.yaml
+runtime-endpoint: unix:///var/run/containerd/containerd.sock
+image-endpoint: unix:///var/run/containerd/containerd.sock
+timeout: 10
+debug: false
+EOF
+
+sudo cp -v kubelet-worker01/crictl.yaml /etc/crictl.yaml
+mkdir -p kubelet-worker01/crictl
+crictl_ver='1.30.0' && tar xf "kubelet-worker01/crictl-v${crictl_ver}-linux-amd64.tar.gz" -C kubelet-worker01/crictl
+sudo cp -v kubelet-worker01/crictl/crictl /usr/local/bin/crictl
+```
+
+### kubelet
+```bash
+kubectl config set-cluster ecs-matrix-k8s-cluster-all-in-one --certificate-authority=ca/ca.crt --embed-certs=true --server=https://192.168.50.97:6443 --kubeconfig=kubelet-worker01/kubelet-worker01.kubeconfig
+kubectl config set-credentials system:node:ecs-matrix-k8s-cluster-worker01 --client-certificate=kubelet-worker01/kubelet-worker01.crt --client-key=kubelet-worker01/kubelet-worker01.key --embed-certs=true --kubeconfig=kubelet-worker01/kubelet-worker01.kubeconfig
+kubectl config set-context default --cluster=ecs-matrix-k8s-cluster-all-in-one --user=system:node:ecs-matrix-k8s-cluster-worker01 --kubeconfig=kubelet-worker01/kubelet-worker01.kubeconfig
+kubectl config use-context default --kubeconfig=kubelet-worker01/kubelet-worker01.kubeconfig
+
+[ -d /var/lib/kubelet ] || sudo mkdir -p /var/lib/kubelet && sudo cp -v kubelet-worker01/kubelet-worker01.kubeconfig /var/lib/kubelet/kubelet.kubeconfig
+
+sudo mkdir -p /run/systemd/resolve /var/lib/kubelet/
+sudo ln -s /etc/resolv.conf /run/systemd/resolve/resolv.conf
+
+POD_CIDR='10.64.2.0/24'
+
+cat <<EOF> kubelet-worker01/kubelet-config.yaml
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+authentication:
+  anonymous:
+    enabled: false
+  webhook:
+    enabled: true
+  x509:
+    clientCAFile: "/var/lib/kubernetes/ca.crt"
+authorization:
+  mode: Webhook
+clusterDomain: "cluster.local"
+clusterDNS:
+  - "10.32.0.10"
+podCIDR: "${POD_CIDR}"
+resolvConf: "/run/systemd/resolve/resolv.conf"
+runtimeRequestTimeout: "15m"
+tlsCertFile: "/var/lib/kubelet/kubelet.crt"
+tlsPrivateKeyFile: "/var/lib/kubelet/kubelet.key"
+containerRuntimeEndpoint: "unix:///var/run/containerd/containerd.sock"
+cgroupDriver: "systemd"
+EOF
+
+sudo mkdir -p /var/lib/kubernetes/
+sudo cp -v kubelet-worker01/kubelet-config.yaml /var/lib/kubelet/kubelet-config.yaml
+sudo cp -v kubelet-worker01/kubelet-worker01.crt /var/lib/kubelet/kubelet.crt
+sudo cp -v kubelet-worker01/kubelet-worker01.key /var/lib/kubelet/kubelet.key
+sudo cp -v kubelet-worker01/ca.crt /var/lib/kubernetes/ca.crt
+kube_ver='1.30.2' && sudo cp -v "kubelet-worker01/kubelet-v${kube_ver}" "/usr/local/bin/kubelet-v${kube_ver}" && sudo chmod -v 755 "/usr/local/bin/kubelet-v${kube_ver}"
+
+cat <<EOF> kubelet-worker01/kubelet.service
+[Unit]
+Description=Kubernetes Kubelet
+Documentation=https://github.com/kubernetes/kubernetes
+After=containerd.service
+Requires=containerd.service
+
+[Service]
+ExecStart=/usr/local/bin/kubelet-v${kube_ver} \\
+  --config=/var/lib/kubelet/kubelet-config.yaml \\
+  --kubeconfig=/var/lib/kubelet/kubelet.kubeconfig \\
+  --register-node=true \\
+  --hostname-override=$(hostname -s) \\
+  --v=2
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo cp -v kubelet-worker01/kubelet.service /etc/systemd/system/kubelet.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now kubelet.service
+```
+
+### kube-proxy
+same as master node `kube-proxy` deployment
+
+### static route
+```bash
+# add route on master node 
+sudo route add -net ${POD_CIDR of worker1} gateway ${ip of worker01}
+# add route on worker node 
+sudo route add -net ${POD_CIDR of master} gateway ${ip of master}
+```
+
+## Verify
+```bash
+$ kubectl get nodes
+NAME                              STATUS   ROLES    AGE     VERSION
+ecs-matrix-k8s-cluster-master02   Ready    <none>   6h17m   v1.30.2
+ecs-matrix-k8s-cluster-worker01   Ready    <none>   41m     v1.30.2
 ```
 
 {% include links.html %}
