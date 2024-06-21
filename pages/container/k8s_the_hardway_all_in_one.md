@@ -14,12 +14,14 @@ folder: Container
 
 ## Env  
 
+## Env
 | Item | Explanation |  Value in config | config file |   
 | :------ | :------ | :------ | :------ |   
 | cluster-name | | ecs-matrix-k8s-cluster-all-in-one | admin.kubeconfig, kubelet.kubeconfig, kube-proxy.kubeconfig |   
 | service-cluster-ip-range | A CIDR IP range from which to assign service cluster IPs | 10.32.0.0/24 | kube-apiserver.service |   
-| cluster-cidr | CIDR Range for Pods in cluster | 10.64.1.0/24 | kube-controller-manager.service, kube-proxy-config.yaml |    
-| podCIDR | | 10.64.1.0/24 | 10-bridge.conf, kubelet-config.yaml |   
+| cluster-cidr | CIDR Range for Pods in cluster | 10.64.0.0/23 | kube-proxy-config.yaml, kube-controller-manager.service |    
+| podCIDR | pod subnet for master node | 10.64.1.0/24 | 10-bridge.conf, kubelet-config.yaml |   
+| podCIDR | pod subnet for worker node | 10.64.2.0/24 | 10-bridge.conf, kubelet-config.yaml |  
 
 ```bash
 sudo /usr/sbin/setenforce 0 
@@ -699,7 +701,7 @@ apiVersion: kubeproxy.config.k8s.io/v1alpha1
 clientConnection:
   kubeconfig: "/var/lib/kube-proxy/kube-proxy.kubeconfig"
 mode: "iptables"
-clusterCIDR: "10.64.1.0/24"
+clusterCIDR: "10.64.0.0/23"
 EOF
 
 cat <<EOF> kube-proxy/kube-proxy.service
@@ -832,7 +834,7 @@ Documentation=https://github.com/kubernetes/kubernetes
 [Service]
 ExecStart=/usr/local/bin/kube-controller-manager-v${kube_ver} \\
   --bind-address=0.0.0.0 \\
-  --cluster-cidr=10.64.0.0/16 \\
+  --cluster-cidr=10.64.0.0/23 \\
   --cluster-name=kubernetes \\
   --cluster-signing-cert-file=/var/lib/kubernetes/ca.crt \\
   --cluster-signing-key-file=/var/lib/kubernetes/ca.key \\
