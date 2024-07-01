@@ -783,7 +783,12 @@ Welcome to Nginx on ecs-matrix-https-server
 ## CMD Memo
 ### Check Private Key File
 ```bash
-$ openssl req -in <Private Key File> -noout -text
+$ openssl rsa -in <Private Key File> -noout -text
+```
+
+### Check Cert Request File
+```bash
+$ openssl req -in <Cert Request File> -noout -text
 ```
 
 ### Check Public Cert File
@@ -801,11 +806,6 @@ $ openssl x509 -in <Cert File> -noout -subject
 $ openssl x509 -in <Cert File> -noout -issuer
 ```
 
-### Check Cert Request File
-```bash
-$ openssl req -in <Cert Request File> -noout -text
-```
-
 ### Verify Cert with `openssl`
 ```bash
 $ echo | openssl s_client -connect ecs-matrix-https-server:443 2>/dev/null | grep 'Verify return code'
@@ -814,7 +814,7 @@ If `return code` is not `0`, it means error occurred.
 
 ### Script to download Certs Chain for a site
 ```bash
-$ cat <<EOF > cert1.awk
+$ cat <<EOF> cert.awk
 /\s*[0-9] s:/ {
     cert_cn = gensub(/.*CN ?=([^\/]*).*/, "\\\\1", "g")
     # remove leading [*. ]
@@ -840,7 +840,7 @@ EOF
 
 $ host='ecs-matrix-https-server'
 
-$ echo | openssl s_client -showcerts -connect "${host}:443" 2>&1 | awk -f cert1.awk
+$ echo | openssl s_client -showcerts -connect "${host}:443" 2>&1 | awk -f cert.awk
 Copying Cert to ecs_matrix_https_server.crt
 Copying Cert to ca_level1.crt
 Copying Cert to ca_level2.crt
