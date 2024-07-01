@@ -13,6 +13,7 @@ folder: Container
 =====
 
 ## Env
+
 | Item | Explanation |  Value in config | config file |   
 | :------ | :------ | :------ | :------ |   
 | cluster-name | | ecs-matrix-k8s-cluster-multi-masters | admin.kubeconfig, kubelet.kubeconfig, kube-proxy.kubeconfig |   
@@ -219,36 +220,6 @@ openssl req -new -out kube-apiserver/kube-apiserver.csr -key kube-apiserver/kube
 openssl ca -in kube-apiserver/kube-apiserver.csr -out kube-apiserver/kube-apiserver.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=kube-apiserver" -extensions usr_cert_kube_apiserver -passin pass:"$CA_KEY_PASS" -batch
 ```
 
-#### For `master01`
-```bash
-# Private Key
-openssl genrsa -out kube-apiserver/kube-apiserver-master01.key 2048
-# Cert Request
-openssl req -new -out kube-apiserver/kube-apiserver-master01.csr -key kube-apiserver/kube-apiserver-master01.key -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=Matrix/OU=Matrix/CN=kube-apiserver-master01' -reqexts usr_cert_kube_apiserver_master1 
-# Public Cert
-openssl ca -in kube-apiserver/kube-apiserver-master01.csr -out kube-apiserver/kube-apiserver-master01.crt -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=Matrix/OU=Matrix/CN=kube-apiserver-master01' -extensions usr_cert_kube_apiserver_master1 -passin pass:"$CA_KEY_PASS" -batch
-```
-
-#### For `master02`
-```bash
-# Private Key
-openssl genrsa -out kube-apiserver/kube-apiserver-master02.key 2048
-# Cert Request
-openssl req -new -out kube-apiserver/kube-apiserver-master02.csr -key kube-apiserver/kube-apiserver-master02.key -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=Matrix/OU=Matrix/CN=kube-apiserver-master02' -reqexts usr_cert_kube_apiserver_master2 
-# Public Cert
-openssl ca -in kube-apiserver/kube-apiserver-master02.csr -out kube-apiserver/kube-apiserver-master02.crt -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=Matrix/OU=Matrix/CN=kube-apiserver-master02' -extensions usr_cert_kube_apiserver_master2 -passin pass:"$CA_KEY_PASS" -batch
-```
-
-#### For `master03`
-```bash
-# Private Key
-openssl genrsa -out kube-apiserver/kube-apiserver-master03.key 2048
-# Cert Request
-openssl req -new -out kube-apiserver/kube-apiserver-master03.csr -key kube-apiserver/kube-apiserver-master03.key -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=Matrix/OU=Matrix/CN=kube-apiserver-master03' -reqexts usr_cert_kube_apiserver_master3 
-# Public Cert
-openssl ca -in kube-apiserver/kube-apiserver-master03.csr -out kube-apiserver/kube-apiserver-master03.crt -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=Matrix/OU=Matrix/CN=kube-apiserver-master03' -extensions usr_cert_kube_apiserver_master3 -passin pass:"$CA_KEY_PASS" -batch
-```
-
 ### `admin` Cert
 It is authenticated with clusterrolebinding `cluster-admin`
 ```bash
@@ -269,7 +240,7 @@ openssl ca -in admin/admin.csr -out admin/admin.crt -config ca/ca.cnf -subj '/C=
 ```
 
 ### `kubelet` Cert
-In order to be authorized by the Node authorizer, kubelets must use a credential that identifies them as being in the `system:nodes` group, with a username of `system:node:<nodeName>`. By default, `nodeName` is the host name as provided by `hostname`, or overridden via the kubelet option `--hostname-override`. So that, `group` should be aligned with `O`(Organization) in cert, and `username` aligned with `CN`(Common Name).  
+In order to be authorized by the Node authorizer, kubelets must use a credential that identifies them as being in the `system:nodes` group, with a username of `system:node:<nodeName>`. By default, `nodeName` is the host name as provided by `hostname`, or overridden via the kubelet option `--hostname-override`.   
 Ref: [Kubernetes Using Node Authorization](https://kubernetes.io/docs/reference/access-authn-authz/node/) 
 ```bash
 for sn in $(seq 1 3); do
@@ -280,7 +251,7 @@ for sn in $(seq 1 3); do
   # Private Key
   openssl genrsa -out kubelet/kubelet-master0${curr_hostname: -1}.key 2048
   # Cert Request
-  openssl req -new -out kubelet/kubelet-master0${curr_hostname: -1}.csr -key kubelet/kubelet-master0${curr_hostname: -1}.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/  O=system:nodes/OU=Matrix/CN=system:node:${curr_hostname}" -reqexts usr_cert_alts_master0${curr_hostname: -1}
+  openssl req -new -out kubelet/kubelet-master0${curr_hostname: -1}.csr -key kubelet/kubelet-master0${curr_hostname: -1}.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${curr_hostname}" -reqexts usr_cert_alts_master0${curr_hostname: -1}
   # Public Cert
   openssl ca -in kubelet/kubelet-master0${curr_hostname: -1}.csr -out kubelet/kubelet-master0${curr_hostname: -1}.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${curr_hostname}" -extensions usr_cert_alts_master0${curr_hostname: -1} -passin pass:"$CA_KEY_PASS" -batch
 done
@@ -356,6 +327,7 @@ done
 ## etcd 
 ### Tools Download
 ```bash
+[ -d etcd ] || mkdir etcd
 curl -s -L "https://github.com/etcd-io/etcd/releases/download/v${etcd_ver}/etcd-v${etcd_ver}-linux-amd64.tar.gz" -o "etcd/etcd-v${etcd_ver}-linux-amd64.tar.gz"
 ```
 
@@ -870,13 +842,12 @@ ecs-matrix-k8s-cluster-master03
 ## kube-proxy
 ### Tools Download
 ```bash
+[ -d kube-proxy ] || mkdir kube-proxy 
 curl -s -L "https://storage.googleapis.com/kubernetes-release/release/v${kube_ver}/bin/linux/amd64/kube-proxy" -o kube-proxy/kube-proxy-v${kube_ver}
 ```
 
 ### Config
 ```bash
-[ -d kube-proxy ] || mkdir -p kube-proxy
-
 kube_conf_file="kube-proxy/kube-proxy.kubeconfig"
 kubectl config set-cluster ${CLUSTER_NAME} --certificate-authority=ca/ca.crt --embed-certs=true --server=https://127.0.0.1:6443 --kubeconfig=${kube_conf_file}
 kubectl config set-credentials system:kube-proxy --client-certificate=kube-proxy/kube-proxy.crt --client-key=kube-proxy/kube-proxy.key --embed-certs=true --kubeconfig=${kube_conf_file}
