@@ -159,17 +159,6 @@ chmod 600 ca/ca.key
 openssl req -new -x509 -key ca/ca.key -days 3650 -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=Kubernetes-CA" -config ca/ca.cnf -extensions root_ca -passin pass:"$CA_KEY_PASS" > ca/ca.crt
 ```
 
-### `kube-apiserver` Cert
-```bash
-[ -d kube-apiserver ] || mkdir kube-apiserver
-# Private Key
-openssl genrsa -out kube-apiserver/kube-apiserver.key 2048
-# Cert Request
-openssl req -new -out kube-apiserver/kube-apiserver.csr -key kube-apiserver/kube-apiserver.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=kube-apiserver" -reqexts usr_cert_kube_apiserver 
-# Public Cert
-openssl ca -in kube-apiserver/kube-apiserver.csr -out kube-apiserver/kube-apiserver.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=kube-apiserver" -extensions usr_cert_kube_apiserver -passin pass:"$CA_KEY_PASS" -batch
-```
-
 ### `etcd` Cert
 ```bash
 [ -d etcd ] || mkdir etcd
@@ -178,7 +167,18 @@ openssl genrsa -out etcd/etcd.key 2048
 # Cert Request
 openssl req -new -out etcd/etcd.csr -key etcd/etcd.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=etcd" -reqexts usr_cert_alts 
 # Public Cert
-openssl ca -in etcd/etcd.csr -out etcd/etcd.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=etcd" -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in etcd/etcd.csr -out etcd/etcd.crt -notext -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=etcd" -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
+```
+
+### `kube-apiserver` Cert
+```bash
+[ -d kube-apiserver ] || mkdir kube-apiserver
+# Private Key
+openssl genrsa -out kube-apiserver/kube-apiserver.key 2048
+# Cert Request
+openssl req -new -out kube-apiserver/kube-apiserver.csr -key kube-apiserver/kube-apiserver.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=kube-apiserver" -reqexts usr_cert_kube_apiserver 
+# Public Cert
+openssl ca -in kube-apiserver/kube-apiserver.csr -out kube-apiserver/kube-apiserver.crt -notext -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=kube-apiserver" -extensions usr_cert_kube_apiserver -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### `admin` Cert
@@ -198,7 +198,7 @@ openssl genrsa -out admin/admin.key 2048
 # Cert Request
 openssl req -new -out admin/admin.csr -key admin/admin.key -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=system:masters/OU=Matrix/CN=kube-admin' -reqexts usr_cert_no_alt
 # Public Cert
-openssl ca -in admin/admin.csr -out admin/admin.crt -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=system:masters/OU=Matrix/CN=kube-admin' -extensions usr_cert_no_alt -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in admin/admin.csr -out admin/admin.crt -notext -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=system:masters/OU=Matrix/CN=kube-admin' -extensions usr_cert_no_alt -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### `kubelet` Cert
@@ -211,7 +211,7 @@ openssl genrsa -out kubelet/kubelet.key 2048
 # Cert Request
 openssl req -new -out kubelet/kubelet.csr -key kubelet/kubelet.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${HOSTNAME_MASTER}" -reqexts usr_cert_alts
 # Public Cert
-openssl ca -in kubelet/kubelet.csr -out kubelet/kubelet.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${HOSTNAME_MASTER}" -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in kubelet/kubelet.csr -out kubelet/kubelet.crt -notext -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${HOSTNAME_MASTER}" -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### `kube-proxy` Cert
@@ -230,7 +230,7 @@ openssl genrsa -out kube-proxy/kube-proxy.key 2048
 # Cert Request
 openssl req -new -out kube-proxy/kube-proxy.csr -key kube-proxy/kube-proxy.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-proxy" -reqexts usr_cert_no_alt
 # Public Cert
-openssl ca -in kube-proxy/kube-proxy.csr -out kube-proxy/kube-proxy.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-proxy" -extensions usr_cert_no_alt -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in kube-proxy/kube-proxy.csr -out kube-proxy/kube-proxy.crt -notext -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-proxy" -extensions usr_cert_no_alt -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### `kube-scheduler` Cert
@@ -249,7 +249,7 @@ openssl genrsa -out kube-scheduler/kube-scheduler.key 2048
 # Cert Request
 openssl req -new -out kube-scheduler/kube-scheduler.csr -key kube-scheduler/kube-scheduler.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-scheduler" -reqexts usr_cert_alts
 # Public Cert
-openssl ca -in kube-scheduler/kube-scheduler.csr -out kube-scheduler/kube-scheduler.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-scheduler" -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in kube-scheduler/kube-scheduler.csr -out kube-scheduler/kube-scheduler.crt -notext -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-scheduler" -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### `kube-controller-manager` Cert
@@ -268,7 +268,7 @@ openssl genrsa -out kube-controller-manager/kube-controller-manager.key 2048
 # Cert Request
 openssl req -new -out kube-controller-manager/kube-controller-manager.csr -key kube-controller-manager/kube-controller-manager.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-controller-manager" -reqexts usr_cert_alts
 # Public Cert
-openssl ca -in kube-controller-manager/kube-controller-manager.csr -out kube-controller-manager/kube-controller-manager.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-controller-manager" -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in kube-controller-manager/kube-controller-manager.csr -out kube-controller-manager/kube-controller-manager.crt -notext -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-controller-manager" -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ## etcd 
@@ -1453,7 +1453,7 @@ cat <<EOF>> .bashrc
 export IP_WORKER01='192.168.50.79'
 export HOSTNAME_WORKER01='ecs-matrix-k8s-cluster-worker01'
 export POD_CIDR_WORKER01='10.64.1.0/24'
-export KUBE_APISERVER_IP='192.168.50.57'
+export KUBE_APISERVER_IP=${IP_MASTER}
 EOF
 ```
 
@@ -1475,14 +1475,12 @@ IP.1 = 127.0.0.1
 IP.2 = ${IP_WORKER01}
 EOF
 
-# Cert Generate
-[ -d kubelet-worker01 ] || mkdir kubelet-worker01
 # Private Key
-openssl genrsa -out kubelet-worker01/kubelet-worker01.key 2048
+openssl genrsa -out kubelet/kubelet-worker01.key 2048
 # Cert Request
-openssl req -new -out kubelet-worker01/kubelet-worker01.csr -key kubelet-worker01/kubelet-worker01.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${HOSTNAME_WORKER01}" -reqexts usr_cert_alts_worker01
+openssl req -new -out kubelet/kubelet-worker01.csr -key kubelet/kubelet-worker01.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${HOSTNAME_WORKER01}" -reqexts usr_cert_alts_worker01
 # Public Cert
-openssl ca -in kubelet-worker01/kubelet-worker01.csr -out kubelet-worker01/kubelet-worker01.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${HOSTNAME_WORKER01}" -extensions usr_cert_alts_worker01 -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in kubelet/kubelet-worker01.csr -out kubelet/kubelet-worker01.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${HOSTNAME_WORKER01}" -extensions usr_cert_alts_worker01 -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### CNI
@@ -1499,9 +1497,9 @@ sudo cp -v kubelet/sysctl-kubernetes.conf /etc/sysctl.d/kubernetes.conf
 sudo sysctl --system
 
 sudo mkdir -p /opt/cni/bin
-sudo tar xf kubelet-worker01/cni-plugins-linux-amd64-v${cni_ver}.tgz -C /opt/cni/bin/
+sudo tar xf kubelet/cni-plugins-linux-amd64-v${cni_ver}.tgz -C /opt/cni/bin/
 
-cat <<EOF> kubelet-worker01/10-bridge.conf
+cat <<EOF> kubelet/10-bridge-worker01.conf
 {
     "cniVersion": "0.4.0",
     "name": "bridge",
@@ -1528,18 +1526,18 @@ cat <<EOF> kubelet-worker01/99-loopback.conf
 EOF
 
 sudo mkdir -p /etc/cni/net.d/
-sudo cp -v kubelet-worker01/10-bridge.conf /etc/cni/net.d/10-bridge.conf
-sudo cp -v kubelet-worker01/99-loopback.conf /etc/cni/net.d/99-loopback.conf
+sudo cp -v kubelet/10-bridge-worker01.conf /etc/cni/net.d/10-bridge.conf
+sudo cp -v kubelet/99-loopback.conf /etc/cni/net.d/99-loopback.conf
 ```
 
 ### containerd
 ```bash
-mkdir -p kubelet-worker01/containerd
-tar xf "kubelet-worker01/containerd-${containerd_ver}-linux-amd64.tar.gz" -C kubelet-worker01/containerd
-sudo cp -arv kubelet-worker01/containerd/bin/* /bin/
-sudo cp -v "kubelet-worker01/runc.amd64-v${runc_ver}" /usr/local/bin/runc-v${runc_ver} && sudo chmod -v 755 /usr/local/bin/runc-v${runc_ver}
+mkdir -p kubelet/containerd
+tar xf "kubelet/containerd-${containerd_ver}-linux-amd64.tar.gz" -C kubelet/containerd
+sudo cp -arv kubelet/containerd/bin/* /bin/
+sudo cp -v "kubelet/runc.amd64-v${runc_ver}" /usr/local/bin/runc-v${runc_ver} && sudo chmod -v 755 /usr/local/bin/runc-v${runc_ver}
 
-cat <<EOF> kubelet-worker01/containerd-config.toml
+cat <<EOF> kubelet/containerd-config.toml
 version = 2
 
 [plugins."io.containerd.grpc.v1.cri"]
@@ -1556,7 +1554,7 @@ version = 2
   conf_dir = "/etc/cni/net.d"
 EOF
 
-cat <<EOF> kubelet-worker01/containerd.service
+cat <<EOF> kubelet/containerd.service
 [Unit]
 Description=containerd container runtime
 Documentation=https://containerd.io
@@ -1578,39 +1576,39 @@ LimitCORE=infinity
 WantedBy=multi-user.target
 EOF
 
-sudo mkdir -p /etc/containerd/ && sudo cp kubelet-worker01/containerd-config.toml /etc/containerd/config.toml
-sudo cp -v kubelet-worker01/containerd.service /etc/systemd/system/containerd.service
+sudo mkdir -p /etc/containerd/ && sudo cp kubelet/containerd-config.toml /etc/containerd/config.toml
+sudo cp -v kubelet/containerd.service /etc/systemd/system/containerd.service
 sudo systemctl daemon-reload
 sudo systemctl enable --now containerd.service
 
 # crictl installation
-cat <<EOF> kubelet-worker01/crictl.yaml
+cat <<EOF> kubelet/crictl.yaml
 runtime-endpoint: unix:///var/run/containerd/containerd.sock
 image-endpoint: unix:///var/run/containerd/containerd.sock
 timeout: 10
 debug: false
 EOF
 
-sudo cp -v kubelet-worker01/crictl.yaml /etc/crictl.yaml
-mkdir -p kubelet-worker01/crictl
-crictl_ver='1.30.0' && tar xf "kubelet-worker01/crictl-v${crictl_ver}-linux-amd64.tar.gz" -C kubelet-worker01/crictl
-sudo cp -v kubelet-worker01/crictl/crictl /usr/local/bin/crictl
+sudo cp -v kubelet/crictl.yaml /etc/crictl.yaml
+mkdir -p kubelet/crictl
+tar xf "kubelet/crictl-v${crictl_ver}-linux-amd64.tar.gz" -C kubelet/crictl
+sudo cp -v kubelet/crictl/crictl /usr/local/bin/crictl
 ```
 
 ### kubelet
 ```bash
-kube_conf_file='kubelet-worker01/kubelet-worker01.kubeconfig'
+kube_conf_file='kubelet/kubelet-worker01.kubeconfig'
 kubectl config set-cluster ${CLUSTER_NAME} --certificate-authority=ca/ca.crt --embed-certs=true --server=https://${KUBE_APISERVER_IP}:6443 --kubeconfig=${kube_conf_file}
-kubectl config set-credentials system:node:ecs-matrix-k8s-cluster-worker01 --client-certificate=kubelet-worker01/kubelet-worker01.crt --client-key=kubelet-worker01/kubelet-worker01.key --embed-certs=true --kubeconfig=${kube_conf_file}
-kubectl config set-context default --cluster=${CLUSTER_NAME} --user=system:node:ecs-matrix-k8s-cluster-worker01 --kubeconfig=${kube_conf_file}
+kubectl config set-credentials system:node:${HOSTNAME_WORKER01} --client-certificate=kubelet/kubelet-worker01.crt --client-key=kubelet/kubelet-worker01.key --embed-certs=true --kubeconfig=${kube_conf_file}
+kubectl config set-context default --cluster=${CLUSTER_NAME} --user=system:node:${HOSTNAME_WORKER01} --kubeconfig=${kube_conf_file}
 kubectl config use-context default --kubeconfig=${kube_conf_file}
 
-[ -d /var/lib/kubelet ] || sudo mkdir -p /var/lib/kubelet && sudo cp -v kubelet-worker01/kubelet-worker01.kubeconfig /var/lib/kubelet/kubelet.kubeconfig
+[ -d /var/lib/kubelet ] || sudo mkdir -p /var/lib/kubelet && sudo cp -v kubelet/kubelet-worker01.kubeconfig /var/lib/kubelet/kubelet.kubeconfig
 
 sudo mkdir -p /run/systemd/resolve /var/lib/kubelet/
 sudo ln -s /etc/resolv.conf /run/systemd/resolve/resolv.conf
 
-cat <<EOF> kubelet-worker01/kubelet-config.yaml
+cat <<EOF> kubelet/kubelet-config-worker01.yaml
 kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
 authentication:
@@ -1635,13 +1633,13 @@ cgroupDriver: "systemd"
 EOF
 
 sudo mkdir -p /var/lib/kubernetes/
-sudo cp -v kubelet-worker01/kubelet-config.yaml /var/lib/kubelet/kubelet-config.yaml
-sudo cp -v kubelet-worker01/kubelet-worker01.crt /var/lib/kubelet/kubelet-worker01.crt
-sudo cp -v kubelet-worker01/kubelet-worker01.key /var/lib/kubelet/kubelet-worker01.key
+sudo cp -v kubelet/kubelet-config-worker01.yaml /var/lib/kubelet/kubelet-config-worker01.yaml
+sudo cp -v kubelet/kubelet-worker01.crt /var/lib/kubelet/kubelet-worker01.crt
+sudo cp -v kubelet/kubelet-worker01.key /var/lib/kubelet/kubelet-worker01.key
 sudo cp -v ca/ca.crt /var/lib/kubernetes/ca.crt
-sudo cp -v "kubelet-worker01/kubelet-v${kube_ver}" "/usr/local/bin/kubelet-v${kube_ver}" && sudo chmod -v 755 "/usr/local/bin/kubelet-v${kube_ver}"
+sudo cp -v "kubelet/kubelet-v${kube_ver}" "/usr/local/bin/kubelet-v${kube_ver}" && sudo chmod -v 755 "/usr/local/bin/kubelet-v${kube_ver}"
 
-cat <<EOF> kubelet-worker01/kubelet.service
+cat <<EOF> kubelet/kubelet-worker01.service
 [Unit]
 Description=Kubernetes Kubelet
 Documentation=https://github.com/kubernetes/kubernetes
@@ -1650,7 +1648,7 @@ Requires=containerd.service
 
 [Service]
 ExecStart=/usr/local/bin/kubelet-v${kube_ver} \\
-  --config=/var/lib/kubelet/kubelet-config.yaml \\
+  --config=/var/lib/kubelet/kubelet-config-worker01.yaml \\
   --kubeconfig=/var/lib/kubelet/kubelet.kubeconfig \\
   --register-node=true \\
   --hostname-override=${HOSTNAME_WORKER01} \\
@@ -1662,13 +1660,45 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 
-sudo cp -v kubelet-worker01/kubelet.service /etc/systemd/system/kubelet.service
+sudo cp -v kubelet/kubelet-worker01.service /etc/systemd/system/kubelet.service
 sudo systemctl daemon-reload
 sudo systemctl enable --now kubelet.service
 ```
 
 ### kube-proxy
-same as master node `kube-proxy` deployment
+#### Config
+All other config files / cert files are same as master node.  
+```bash
+cat <<EOF> kube-proxy/kube-proxy-worker01.service
+[Unit]
+Description=Kubernetes Kube Proxy
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+ExecStart=/usr/local/bin/kube-proxy-v${kube_ver} \\
+  --config=/var/lib/kube-proxy/kube-proxy-config.yaml \\
+  --hostname-override=${HOSTNAME_WORKER01}
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+
+#### Deployment
+```bash
+sudo yum -y install socat conntrack ipset
+sudo cp -v kube-proxy/kube-proxy-v${kube_ver} /usr/local/bin/kube-proxy-v${kube_ver} && sudo chmod -v 755 /usr/local/bin/kube-proxy-v${kube_ver}
+
+sudo mkdir -p /var/lib/kube-proxy
+sudo cp -v kube-proxy/kube-proxy.kubeconfig /var/lib/kube-proxy/kube-proxy.kubeconfig
+
+sudo cp -v kube-proxy/kube-proxy-config.yaml /var/lib/kube-proxy/kube-proxy-config.yaml
+sudo cp -v kube-proxy/kube-proxy-worker01.service /etc/systemd/system/kube-proxy.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now kube-proxy.service
+```
 
 ### static route
 ```bash
@@ -1682,8 +1712,8 @@ sudo route add -net ${POD_CIDR_MASTER} gateway ${IP_MASTER}
 ```bash
 $ kubectl get nodes
 NAME                              STATUS   ROLES    AGE     VERSION
-ecs-matrix-k8s-cluster-master     Ready    <none>   6h17m   v1.30.2
-ecs-matrix-k8s-cluster-worker01   Ready    <none>   41m     v1.30.2
+ecs-matrix-k8s-cluster-master     Ready    <none>   56m     v1.30.2
+ecs-matrix-k8s-cluster-worker01   Ready    <none>   4m58s   v1.30.2
 ```
 
 {% include links.html %}
