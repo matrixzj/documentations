@@ -2,7 +2,7 @@
 title: Kubernetes All-in-One Deployment in the Hard Way 
 tags: [container]
 keywords: kubernetes, k8s
-last_updated: Jun 27, 2024
+last_updated: Jul 4, 2024
 summary: "All in one deployment for Kubernetes cluster in the hard Way"
 sidebar: mydoc_sidebar
 permalink: k8s_the_hardway_all_in_one.html
@@ -17,8 +17,8 @@ folder: Container
 | Item | Explanation |  Value in config | config file |   
 | :------ | :------ | :------ | :------ |   
 | cluster-name | | ecs-matrix-k8s-cluster-all-in-one | admin.kubeconfig, kubelet.kubeconfig, kube-proxy.kubeconfig |   
-| service-cluster-ip-range | A CIDR IP range from which to assign service cluster IPs | 10.32.0.0/24 | kube-apiserver.service |   
-| cluster-cidr | CIDR Range for Pods in cluster | 10.64.0.0/23 | kube-proxy-config.yaml, kube-controller-manager.service |    
+| service-cluster-ip-range | A CIDR IP range from which to assign service cluster IPs | 10.32.0.0/24 | kube-apiserver.service, kube-controller-manager.service |   
+| cluster-cidr | CIDR Range for Pods in cluster | 10.64.0.0/22 | kube-proxy-config.yaml, kube-controller-manager.service |    
 | podCIDR for node 1 | pod subnet for master node | 10.64.1.0/24 | 10-bridge.conf, kubelet-config.yaml |   
 | podCIDR for node 2 | pod subnet for worker node | 10.64.2.0/24 | 10-bridge.conf, kubelet-config.yaml |  
 
@@ -27,6 +27,27 @@ sudo /usr/sbin/setenforce 0
 sudo sed -i '/SELINUX=/s/enforcing/disabled/' /etc/sysconfig/selinux
 ```
 Config `/etc/hosts` file for dns resolve. 
+Env Variables
+```bash
+cat <<EOF>> .bashrc
+export SVC_CIDR='10.32.0.0/24'
+export CLUSTER_CIDR='10.64.0.0/22'
+export CLUSTER_NAME='ecs-matrix-k8s-cluster-all-in-one'
+
+export IP_MASTER='192.168.50.74'
+export HOSTNAME_MASTER='ecs-matrix-k8s-cluster-master'
+export POD_CIDR_MASTER='10.64.0.0/24'
+
+export CA_KEY_PASS='*@55Ka}5'
+
+export kube_ver='1.30.2'
+export etcd_ver='3.4.33'
+export crictl_ver='1.30.0'
+export runc_ver='1.1.13'
+export cni_ver='1.5.1'
+export containerd_ver='1.7.18'
+EOF
+```
 
 ## CA
 In Kubernetes authorization `RBAC` 
@@ -105,11 +126,10 @@ DNS.2 = kubernetes.default
 DNS.3 = kubernetes.default.svc
 DNS.4 = kubernetes.default.svc.cluster
 DNS.5 = kubernetes.svc.cluster.local
-DNS.6 = $(hostname -s)
-DNS.7 = $(hostname)
+DNS.7 = ${HOSTNAME_MASTER}
 IP.1 = 127.0.0.1
 IP.2 = 10.32.0.1
-IP.3 = $(ip addr show eth0  | awk '/inet /{print gensub("/.*", "", "1", $2)}')
+IP.3 = ${IP_MASTER}
 
 # For \`etcd\` / \`kubelet\` / \`kube-scheduler\` / \`kube-controller-manager\`
 [ usr_cert_alts ]
@@ -118,10 +138,10 @@ keyUsage                        = critical, digitalSignature, keyEncipherment
 subjectAltName                  = @alt_names_alts
 
 [ alt_names_alts ]
-DNS.1 = $(hostname -s)
-DNS.2 = $(hostname)
+DNS.1 = localhost
+DNS.2 = ${HOSTNAME_MASTER}
 IP.1 = 127.0.0.1
-IP.2 = $(ip addr show eth0  | awk '/inet /{print gensub("/.*", "", "1", $2)}')
+IP.2 = ${IP_MASTER}
 EOF
 
 mkdir ca/newcerts
@@ -131,14 +151,12 @@ echo 01 >> ca/serial
 
 ### CA Cert
 ```bash
-export CA_KEY_PASS=''
-
 # Private Key
 openssl genrsa -passout pass:"$CA_KEY_PASS" -out ca/ca.key -des3 2048
 chmod 600 ca/ca.key
 
 # Public Cert
-openssl req -new -x509 -key ca/ca.key -days 3650 -subj '/C=CN/ST=BJ/L=Beijing/O=Matrix/OU=Matrix/CN=Kubernetes-CA' -config ca/ca.cnf -extensions root_ca -passin pass:"$CA_KEY_PASS" > ca/ca.crt
+openssl req -new -x509 -key ca/ca.key -days 3650 -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=Kubernetes-CA" -config ca/ca.cnf -extensions root_ca -passin pass:"$CA_KEY_PASS" > ca/ca.crt
 ```
 
 ### `kube-apiserver` Cert
@@ -147,9 +165,9 @@ openssl req -new -x509 -key ca/ca.key -days 3650 -subj '/C=CN/ST=BJ/L=Beijing/O=
 # Private Key
 openssl genrsa -out kube-apiserver/kube-apiserver.key 2048
 # Cert Request
-openssl req -new -out kube-apiserver/kube-apiserver.csr -key kube-apiserver/kube-apiserver.key -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=Matrix/OU=Matrix/CN=kube-apiserver' -reqexts usr_cert_kube_apiserver 
+openssl req -new -out kube-apiserver/kube-apiserver.csr -key kube-apiserver/kube-apiserver.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=kube-apiserver" -reqexts usr_cert_kube_apiserver 
 # Public Cert
-openssl ca -in kube-apiserver/kube-apiserver.csr -out kube-apiserver/kube-apiserver.crt -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=Matrix/OU=Matrix/CN=kube-apiserver' -extensions usr_cert_kube_apiserver -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in kube-apiserver/kube-apiserver.csr -out kube-apiserver/kube-apiserver.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=kube-apiserver" -extensions usr_cert_kube_apiserver -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### `etcd` Cert
@@ -158,9 +176,9 @@ openssl ca -in kube-apiserver/kube-apiserver.csr -out kube-apiserver/kube-apiser
 # Private Key
 openssl genrsa -out etcd/etcd.key 2048
 # Cert Request
-openssl req -new -out etcd/etcd.csr -key etcd/etcd.key -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=Matrix/OU=Matrix/CN=etcd' -reqexts usr_cert_alts 
+openssl req -new -out etcd/etcd.csr -key etcd/etcd.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=etcd" -reqexts usr_cert_alts 
 # Public Cert
-openssl ca -in etcd/etcd.csr -out etcd/etcd.crt -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=Matrix/OU=Matrix/CN=etcd' -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in etcd/etcd.csr -out etcd/etcd.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=etcd" -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### `admin` Cert
@@ -184,16 +202,16 @@ openssl ca -in admin/admin.csr -out admin/admin.crt -config ca/ca.cnf -subj '/C=
 ```
 
 ### `kubelet` Cert
-In order to be authorized by the Node authorizer, kubelets must use a credential that identifies them as being in the `system:nodes` group, with a username of `system:node:<nodeName>`. By default, `nodeName` is the host name as provided by `hostname`, or overridden via the kubelet option `--hostname-override`. So that, `group` should be aligned with `O`(Organization) in cert, and `username` aligned with `CN`(Common Name).  
+In order to be authorized by the Node authorizer, kubelets must use a credential that identifies them as being in the `system:nodes` group, with a username of `system:node:<nodeName>`. By default, `nodeName` is the host name as provided by `hostname`, or overridden via the kubelet option `--hostname-override`.
 Ref: [Kubernetes Using Node Authorization](https://kubernetes.io/docs/reference/access-authn-authz/node/) 
 ```bash
 [ -d kubelet ] || mkdir kubelet
 # Private Key
 openssl genrsa -out kubelet/kubelet.key 2048
 # Cert Request
-openssl req -new -out kubelet/kubelet.csr -key kubelet/kubelet.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:$(hostname -s)" -reqexts usr_cert_alts
+openssl req -new -out kubelet/kubelet.csr -key kubelet/kubelet.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${HOSTNAME_MASTER}" -reqexts usr_cert_alts
 # Public Cert
-openssl ca -in kubelet/kubelet.csr -out kubelet/kubelet.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:$(hostname -s)" -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in kubelet/kubelet.csr -out kubelet/kubelet.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${HOSTNAME_MASTER}" -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### `kube-proxy` Cert
@@ -210,9 +228,9 @@ $ kubectl get clusterrolebindings.rbac.authorization.k8s.io system:node-proxier 
 # Private Key
 openssl genrsa -out kube-proxy/kube-proxy.key 2048
 # Cert Request
-openssl req -new -out kube-proxy/kube-proxy.csr -key kube-proxy/kube-proxy.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:node-proxier/OU=Matrix/CN=system:kube-proxy" -reqexts usr_cert_no_alt
+openssl req -new -out kube-proxy/kube-proxy.csr -key kube-proxy/kube-proxy.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-proxy" -reqexts usr_cert_no_alt
 # Public Cert
-openssl ca -in kube-proxy/kube-proxy.csr -out kube-proxy/kube-proxy.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:node-proxier/OU=Matrix/CN=system:kube-proxy" -extensions usr_cert_no_alt -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in kube-proxy/kube-proxy.csr -out kube-proxy/kube-proxy.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-proxy" -extensions usr_cert_no_alt -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### `kube-scheduler` Cert
@@ -229,9 +247,9 @@ $ kubectl get clusterrolebindings.rbac.authorization.k8s.io system:kube-schedule
 # Private Key
 openssl genrsa -out kube-scheduler/kube-scheduler.key 2048
 # Cert Request
-openssl req -new -out kube-scheduler/kube-scheduler.csr -key kube-scheduler/kube-scheduler.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:kube-scheduler/OU=Matrix/CN=system:kube-scheduler" -reqexts usr_cert_alts
+openssl req -new -out kube-scheduler/kube-scheduler.csr -key kube-scheduler/kube-scheduler.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-scheduler" -reqexts usr_cert_alts
 # Public Cert
-openssl ca -in kube-scheduler/kube-scheduler.csr -out kube-scheduler/kube-scheduler.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:kube-scheduler/OU=Matrix/CN=system:kube-scheduler" -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in kube-scheduler/kube-scheduler.csr -out kube-scheduler/kube-scheduler.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-scheduler" -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### `kube-controller-manager` Cert
@@ -248,29 +266,20 @@ $ kubectl get clusterrolebindings.rbac.authorization.k8s.io system:kube-controll
 # Private Key
 openssl genrsa -out kube-controller-manager/kube-controller-manager.key 2048
 # Cert Request
-openssl req -new -out kube-controller-manager/kube-controller-manager.csr -key kube-controller-manager/kube-controller-manager.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:kube-controller-manager/OU=Matrix/CN=system:kube-controller-manager" -reqexts usr_cert_alts
+openssl req -new -out kube-controller-manager/kube-controller-manager.csr -key kube-controller-manager/kube-controller-manager.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-controller-manager" -reqexts usr_cert_alts
 # Public Cert
-openssl ca -in kube-controller-manager/kube-controller-manager.csr -out kube-controller-manager/kube-controller-manager.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:kube-controller-manager/OU=Matrix/CN=system:kube-controller-manager" -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in kube-controller-manager/kube-controller-manager.csr -out kube-controller-manager/kube-controller-manager.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-controller-manager" -extensions usr_cert_alts -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ## etcd 
-### Config
-Tools download
+### Tools Download
 ```bash
-etcd_ver='3.4.33'
+[ -d etcd ] || mkdir etcd
 curl -s -L "https://github.com/etcd-io/etcd/releases/download/v${etcd_ver}/etcd-v${etcd_ver}-linux-amd64.tar.gz" -o "etcd/etcd-v${etcd_ver}-linux-amd64.tar.gz"
-tar xf "etcd/etcd-v${etcd_ver}-linux-amd64.tar.gz" -C etcd/
-sudo cp -v etcd/etcd-v${etcd_ver}-linux-amd64/etcd* /usr/local/bin/
+```
 
-sudo mkdir -p /etc/etcd
-sudo mkdir -p /var/lib/etcd && sudo chmod 700 /var/lib/etcd
-sudo cp -v ca/ca.crt /etc/etcd/
-sudo cp -v etcd/etcd.crt /etc/etcd/
-sudo cp -v etcd/etcd.key /etc/etcd/
-
-HOSTNAME=$(hostname -s)
-LOCAL_IP=$(ifconfig eth0 | awk '/inet /{print $2}')
-
+### Config
+```bash
 cat <<EOF> etcd/etcd.service
 [Unit]
 Description=etcd
@@ -279,7 +288,7 @@ Documentation=https://github.com/coreos
 [Service]
 Type=notify
 ExecStart=/usr/local/bin/etcd \\
-  --name ${HOSTNAME} \\
+  --name ${HOSTNAME_MASTER} \\
   --cert-file=/etc/etcd/etcd.crt \\
   --key-file=/etc/etcd/etcd.key \\
   --peer-cert-file=/etc/etcd/etcd.crt \\
@@ -288,11 +297,11 @@ ExecStart=/usr/local/bin/etcd \\
   --peer-trusted-ca-file=/etc/etcd/ca.crt \\
   --peer-client-cert-auth \\
   --client-cert-auth \\
-  --initial-advertise-peer-urls https://${LOCAL_IP}:2380 \\
-  --listen-peer-urls https://${LOCAL_IP}:2380 \\
-  --listen-client-urls https://${LOCAL_IP}:2379,https://127.0.0.1:2379 \\
-  --advertise-client-urls https://${LOCAL_IP}:2379 \\
-  --initial-cluster ${HOSTNAME}=https://${LOCAL_IP}:2380 \\
+  --initial-advertise-peer-urls https://${IP_MASTER}:2380 \\
+  --listen-peer-urls https://${IP_MASTER}:2380 \\
+  --listen-client-urls https://${IP_MASTER}:2379,https://127.0.0.1:2379 \\
+  --advertise-client-urls https://${IP_MASTER}:2379 \\
+  --initial-cluster ${HOSTNAME_MASTER}=https://${IP_MASTER}:2380 \\
   --initial-cluster-state new \\
   --data-dir=/var/lib/etcd
 Restart=on-failure
@@ -301,6 +310,18 @@ RestartSec=5
 [Install]
 WantedBy=multi-user.target
 EOF
+```
+
+### Deployment 
+```bash
+tar xf "etcd/etcd-v${etcd_ver}-linux-amd64.tar.gz" -C etcd/
+sudo cp -v etcd/etcd-v${etcd_ver}-linux-amd64/etcd* /usr/local/bin/
+
+sudo mkdir -p /etc/etcd
+sudo mkdir -p /var/lib/etcd && sudo chmod 700 /var/lib/etcd
+sudo cp -v ca/ca.crt /etc/etcd/ca.crt
+sudo cp -v etcd/etcd.crt /etc/etcd/etcd.crt
+sudo cp -v etcd/etcd.key /etc/etcd/etcd.key
 
 sudo cp -v etcd/etcd.service /etc/systemd/system/etcd.service
 sudo systemctl daemon-reload
@@ -318,21 +339,14 @@ $ ETCDCTL_API=3 /usr/local/bin/etcdctl member list --endpoints=https://127.0.0.1
 ```
 
 ## kube-apiserver
+### Tools Download
+```bash
+[ -d kube-apiserver ] || mkdir -p kube-apiserver
+curl -s -L "https://storage.googleapis.com/kubernetes-release/release/v${kube_ver}/bin/linux/amd64/kube-apiserver" -o "kube-apiserver/kube-apiserver-v${kube_ver}"
+```
+
 ### Config
 ```bash
-kube_ver='1.30.2'
-curl -s -L "https://storage.googleapis.com/kubernetes-release/release/v${kube_ver}/bin/linux/amd64/kube-apiserver" -o "kube-apiserver/kube-apiserver-v${kube_ver}"
-sudo cp -v "kube-apiserver/kube-apiserver-v${kube_ver}" "/usr/local/bin/kube-apiserver-v${kube_ver}" && sudo chmod -v 755 "/usr/local/bin/kube-apiserver-v${kube_ver}"
-
-sudo mkdir -p /var/lib/kubernetes/
-sudo cp -v ca/ca.crt /var/lib/kubernetes/
-sudo cp -v kube-apiserver/kube-apiserver.crt /var/lib/kubernetes/
-sudo cp -v kube-apiserver/kube-apiserver.key /var/lib/kubernetes/
-sudo cp -v kube-controller-manager/kube-controller-manager.crt /var/lib/kubernetes/kube-controller-manager.crt
-sudo cp -v kube-controller-manager/kube-controller-manager.key /var/lib/kubernetes/kube-controller-manager.key
-
-LOCAL_IP=$(ifconfig eth0 | awk '/inet /{print $2}')
-
 cat <<EOF> kube-apiserver/kube-apiserver.service
 [Unit]
 Description=Kubernetes API Server
@@ -340,7 +354,7 @@ Documentation=https://github.com/kubernetes/kubernetes
 
 [Service]
 ExecStart=/usr/local/bin/kube-apiserver-v${kube_ver} \\
-  --advertise-address=${LOCAL_IP} \\
+  --advertise-address=${IP_MASTER} \\
   --allow-privileged=true \\
   --apiserver-count=3 \\
   --audit-log-maxage=30 \\
@@ -354,16 +368,16 @@ ExecStart=/usr/local/bin/kube-apiserver-v${kube_ver} \\
   --etcd-cafile=/var/lib/kubernetes/ca.crt \\
   --etcd-certfile=/var/lib/kubernetes/kube-apiserver.crt \\
   --etcd-keyfile=/var/lib/kubernetes/kube-apiserver.key \\
-  --etcd-servers=https://${LOCAL_IP}:2379 \\
+  --etcd-servers=https://${IP_MASTER}:2379 \\
   --event-ttl=1h \\
   --kubelet-certificate-authority=/var/lib/kubernetes/ca.crt \\
   --kubelet-client-certificate=/var/lib/kubernetes/kube-apiserver.crt \\
   --kubelet-client-key=/var/lib/kubernetes/kube-apiserver.key \\
   --runtime-config=api/all=true \\
-  --service-account-issuer=https://${LOCAL_IP}:6443 \\
+  --service-account-issuer=https://${IP_MASTER}:6443 \\
   --service-account-key-file=/var/lib/kubernetes/kube-controller-manager.crt \\
   --service-account-signing-key-file=/var/lib/kubernetes/kube-controller-manager.key \\
-  --service-cluster-ip-range=10.32.0.0/24 \\
+  --service-cluster-ip-range=${SVC_CIDR} \\
   --service-node-port-range=30000-32767 \\
   --tls-cert-file=/var/lib/kubernetes/kube-apiserver.crt \\
   --tls-private-key-file=/var/lib/kubernetes/kube-apiserver.key \\
@@ -374,6 +388,18 @@ RestartSec=5
 [Install]
 WantedBy=multi-user.target
 EOF
+```
+
+### Deployment
+```bash
+sudo cp -v "kube-apiserver/kube-apiserver-v${kube_ver}" "/usr/local/bin/kube-apiserver-v${kube_ver}" && sudo chmod -v 755 "/usr/local/bin/kube-apiserver-v${kube_ver}"
+
+sudo mkdir -p /var/lib/kubernetes/
+sudo cp -v ca/ca.crt /var/lib/kubernetes/ca.crt
+sudo cp -v kube-apiserver/kube-apiserver.crt /var/lib/kubernetes/kube-apiserver.crt
+sudo cp -v kube-apiserver/kube-apiserver.key /var/lib/kubernetes/kube-apiserver.key
+sudo cp -v kube-controller-manager/kube-controller-manager.crt /var/lib/kubernetes/kube-controller-manager.crt
+sudo cp -v kube-controller-manager/kube-controller-manager.key /var/lib/kubernetes/kube-controller-manager.key
 
 sudo cp -v kube-apiserver/kube-apiserver.service /etc/systemd/system/kube-apiserver.service
 sudo systemctl daemon-reload
@@ -400,24 +426,29 @@ $ curl --cacert ca/ca.crt https://127.0.0.1:6443/version
 ```
 
 ## admin
-### Config
+### Tools Download
 ```bash
-kube_ver='1.30.2'
 [ -d kubectl ] || mkdir -p kubectl
 curl -s -L "https://storage.googleapis.com/kubernetes-release/release/v${kube_ver}/bin/linux/amd64/kubectl" -o "kubectl/kubectl-v${kube_ver}"
+```
+
+### Config
+```bash
 sudo cp -v "kubectl/kubectl-v${kube_ver}" /usr/local/bin/kubectl
 sudo chmod -v 755 /usr/local/bin/kubectl
 
-kubectl config set-cluster ecs-matrix-k8s-cluster-all-in-one --certificate-authority=ca/ca.crt --embed-certs=true --server=https://127.0.0.1:6443 --kubeconfig=admin/admin.kubeconfig
-kubectl config set-credentials admin --client-certificate=admin/admin.crt --client-key=admin/admin.key --embed-certs=true --kubeconfig=admin/admin.kubeconfig
-kubectl config set-context default --cluster=ecs-matrix-k8s-cluster-all-in-one --user=admin --kubeconfig=admin/admin.kubeconfig
-kubectl config use-context default --kubeconfig=admin/admin.kubeconfig
-[ -d ~/.kube ] || mkdir ~/.kube && cp -v admin/admin.kubeconfig ~/.kube/config
+kube_conf_file='admin/admin.kubeconfig'
+kubectl config set-cluster ${CLUSTER_NAME} --certificate-authority=ca/ca.crt --embed-certs=true --server=https://${IP_MASTER}:6443 --kubeconfig=${kube_conf_file}
+kubectl config set-credentials admin --client-certificate=admin/admin.crt --client-key=admin/admin.key --embed-certs=true --kubeconfig=${kube_conf_file}
+kubectl config set-context default --cluster=${CLUSTER_NAME} --user=admin --kubeconfig=${kube_conf_file}
+kubectl config use-context default --kubeconfig=${kube_conf_file}
+[ -d ~/.kube ] || mkdir ~/.kube && cp -v ${kube_conf_file} ~/.kube/config
 
 #  Bash Auto Completion
 sudo yum -y install bash-completion
 source /usr/share/bash-completion/bash_completion
 kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
+source /etc/bash_completion.d/kubectl
 echo 'alias k=kubectl' >> ~/.bashrc
 echo 'complete -o default -F __start_kubectl k' >> ~/.bashrc
 source ~/.bashrc  
@@ -448,25 +479,19 @@ subjects:
 ```
 
 ## kubelet
-### Config
-#### Tools Download
+### Tools Download
 ```bash
 [ -d kubelet ] || mkdir -p kubelet
-crictl_ver='1.30.0' && curl -s -L "https://github.com/kubernetes-sigs/cri-tools/releases/download/v${crictl_ver}/crictl-v${crictl_ver}-linux-amd64.tar.gz" -o "kubelet/crictl-v${crictl_ver}-linux-amd64.tar.gz"
-runc_ver='1.1.13' && curl -s -L "https://github.com/opencontainers/runc/releases/download/v${runc_ver}/runc.amd64" -o "kubelet/runc.amd64-v${runc_ver}"
-cni_ver='1.5.1' && curl -s -L "https://github.com/containernetworking/plugins/releases/download/v${cni_ver}/cni-plugins-linux-amd64-v${cni_ver}.tgz" -o "kubelet/cni-plugins-linux-amd64-v${cni_ver}.tgz"
-containerd_ver='1.7.18' && curl -s -L "https://github.com/containerd/containerd/releases/download/v${containerd_ver}/containerd-${containerd_ver}-linux-amd64.tar.gz" -o "kubelet/containerd-${containerd_ver}-linux-amd64.tar.gz"
-kube_ver='1.30.2' && curl -s -L "https://storage.googleapis.com/kubernetes-release/release/v${kube_ver}/bin/linux/amd64/kubelet" -o "kubelet/kubelet-v${kube_ver}"
+url -s -L "https://github.com/kubernetes-sigs/cri-tools/releases/download/v${crictl_ver}/crictl-v${crictl_ver}-linux-amd64.tar.gz" -o "kubelet/crictl-v${crictl_ver}-linux-amd64.tar.gz"
+curl -s -L "https://github.com/opencontainers/runc/releases/download/v${runc_ver}/runc.amd64" -o "kubelet/runc.amd64-v${runc_ver}"
+curl -s -L "https://github.com/containernetworking/plugins/releases/download/v${cni_ver}/cni-plugins-linux-amd64-v${cni_ver}.tgz" -o "kubelet/cni-plugins-linux-amd64-v${cni_ver}.tgz"
+curl -s -L "https://github.com/containerd/containerd/releases/download/v${containerd_ver}/containerd-${containerd_ver}-linux-amd64.tar.gz" -o "kubelet/containerd-${containerd_ver}-linux-amd64.tar.gz"
+curl -s -L "https://storage.googleapis.com/kubernetes-release/release/v${kube_ver}/bin/linux/amd64/kubelet" -o "kubelet/kubelet-v${kube_ver}"
 ```
 
-#### CNI
+### CNI
+#### Config
 ```bash
-lsmod | grep -q br_netfilter || sudo modprobe br_netfilter
-
-sudo mkdir -p /opt/cni/bin
-cni_ver='1.5.1' && sudo tar xf kubelet/cni-plugins-linux-amd64-v${cni_ver}.tgz -C /opt/cni/bin/
-
-POD_CIDR='10.64.1.0/24'
 cat <<EOF> kubelet/10-bridge.conf
 {
     "cniVersion": "0.4.0",
@@ -478,7 +503,7 @@ cat <<EOF> kubelet/10-bridge.conf
     "ipam": {
         "type": "host-local",
         "ranges": [
-          [{"subnet": "${POD_CIDR}"}]
+          [{"subnet": "${POD_CIDR_MASTER}"}]
         ],
         "routes": [{"dst": "0.0.0.0/0"}]
     }
@@ -493,18 +518,31 @@ cat <<EOF> kubelet/99-loopback.conf
 }
 EOF
 
+cat <<EOF> kubelet/sysctl-kubernetes.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+```
+
+#### Deployment
+```bash
+lsmod | grep -q br_netfilter || sudo modprobe br_netfilter
+
+sudo cp -v kubelet/sysctl-kubernetes.conf /etc/sysctl.d/kubernetes.conf
+sudo sysctl --system
+
+sudo mkdir -p /opt/cni/bin
+sudo tar xf kubelet/cni-plugins-linux-amd64-v${cni_ver}.tgz -C /opt/cni/bin/
+
 sudo mkdir -p /etc/cni/net.d/
 sudo cp -v kubelet/10-bridge.conf /etc/cni/net.d/10-bridge.conf
 sudo cp -v kubelet/99-loopback.conf /etc/cni/net.d/99-loopback.conf
 ```
 
-#### containerd
+### containerd
+#### Config
 ```bash
-mkdir -p kubelet/containerd
-containerd_ver='1.7.18' && tar xf "kubelet/containerd-${containerd_ver}-linux-amd64.tar.gz" -C kubelet/containerd
-sudo cp -arv kubelet/containerd/bin/* /bin/
-runc_ver='1.1.13' && sudo cp -v "kubelet/runc.amd64-v${runc_ver}" /usr/local/bin/runc-v${runc_ver} && sudo chmod -v 755 /usr/local/bin/runc-v${runc_ver}
-
 cat <<EOF> kubelet/containerd-config.toml
 version = 2
 
@@ -544,19 +582,28 @@ LimitCORE=infinity
 WantedBy=multi-user.target
 EOF
 
-sudo mkdir -p /etc/containerd/ && sudo cp kubelet/containerd-config.toml /etc/containerd/config.toml
-sudo cp -v kubelet/containerd.service /etc/systemd/system/containerd.service
-sudo systemctl daemon-reload
-sudo systemctl enable --now containerd.service
-
-# crictl installation
+# crictl config
 cat <<EOF> kubelet/crictl.yaml
 runtime-endpoint: unix:///var/run/containerd/containerd.sock
 image-endpoint: unix:///var/run/containerd/containerd.sock
 timeout: 10
 debug: false
 EOF
+```
 
+#### Deployment
+```bash
+mkdir -p kubelet/containerd
+tar xf "kubelet/containerd-${containerd_ver}-linux-amd64.tar.gz" -C kubelet/containerd
+sudo cp -arv kubelet/containerd/bin/* /bin/
+sudo cp -v "kubelet/runc.amd64-v${runc_ver}" /usr/local/bin/runc-v${runc_ver} && sudo chmod -v 755 /usr/local/bin/runc-v${runc_ver}
+
+sudo mkdir -p /etc/containerd/ && sudo cp kubelet/containerd-config.toml /etc/containerd/config.toml
+sudo cp -v kubelet/containerd.service /etc/systemd/system/containerd.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now containerd.service
+
+# crictl deployment
 sudo cp -v kubelet/crictl.yaml /etc/crictl.yaml
 mkdir -p kubelet/crictl
 crictl_ver='1.30.0' && tar xf "kubelet/crictl-v${crictl_ver}-linux-amd64.tar.gz" -C kubelet/crictl
@@ -567,18 +614,14 @@ Verify
 $ sudo /usr/local/bin/crictl info
 ```
 
-#### kubelet
+### kubelet
+#### Config
 ```bash
-kubectl config set-cluster ecs-matrix-k8s-cluster-all-in-one --certificate-authority=ca/ca.crt --embed-certs=true --server=https://$(ifconfig eth0 | awk '/inet /{print $2}'):6443 --kubeconfig=kubelet/kubelet.kubeconfig
-kubectl config set-credentials system:node:ecs-matrix-k8s-cluster-master01 --client-certificate=kubelet/kubelet.crt --client-key=kubelet/kubelet.key --embed-certs=true --kubeconfig=kubelet/kubelet.kubeconfig
-kubectl config set-context default --cluster=ecs-matrix-k8s-cluster-all-in-one --user=system:node:ecs-matrix-k8s-cluster-master01 --kubeconfig=kubelet/kubelet.kubeconfig
-kubectl config use-context default --kubeconfig=kubelet/kubelet.kubeconfig
-[ -d /var/lib/kubelet ] || sudo mkdir -p /var/lib/kubelet && sudo cp -v kubelet/kubelet.kubeconfig /var/lib/kubelet/kubelet.kubeconfig
-
-sudo mkdir -p /run/systemd/resolve /var/lib/kubelet/
-sudo ln -s /etc/resolv.conf /run/systemd/resolve/resolv.conf
-
-POD_CIDR='10.64.1.0/24'
+kube_conf_file='kubelet/kubelet.kubeconfig'
+kubectl config set-cluster ${CLUSTER_NAME} --certificate-authority=ca/ca.crt --embed-certs=true --server=https://${IP_MASTER}:6443 --kubeconfig=${kube_conf_file}
+kubectl config set-credentials system:node:${HOSTNAME_MASTER} --client-certificate=kubelet/kubelet.crt --client-key=kubelet/kubelet.key --embed-certs=true --kubeconfig=${kube_conf_file}
+kubectl config set-context default --cluster=${CLUSTER_NAME} --user=system:node:${HOSTNAME_MASTER} --kubeconfig=${kube_conf_file}
+kubectl config use-context default --kubeconfig=${kube_conf_file}
 
 cat <<EOF> kubelet/kubelet-config.yaml
 kind: KubeletConfiguration
@@ -594,8 +637,8 @@ authorization:
   mode: Webhook
 clusterDomain: "cluster.local"
 clusterDNS:
-  - "10.32.0.10"
-podCIDR: "${POD_CIDR}"
+  - "${SVC_CIDR%${SVC_CIDR##*.}}10"
+podCIDR: "${POD_CIDR_MASTER}"
 resolvConf: "/run/systemd/resolve/resolv.conf"
 runtimeRequestTimeout: "15m"
 tlsCertFile: "/var/lib/kubelet/kubelet.crt"
@@ -603,11 +646,6 @@ tlsPrivateKeyFile: "/var/lib/kubelet/kubelet.key"
 containerRuntimeEndpoint: "unix:///var/run/containerd/containerd.sock"
 cgroupDriver: "systemd"
 EOF
-
-sudo cp -v kubelet/kubelet-config.yaml /var/lib/kubelet/kubelet-config.yaml
-sudo cp -v kubelet/kubelet.crt /var/lib/kubelet/kubelet.crt
-sudo cp -v kubelet/kubelet.key /var/lib/kubelet/kubelet.key
-kube_ver='1.30.2' && sudo cp -v "kubelet/kubelet-v${kube_ver}" "/usr/local/bin/kubelet-v${kube_ver}" && sudo chmod -v 755 "/usr/local/bin/kubelet-v${kube_ver}"
 
 cat <<EOF> kubelet/kubelet.service
 [Unit]
@@ -621,7 +659,7 @@ ExecStart=/usr/local/bin/kubelet-v${kube_ver} \\
   --config=/var/lib/kubelet/kubelet-config.yaml \\
   --kubeconfig=/var/lib/kubelet/kubelet.kubeconfig \\
   --register-node=true \\
-  --hostname-override=$(hostname -s) \\
+  --hostname-override=${HOSTNAME_MASTER} \\
   --v=2
 Restart=on-failure
 RestartSec=5
@@ -629,13 +667,26 @@ RestartSec=5
 [Install]
 WantedBy=multi-user.target
 EOF
+```
+
+#### Deployment
+```bash
+[ -d /var/lib/kubelet ] || sudo mkdir -p /var/lib/kubelet && sudo cp -v kubelet/kubelet.kubeconfig /var/lib/kubelet/kubelet.kubeconfig
+
+sudo mkdir -p /run/systemd/resolve /var/lib/kubelet/
+sudo ln -s /etc/resolv.conf /run/systemd/resolve/resolv.conf
+
+sudo cp -v kubelet/kubelet-config.yaml /var/lib/kubelet/kubelet-config.yaml
+sudo cp -v kubelet/kubelet.crt /var/lib/kubelet/kubelet.crt
+sudo cp -v kubelet/kubelet.key /var/lib/kubelet/kubelet.key
+sudo cp -v "kubelet/kubelet-v${kube_ver}" "/usr/local/bin/kubelet-v${kube_ver}" && sudo chmod -v 755 "/usr/local/bin/kubelet-v${kube_ver}"
 
 sudo cp -v kubelet/kubelet.service /etc/systemd/system/kubelet.service
 sudo systemctl daemon-reload
 sudo systemctl enable --now kubelet.service
 ```
 
-#### Grant `kube-apiserver` Access to `kubelet`
+### Grant `kube-apiserver` Access to `kubelet`
 Note: `user` configured in `clusterrolebinding: system:kube-apiserver` should be aligned with `CN` in `kube-apiserver` cert.
 ```bash
 cat <<EOF> kube-apiserver_to_kubelet.yaml
@@ -689,6 +740,7 @@ ecs-matrix-k8s-cluster-master01   Ready    <none>   73s   v1.30.2
 $ curl -s --cacert ca/ca.crt --cert kubelet/kubelet.crt --key kubelet/kubelet.key https://127.0.0.1:6443/api/v1/nodes | jq '.items[].metadata.name' 
 "ecs-matrix-k8s-cluster-master01"
 
+# kubectl running config 
 $ kubectl proxy &
 
 $ curl http://127.0.0.1:8001/api/v1/nodes/ecs-matrix-k8s-cluster-master01/proxy/configz | jq .
@@ -816,20 +868,19 @@ $ curl http://127.0.0.1:8001/api/v1/nodes/ecs-matrix-k8s-cluster-master01/proxy/
 ```
 
 ## kube-proxy
+### Tools Download
+```bash
+[ -d kube-proxy ] || mkdir -p kube-proxy
+curl -s -L "https://storage.googleapis.com/kubernetes-release/release/v${kube_ver}/bin/linux/amd64/kube-proxy" -o kube-proxy/kube-proxy-v${kube_ver}
+```
+
 ### Config
 ```bash
-sudo yum -y install socat conntrack ipset
-
-[ -d kube-proxy ] || mkdir -p kube-proxy
-kube_ver='1.30.2' && curl -s -L "https://storage.googleapis.com/kubernetes-release/release/v${kube_ver}/bin/linux/amd64/kube-proxy" -o kube-proxy/kube-proxy-v${kube_ver}
-sudo cp -v kube-proxy/kube-proxy-v${kube_ver} /usr/local/bin/kube-proxy-v${kube_ver} && sudo chmod -v 755 /usr/local/bin/kube-proxy-v${kube_ver}
-
-kubectl config set-cluster ecs-matrix-k8s-cluster-all-in-one --certificate-authority=ca/ca.crt --embed-certs=true --server=https://$(ifconfig eth0 | awk '/inet /{print $2}'):6443 --kubeconfig=kube-proxy/kube-proxy.kubeconfig
-kubectl config set-credentials system:kube-proxy --client-certificate=kube-proxy/kube-proxy.crt --client-key=kube-proxy/kube-proxy.key --embed-certs=true --kubeconfig=kube-proxy/kube-proxy.kubeconfig
-kubectl config set-context default --cluster=ecs-matrix-k8s-cluster-all-in-one --user=system:kube-proxy --kubeconfig=kube-proxy/kube-proxy.kubeconfig
-kubectl config use-context default --kubeconfig=kube-proxy/kube-proxy.kubeconfig
-sudo mkdir -p /var/lib/kube-proxy
-sudo cp -v kube-proxy/kube-proxy.kubeconfig /var/lib/kube-proxy/kube-proxy.kubeconfig
+kube_conf_file='kube-proxy/kube-proxy.kubeconfig'
+kubectl config set-cluster ${CLUSTER_NAME} --certificate-authority=ca/ca.crt --embed-certs=true --server=https://${IP_MASTER}:6443 --kubeconfig=${kube_conf_file}
+kubectl config set-credentials system:kube-proxy --client-certificate=kube-proxy/kube-proxy.crt --client-key=kube-proxy/kube-proxy.key --embed-certs=true --kubeconfig=${kube_conf_file}
+kubectl config set-context default --cluster=${CLUSTER_NAME} --user=system:kube-proxy --kubeconfig=${kube_conf_file}
+kubectl config use-context default --kubeconfig=${kube_conf_file}
 
 cat <<EOF> kube-proxy/kube-proxy-config.yaml
 kind: KubeProxyConfiguration
@@ -837,7 +888,7 @@ apiVersion: kubeproxy.config.k8s.io/v1alpha1
 clientConnection:
   kubeconfig: "/var/lib/kube-proxy/kube-proxy.kubeconfig"
 mode: "iptables"
-clusterCIDR: "10.64.0.0/23"
+clusterCIDR: "${CLUSTER_CIDR}"
 EOF
 
 cat <<EOF> kube-proxy/kube-proxy.service
@@ -848,13 +899,22 @@ Documentation=https://github.com/kubernetes/kubernetes
 [Service]
 ExecStart=/usr/local/bin/kube-proxy-v${kube_ver} \\
   --config=/var/lib/kube-proxy/kube-proxy-config.yaml \\
-  --hostname-override $(hostname -s)
+  --hostname-override=${HOSTNAME_MASTER}
 Restart=on-failure
 RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
 EOF
+```
+
+### Deployment
+```bash
+sudo yum -y install socat conntrack ipset
+sudo cp -v kube-proxy/kube-proxy-v${kube_ver} /usr/local/bin/kube-proxy-v${kube_ver} && sudo chmod -v 755 /usr/local/bin/kube-proxy-v${kube_ver}
+
+sudo mkdir -p /var/lib/kube-proxy
+sudo cp -v kube-proxy/kube-proxy.kubeconfig /var/lib/kube-proxy/kube-proxy.kubeconfig
 
 sudo cp -v kube-proxy/kube-proxy-config.yaml /var/lib/kube-proxy/kube-proxy-config.yaml
 sudo cp -v kube-proxy/kube-proxy.service /etc/systemd/system/kube-proxy.service
@@ -881,18 +941,19 @@ go_gc_duration_seconds_sum 0.001537893
 ```
 
 ## kube-scheduler
-### Config
+### Tools Download
 ```bash
 [ -d kube-scheduler ] || mkdir kube-scheduler
-kube_ver='1.30.2'
 curl -s -L "https://storage.googleapis.com/kubernetes-release/release/v${kube_ver}/bin/linux/amd64/kube-scheduler" -o "kube-scheduler/kube-scheduler-v${kube_ver}"
-sudo cp -v "kube-scheduler/kube-scheduler-v${kube_ver}" "/usr/local/bin/kube-scheduler-v${kube_ver}" && sudo chmod -v 755 "/usr/local/bin/kube-scheduler-v${kube_ver}"
+```
 
-kubectl config set-cluster ecs-matrix-k8s-cluster-all-in-one --certificate-authority=ca/ca.crt --embed-certs=true --server=https://127.0.0.1:6443 --kubeconfig=kube-scheduler/kube-scheduler.kubeconfig
-kubectl config set-credentials system:kube-scheduler --client-certificate=kube-scheduler/kube-scheduler.crt --client-key=kube-scheduler/kube-scheduler.key --embed-certs=true --kubeconfig=kube-scheduler/kube-scheduler.kubeconfig
-kubectl config set-context default --cluster=ecs-matrix-k8s-cluster-all-in-one --user=system:kube-scheduler --kubeconfig=kube-scheduler/kube-scheduler.kubeconfig
-kubectl config use-context default --kubeconfig=kube-scheduler/kube-scheduler.kubeconfig
-sudo cp -v kube-scheduler/kube-scheduler.kubeconfig /var/lib/kubernetes/kube-scheduler.kubeconfig
+### Config
+```bash
+kube_conf_file='kube-scheduler/kube-scheduler.kubeconfig'
+kubectl config set-cluster ${CLUSTER_NAME} --certificate-authority=ca/ca.crt --embed-certs=true --server=https://127.0.0.1:6443 --kubeconfig=${kube_conf_file}
+kubectl config set-credentials system:kube-scheduler --client-certificate=kube-scheduler/kube-scheduler.crt --client-key=kube-scheduler/kube-scheduler.key --embed-certs=true --kubeconfig=${kube_conf_file}
+kubectl config set-context default --cluster=${CLUSTER_NAME} --user=system:kube-scheduler --kubeconfig=${kube_conf_file}
+kubectl config use-context default --kubeconfig=${kube_conf_file}
 
 cat <<EOF> kube-scheduler/kube-scheduler.yaml
 apiVersion: kubescheduler.config.k8s.io/v1
@@ -902,11 +963,6 @@ clientConnection:
 leaderElection:
   leaderElect: true
 EOF
-
-sudo mkdir -p /etc/kubernetes/config/
-sudo cp -v kube-scheduler/kube-scheduler.yaml /etc/kubernetes/config/kube-scheduler.yaml
-sudo cp -v kube-scheduler/kube-scheduler.crt /var/lib/kubernetes/kube-scheduler.crt
-sudo cp -v kube-scheduler/kube-scheduler.key /var/lib/kubernetes/kube-scheduler.key
 
 cat <<EOF> kube-scheduler/kube-scheduler.service
 [Unit]
@@ -925,10 +981,21 @@ RestartSec=5
 [Install]
 WantedBy=multi-user.target
 EOF
+```
+
+### Deployment
+```bash
+sudo cp -v "kube-scheduler/kube-scheduler-v${kube_ver}" "/usr/local/bin/kube-scheduler-v${kube_ver}" && sudo chmod -v 755 "/usr/local/bin/kube-scheduler-v${kube_ver}"
+sudo cp -v kube-scheduler/kube-scheduler.kubeconfig /var/lib/kubernetes/kube-scheduler.kubeconfig
+
+sudo mkdir -p /etc/kubernetes/config/
+sudo cp -v kube-scheduler/kube-scheduler.yaml /etc/kubernetes/config/kube-scheduler.yaml
+sudo cp -v kube-scheduler/kube-scheduler.crt /var/lib/kubernetes/kube-scheduler.crt
+sudo cp -v kube-scheduler/kube-scheduler.key /var/lib/kubernetes/kube-scheduler.key
 
 sudo cp -v kube-scheduler/kube-scheduler.service /etc/systemd/system/kube-scheduler.service
 sudo systemctl daemon-reload
-sudo systemctl enable --now kube-scheduler
+sudo systemctl enable --now kube-scheduler.service
 ```
 
 ### Verify
@@ -943,23 +1010,19 @@ scheduler   Healthy   ok
 ```
 
 ## kube-controller-manager
-### Config
+### Tools Download
 ```bash
 [ -d kube-controller-manager ] || mkdir kube-controller-manager
-kube_ver='1.30.2'
 curl -s -L "https://storage.googleapis.com/kubernetes-release/release/v${kube_ver}/bin/linux/amd64/kube-controller-manager" -o "kube-controller-manager/kube-controller-manager-v${kube_ver}"
-sudo cp -v "kube-controller-manager/kube-controller-manager-v${kube_ver}" "/usr/local/bin/kube-controller-manager-v${kube_ver}" && sudo chmod -v 755 "/usr/local/bin/kube-controller-manager-v${kube_ver}"
+```
 
-sudo cp -v kube-controller-manager/kube-controller-manager.crt /var/lib/kubernetes/kube-controller-manager.crt
-sudo cp -v kube-controller-manager/kube-controller-manager.key /var/lib/kubernetes/kube-controller-manager.key
-# remove passwd from CA private key
-openssl rsa -passin pass:"$CA_KEY_PASS" -in ca/ca.key | sudo tee /var/lib/kubernetes/ca.key
-
-kubectl config set-cluster ecs-matrix-k8s-cluster-all-in-one  --certificate-authority=ca/ca.crt --embed-certs=true --server=https://127.0.0.1:6443 --kubeconfig=kube-controller-manager/kube-controller-manager.kubeconfig
-kubectl config set-credentials system:kube-controller-manager --client-certificate=kube-controller-manager/kube-controller-manager.crt --client-key=kube-controller-manager/kube-controller-manager.key --embed-certs=true --kubeconfig=kube-controller-manager/kube-controller-manager.kubeconfig
-kubectl config set-context default --cluster=ecs-matrix-k8s-cluster-all-in-one --user=system:kube-controller-manager --kubeconfig=kube-controller-manager/kube-controller-manager.kubeconfig
-kubectl config use-context default --kubeconfig=kube-controller-manager/kube-controller-manager.kubeconfig
-sudo cp -v kube-controller-manager/kube-controller-manager.kubeconfig /var/lib/kubernetes/kube-controller-manager.kubeconfig
+### Config
+```bash
+kube_conf_file='kube-controller-manager/kube-controller-manager.kubeconfig'
+kubectl config set-cluster ${CLUSTER_NAME}  --certificate-authority=ca/ca.crt --embed-certs=true --server=https://127.0.0.1:6443 --kubeconfig=${kube_conf_file}
+kubectl config set-credentials system:kube-controller-manager --client-certificate=kube-controller-manager/kube-controller-manager.crt --client-key=kube-controller-manager/kube-controller-manager.key --embed-certs=true --kubeconfig=${kube_conf_file}
+kubectl config set-context default --cluster=${CLUSTER_NAME} --user=system:kube-controller-manager --kubeconfig=${kube_conf_file}
+kubectl config use-context default --kubeconfig=${kube_conf_file}
 
 cat <<EOF> kube-controller-manager/kube-controller-manager.service
 [Unit]
@@ -969,7 +1032,7 @@ Documentation=https://github.com/kubernetes/kubernetes
 [Service]
 ExecStart=/usr/local/bin/kube-controller-manager-v${kube_ver} \\
   --bind-address=0.0.0.0 \\
-  --cluster-cidr=10.64.0.0/23 \\
+  --cluster-cidr=${CLUSTER_CIDR} \\
   --cluster-name=kubernetes \\
   --cluster-signing-cert-file=/var/lib/kubernetes/ca.crt \\
   --cluster-signing-key-file=/var/lib/kubernetes/ca.key \\
@@ -977,7 +1040,7 @@ ExecStart=/usr/local/bin/kube-controller-manager-v${kube_ver} \\
   --leader-elect=true \\
   --root-ca-file=/var/lib/kubernetes/ca.crt \\
   --service-account-private-key-file=/var/lib/kubernetes/kube-controller-manager.key \\
-  --service-cluster-ip-range=10.32.0.0/24 \\
+  --service-cluster-ip-range=${SVC_CIDR} \\
   --use-service-account-credentials=true \\
   --tls-cert-file=/var/lib/kubernetes/kube-controller-manager.crt \\
   --tls-private-key-file=/var/lib/kubernetes/kube-controller-manager.key \\
@@ -987,6 +1050,18 @@ RestartSec=5
 [Install]
 WantedBy=multi-user.target
 EOF
+```
+
+### Deployment
+```bash
+sudo cp -v "kube-controller-manager/kube-controller-manager-v${kube_ver}" "/usr/local/bin/kube-controller-manager-v${kube_ver}" && sudo chmod -v 755 "/usr/local/bin/kube-controller-manager-v${kube_ver}"
+
+sudo cp -v kube-controller-manager/kube-controller-manager.crt /var/lib/kubernetes/kube-controller-manager.crt
+sudo cp -v kube-controller-manager/kube-controller-manager.key /var/lib/kubernetes/kube-controller-manager.key
+# remove passwd from CA private key
+openssl rsa -passin pass:"$CA_KEY_PASS" -in ca/ca.key | sudo tee /var/lib/kubernetes/ca.key
+
+sudo cp -v kube-controller-manager/kube-controller-manager.kubeconfig /var/lib/kubernetes/kube-controller-manager.kubeconfig
 
 sudo cp -v kube-controller-manager/kube-controller-manager.service /etc/systemd/system/kube-controller-manager.service
 sudo systemctl daemon-reload
@@ -1237,7 +1312,7 @@ kubectl apply -f kube-dns.yaml
 ```bash
 $ k run test --image=busybox:stable -- sleep 1d
 
-$ $ k exec test -- nslookup www.google.com
+$ k exec test -- nslookup www.google.com
 Server:         10.32.0.10
 Address:        10.32.0.10:53
 
@@ -1372,12 +1447,19 @@ Error from server (Forbidden): pods is forbidden: User "matrix" cannot create re
 ```
 
 ## Extra: add worker node
+### Env 
+```bash
+cat <<EOF>> .bashrc
+export IP_WORKER01='192.168.50.79'
+export HOSTNAME_WORKER01='ecs-matrix-k8s-cluster-worker01'
+export POD_CIDR_WORKER01='10.64.1.0/24'
+export KUBE_APISERVER_IP='192.168.50.57'
+EOF
+```
+
 ### Cert
 ```bash
-WORKER_SHORT_HOSTNAME=$(hostname -s)
-WORKER_FQDN_HOSTNAME=$(hostname -f)
-WORKER_IP_ADDR=$(ifconfig eth0 | awk '/inet /{print $2}')
-
+# Cert Config
 cat <<EOF>> ca/ca.cnf
 
 # For \`kubelet-worker01\`
@@ -1387,29 +1469,38 @@ keyUsage                        = critical, digitalSignature, keyEncipherment
 subjectAltName                  = @alt_names_alts_worker01
 
 [ alt_names_alts_worker01 ]
-DNS.1 = ${WORKER_SHORT_HOSTNAME}
-DNS.2 = ${WORKER_FQDN_HOSTNAME}
+DNS.1 = localhost
+DNS.2 = ${HOSTNAME_WORKER01}
 IP.1 = 127.0.0.1
-IP.2 = ${WORKER_IP_ADDR}
+IP.2 = ${IP_WORKER01}
 EOF
 
+# Cert Generate
 [ -d kubelet-worker01 ] || mkdir kubelet-worker01
 # Private Key
 openssl genrsa -out kubelet-worker01/kubelet-worker01.key 2048
 # Cert Request
-openssl req -new -out kubelet-worker01/kubelet-worker01.csr -key kubelet-worker01/kubelet-worker01.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${WORKER_SHORT_HOSTNAME}" -reqexts usr_cert_alts_worker01
+openssl req -new -out kubelet-worker01/kubelet-worker01.csr -key kubelet-worker01/kubelet-worker01.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${HOSTNAME_WORKER01}" -reqexts usr_cert_alts_worker01
 # Public Cert
-openssl ca -in kubelet-worker01/kubelet-worker01.csr -out kubelet-worker01/kubelet-worker01.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${WORKER_SHORT_HOSTNAME}" -extensions usr_cert_alts_worker01 -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in kubelet-worker01/kubelet-worker01.csr -out kubelet-worker01/kubelet-worker01.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${HOSTNAME_WORKER01}" -extensions usr_cert_alts_worker01 -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### CNI
 ```bash
 lsmod | grep -q br_netfilter || sudo modprobe br_netfilter
 
-sudo mkdir -p /opt/cni/bin
-cni_ver='1.5.1' && sudo tar xf kubelet-worker01/cni-plugins-linux-amd64-v${cni_ver}.tgz -C /opt/cni/bin/
+cat <<EOF> kubelet/sysctl-kubernetes.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
 
-POD_CIDR='10.64.2.0/24'
+sudo cp -v kubelet/sysctl-kubernetes.conf /etc/sysctl.d/kubernetes.conf
+sudo sysctl --system
+
+sudo mkdir -p /opt/cni/bin
+sudo tar xf kubelet-worker01/cni-plugins-linux-amd64-v${cni_ver}.tgz -C /opt/cni/bin/
+
 cat <<EOF> kubelet-worker01/10-bridge.conf
 {
     "cniVersion": "0.4.0",
@@ -1421,7 +1512,7 @@ cat <<EOF> kubelet-worker01/10-bridge.conf
     "ipam": {
         "type": "host-local",
         "ranges": [
-          [{"subnet": "${POD_CIDR}"}]
+          [{"subnet": "${POD_CIDR_WORKER01}"}]
         ],
         "routes": [{"dst": "0.0.0.0/0"}]
     }
@@ -1444,9 +1535,9 @@ sudo cp -v kubelet-worker01/99-loopback.conf /etc/cni/net.d/99-loopback.conf
 ### containerd
 ```bash
 mkdir -p kubelet-worker01/containerd
-containerd_ver='1.7.18' && tar xf "kubelet-worker01/containerd-${containerd_ver}-linux-amd64.tar.gz" -C kubelet-worker01/containerd
+tar xf "kubelet-worker01/containerd-${containerd_ver}-linux-amd64.tar.gz" -C kubelet-worker01/containerd
 sudo cp -arv kubelet-worker01/containerd/bin/* /bin/
-runc_ver='1.1.13' && sudo cp -v "kubelet-worker01/runc.amd64-v${runc_ver}" /usr/local/bin/runc-v${runc_ver} && sudo chmod -v 755 /usr/local/bin/runc-v${runc_ver}
+sudo cp -v "kubelet-worker01/runc.amd64-v${runc_ver}" /usr/local/bin/runc-v${runc_ver} && sudo chmod -v 755 /usr/local/bin/runc-v${runc_ver}
 
 cat <<EOF> kubelet-worker01/containerd-config.toml
 version = 2
@@ -1508,18 +1599,16 @@ sudo cp -v kubelet-worker01/crictl/crictl /usr/local/bin/crictl
 
 ### kubelet
 ```bash
-KUBE_APISERVER_IP='192.168.50.39'
-kubectl config set-cluster ecs-matrix-k8s-cluster-all-in-one --certificate-authority=ca/ca.crt --embed-certs=true --server=https://${KUBE_APISERVER_IP}:6443 --kubeconfig=kubelet-worker01/kubelet-worker01.kubeconfig
-kubectl config set-credentials system:node:ecs-matrix-k8s-cluster-worker01 --client-certificate=kubelet-worker01/kubelet-worker01.crt --client-key=kubelet-worker01/kubelet-worker01.key --embed-certs=true --kubeconfig=kubelet-worker01/kubelet-worker01.kubeconfig
-kubectl config set-context default --cluster=ecs-matrix-k8s-cluster-all-in-one --user=system:node:ecs-matrix-k8s-cluster-worker01 --kubeconfig=kubelet-worker01/kubelet-worker01.kubeconfig
-kubectl config use-context default --kubeconfig=kubelet-worker01/kubelet-worker01.kubeconfig
+kube_conf_file='kubelet-worker01/kubelet-worker01.kubeconfig'
+kubectl config set-cluster ${CLUSTER_NAME} --certificate-authority=ca/ca.crt --embed-certs=true --server=https://${KUBE_APISERVER_IP}:6443 --kubeconfig=${kube_conf_file}
+kubectl config set-credentials system:node:ecs-matrix-k8s-cluster-worker01 --client-certificate=kubelet-worker01/kubelet-worker01.crt --client-key=kubelet-worker01/kubelet-worker01.key --embed-certs=true --kubeconfig=${kube_conf_file}
+kubectl config set-context default --cluster=${CLUSTER_NAME} --user=system:node:ecs-matrix-k8s-cluster-worker01 --kubeconfig=${kube_conf_file}
+kubectl config use-context default --kubeconfig=${kube_conf_file}
 
 [ -d /var/lib/kubelet ] || sudo mkdir -p /var/lib/kubelet && sudo cp -v kubelet-worker01/kubelet-worker01.kubeconfig /var/lib/kubelet/kubelet.kubeconfig
 
 sudo mkdir -p /run/systemd/resolve /var/lib/kubelet/
 sudo ln -s /etc/resolv.conf /run/systemd/resolve/resolv.conf
-
-POD_CIDR='10.64.2.0/24'
 
 cat <<EOF> kubelet-worker01/kubelet-config.yaml
 kind: KubeletConfiguration
@@ -1535,22 +1624,22 @@ authorization:
   mode: Webhook
 clusterDomain: "cluster.local"
 clusterDNS:
-  - "10.32.0.10"
-podCIDR: "${POD_CIDR}"
+  - "${SVC_CIDR%${SVC_CIDR##*.}}10"
+podCIDR: "${POD_CIDR_WORKER01}"
 resolvConf: "/run/systemd/resolve/resolv.conf"
 runtimeRequestTimeout: "15m"
-tlsCertFile: "/var/lib/kubelet/kubelet.crt"
-tlsPrivateKeyFile: "/var/lib/kubelet/kubelet.key"
+tlsCertFile: "/var/lib/kubelet/kubelet-worker01.crt"
+tlsPrivateKeyFile: "/var/lib/kubelet/kubelet-worker01.key"
 containerRuntimeEndpoint: "unix:///var/run/containerd/containerd.sock"
 cgroupDriver: "systemd"
 EOF
 
 sudo mkdir -p /var/lib/kubernetes/
 sudo cp -v kubelet-worker01/kubelet-config.yaml /var/lib/kubelet/kubelet-config.yaml
-sudo cp -v kubelet-worker01/kubelet-worker01.crt /var/lib/kubelet/kubelet.crt
-sudo cp -v kubelet-worker01/kubelet-worker01.key /var/lib/kubelet/kubelet.key
-sudo cp -v kubelet-worker01/ca.crt /var/lib/kubernetes/ca.crt
-kube_ver='1.30.2' && sudo cp -v "kubelet-worker01/kubelet-v${kube_ver}" "/usr/local/bin/kubelet-v${kube_ver}" && sudo chmod -v 755 "/usr/local/bin/kubelet-v${kube_ver}"
+sudo cp -v kubelet-worker01/kubelet-worker01.crt /var/lib/kubelet/kubelet-worker01.crt
+sudo cp -v kubelet-worker01/kubelet-worker01.key /var/lib/kubelet/kubelet-worker01.key
+sudo cp -v ca/ca.crt /var/lib/kubernetes/ca.crt
+sudo cp -v "kubelet-worker01/kubelet-v${kube_ver}" "/usr/local/bin/kubelet-v${kube_ver}" && sudo chmod -v 755 "/usr/local/bin/kubelet-v${kube_ver}"
 
 cat <<EOF> kubelet-worker01/kubelet.service
 [Unit]
@@ -1564,7 +1653,7 @@ ExecStart=/usr/local/bin/kubelet-v${kube_ver} \\
   --config=/var/lib/kubelet/kubelet-config.yaml \\
   --kubeconfig=/var/lib/kubelet/kubelet.kubeconfig \\
   --register-node=true \\
-  --hostname-override=$(hostname -s) \\
+  --hostname-override=${HOSTNAME_WORKER01} \\
   --v=2
 Restart=on-failure
 RestartSec=5
@@ -1584,16 +1673,16 @@ same as master node `kube-proxy` deployment
 ### static route
 ```bash
 # add route on master node 
-sudo route add -net ${POD_CIDR of worker1} gateway ${ip of worker01}
+sudo route add -net ${POD_CIDR_WORKER01} gateway ${IP_WORKER01}
 # add route on worker node 
-sudo route add -net ${POD_CIDR of master} gateway ${ip of master}
+sudo route add -net ${POD_CIDR_MASTER} gateway ${IP_MASTER}
 ```
 
 ### Verify
 ```bash
 $ kubectl get nodes
 NAME                              STATUS   ROLES    AGE     VERSION
-ecs-matrix-k8s-cluster-master02   Ready    <none>   6h17m   v1.30.2
+ecs-matrix-k8s-cluster-master     Ready    <none>   6h17m   v1.30.2
 ecs-matrix-k8s-cluster-worker01   Ready    <none>   41m     v1.30.2
 ```
 
