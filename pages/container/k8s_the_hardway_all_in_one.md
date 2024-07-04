@@ -606,7 +606,7 @@ sudo systemctl enable --now containerd.service
 # crictl deployment
 sudo cp -v kubelet/crictl.yaml /etc/crictl.yaml
 mkdir -p kubelet/crictl
-crictl_ver='1.30.0' && tar xf "kubelet/crictl-v${crictl_ver}-linux-amd64.tar.gz" -C kubelet/crictl
+tar xf "kubelet/crictl-v${crictl_ver}-linux-amd64.tar.gz" -C kubelet/crictl
 sudo cp -v kubelet/crictl/crictl /usr/local/bin/crictl
 ```
 Verify
