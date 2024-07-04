@@ -479,7 +479,7 @@ sudo cp -v kube-controller-manager/kube-controller-manager-master0${curr_hostnam
 
 sudo cp -v kube-apiserver/kube-apiserver-master0${curr_hostname: -1}.service /etc/systemd/system/kube-apiserver.service
 sudo systemctl daemon-reload
-sudo systemctl enable --now kube-apiserver.service
+sudo systemctl enable --now kube-apiserver.service && sudo systemctl status kube-apiserver.service
 ```
 
 ### Verify
@@ -674,7 +674,7 @@ sudo cp "kubelet/runc.amd64-v${runc_ver}" /usr/local/bin/runc-v${runc_ver} && su
 sudo mkdir -p /etc/containerd/ && sudo cp kubelet/containerd-config.toml /etc/containerd/config.toml
 sudo cp -v kubelet/containerd.service /etc/systemd/system/containerd.service
 sudo systemctl daemon-reload
-sudo systemctl enable --now containerd.service
+sudo systemctl enable --now containerd.service && sudo systemctl status containerd.service
 
 # crictl installation
 cat <<EOF> kubelet/crictl.yaml
@@ -775,7 +775,7 @@ sudo cp -v kubelet/kubelet-config-master0${curr_hostname: -1}.yaml /var/lib/kube
 
 sudo cp -v kubelet/kubelet-master0${curr_hostname: -1}.service /etc/systemd/system/kubelet.service
 sudo systemctl daemon-reload
-sudo systemctl enable --now kubelet.service
+sudo systemctl enable --now kubelet.service && sudo systemctl status kubelet.service
 ```
 
 ### Grant `kube-apiserver` Access to `kubelet`
@@ -908,7 +908,7 @@ sudo cp -v kube-proxy/kube-proxy-config.yaml /var/lib/kube-proxy/kube-proxy-conf
 
 sudo cp -v kube-proxy/kube-proxy-master0${curr_hostname: -1}.service /etc/systemd/system/kube-proxy.service
 sudo systemctl daemon-reload
-sudo systemctl enable --now kube-proxy.service
+sudo systemctl enable --now kube-proxy.service && sudo systemctl status kube-proxy.service
 ```
 
 ### Verify
@@ -1071,7 +1071,7 @@ openssl rsa -passin pass:"$CA_KEY_PASS" -in ca/ca.key | sudo tee /var/lib/kubern
 sudo cp -v kube-controller-manager/kube-controller-manager-master0${curr_hostname: -1}.kubeconfig /var/lib/kubernetes/kube-controller-manager-master0${curr_hostname: -1}.kubeconfig
 sudo cp -v kube-controller-manager/kube-controller-manager-master0${curr_hostname: -1}.service /etc/systemd/system/kube-controller-manager.service
 sudo systemctl daemon-reload
-sudo systemctl enable --now kube-controller-manager.service
+sudo systemctl enable --now kube-controller-manager.service && sudo systemctl status kube-controller-manager.service
 ```
 
 ### Verify

@@ -229,6 +229,10 @@ entries:
       url: /kube-proxy_iptables.html
       output: web, pdf
 
+    - title: Privileged Container
+      url: /privileged_container.html
+      output: web, pdf  
+
   - title: Python
     output: web, pdf
     folderitems:
