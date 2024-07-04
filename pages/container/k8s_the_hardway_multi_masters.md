@@ -16,8 +16,8 @@ folder: Container
 
 | Item | Explanation |  Value in config | config file |   
 | :------ | :------ | :------ | :------ |   
-| cluster-name | | ecs-matrix-k8s-cluster-multi-masters | admin.kubeconfig, kubelet.kubeconfig, kube-proxy.kubeconfig |   
-| service-cluster-ip-range | A CIDR IP range from which to assign service cluster IPs | 10.32.0.0/24 | kube-apiserver.service |   
+| cluster-name | | ecs-matrix-k8s-cluster-multi-masters | kubeconfig files |   
+| service-cluster-ip-range | A CIDR IP range from which to assign service cluster IPs | 10.32.0.0/24 | kube-apiserver.service, kube-controller-manager.service |   
 | cluster-cidr | CIDR Range for Pods in cluster | 10.64.0.0/22 | kube-proxy-config.yaml, kube-controller-manager.service |    
 | podCIDR | pod subnet for master node 01 | 10.64.0.0/24 | 10-bridge.conf, kubelet-config.yaml |   
 | podCIDR | pod subnet for master node 02 | 10.64.1.0/24 | 10-bridge.conf, kubelet-config.yaml |   
@@ -183,8 +183,6 @@ echo 01 >> ca/serial
 
 ### CA Cert
 ```bash
-export CA_KEY_PASS=''
-
 # Private Key
 openssl genrsa -passout pass:"$CA_KEY_PASS" -out ca/ca.key -des3 2048
 chmod 600 ca/ca.key
@@ -205,7 +203,7 @@ for sn in $(seq 1 3); do
   # Cert Request
   openssl req -new -out etcd/etcd-master0${curr_hostname: -1}.csr -key etcd/etcd-master0${curr_hostname: -1}.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=etcd-master0${curr_hostname: -1}" -reqexts usr_cert_alts_master0${curr_hostname: -1} 
     # Public Cert
-  openssl ca -in etcd/etcd-master0${curr_hostname: -1}.csr -out etcd/etcd-master0${curr_hostname: -1}.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=etcd-master0${curr_hostname: -1}" -extensions usr_cert_alts_master0${curr_hostname: -1}  -passin pass:"$CA_KEY_PASS" -batch
+  openssl ca -in etcd/etcd-master0${curr_hostname: -1}.csr -out etcd/etcd-master0${curr_hostname: -1}.crt -notext -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=etcd-master0${curr_hostname: -1}" -extensions usr_cert_alts_master0${curr_hostname: -1}  -passin pass:"$CA_KEY_PASS" -batch
 done
 ```
 
@@ -833,7 +831,7 @@ ecs-matrix-k8s-cluster-master01   Ready    <none>   14m     v1.30.2
 ecs-matrix-k8s-cluster-master02   Ready    <none>   45s     v1.30.2
 ecs-matrix-k8s-cluster-master03   Ready    <none>   2m57s   v1.30.2
 
-$ curl -s --cacert ca/ca.crt --cert kubelet/kubelet0${curr_hostname: -1}.crt --key kubelet/kubelet0${curr_hostname: -1}.key https://${curr_hostname}:6443/api/v1/nodes | jq -r '.items[].metadata.name'
+$ curl -s --cacert ca/ca.crt --cert  admin/admin.crt --key admin/admin.key https://ecs-atrix-k8s-cluster-master01:6443/api/v1/nodes | jq -r '.items[].metadata.name'
 ecs-matrix-k8s-cluster-master01
 ecs-matrix-k8s-cluster-master02
 ecs-matrix-k8s-cluster-master03
@@ -854,7 +852,13 @@ kubectl config set-credentials system:kube-proxy --client-certificate=kube-proxy
 kubectl config set-context default --cluster=${CLUSTER_NAME} --user=system:kube-proxy --kubeconfig=${kube_conf_file}
 kubectl config use-context default --kubeconfig=${kube_conf_file}
 
-at <<EOF> kube-proxy/kube-proxy-config.yaml
+cat <<EOF> kubelet/sysctl-kubernetes.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+
+cat <<EOF> kube-proxy/kube-proxy-config.yaml
 kind: KubeProxyConfiguration
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 clientConnection:
@@ -892,6 +896,9 @@ hostname="HOSTNAME_MASTER0$sn"
 curr_hostname=${!hostname}
 
 sudo yum -y install socat conntrack ipset
+
+sudo cp -v kubelet/sysctl-kubernetes.conf /etc/sysctl.d/kubernetes.conf
+sudo sysctl --system
 
 sudo cp -v kube-proxy/kube-proxy-v${kube_ver} /usr/local/bin/kube-proxy-v${kube_ver} && sudo chmod -v 755 /usr/local/bin/kube-proxy-v${kube_ver}
 
@@ -986,7 +993,7 @@ sudo cp -v kube-scheduler/kube-scheduler-master0${curr_hostname: -1}.kubeconfig 
 
 sudo cp -v kube-scheduler/kube-scheduler-master0${curr_hostname: -1}.service /etc/systemd/system/kube-scheduler.service
 sudo systemctl daemon-reload
-sudo systemctl enable --now kube-scheduler
+sudo systemctl enable --now kube-scheduler.service && sudo systemctl status kube-scheduler.service 
 ```
 
 ### Verify

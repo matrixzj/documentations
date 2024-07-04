@@ -16,7 +16,7 @@ folder: Container
 
 | Item | Explanation |  Value in config | config file |   
 | :------ | :------ | :------ | :------ |   
-| cluster-name | | ecs-matrix-k8s-cluster-all-in-one | admin.kubeconfig, kubelet.kubeconfig, kube-proxy.kubeconfig |   
+| cluster-name | | ecs-matrix-k8s-cluster-all-in-one | kubeconfig files |   
 | service-cluster-ip-range | A CIDR IP range from which to assign service cluster IPs | 10.32.0.0/24 | kube-apiserver.service, kube-controller-manager.service |   
 | cluster-cidr | CIDR Range for Pods in cluster | 10.64.0.0/22 | kube-proxy-config.yaml, kube-controller-manager.service |    
 | podCIDR for node 1 | pod subnet for master node | 10.64.1.0/24 | 10-bridge.conf, kubelet-config.yaml |   
@@ -517,20 +517,11 @@ cat <<EOF> kubelet/99-loopback.conf
     "type": "loopback"
 }
 EOF
-
-cat <<EOF> kubelet/sysctl-kubernetes.conf
-net.bridge.bridge-nf-call-iptables  = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-net.ipv4.ip_forward                 = 1
-EOF
 ```
 
 #### Deployment
 ```bash
 lsmod | grep -q br_netfilter || sudo modprobe br_netfilter
-
-sudo cp -v kubelet/sysctl-kubernetes.conf /etc/sysctl.d/kubernetes.conf
-sudo sysctl --system
 
 sudo mkdir -p /opt/cni/bin
 sudo tar xf kubelet/cni-plugins-linux-amd64-v${cni_ver}.tgz -C /opt/cni/bin/
@@ -906,11 +897,21 @@ RestartSec=5
 [Install]
 WantedBy=multi-user.target
 EOF
+
+cat <<EOF> kubelet/sysctl-kubernetes.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
 ```
 
 ### Deployment
 ```bash
 sudo yum -y install socat conntrack ipset
+
+sudo cp -v kubelet/sysctl-kubernetes.conf /etc/sysctl.d/kubernetes.conf
+sudo sysctl --system
+
 sudo cp -v kube-proxy/kube-proxy-v${kube_ver} /usr/local/bin/kube-proxy-v${kube_ver} && sudo chmod -v 755 /usr/local/bin/kube-proxy-v${kube_ver}
 
 sudo mkdir -p /var/lib/kube-proxy
