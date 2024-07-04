@@ -1480,7 +1480,7 @@ openssl genrsa -out kubelet/kubelet-worker01.key 2048
 # Cert Request
 openssl req -new -out kubelet/kubelet-worker01.csr -key kubelet/kubelet-worker01.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${HOSTNAME_WORKER01}" -reqexts usr_cert_alts_worker01
 # Public Cert
-openssl ca -in kubelet/kubelet-worker01.csr -out kubelet/kubelet-worker01.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${HOSTNAME_WORKER01}" -extensions usr_cert_alts_worker01 -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in kubelet/kubelet-worker01.csr -out kubelet/kubelet-worker01.crt -notext -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${HOSTNAME_WORKER01}" -extensions usr_cert_alts_worker01 -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### CNI

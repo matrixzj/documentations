@@ -217,7 +217,7 @@ openssl genrsa -out kube-apiserver/kube-apiserver.key 2048
 # Cert Request
 openssl req -new -out kube-apiserver/kube-apiserver.csr -key kube-apiserver/kube-apiserver.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=kube-apiserver" -reqexts usr_cert_kube_apiserver 
 # Public Cert
-openssl ca -in kube-apiserver/kube-apiserver.csr -out kube-apiserver/kube-apiserver.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=kube-apiserver" -extensions usr_cert_kube_apiserver -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in kube-apiserver/kube-apiserver.csr -out kube-apiserver/kube-apiserver.crt -notext -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=kube-apiserver" -extensions usr_cert_kube_apiserver -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### `admin` Cert
@@ -236,7 +236,7 @@ openssl genrsa -out admin/admin.key 2048
 # Cert Request
 openssl req -new -out admin/admin.csr -key admin/admin.key -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=system:masters/OU=Matrix/CN=kube-admin' -reqexts usr_cert_no_alt
 # Public Cert
-openssl ca -in admin/admin.csr -out admin/admin.crt -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=system:masters/OU=Matrix/CN=kube-admin' -extensions usr_cert_no_alt -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in admin/admin.csr -out admin/admin.crt -notext -config ca/ca.cnf -subj '/C=CN/ST=BJ/L=Beijing/O=system:masters/OU=Matrix/CN=kube-admin' -extensions usr_cert_no_alt -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### `kubelet` Cert
@@ -253,7 +253,7 @@ for sn in $(seq 1 3); do
   # Cert Request
   openssl req -new -out kubelet/kubelet-master0${curr_hostname: -1}.csr -key kubelet/kubelet-master0${curr_hostname: -1}.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${curr_hostname}" -reqexts usr_cert_alts_master0${curr_hostname: -1}
   # Public Cert
-  openssl ca -in kubelet/kubelet-master0${curr_hostname: -1}.csr -out kubelet/kubelet-master0${curr_hostname: -1}.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${curr_hostname}" -extensions usr_cert_alts_master0${curr_hostname: -1} -passin pass:"$CA_KEY_PASS" -batch
+  openssl ca -in kubelet/kubelet-master0${curr_hostname: -1}.csr -out kubelet/kubelet-master0${curr_hostname: -1}.crt -notext -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=system:nodes/OU=Matrix/CN=system:node:${curr_hostname}" -extensions usr_cert_alts_master0${curr_hostname: -1} -passin pass:"$CA_KEY_PASS" -batch
 done
 ```
 
@@ -273,7 +273,7 @@ openssl genrsa -out kube-proxy/kube-proxy.key 2048
 # Cert Request
 openssl req -new -out kube-proxy/kube-proxy.csr -key kube-proxy/kube-proxy.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-proxy" -reqexts usr_cert_no_alt
 # Public Cert
-openssl ca -in kube-proxy/kube-proxy.csr -out kube-proxy/kube-proxy.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-proxy" -extensions usr_cert_no_alt -passin pass:"$CA_KEY_PASS" -batch
+openssl ca -in kube-proxy/kube-proxy.csr -out kube-proxy/kube-proxy.crt -notext -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${CLUSTER_NAME}/OU=Matrix/CN=system:kube-proxy" -extensions usr_cert_no_alt -passin pass:"$CA_KEY_PASS" -batch
 ```
 
 ### `kube-scheduler` Cert
@@ -296,7 +296,7 @@ for sn in $(seq 1 3); do
   # Cert Request
   openssl req -new -out kube-scheduler/kube-scheduler-master0${curr_hostname: -1}.csr -key kube-scheduler/kube-scheduler-master0${curr_hostname: -1}.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${curr_hostname}/OU=Matrix/CN=kube-scheduler" -reqexts usr_cert_alts_master0${curr_hostname: -1}
   # Public Cert
-  openssl ca -in kube-scheduler/kube-scheduler-master0${curr_hostname: -1}.csr -out kube-scheduler/kube-scheduler-master0${curr_hostname: -1}.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${curr_hostname}/OU=Matrix/CN=system:kube-scheduler" -extensions usr_cert_alts_master0${curr_hostname: -1} -passin pass:"$CA_KEY_PASS" -batch
+  openssl ca -in kube-scheduler/kube-scheduler-master0${curr_hostname: -1}.csr -out kube-scheduler/kube-scheduler-master0${curr_hostname: -1}.crt -notext -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${curr_hostname}/OU=Matrix/CN=system:kube-scheduler" -extensions usr_cert_alts_master0${curr_hostname: -1} -passin pass:"$CA_KEY_PASS" -batch
 done
 ```
 
@@ -320,7 +320,7 @@ for sn in $(seq 1 3); do
   # Cert Request
   openssl req -new -out kube-controller-manager/kube-controller-manager-master0${curr_hostname: -1}.csr -key kube-controller-manager/kube-controller-manager-master0${curr_hostname: -1}.key -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${curr_hostname}/OU=Matrix/CN=system:kube-controller-manager" -reqexts usr_cert_alts_master0${curr_hostname: -1}
   # Public Cert
-  openssl ca -in kube-controller-manager/kube-controller-manager-master0${curr_hostname: -1}.csr -out kube-controller-manager/kube-controller-manager-master0${curr_hostname: -1}.crt -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${curr_hostname}/OU=Matrix/CN=system:kube-controller-manager" -extensions usr_cert_alts_master0${curr_hostname: -1} -passin pass:"$CA_KEY_PASS" -batch
+  openssl ca -in kube-controller-manager/kube-controller-manager-master0${curr_hostname: -1}.csr -out kube-controller-manager/kube-controller-manager-master0${curr_hostname: -1}.crt -notext -config ca/ca.cnf -subj "/C=CN/ST=BJ/L=Beijing/O=${curr_hostname}/OU=Matrix/CN=system:kube-controller-manager" -extensions usr_cert_alts_master0${curr_hostname: -1} -passin pass:"$CA_KEY_PASS" -batch
 done
 ```
 
