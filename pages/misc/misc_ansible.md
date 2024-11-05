@@ -1,6 +1,6 @@
 ---
 title: Ansible Tips
-tags: [misc]
+tags: [misc, python]
 keywords: ansible, automation
 last_updated: Dev 24, 2019
 summary: "ansible playbook tips"
