@@ -205,6 +205,10 @@ entries:
       url: /k8s_the_hardway_all_in_one.html
       output: web, pdf
 
+    - title: Kubernetes Multi-Masters Deployment in the Hard Way
+      url: /k8s_the_hardway_multi_masters.html
+      output: web, pdf
+
     - title: Kubernetes All-in-One Deployment with kubeadm
       url: /k8s_kubeadm_all_in_one.html
       output: web, pdf
@@ -224,6 +228,10 @@ entries:
     - title: Kube-Proxy IPTABLES
       url: /kube-proxy_iptables.html
       output: web, pdf
+
+    - title: Privileged Container
+      url: /privileged_container.html
+      output: web, pdf  
 
   - title: Python
     output: web, pdf

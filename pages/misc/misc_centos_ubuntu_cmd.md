@@ -15,8 +15,8 @@ folder: Misc
 | Functions | CentOS | Ubuntu |
 | :------ | :------ | :------ | 
 | Find which installed package provided file | rpm -qf ${file_path} | dpkg -S ${file_path} |
-| List Installed Packages | rpm -qa | apt list --installed |
-| List all availabe version for a Package | yum list --showduplicates ${package_name} | apt-get madison ${package_name} |
+| List Installed Packages | rpm -qa | apt list \-\-installed |
+| List all availabe version for a Package | yum list --showduplicates ${package_name} | apt-cache madison ${package_name} |
 | Find which package from repo provided file | yum whatprovides */jq | apt-file update && apt-file search --regexp '.*/jq$' |
 | Uninstall a package | yum remove jq | apt remove jq |
 

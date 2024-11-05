@@ -51,18 +51,20 @@ $ sudo apt-get install -y apt-transport-https ca-certificates curl
 # add google gpg key
 $ sudo mkdir /etc/apt/keyrings/
 
-$ curl -o kubernetes-archive-keyring.gpg 'https://packages.cloud.google.com/apt/doc/apt-key.gpg'
-$ sudo cp kubernetes-archive-keyring.gpg /etc/apt/keyrings/
+$ curl -sL -o /tmp/Release.key 'https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key'
+$ cat /tmp/Release.key | gpg --dearmor -o /tmp/kubernetes-apt-keyring.gpg
+$ sudo cp /tmp/kubernetes-apt-keyring.gpg /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 # add google k8s packages list
-$ echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+$ ver='1.28'
+$ echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v${ver}/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 $ sudo apt-get update
 
 # List available versions
 $ sudo apt-cache madison kubeadm kubelet kubectl
 
 # Install specific version
-$ sudo apt-get install kubeadm=1.25.0-00 kubelet=1.25.0-00 kubectl=1.25.0-00
+$ sudo apt-get install kubeadm=1.28.0-1.1 kubelet=1.28.0-1.1 kubectl=1.28.0-1.1
 ```
 
 ## Option 1: Install `docker` as `CRI`, `weave-net` add-on as CNI
@@ -260,9 +262,7 @@ $ sudo cp -arv containerd/bin/* /bin/
 ‘containerd/bin/containerd-shim-runc-v2’ -> ‘/bin/containerd-shim-runc-v2’
 ‘containerd/bin/ctr’ -> ‘/bin/ctr’
 
-$ sudo cp runc.amd64 /usr/local/bin/runc
-
-$ sudo chmod 755 /usr/local/bin/runc
+$ sudo install -m0755 runc.amd64 /usr/local/bin/runc
 
 $ sudo mkdir -p /etc/containerd/
 

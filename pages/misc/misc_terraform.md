@@ -127,6 +127,7 @@ Variable files will be automatically loaded:
 * *.tf
 
 Variable Definition Percedence
+
 | Order | Operation |
 | :------ | :------  |
 | 1 | Environment Variables |
@@ -203,7 +204,7 @@ Outputs the visual execution graph.
 ```bash
 terraform graph | dot -Tsvg > graph.svg
 ```
-![terraform-graph](images/misc/terraform-graph.jpg.jpg)
+![terraform-graph](images/misc/terraform-graph.jpg)
 
 ## State
 Json formatted, non-operational 
