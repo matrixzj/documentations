@@ -118,7 +118,7 @@ echo "export PATH=\"${awk_path%/awk}:${sed_path%/sed}:$PATH\"" >> ~/.zshrc
 
 - [Karabiner-Elements](https://karabiner-elements.pqrs.org/)
 - [iTerm2](https://iterm2.com/downloads.html)
-- [Rectangle](https://rectangleapp.com/)
+- [Raycast](https://www.raycast.com/)
 - [Input Method - Squirrel 鼠须管](https://matrixzj.github.io/documentations/misc_mac_reinstallation_steps.html#squirrel-%E9%BC%A0%E9%A1%BB%E7%AE%A1)
 - [Visual Studio Code](https://code.visualstudio.com/download)
 - [Firefox](https://www.mozilla.org/en-US/firefox/new/)
